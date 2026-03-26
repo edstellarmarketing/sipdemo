@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataPort — Import Wizard · Arcova SIP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:        #080F18;
+  --ink-panel:  #0C1825;
+  --ink-card:   #101E2E;
+  --ink-raised: #152438;
+  --ink-border: rgba(255,255,255,0.07);
+  --ink-soft:   #4A6A84;
+  --paper:      #D8E8F4;
+  --paper-mid:  #8AACC4;
+  --gold:       #C8A84B;
+  --gold-lt:    #E0CC70;
+  --gold-dim:   rgba(200,168,75,0.10);
+  --blue:       #1A5C8A;
+  --blue-lt:    #3A8CC0;
+  --blue-dim:   rgba(26,92,138,0.15);
+  --green:      #1A7A4A;
+  --green-lt:   #3AB87A;
+  --green-dim:  rgba(26,122,74,0.12);
+  --amber:      #D4820A;
+  --amber-lt:   #F0A030;
+  --amber-dim:  rgba(212,130,10,0.12);
+  --red:        #C0392B;
+  --red-lt:     #E87060;
+  --red-dim:    rgba(192,57,43,0.12);
+  --teal:       #0E8A80;
+  --teal-lt:    #22C0B4;
+  --teal-dim:   rgba(14,138,128,0.12);
+  --sidebar-w:  220px;
+}
+
+html, body { height: 100%; background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans-serif; overflow: hidden; }
+.app { display: flex; height: 100vh; }
+
+/* ── SIDEBAR ── */
+.sidebar { width: var(--sidebar-w); background: var(--ink-panel); border-right: 1px solid var(--ink-border); display: flex; flex-direction: column; flex-shrink: 0; }
+.sidebar-brand { padding: 22px 20px 20px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; }
+.brand-hex { width: 28px; height: 28px; background: var(--gold); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); flex-shrink: 0; }
+.brand-nm { font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--paper); }
+.brand-tg { font-size: 10px; color: var(--ink-soft); letter-spacing: 0.06em; text-transform: uppercase; }
+.sidebar-nav { flex: 1; padding: 12px 14px; overflow-y: auto; }
+.nav-section-label { font-size: 10px; color: var(--ink-soft); letter-spacing: .1em; text-transform: uppercase; padding: 10px 6px 6px; }
+.nav-item { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 6px; font-size: 12.5px; color: var(--paper-mid); cursor: pointer; text-decoration: none; transition: background .15s, color .15s; margin-bottom: 1px; }
+.nav-item:hover { background: rgba(255,255,255,0.05); color: var(--paper); }
+.nav-item.active { background: var(--teal-dim); color: var(--teal-lt); }
+.nav-item svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; opacity: .7; }
+.nav-item.active svg { opacity: 1; }
+.nav-badge { margin-left: auto; padding: 1px 6px; border-radius: 100px; font-size: 10px; font-weight: 500; }
+.nb-green { background: var(--green-dim); color: var(--green-lt); }
+.nb-gold  { background: var(--gold-dim);  color: var(--gold); }
+.sidebar-user { padding: 14px 16px; border-top: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; }
+.user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; color: var(--paper); flex-shrink: 0; }
+.user-name { font-size: 12px; font-weight: 500; color: var(--paper); }
+.user-role { font-size: 10px; color: var(--ink-soft); }
+
+/* ── MAIN ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { height: 54px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; padding: 0 28px; gap: 14px; flex-shrink: 0; background: var(--ink-panel); }
+.topbar-title { font-family: 'Syne',sans-serif; font-size: 15px; font-weight: 700; color: var(--paper); flex: 1; }
+.topbar-meta { font-size: 11px; color: var(--ink-soft); }
+.tb-pill { padding: 4px 11px; border-radius: 100px; font-size: 11px; border: 1px solid; white-space: nowrap; }
+.tb-pill.teal { border-color: rgba(34,192,180,.35); color: var(--teal-lt); }
+.tb-pill.gold { border-color: rgba(200,168,75,.3); color: var(--gold); }
+.tb-btn { padding: 7px 14px; border-radius: 6px; border: 1px solid var(--ink-border); background: transparent; color: var(--paper-mid); font-family: 'DM Sans',sans-serif; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background .15s, color .15s; }
+.tb-btn:hover { background: rgba(255,255,255,0.05); color: var(--paper); }
+.tb-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; }
+.tb-btn.primary { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 600; }
+.tb-btn.primary:hover { opacity: .88; }
+
+/* ── CONTENT ── */
+.content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+.content::-webkit-scrollbar { width: 4px; }
+.content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+/* ── WIZARD STEPS STRIP ── */
+.wizard-strip {
+  padding: 0 28px;
+  background: var(--ink-card);
+  border-bottom: 1px solid var(--ink-border);
+  display: flex; align-items: stretch;
+  flex-shrink: 0;
+  animation: fadeDown .4s ease both;
+}
+.wz-step {
+  padding: 14px 20px;
+  display: flex; align-items: center; gap: 10px;
+  position: relative; cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: border-color .2s;
+  flex-shrink: 0;
+}
+.wz-step.active { border-bottom-color: var(--teal-lt); }
+.wz-step.done   { border-bottom-color: var(--green-lt); }
+.wz-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono',monospace; font-size: 10px; font-weight: 500;
+  background: rgba(255,255,255,.06); color: var(--ink-soft);
+  border: 1px solid rgba(255,255,255,.1); flex-shrink: 0;
+  transition: all .2s;
+}
+.wz-step.active .wz-num { background: var(--teal-dim); color: var(--teal-lt); border-color: rgba(34,192,180,.4); }
+.wz-step.done   .wz-num { background: var(--green-dim); color: var(--green-lt); border-color: rgba(58,184,122,.4); }
+.wz-label { font-size: 12px; color: var(--ink-soft); transition: color .2s; white-space: nowrap; }
+.wz-step.active .wz-label { color: var(--paper); font-weight: 500; }
+.wz-step.done   .wz-label { color: var(--green-lt); }
+.wz-arrow { width: 16px; color: rgba(255,255,255,.12); font-size: 14px; flex-shrink: 0; }
+
+/* ── STEP PANELS ── */
+.step-panel { display: none; flex: 1; flex-direction: column; padding: 24px 28px; gap: 18px; animation: fadeUp .4s ease both; }
+.step-panel.active { display: flex; }
+
+/* ── STEP 1A — UPLOAD ── */
+.upload-zone {
+  border: 2px dashed rgba(34,192,180,.3);
+  border-radius: 14px;
+  padding: 52px 32px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  text-align: center; cursor: pointer;
+  transition: border-color .2s, background .2s;
+  background: rgba(14,138,128,.04);
+}
+.upload-zone:hover { border-color: rgba(34,192,180,.6); background: rgba(14,138,128,.08); }
+.upload-icon { width: 56px; height: 56px; border-radius: 14px; background: var(--teal-dim); border: 1px solid rgba(34,192,180,.25); display: flex; align-items: center; justify-content: center; }
+.upload-icon svg { width: 26px; height: 26px; stroke: var(--teal-lt); fill: none; stroke-width: 1.5; stroke-linecap: round; }
+.upload-title { font-family: 'Syne',sans-serif; font-size: 18px; font-weight: 700; color: var(--paper); }
+.upload-sub { font-size: 13px; color: var(--paper-mid); line-height: 1.6; max-width: 420px; }
+.upload-formats { display: flex; gap: 8px; margin-top: 4px; }
+.fmt-chip { padding: 4px 10px; border-radius: 100px; font-size: 11px; border: 1px solid rgba(34,192,180,.25); color: var(--teal-lt); background: var(--teal-dim); font-family: 'DM Mono',monospace; }
+
+.hris-strip {
+  background: var(--ink-card); border: 1px solid var(--ink-border);
+  border-radius: 12px; padding: 18px 22px;
+  display: flex; align-items: center; gap: 20px;
+}
+.hris-label { font-size: 12px; color: var(--ink-soft); flex-shrink: 0; }
+.hris-options { display: flex; gap: 10px; flex-wrap: wrap; }
+.hris-btn { padding: 8px 16px; border-radius: 7px; border: 1px solid var(--ink-border); background: rgba(255,255,255,.03); font-size: 12px; color: var(--paper-mid); cursor: pointer; display: flex; align-items: center; gap: 7px; transition: border-color .15s, color .15s, background .15s; }
+.hris-btn:hover { border-color: rgba(34,192,180,.3); color: var(--paper); background: var(--teal-dim); }
+.hris-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-soft); }
+.hris-btn.connected .hris-dot { background: var(--green-lt); }
+.hris-btn.connected { border-color: rgba(58,184,122,.3); color: var(--green-lt); background: var(--green-dim); }
+
+.template-card { background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 16px; }
+.tc-icon { width: 40px; height: 40px; border-radius: 9px; background: var(--gold-dim); border: 1px solid rgba(200,168,75,.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.tc-icon svg { width: 19px; height: 19px; stroke: var(--gold); fill: none; stroke-width: 1.6; stroke-linecap: round; }
+.tc-text { flex: 1; }
+.tc-title { font-size: 13px; color: var(--paper); font-weight: 500; }
+.tc-sub { font-size: 11px; color: var(--ink-soft); margin-top: 3px; }
+.tc-btn { padding: 8px 16px; border-radius: 6px; border: 1px solid rgba(200,168,75,.3); color: var(--gold); background: transparent; font-size: 12px; cursor: pointer; font-family: 'DM Sans',sans-serif; white-space: nowrap; transition: background .15s; }
+.tc-btn:hover { background: var(--gold-dim); }
+
+/* ── STEP 1B — PARSING ── */
+.parse-header {
+  background: var(--ink-card); border: 1px solid var(--ink-border);
+  border-radius: 12px; padding: 18px 22px;
+  display: flex; align-items: center; gap: 16px;
+}
+.parse-file-icon { width: 40px; height: 40px; border-radius: 9px; background: var(--green-dim); border: 1px solid rgba(58,184,122,.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.parse-file-icon svg { width: 19px; height: 19px; stroke: var(--green-lt); fill: none; stroke-width: 1.6; stroke-linecap: round; }
+.parse-info { flex: 1; }
+.parse-filename { font-family: 'DM Mono',monospace; font-size: 13px; color: var(--paper); }
+.parse-meta { font-size: 11px; color: var(--ink-soft); margin-top: 3px; }
+.parse-status { font-size: 12px; color: var(--green-lt); display: flex; align-items: center; gap: 6px; }
+
+.sheets-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.sheet-card {
+  background: var(--ink-card); border: 1px solid var(--ink-border);
+  border-radius: 10px; overflow: hidden;
+  cursor: pointer; transition: border-color .2s;
+}
+.sheet-card:hover { border-color: rgba(34,192,180,.3); }
+.sheet-card.has-errors { border-color: rgba(192,57,43,.3); }
+.sheet-card.clean { border-color: rgba(58,184,122,.25); }
+.sc-head { padding: 12px 14px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; gap: 9px; }
+.sheet-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.sheet-icon svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; }
+.sc-name { font-size: 12px; color: var(--paper); font-weight: 500; flex: 1; }
+.sc-badge { padding: 2px 7px; border-radius: 100px; font-size: 9.5px; border: 1px solid; white-space: nowrap; }
+.scb-clean { border-color: rgba(58,184,122,.4); color: var(--green-lt); background: var(--green-dim); }
+.scb-warn  { border-color: rgba(192,57,43,.4);  color: var(--red-lt);   background: var(--red-dim); }
+.scb-ok    { border-color: rgba(200,168,75,.35); color: var(--gold);     background: var(--gold-dim); }
+.sc-body { padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; }
+.sc-stat { display: flex; justify-content: space-between; font-size: 11px; }
+.sc-stat-key { color: var(--ink-soft); }
+.sc-stat-val { color: var(--paper-mid); font-family: 'DM Mono',monospace; }
+.sc-stat-val.red   { color: var(--red-lt); }
+.sc-stat-val.green { color: var(--green-lt); }
+
+/* ── STEP 1C — VALIDATION ── */
+.val-summary {
+  background: var(--ink-card); border: 1px solid var(--ink-border);
+  border-radius: 12px; padding: 16px 22px;
+  display: flex; gap: 28px; align-items: center;
+}
+.vs-item { display: flex; flex-direction: column; gap: 3px; }
+.vs-val { font-family: 'Syne',sans-serif; font-size: 22px; font-weight: 800; color: var(--paper); }
+.vs-val.green { color: var(--green-lt); }
+.vs-val.red   { color: var(--red-lt); }
+.vs-val.amber { color: var(--amber-lt); }
+.vs-key { font-size: 10px; color: var(--ink-soft); letter-spacing: .07em; text-transform: uppercase; }
+.vs-div { width: 1px; background: var(--ink-border); align-self: stretch; }
+
+.error-table { width: 100%; border-collapse: collapse; }
+.error-table th { font-size: 10px; color: var(--ink-soft); letter-spacing: .08em; text-transform: uppercase; text-align: left; padding: 10px 16px; font-weight: 400; border-bottom: 1px solid var(--ink-border); }
+.error-table th:nth-child(4) { text-align: center; }
+.error-table tr { border-bottom: 1px solid rgba(255,255,255,.04); }
+.error-table tr:last-child { border-bottom: none; }
+.error-table td { padding: 10px 16px; font-size: 12px; color: var(--paper-mid); }
+.error-table td:first-child { font-family: 'DM Mono',monospace; color: var(--ink-soft); font-size: 11px; }
+.err-sev { padding: 2px 7px; border-radius: 100px; font-size: 10px; border: 1px solid; }
+.es-err  { border-color: rgba(192,57,43,.5); color: var(--red-lt); background: var(--red-dim); }
+.es-warn { border-color: rgba(212,130,10,.5); color: var(--amber-lt); background: var(--amber-dim); }
+.err-action { display: flex; gap: 5px; justify-content: center; }
+.era-btn { padding: 3px 10px; border-radius: 5px; font-size: 11px; cursor: pointer; border: 1px solid; transition: opacity .15s; }
+.era-fix  { border-color: rgba(58,140,192,.4); color: #5BA8E0; background: var(--blue-dim); }
+.era-skip { border-color: rgba(255,255,255,.1); color: var(--ink-soft); background: transparent; }
+.era-btn:hover { opacity: .78; }
+
+/* ── STEP 1D — CONFIRM ── */
+.confirm-banner {
+  background: linear-gradient(135deg, rgba(26,122,74,.15) 0%, transparent 60%);
+  border: 1px solid rgba(58,184,122,.3);
+  border-radius: 14px; padding: 24px 28px;
+  display: flex; align-items: center; gap: 20px;
+}
+.conf-check { width: 52px; height: 52px; border-radius: 50%; background: var(--green-dim); border: 1px solid rgba(58,184,122,.4); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.conf-check svg { width: 24px; height: 24px; stroke: var(--green-lt); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.conf-info { flex: 1; }
+.conf-title { font-family: 'Syne',sans-serif; font-size: 18px; font-weight: 800; color: var(--paper); margin-bottom: 5px; }
+.conf-sub   { font-size: 12.5px; color: var(--paper-mid); line-height: 1.6; }
+.conf-stats { display: flex; gap: 20px; }
+.conf-stat  { display: flex; flex-direction: column; gap: 3px; align-items: center; }
+.conf-stat-val { font-family: 'Syne',sans-serif; font-size: 20px; font-weight: 800; color: var(--green-lt); }
+.conf-stat-key { font-size: 10px; color: var(--ink-soft); letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; }
+
+.meter-card { background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: 12px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px; }
+.meter-title { font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; color: var(--paper); }
+.meter-bar-track { height: 10px; background: rgba(255,255,255,.06); border-radius: 5px; overflow: hidden; }
+.meter-bar-fill  { height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--teal-lt), var(--green-lt)); transition: width 1.4s ease; }
+.meter-labels { display: flex; justify-content: space-between; font-size: 11px; }
+.meter-label-key { color: var(--ink-soft); }
+.meter-label-val { color: var(--teal-lt); font-weight: 500; }
+
+.data-preview { background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: 12px; overflow: hidden; }
+.dp-head { padding: 12px 16px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; justify-content: space-between; }
+.dp-title { font-family: 'Syne',sans-serif; font-size: 12px; font-weight: 700; color: var(--paper); }
+.dp-count { font-size: 10px; color: var(--teal-lt); background: var(--teal-dim); padding: 2px 8px; border-radius: 100px; }
+.preview-table { width: 100%; border-collapse: collapse; }
+.preview-table th { font-size: 10px; color: var(--ink-soft); letter-spacing: .08em; text-transform: uppercase; text-align: left; padding: 9px 14px; font-weight: 400; border-bottom: 1px solid var(--ink-border); background: rgba(255,255,255,.02); }
+.preview-table tr { border-bottom: 1px solid rgba(255,255,255,.04); }
+.preview-table tr:last-child { border-bottom: none; }
+.preview-table td { padding: 9px 14px; font-size: 11.5px; color: var(--paper-mid); }
+.preview-table td:first-child { font-family: 'DM Mono',monospace; font-size: 10.5px; color: var(--ink-soft); }
+.status-dot-cell { display: flex; align-items: center; gap: 5px; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+.import-actions { display: flex; gap: 10px; align-items: center; padding: 18px 22px; background: var(--ink-card); border: 1px solid rgba(34,192,180,.2); border-radius: 12px; }
+.import-note { flex: 1; font-size: 12px; color: var(--paper-mid); line-height: 1.5; }
+.import-note strong { color: var(--paper); font-weight: 500; }
+.ia-btn { padding: 12px 28px; border-radius: 8px; font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; cursor: pointer; border: 1px solid; transition: opacity .15s; white-space: nowrap; }
+.ia-btn.primary { background: var(--teal); border-color: var(--teal); color: #fff; box-shadow: 0 4px 20px rgba(14,138,128,.3); }
+.ia-btn.primary:hover { opacity: .88; }
+.ia-btn.outline { background: transparent; border-color: rgba(255,255,255,.1); color: var(--paper-mid); }
+.ia-btn.outline:hover { border-color: rgba(255,255,255,.2); color: var(--paper); }
+
+/* ── CONTEXT METER ── */
+.context-meter {
+  background: var(--ink-card); border: 1px solid var(--ink-border);
+  border-radius: 12px; padding: 16px 20px;
+  position: sticky; top: 0; z-index: 5;
+  display: flex; align-items: center; gap: 20px;
+}
+.cm-label { font-size: 11px; color: var(--ink-soft); letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; }
+.cm-bar-track { flex: 1; height: 7px; background: rgba(255,255,255,.06); border-radius: 4px; overflow: hidden; }
+.cm-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--teal-lt), var(--green-lt)); }
+.cm-pct { font-family: 'Syne',sans-serif; font-size: 15px; font-weight: 800; color: var(--teal-lt); min-width: 36px; }
+.cm-segments { display: flex; gap: 12px; }
+.cm-seg { display: flex; flex-direction: column; gap: 2px; align-items: center; }
+.cm-seg-val { font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 700; color: var(--paper); }
+.cm-seg-key { font-size: 9px; color: var(--ink-soft); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+
+/* ── WIZARD NAV ── */
+.wizard-nav {
+  padding: 16px 28px;
+  border-top: 1px solid var(--ink-border);
+  background: var(--ink-panel);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-shrink: 0;
+}
+.wn-info { font-size: 11px; color: var(--ink-soft); }
+.wn-actions { display: flex; gap: 10px; }
+.wn-btn { padding: 9px 20px; border-radius: 7px; font-family: 'DM Sans',sans-serif; font-size: 12.5px; cursor: pointer; border: 1px solid; transition: opacity .15s; font-weight: 500; }
+.wn-btn.back    { background: transparent; border-color: rgba(255,255,255,.1); color: var(--paper-mid); }
+.wn-btn.back:hover { border-color: rgba(255,255,255,.2); color: var(--paper); }
+.wn-btn.next    { background: var(--teal); border-color: var(--teal); color: #fff; font-family: 'Syne',sans-serif; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; font-size: 12px; }
+.wn-btn.next:hover { opacity: .88; }
+.wn-btn.finish  { background: var(--green); border-color: var(--green); color: #fff; font-family: 'Syne',sans-serif; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; font-size: 12px; }
+.wn-btn.finish:hover { opacity: .88; }
+
+/* ── DONE STATE ── */
+#doneScreen {
+  display: none; flex: 1; flex-direction: column;
+  align-items: center; justify-content: center; gap: 28px;
+  padding: 40px 28px; text-align: center;
+  animation: fadeUp .5s ease both;
+}
+.done-ring { position: relative; width: 100px; height: 100px; }
+.done-ring svg { width: 100%; height: 100%; }
+.done-icon-inner { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.done-icon-inner svg { width: 40px; height: 40px; stroke: var(--green-lt); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.done-title { font-family: 'Syne',sans-serif; font-size: 32px; font-weight: 800; color: var(--paper); line-height: 1.1; }
+.done-title span { color: var(--green-lt); }
+.done-sub { font-size: 14px; color: var(--paper-mid); max-width: 480px; line-height: 1.7; }
+.done-stats { display: flex; gap: 32px; }
+.ds-item { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+.ds-val { font-family: 'Syne',sans-serif; font-size: 28px; font-weight: 800; color: var(--green-lt); }
+.ds-key { font-size: 11px; color: var(--ink-soft); letter-spacing: .07em; text-transform: uppercase; }
+.done-actions { display: flex; gap: 12px; }
+.done-btn { padding: 12px 28px; border-radius: 8px; font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; cursor: pointer; border: 1px solid; transition: opacity .15s; }
+.done-btn.primary { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+.done-btn.outline { background: transparent; border-color: rgba(255,255,255,.15); color: var(--paper-mid); }
+.done-btn:hover { opacity: .84; }
+
+@keyframes fadeUp   { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes dashAnim { to { stroke-dashoffset: 0; } }
+
+.spinner-sm { width: 14px; height: 14px; border: 2px solid rgba(34,192,180,.2); border-top-color: var(--teal-lt); border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; }
+a.sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 22px 20px 20px; border-bottom: 1px solid var(--ink-border); text-decoration: none; }
+a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <a class="sidebar-brand" href="../index.html" style="text-decoration:none;cursor:pointer">
+    <div class="brand-hex"></div>
+    <div style="display:flex;flex-direction:column;gap:1px">
+      <span class="brand-nm">Arcova SIP</span>
+      <span class="brand-tg">Admin Portal</span>
+    </div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Setup</div>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      OrgSetup <span class="nav-badge nb-green">Done</span>
+    </a>
+    <a class="nav-item active" href="#">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      DataPort
+    </a>
+    <div class="nav-section-label">AI Pipeline</div>
+    <a class="nav-item" href="skillforge.html">
+      <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      SkillForge <span class="nav-badge nb-gold">Next</span>
+    </a>
+    <a class="nav-item" href="approvalhub.html">
+      <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+      ApprovalHub
+    </a>
+    <div class="nav-section-label">Intelligence</div>
+    <a class="nav-item" href="../manager/chro-dashboard.html">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      InsightBoard
+    </a>
+    <a class="nav-item" href="../employee/skill-passport.html">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Skill Passport
+    </a>
+    <div class="nav-section-label">Modules</div>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      AssessEngine
+    </a>
+    <a class="nav-item" href="../manager/lna-report.html">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      ReportGen
+    </a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-avatar">KR</div>
+    <div style="display:flex;flex-direction:column;gap:1px">
+      <div class="user-name">Kavitha Ramachandran</div>
+      <div class="user-role">L&D Manager · Super Admin</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">DataPort — Workforce Data Import</div>
+    <a href="../nav-menus.html" style="display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;border:1px solid var(--ink-border);font-size:11px;color:var(--ink-soft);text-decoration:none;transition:background .15s,color .15s" onmouseover="this.style.background='rgba(255,255,255,0.05)';this.style.color='var(--paper)'" onmouseout="this.style.background='transparent';this.style.color='var(--ink-soft)'">
+        <svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        All screens
+      </a>
+    <div class="topbar-meta">M2 Module · Excel Import Wizard</div>
+    <div class="tb-pill teal">Step <span id="stepLabel">1A</span> of 4</div>
+    <div class="tb-pill gold">812 employees</div>
+    <button class="tb-btn">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Import guide
+    </button>
+    <button class="tb-btn primary" onclick="goStep('1d')">
+      <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      View completed import
+    </button>
+  </div>
+
+  <!-- WIZARD STRIP -->
+  <div class="wizard-strip">
+    <div class="wz-step active" id="wz-1a" onclick="goStep('1a')">
+      <div class="wz-num">1A</div><div class="wz-label">Upload file</div>
+    </div>
+    <div class="wz-arrow">›</div>
+    <div class="wz-step" id="wz-1b" onclick="goStep('1b')">
+      <div class="wz-num">1B</div><div class="wz-label">Sheet preview</div>
+    </div>
+    <div class="wz-arrow">›</div>
+    <div class="wz-step" id="wz-1c" onclick="goStep('1c')">
+      <div class="wz-num">1C</div><div class="wz-label">Validation</div>
+    </div>
+    <div class="wz-arrow">›</div>
+    <div class="wz-step" id="wz-1d" onclick="goStep('1d')">
+      <div class="wz-num">1D</div><div class="wz-label">Confirm import</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ── STEP 1A — UPLOAD ── -->
+    <div class="step-panel active" id="panel-1a" style="justify-content:center;gap:16px">
+      <div class="upload-zone" onclick="goStep('1b')">
+        <div class="upload-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <div class="upload-title">Drop your workforce file here</div>
+        <div class="upload-sub">Upload an Excel (.xlsx) file using the Edstellar DataPort template. The platform will parse all sheets automatically and flag any errors row by row.</div>
+        <div class="upload-formats">
+          <div class="fmt-chip">.xlsx</div>
+          <div class="fmt-chip">.xls</div>
+          <div class="fmt-chip">.csv</div>
+        </div>
+      </div>
+
+      <div class="hris-strip">
+        <div class="hris-label">Or sync from HRIS</div>
+        <div class="hris-options">
+          <button class="hris-btn connected"><div class="hris-dot"></div>Workday · Connected</button>
+          <button class="hris-btn"><div class="hris-dot"></div>BambooHR</button>
+          <button class="hris-btn"><div class="hris-dot"></div>SAP SuccessFactors</button>
+          <button class="hris-btn"><div class="hris-dot"></div>+ Add integration</button>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="tc-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="tc-text">
+          <div class="tc-title">Edstellar DataPort Template v3</div>
+          <div class="tc-sub">8 sheets · Employee Profile, Roles, Departments, Skills, Certifications, Training History, Teams, Org Chart</div>
+        </div>
+        <button class="tc-btn">Download template</button>
+      </div>
+    </div>
+
+    <!-- ── STEP 1B — SHEET PREVIEW ── -->
+    <div class="step-panel" id="panel-1b">
+      <div class="parse-header">
+        <div class="parse-file-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="parse-info">
+          <div class="parse-filename">Arcova_Workforce_DataPort_March2026.xlsx</div>
+          <div class="parse-meta">3.4 MB · Uploaded 18 Mar 2026 · 09:02 SGT · 8 sheets detected</div>
+        </div>
+        <div class="parse-status">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round"><polyline points="20 6 9 17 4 12"/></svg>
+          Parsed successfully
+        </div>
+      </div>
+
+      <div class="sheets-grid">
+        <div class="sheet-card clean">
+          <div class="sc-head">
+            <div class="sheet-icon" style="background:var(--green-dim);color:var(--green-lt)"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+            <div class="sc-name">Employee Profile</div>
+            <div class="sc-badge scb-clean">Clean</div>
+          </div>
+          <div class="sc-body">
+            <div class="sc-stat"><span class="sc-stat-key">Rows</span><span class="sc-stat-val green">812</span></div>
+            <div class="sc-stat"><span class="sc-stat-key">Errors</span><span class="sc-stat-val green">0</span></div>
+            <div class="sc-stat"><span class="sc-stat-key">Columns mapped</span><span class="sc-stat-val">24 / 24</span></div>
+          </div>
+        </div>
+        <div class="sheet-card has-errors">
+          <div class="sc-head">
+            <div class="sheet-icon" style="background:var(--amber-dim);color:var(--amber-lt)"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+            <div class="sc-name">Roles & Departments</div>
+            <div class="sc-badge scb-warn">7 errors</div>
+          </div>
+          <div class="sc-body">
+            <div class="sc-stat"><span class="sc-stat-key">Rows</span><span class="sc-stat-val">288</span></div>
+            <div class="sc-stat"><span class="sc-stat-key">Errors</span><span class="sc-stat-val red">7</span></div>
+            <div class="sc-stat"><span class="sc-stat-key">Columns mapped</span><span class="sc-stat-val">18 / 18</span></div>
+          </div>
+        </div>
+        <div class="sheet-card clean">
+          <div class="sc-head">
+            <div class="sheet-icon" style="background:var(--blue-dim);color:var(--blue-lt)"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
+            <div class="sc-name">Certifications</div>
+            <div class="sc-badge scb-clean">Clean</div>
+          </div>
+          <div class="sc-body">
+            <div class="sc-stat"><span class="sc-stat-key">Rows</span><span class="sc-stat-val green">1,204</span></div>
+            <div class="sc-stat"><span class="sc-stat-key">Errors</span><span class="sc-stat-val green">0</span></div>
+            <div class="sc-stat"><span class="sc-stat-key">Columns mapped</span><span class="sc-stat-val">12 / 12</span></div>
+          </div>
+        </div>
+        <div class="sheet-card clean">
+          <div class="sc-head">
+            <div class="sheet-icon" style="background:var(--purple-dim,rgba(106,58,154,.15));color:#A070E0"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+            <div class="sc-name">Training History</div>
+            <div class="sc-badge scb-clean">Clean</div>
+          </div>
+          <div class="sc-body">
+            <div class="sc-stat"><span class="sc-stat-key">Rows</span><span class="sc-stat-val green">3,841</span></div>
+            <div class="sc-stat"><span class="sc-stat-key">Errors</span><span class="sc-stat-val green">0</span></div>
+            <div class="sc-stat"><span class="sc-stat-key">Columns mapped</span><span class="sc-stat-val">16 / 16</span></div>
+          </div>
+        </div>
+        <div class="sheet-card has-errors">
+          <div class="sc-head">
+            <div class="sheet-icon" style="background:var(--teal-dim);color:var(--teal-lt)"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <div class="sc-name">Skills (Self-Declared)</div>
+            <div class="sc-badge scb-warn">3 errors</div>
+          </div>
+          <div class="sc-body">
+            <div class="sc-stat"><span class="sc-stat-key">Rows</span><span class="sc-stat-val">4,218</span></div>
+            <div class="sc-stat"><span class="sc-stat-key">Errors</span><span class="sc-stat-val red">3</span></div>
+            <div class="sc-stat"><span class="sc-stat-key">Columns mapped</span><span class="sc-stat-val">10 / 10</span></div>
+          </div>
+        </div>
+        <div class="sheet-card clean">
+          <div class="sc-head">
+            <div class="sheet-icon" style="background:var(--gold-dim);color:var(--gold)"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div class="sc-name">Teams & Cohorts</div>
+            <div class="sc-badge scb-ok">2 warnings</div>
+          </div>
+          <div class="sc-body">
+            <div class="sc-stat"><span class="sc-stat-key">Rows</span><span class="sc-stat-val">142</span></div>
+            <div class="sc-stat"><span class="sc-stat-key">Errors</span><span class="sc-stat-val" style="color:var(--amber-lt)">2 warn</span></div>
+            <div class="sc-stat"><span class="sc-stat-key">Columns mapped</span><span class="sc-stat-val">8 / 8</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STEP 1C — VALIDATION ── -->
+    <div class="step-panel" id="panel-1c">
+      <div class="val-summary">
+        <div class="vs-item"><div class="vs-val">10,507</div><div class="vs-key">Total rows</div></div>
+        <div class="vs-div"></div>
+        <div class="vs-item"><div class="vs-val green">10,497</div><div class="vs-key">Valid rows</div></div>
+        <div class="vs-div"></div>
+        <div class="vs-item"><div class="vs-val red">7</div><div class="vs-key">Errors</div></div>
+        <div class="vs-div"></div>
+        <div class="vs-item"><div class="vs-val amber">5</div><div class="vs-key">Warnings</div></div>
+        <div class="vs-div"></div>
+        <div class="vs-item"><div class="vs-val">812</div><div class="vs-key">Employees</div></div>
+        <div class="vs-div"></div>
+        <div class="vs-item"><div class="vs-val green">99.9%</div><div class="vs-key">Data quality</div></div>
+      </div>
+
+      <div class="data-preview">
+        <div class="dp-head">
+          <div class="dp-title">Row-level errors — Fix or skip before importing</div>
+          <div class="dp-count">7 errors · 5 warnings</div>
+        </div>
+        <table class="error-table">
+          <thead>
+            <tr>
+              <th>Row ref</th>
+              <th>Sheet</th>
+              <th>Issue</th>
+              <th>Severity</th>
+              <th style="text-align:center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>R114</td>
+              <td>Roles & Depts</td>
+              <td style="color:var(--paper)">Department "Infra Solutions" not found in OrgSetup — no matching BU</td>
+              <td><span class="err-sev es-err">Error</span></td>
+              <td><div class="err-action"><button class="era-btn era-fix">Fix</button><button class="era-btn era-skip">Skip</button></div></td>
+            </tr>
+            <tr>
+              <td>R203</td>
+              <td>Roles & Depts</td>
+              <td style="color:var(--paper)">Job title "Snr BIM Engr" — abbreviation not mapped to role taxonomy</td>
+              <td><span class="err-sev es-err">Error</span></td>
+              <td><div class="err-action"><button class="era-btn era-fix">Fix</button><button class="era-btn era-skip">Skip</button></div></td>
+            </tr>
+            <tr>
+              <td>R441–R447</td>
+              <td>Roles & Depts</td>
+              <td style="color:var(--paper)">5 rows: Employee IDs duplicated across two departments</td>
+              <td><span class="err-sev es-err">Error</span></td>
+              <td><div class="err-action"><button class="era-btn era-fix">Fix</button><button class="era-btn era-skip">Skip row</button></div></td>
+            </tr>
+            <tr>
+              <td>R2871</td>
+              <td>Skills</td>
+              <td style="color:var(--paper)">Skill "Revit 2019" — not in framework taxonomy; nearest match "BIM"</td>
+              <td><span class="err-sev es-warn">Warning</span></td>
+              <td><div class="err-action"><button class="era-btn era-fix">Map →BIM</button><button class="era-btn era-skip">Skip</button></div></td>
+            </tr>
+            <tr>
+              <td>R3104</td>
+              <td>Skills</td>
+              <td style="color:var(--paper)">Proficiency value "5" out of range — scale is 1–4</td>
+              <td><span class="err-sev es-err">Error</span></td>
+              <td><div class="err-action"><button class="era-btn era-fix">Cap at 4</button><button class="era-btn era-skip">Skip</button></div></td>
+            </tr>
+            <tr>
+              <td>R78, R91</td>
+              <td>Teams</td>
+              <td style="color:var(--paper)">Team lead EMP-ID not found in Employee Profile sheet</td>
+              <td><span class="err-sev es-warn">Warning</span></td>
+              <td><div class="err-action"><button class="era-btn era-fix">Fix</button><button class="era-btn era-skip">Skip</button></div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── STEP 1D — CONFIRM ── -->
+    <div class="step-panel" id="panel-1d">
+      <div class="confirm-banner">
+        <div class="conf-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="conf-info">
+          <div class="conf-title">Ready to import — 10,497 valid rows</div>
+          <div class="conf-sub">5 errors fixed · 2 rows skipped · Data quality score: 99.9% · Workday sync active · SkillForge pipeline will be triggered automatically after import confirms.</div>
+        </div>
+        <div class="conf-stats">
+          <div class="conf-stat"><div class="conf-stat-val">812</div><div class="conf-stat-key">Employees</div></div>
+          <div class="conf-stat"><div class="conf-stat-val">32</div><div class="conf-stat-key">Roles</div></div>
+          <div class="conf-stat"><div class="conf-stat-val">1,204</div><div class="conf-stat-key">Certs</div></div>
+        </div>
+      </div>
+
+      <div class="meter-card">
+        <div class="meter-title">Data Context Meter — Post Import Estimate</div>
+        <div class="meter-bar-track">
+          <div class="meter-bar-fill" style="width:91%" id="meterFill"></div>
+        </div>
+        <div class="meter-labels">
+          <span class="meter-label-key">AI confidence · SkillForge pipeline readiness</span>
+          <span class="meter-label-val">91% — High confidence · Ready to generate</span>
+        </div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:4px">
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green-lt)"><div style="width:7px;height:7px;border-radius:50%;background:var(--green-lt)"></div>Employee profiles complete</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green-lt)"><div style="width:7px;height:7px;border-radius:50%;background:var(--green-lt)"></div>Role architecture mapped</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green-lt)"><div style="width:7px;height:7px;border-radius:50%;background:var(--green-lt)"></div>Training history loaded</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--amber-lt)"><div style="width:7px;height:7px;border-radius:50%;background:var(--amber-lt)"></div>Skills self-declared only — assessment pending</div>
+        </div>
+      </div>
+
+      <div class="data-preview">
+        <div class="dp-head">
+          <div class="dp-title">Employee data preview — first 5 rows</div>
+          <div class="dp-count">812 employees total</div>
+        </div>
+        <table class="preview-table">
+          <thead>
+            <tr>
+              <th>Emp ID</th>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Department</th>
+              <th>Location</th>
+              <th>Certs</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>EMP-001</td>
+              <td style="color:var(--paper)">Priya Menon</td>
+              <td>Sr Project Manager</td>
+              <td>Project Delivery</td>
+              <td>Singapore</td>
+              <td>2</td>
+              <td><div class="status-dot-cell"><div class="status-dot" style="background:var(--green-lt)"></div>Ready</div></td>
+            </tr>
+            <tr>
+              <td>EMP-002</td>
+              <td style="color:var(--paper)">Tariq Al-Rashidi</td>
+              <td>BIM Manager</td>
+              <td>BIM & Digital Delivery</td>
+              <td>Dubai</td>
+              <td>1</td>
+              <td><div class="status-dot-cell"><div class="status-dot" style="background:var(--green-lt)"></div>Ready</div></td>
+            </tr>
+            <tr>
+              <td>EMP-003</td>
+              <td style="color:var(--paper)">Ananya Krishnaswamy</td>
+              <td>EHS Auditor</td>
+              <td>EHS & Risk</td>
+              <td>Mumbai</td>
+              <td>2</td>
+              <td><div class="status-dot-cell"><div class="status-dot" style="background:var(--green-lt)"></div>Ready</div></td>
+            </tr>
+            <tr>
+              <td>EMP-004</td>
+              <td style="color:var(--paper)">Darren Loh</td>
+              <td>Data Analyst</td>
+              <td>IT Infrastructure</td>
+              <td>Singapore</td>
+              <td>0</td>
+              <td><div class="status-dot-cell"><div class="status-dot" style="background:var(--green-lt)"></div>Ready</div></td>
+            </tr>
+            <tr>
+              <td>EMP-005</td>
+              <td style="color:var(--paper)">Kavitha Ramachandran</td>
+              <td>L&D Manager</td>
+              <td>Human Resources</td>
+              <td>Singapore</td>
+              <td>2</td>
+              <td><div class="status-dot-cell"><div class="status-dot" style="background:var(--green-lt)"></div>Ready</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="import-actions">
+        <div class="import-note">Confirming import will create <strong>812 Skill Passports</strong>, populate the DataPort layer, and queue the <strong>SkillForge 7-prompt pipeline</strong>. This action is logged and versioned — previous data is preserved as a snapshot.</div>
+        <button class="ia-btn outline" onclick="goStep('1c')">← Back to validation</button>
+        <button class="ia-btn primary" onclick="confirmImport()">
+          Confirm Import →
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- WIZARD NAV -->
+  <div class="wizard-nav" id="wizNav">
+    <div class="wn-info" id="wizNavInfo">Step 1A of 4 — Upload your workforce Excel file</div>
+    <div class="wn-actions">
+      <button class="wn-btn back" id="backBtn" onclick="stepBack()" style="display:none">← Back</button>
+      <button class="wn-btn next" id="nextBtn" onclick="stepNext()">Next →</button>
+    </div>
+  </div>
+
+  <!-- DONE SCREEN -->
+  <div id="doneScreen">
+    <div class="done-ring">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(58,184,122,0.15)" stroke-width="4"/>
+        <circle cx="50" cy="50" r="44" fill="none" stroke="#3AB87A" stroke-width="4"
+          stroke-dasharray="276" stroke-dashoffset="276"
+          style="transform:rotate(-90deg);transform-origin:50% 50%;animation:dashAnim 1.2s ease .3s forwards"/>
+      </svg>
+      <div class="done-icon-inner">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+    </div>
+    <div class="done-title">Import <span>complete.</span></div>
+    <div class="done-sub">812 employee records imported · 1,204 certificates loaded · 3,841 training history entries processed · 812 Skill Passports created · SkillForge pipeline queued</div>
+    <div class="done-stats">
+      <div class="ds-item"><div class="ds-val">812</div><div class="ds-key">Employees</div></div>
+      <div class="ds-item"><div class="ds-val">1,204</div><div class="ds-key">Certificates</div></div>
+      <div class="ds-item"><div class="ds-val">3,841</div><div class="ds-key">Training entries</div></div>
+      <div class="ds-item"><div class="ds-val">91%</div><div class="ds-key">Data quality</div></div>
+    </div>
+    <div class="done-actions">
+      <button class="done-btn outline" onclick="resetWizard()">Import another file</button>
+      <button class="done-btn primary" onclick="window.location.href='skillforge.html'">Run SkillForge →</button>
+    </div>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+const STEPS = ['1a','1b','1c','1d'];
+const LABELS = {
+  '1a': 'Step 1A of 4 — Upload your workforce Excel file',
+  '1b': 'Step 1B of 4 — Review sheet-by-sheet parse results',
+  '1c': 'Step 1C of 4 — Fix or skip row-level validation errors',
+  '1d': 'Step 1D of 4 — Confirm import and queue SkillForge'
+};
+let currentStep = '1a';
+
+function goStep(s) {
+  // hide all panels
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.wz-step').forEach(w => {
+    w.classList.remove('active');
+    const idx = STEPS.indexOf(w.id.replace('wz-',''));
+    const cur = STEPS.indexOf(s);
+    if (idx < cur) w.classList.add('done'); else w.classList.remove('done');
+  });
+
+  document.getElementById('panel-' + s).classList.add('active');
+  document.getElementById('wz-' + s).classList.add('active');
+  document.getElementById('wz-' + s).classList.remove('done');
+  document.getElementById('stepLabel').textContent = s.toUpperCase();
+  document.getElementById('wizNavInfo').textContent = LABELS[s];
+  currentStep = s;
+
+  // back/next buttons
+  const idx = STEPS.indexOf(s);
+  document.getElementById('backBtn').style.display = idx > 0 ? 'block' : 'none';
+  const nextBtn = document.getElementById('nextBtn');
+  if (s === '1d') {
+    nextBtn.className = 'wn-btn finish';
+    nextBtn.textContent = 'Confirm Import';
+    nextBtn.onclick = confirmImport;
+  } else {
+    nextBtn.className = 'wn-btn next';
+    nextBtn.textContent = 'Next →';
+    nextBtn.onclick = stepNext;
+  }
+}
+
+function stepNext() {
+  const idx = STEPS.indexOf(currentStep);
+  if (idx < STEPS.length - 1) goStep(STEPS[idx + 1]);
+}
+
+function stepBack() {
+  const idx = STEPS.indexOf(currentStep);
+  if (idx > 0) goStep(STEPS[idx - 1]);
+}
+
+function confirmImport() {
+  // hide wizard UI
+  document.getElementById('wizNav').style.display = 'none';
+  document.querySelector('.wizard-strip').style.display = 'none';
+  document.querySelector('.content').style.display = 'none';
+  document.getElementById('doneScreen').style.display = 'flex';
+  document.getElementById('stepLabel').textContent = 'Done';
+
+  // mark all steps done
+  document.querySelectorAll('.wz-step').forEach(w => {
+    w.classList.remove('active'); w.classList.add('done');
+  });
+}
+
+function resetWizard() {
+  document.getElementById('wizNav').style.display = 'flex';
+  document.querySelector('.wizard-strip').style.display = 'flex';
+  document.querySelector('.content').style.display = 'flex';
+  document.getElementById('doneScreen').style.display = 'none';
+  goStep('1a');
+}
+</script>
+
+<script>
+(function(){
+  var toast = document.createElement("div");
+  toast.id = "sip-toast";
+  toast.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#152438;border:1px solid rgba(255,255,255,0.1);color:#8AACC4;font-size:12px;font-family:'DM Sans',sans-serif;padding:10px 18px;border-radius:8px;opacity:0;transition:opacity 0.2s,transform 0.2s;pointer-events:none;z-index:9999;white-space:nowrap;";
+  document.body.appendChild(toast);
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.style.opacity = "1";
+    toast.style.transform = "translateX(-50%) translateY(0)";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function(){
+      toast.style.opacity="0";
+      toast.style.transform="translateX(-50%) translateY(8px)";
+    }, 2400);
+  }
+  document.addEventListener("click", function(e){
+    var a = e.target.closest("a");
+    if(a && a.getAttribute("href") === "#"){
+      e.preventDefault();
+      var label = (a.textContent || "").trim().replace(/\s+/g," ").substring(0,36);
+      showToast(label + " — available in full platform");
+    }
+  });
+})();
+</script>
+</body>
+</html>

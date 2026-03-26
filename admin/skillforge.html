@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillForge — AI Pipeline · Arcova SIP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:        #080F18;
+  --ink-panel:  #0D1825;
+  --ink-card:   #111F30;
+  --ink-raised: #162840;
+  --ink-border: rgba(255,255,255,0.07);
+  --ink-soft:   #4A6A84;
+  --paper:      #D8E8F4;
+  --paper-mid:  #8AACC4;
+  --gold:       #C8A84B;
+  --gold-light: #E8D070;
+  --gold-dim:   rgba(200,168,75,0.10);
+  --gold-glow:  rgba(200,168,75,0.20);
+  --blue:       #1A5C8A;
+  --blue-lt:    #3A8CC0;
+  --blue-glow:  rgba(58,140,192,0.15);
+  --teal:       #0E7C72;
+  --teal-lt:    #22B0A4;
+  --green:      #1A7A4A;
+  --green-lt:   #2EAA6A;
+  --red:        #8B2635;
+  --mono:       'DM Mono', monospace;
+  --sidebar-w:  220px;
+}
+
+html, body { height: 100%; background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans-serif; overflow: hidden; }
+
+.app { display: flex; height: 100vh; }
+
+/* ── SIDEBAR (same as CHRO page) ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--ink-panel);
+  border-right: 1px solid var(--ink-border);
+  display: flex; flex-direction: column; flex-shrink: 0; z-index: 10;
+}
+.sidebar-brand { padding: 22px 20px 20px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; }
+.brand-hex { width: 28px; height: 28px; background: var(--gold); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); flex-shrink: 0; }
+.brand-txt { display: flex; flex-direction: column; gap: 1px; }
+.brand-nm  { font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--paper); }
+.brand-tg  { font-size: 10px; color: var(--ink-soft); letter-spacing: 0.06em; text-transform: uppercase; }
+
+.sidebar-nav { flex: 1; padding: 12px 14px; overflow-y: auto; }
+.nav-section-label { font-size: 10px; color: var(--ink-soft); letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 6px 6px; }
+.nav-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; border-radius: 6px; font-size: 12.5px;
+  color: var(--paper-mid); cursor: pointer; text-decoration: none;
+  transition: background 0.15s, color 0.15s; margin-bottom: 1px;
+}
+.nav-item:hover { background: rgba(255,255,255,0.05); color: var(--paper); }
+.nav-item.active { background: rgba(200,168,75,0.10); color: var(--gold-light); }
+.nav-item svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; opacity: 0.7; }
+.nav-item.active svg { opacity: 1; }
+.nav-badge { margin-left: auto; padding: 1px 6px; border-radius: 100px; font-size: 10px; background: rgba(26,122,74,0.2); color: #3AB87A; font-weight: 500; }
+
+.sidebar-user { padding: 14px 16px; border-top: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; }
+.user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; color: var(--paper); flex-shrink: 0; }
+.user-info { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.user-name { font-size: 12px; font-weight: 500; color: var(--paper); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-role { font-size: 10px; color: var(--ink-soft); }
+
+/* ── MAIN ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+.topbar {
+  height: 54px; border-bottom: 1px solid var(--ink-border);
+  display: flex; align-items: center; padding: 0 32px; gap: 16px;
+  flex-shrink: 0; background: var(--ink-panel);
+}
+.topbar-title { font-family: 'Syne',sans-serif; font-size: 15px; font-weight: 700; color: var(--paper); flex: 1; }
+.topbar-meta  { font-size: 11px; color: var(--ink-soft); }
+.chip-outline { padding: 4px 10px; border-radius: 100px; border: 1px solid rgba(200,168,75,0.3); font-size: 11px; color: var(--gold); }
+
+/* ── CONTENT ── */
+.content { flex: 1; overflow-y: auto; padding: 32px; display: flex; flex-direction: column; gap: 24px; }
+.content::-webkit-scrollbar { width: 4px; }
+.content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+/* ── PRE-LAUNCH STATE ── */
+#preLaunch {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  flex: 1; gap: 0; text-align: center; padding: 40px 20px;
+  animation: fadeUp 0.6s ease both;
+}
+
+.pre-eyebrow {
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.pre-eyebrow::before, .pre-eyebrow::after { content: ''; display: block; width: 32px; height: 1px; background: var(--gold); opacity: 0.4; }
+
+.pre-title {
+  font-family: 'Syne',sans-serif; font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 800; line-height: 1.08; letter-spacing: -0.02em;
+  color: var(--paper); margin-bottom: 14px;
+}
+.pre-title em { font-style: normal; color: var(--gold); }
+
+.pre-desc {
+  font-size: 14px; color: var(--paper-mid); line-height: 1.7;
+  max-width: 520px; margin: 0 auto 36px;
+}
+
+/* Org context summary cards */
+.context-cards {
+  display: flex; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; justify-content: center;
+}
+.ctx-card {
+  padding: 12px 18px;
+  background: var(--ink-card);
+  border: 1px solid var(--ink-border);
+  border-radius: 10px;
+  display: flex; flex-direction: column; gap: 3px;
+  text-align: left; min-width: 130px;
+}
+.ctx-val  { font-family: 'Syne',sans-serif; font-size: 18px; font-weight: 700; color: var(--paper); }
+.ctx-key  { font-size: 10px; color: var(--ink-soft); letter-spacing: 0.07em; text-transform: uppercase; }
+
+/* Step preview strip */
+.step-preview {
+  display: flex; gap: 8px; margin-bottom: 40px; align-items: stretch;
+}
+.step-pip {
+  flex: 1; padding: 10px 12px;
+  background: var(--ink-card);
+  border: 1px solid var(--ink-border);
+  border-radius: 8px;
+  display: flex; flex-direction: column; gap: 4px;
+  transition: border-color 0.3s;
+}
+.pip-num  { font-family: 'DM Mono',monospace; font-size: 10px; color: var(--ink-soft); }
+.pip-name { font-size: 11px; color: var(--paper-mid); line-height: 1.3; }
+
+/* Launch button */
+.launch-btn {
+  padding: 16px 48px;
+  background: var(--gold);
+  color: var(--ink);
+  font-family: 'Syne',sans-serif;
+  font-size: 15px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  border: none; border-radius: 8px;
+  cursor: pointer;
+  position: relative; overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 24px rgba(200,168,75,0.3);
+}
+.launch-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(200,168,75,0.45); }
+.launch-btn:active { transform: translateY(0); }
+.launch-btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+  transform: translateX(-100%);
+  animation: shimmer 2.5s ease-in-out infinite;
+}
+
+/* ── RUNNING STATE ── */
+#runningState { display: none; flex-direction: column; gap: 20px; animation: fadeUp 0.5s ease both; }
+
+/* Pipeline header */
+.pipeline-header {
+  display: flex; align-items: center; gap: 20px;
+  padding: 20px 24px;
+  background: var(--ink-card);
+  border: 1px solid var(--ink-border);
+  border-radius: 12px;
+}
+.pipeline-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: var(--gold-dim);
+  border: 1px solid rgba(200,168,75,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.pipeline-icon svg { width: 22px; height: 22px; stroke: var(--gold); fill: none; stroke-width: 1.5; stroke-linecap: round; }
+.pipeline-meta { flex: 1; }
+.pipeline-name { font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 700; color: var(--paper); }
+.pipeline-sub  { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+
+.overall-progress { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; min-width: 160px; }
+.overall-pct { font-family: 'Syne',sans-serif; font-size: 28px; font-weight: 800; color: var(--gold); line-height: 1; }
+.overall-bar-track { width: 160px; height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+.overall-bar-fill  { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.6s ease; width: 0%; }
+.overall-label { font-size: 10px; color: var(--ink-soft); }
+
+/* Steps grid */
+.steps-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Step card */
+.step-card {
+  background: var(--ink-card);
+  border: 1px solid var(--ink-border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+
+.step-card.running { border-color: rgba(200,168,75,0.5); }
+.step-card.done    { border-color: rgba(26,160,100,0.4); }
+
+.step-inner { padding: 16px 18px 14px; }
+
+.step-top {
+  display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;
+}
+
+.step-num-badge {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono',monospace; font-size: 11px; font-weight: 500;
+  flex-shrink: 0; transition: background 0.3s, color 0.3s;
+  background: rgba(255,255,255,0.06); color: var(--ink-soft);
+}
+.step-card.running .step-num-badge { background: var(--gold-dim); color: var(--gold); }
+.step-card.done    .step-num-badge { background: rgba(26,160,100,0.2); color: #3AB87A; }
+
+.step-text { flex: 1; }
+.step-name { font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; color: var(--paper-mid); line-height: 1.2; transition: color 0.3s; }
+.step-card.running .step-name,
+.step-card.done    .step-name { color: var(--paper); }
+.step-desc { font-size: 11px; color: var(--ink-soft); margin-top: 4px; line-height: 1.5; }
+
+.step-status {
+  font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+  margin-left: auto; padding: 3px 8px; border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.08); color: var(--ink-soft);
+  flex-shrink: 0; transition: all 0.3s;
+  white-space: nowrap;
+}
+.step-card.running .step-status { border-color: rgba(200,168,75,0.4); color: var(--gold); background: var(--gold-dim); }
+.step-card.done    .step-status { border-color: rgba(26,160,100,0.4); color: #3AB87A; background: rgba(26,160,100,0.12); }
+
+/* Step progress bar */
+.step-bar-track { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+.step-bar-fill  { height: 100%; border-radius: 2px; width: 0%; transition: width 0.4s linear; }
+.step-card.running .step-bar-fill { background: var(--gold); }
+.step-card.done    .step-bar-fill { background: #3AB87A; width: 100% !important; }
+
+/* Terminal log */
+.step-log {
+  padding: 10px 18px 12px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  background: rgba(0,0,0,0.2);
+  min-height: 0; max-height: 64px; overflow: hidden;
+}
+.log-line {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--ink-soft); line-height: 1.7;
+  opacity: 0; transform: translateY(4px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.log-line.visible { opacity: 1; transform: translateY(0); }
+.log-line.gold    { color: var(--gold-light); }
+.log-line.green   { color: #3AB87A; }
+.log-line.teal    { color: #22B0A4; }
+
+/* Cursor blink */
+.cursor { display: inline-block; width: 6px; height: 11px; background: var(--gold); margin-left: 2px; animation: cursorBlink 0.8s step-end infinite; vertical-align: text-bottom; }
+
+/* ── OUTPUT STATE ── */
+#outputState {
+  display: none; flex-direction: column; gap: 16px;
+  animation: fadeUp 0.5s ease both;
+}
+
+.output-banner {
+  padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(26,122,74,0.15) 0%, rgba(26,92,138,0.1) 100%);
+  border: 1px solid rgba(26,160,100,0.35);
+  border-radius: 12px;
+  display: flex; align-items: center; gap: 16px;
+}
+.banner-check {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(26,160,100,0.2);
+  border: 1px solid rgba(26,160,100,0.4);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.banner-check svg { width: 18px; height: 18px; stroke: #3AB87A; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.banner-text { flex: 1; }
+.banner-title { font-family: 'Syne',sans-serif; font-size: 15px; font-weight: 700; color: var(--paper); }
+.banner-sub   { font-size: 12px; color: var(--paper-mid); margin-top: 3px; }
+.banner-stats { display: flex; gap: 20px; }
+.bstat { display: flex; flex-direction: column; gap: 2px; text-align: right; }
+.bstat-val { font-family: 'Syne',sans-serif; font-size: 20px; font-weight: 800; color: var(--gold); }
+.bstat-key { font-size: 10px; color: var(--ink-soft); letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Framework preview */
+.output-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.out-panel {
+  background: var(--ink-card);
+  border: 1px solid var(--ink-border);
+  border-radius: 12px; overflow: hidden;
+}
+.out-panel-head {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ink-border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.out-panel-title { font-family: 'Syne',sans-serif; font-size: 12px; font-weight: 700; color: var(--paper); }
+.out-count { font-size: 10px; color: var(--gold); background: var(--gold-dim); padding: 2px 8px; border-radius: 100px; }
+
+.domain-list { padding: 10px 0; }
+.domain-row {
+  padding: 8px 16px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  cursor: pointer; transition: background 0.15s;
+}
+.domain-row:last-child { border-bottom: none; }
+.domain-row:hover { background: rgba(255,255,255,0.03); }
+.domain-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.domain-name { font-size: 12px; color: var(--paper); flex: 1; }
+.domain-count { font-size: 10px; color: var(--ink-soft); }
+.domain-bar-wrap { width: 60px; height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+.domain-bar { height: 100%; border-radius: 2px; }
+
+/* Role-skill sample */
+.role-sample { padding: 10px 0; }
+.role-row {
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.role-row:last-child { border-bottom: none; }
+.role-title { font-size: 11.5px; color: var(--paper); margin-bottom: 5px; }
+.skill-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+.skill-pill {
+  padding: 2px 7px; border-radius: 100px;
+  font-size: 10px; border: 1px solid;
+}
+.sp-crit { border-color: rgba(200,168,75,0.4); color: var(--gold); }
+.sp-high { border-color: rgba(58,140,192,0.4); color: #5BA8E0; }
+.sp-med  { border-color: rgba(92,122,150,0.3); color: var(--paper-mid); }
+
+/* Proficiency sample */
+.prof-sample { padding: 10px 0; }
+.prof-skill-row { padding: 7px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.prof-skill-row:last-child { border-bottom: none; }
+.psf-name { font-size: 11px; color: var(--paper-mid); margin-bottom: 5px; }
+.psf-levels { display: flex; gap: 4px; }
+.psf-level {
+  flex: 1; padding: 4px 6px; border-radius: 4px; font-size: 9px;
+  text-align: center; line-height: 1.3;
+  background: rgba(255,255,255,0.04); color: var(--ink-soft);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.psf-level.target { border-color: rgba(200,168,75,0.5); color: var(--gold); background: var(--gold-dim); }
+
+/* Approval CTA */
+.approval-cta {
+  padding: 18px 24px;
+  background: var(--ink-card);
+  border: 1px solid rgba(200,168,75,0.2);
+  border-radius: 12px;
+  display: flex; align-items: center; gap: 16px;
+}
+.cta-text { flex: 1; }
+.cta-title { font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 700; color: var(--paper); }
+.cta-sub   { font-size: 12px; color: var(--paper-mid); margin-top: 3px; }
+.cta-btn {
+  padding: 10px 24px; border-radius: 6px;
+  background: var(--gold); color: var(--ink);
+  font-family: 'Syne',sans-serif; font-size: 12px; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  border: none; cursor: pointer; white-space: nowrap;
+  transition: opacity 0.2s;
+}
+.cta-btn:hover { opacity: 0.88; }
+.cta-btn-outline {
+  padding: 10px 20px; border-radius: 6px;
+  border: 1px solid rgba(200,168,75,0.35); color: var(--gold);
+  background: transparent; font-family: 'Syne',sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  cursor: pointer; white-space: nowrap; transition: background 0.15s;
+}
+.cta-btn-outline:hover { background: var(--gold-dim); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(200%); }
+}
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(200,168,75,0.2);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block; vertical-align: middle; margin-right: 6px;
+}
+a.sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 22px 20px 20px; border-bottom: 1px solid var(--ink-border); text-decoration: none; }
+a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <a class="sidebar-brand" href="../index.html" style="text-decoration:none;cursor:pointer">
+    <div class="brand-hex"></div>
+    <div class="brand-txt">
+      <span class="brand-nm">Arcova SIP</span>
+      <span class="brand-tg">Admin Portal</span>
+    </div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Setup</div>
+    <a class="nav-item" href="dataport.html">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      OrgSetup
+      <span class="nav-badge">Done</span>
+    </a>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      DataPort
+      <span class="nav-badge">Done</span>
+    </a>
+    <div class="nav-section-label">AI Pipeline</div>
+    <a class="nav-item active" href="#">
+      <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      SkillForge
+    </a>
+    <a class="nav-item" href="approvalhub.html">
+      <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+      ApprovalHub
+    </a>
+    <div class="nav-section-label">Intelligence</div>
+    <a class="nav-item" href="../manager/chro-dashboard.html">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      InsightBoard
+    </a>
+    <a class="nav-item" href="../employee/skill-passport.html">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Skill Passport
+    </a>
+    <div class="nav-section-label">Modules</div>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      AssessEngine
+    </a>
+    <a class="nav-item" href="../manager/lna-report.html">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      ReportGen
+    </a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-avatar">KR</div>
+    <div class="user-info">
+      <div class="user-name">Kavitha Ramachandran</div>
+      <div class="user-role">L&D Manager</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">SkillForge — AI Framework Generation</div>
+    <a href="../nav-menus.html" style="display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;border:1px solid var(--ink-border);font-size:11px;color:var(--ink-soft);text-decoration:none;transition:background .15s,color .15s" onmouseover="this.style.background='rgba(255,255,255,0.05)';this.style.color='var(--paper)'" onmouseout="this.style.background='transparent';this.style.color='var(--ink-soft)'">
+        <svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        All screens
+      </a>
+    <div class="topbar-meta">7-Prompt Claude Pipeline &nbsp;·&nbsp; Arcova Infrastructure</div>
+    <div class="chip-outline">M3 Module</div>
+  </div>
+
+  <div class="content">
+
+    <!-- PRE-LAUNCH -->
+    <div id="preLaunch">
+      <div class="pre-eyebrow">7-Prompt AI Pipeline</div>
+      <h1 class="pre-title">Generate your<br><em>Skill Framework</em></h1>
+      <p class="pre-desc">Claude will analyse Arcova's strategic context and workforce data across 7 sequential prompts — producing a verified skill taxonomy, competency framework, and individual employee baselines.</p>
+
+      <div class="context-cards">
+        <div class="ctx-card">
+          <div class="ctx-val">812</div>
+          <div class="ctx-key">Employees</div>
+        </div>
+        <div class="ctx-card">
+          <div class="ctx-val">32</div>
+          <div class="ctx-key">Job Roles</div>
+        </div>
+        <div class="ctx-card">
+          <div class="ctx-val">4</div>
+          <div class="ctx-key">Business Units</div>
+        </div>
+        <div class="ctx-card">
+          <div class="ctx-val">4</div>
+          <div class="ctx-key">Regions</div>
+        </div>
+        <div class="ctx-card">
+          <div class="ctx-val">OrgSetup<br>+ DataPort</div>
+          <div class="ctx-key">Inputs ready</div>
+        </div>
+      </div>
+
+      <div class="step-preview">
+        <div class="step-pip"><div class="pip-num">P1</div><div class="pip-name">Context Extraction</div></div>
+        <div class="step-pip"><div class="pip-num">P2</div><div class="pip-name">Deep Synthesis</div></div>
+        <div class="step-pip"><div class="pip-num">P3</div><div class="pip-name">Role Architecture</div></div>
+        <div class="step-pip"><div class="pip-num">P4</div><div class="pip-name">Skill Generation</div></div>
+        <div class="step-pip"><div class="pip-num">P5</div><div class="pip-name">Competency Gen</div></div>
+        <div class="step-pip"><div class="pip-num">P6</div><div class="pip-name">Role–Skill Map</div></div>
+        <div class="step-pip"><div class="pip-num">P7</div><div class="pip-name">Baselines</div></div>
+      </div>
+
+      <button class="launch-btn" id="launchBtn" onclick="startPipeline()">
+        ⚡ &nbsp;Generate Framework
+      </button>
+    </div>
+
+    <!-- RUNNING STATE -->
+    <div id="runningState">
+      <div class="pipeline-header">
+        <div class="pipeline-icon">
+          <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div class="pipeline-meta">
+          <div class="pipeline-name">SkillForge Pipeline — Running</div>
+          <div class="pipeline-sub" id="pipelineSubtitle">Initialising Claude AI engine…</div>
+        </div>
+        <div class="overall-progress">
+          <div class="overall-pct" id="overallPct">0%</div>
+          <div class="overall-bar-track"><div class="overall-bar-fill" id="overallBar"></div></div>
+          <div class="overall-label" id="overallLabel">Step 0 of 7</div>
+        </div>
+      </div>
+
+      <div class="steps-grid" id="stepsGrid"></div>
+    </div>
+
+    <!-- OUTPUT STATE -->
+    <div id="outputState">
+
+      <div class="output-banner">
+        <div class="banner-check">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="banner-text">
+          <div class="banner-title">Framework Bible Generated Successfully</div>
+          <div class="banner-sub">All 7 prompts completed · Ready for 3-tier ApprovalHub review · Generated 14 Oct 2025, 11:42 AM SGT</div>
+        </div>
+        <div class="banner-stats">
+          <div class="bstat"><div class="bstat-val">48</div><div class="bstat-key">Skills</div></div>
+          <div class="bstat"><div class="bstat-val">8</div><div class="bstat-key">Competencies</div></div>
+          <div class="bstat"><div class="bstat-val">812</div><div class="bstat-key">Baselines</div></div>
+        </div>
+      </div>
+
+      <div class="output-grid">
+
+        <!-- Skill Domains -->
+        <div class="out-panel">
+          <div class="out-panel-head">
+            <div class="out-panel-title">Skill Domains Generated</div>
+            <div class="out-count">6 domains · 48 skills</div>
+          </div>
+          <div class="domain-list">
+            <div class="domain-row"><div class="domain-dot" style="background:#C8A84B"></div><div class="domain-name">Engineering & Technical</div><div class="domain-count">8 skills</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:100%;background:#C8A84B"></div></div></div>
+            <div class="domain-row"><div class="domain-dot" style="background:#3A8CC0"></div><div class="domain-name">Project & Programme Mgmt</div><div class="domain-count">7 skills</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:87%;background:#3A8CC0"></div></div></div>
+            <div class="domain-row"><div class="domain-dot" style="background:#22B0A4"></div><div class="domain-name">Digital & Technology</div><div class="domain-count">7 skills</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:87%;background:#22B0A4"></div></div></div>
+            <div class="domain-row"><div class="domain-dot" style="background:#E87060"></div><div class="domain-name">EHS & Sustainability</div><div class="domain-count">6 skills</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:75%;background:#E87060"></div></div></div>
+            <div class="domain-row"><div class="domain-dot" style="background:#A070D0"></div><div class="domain-name">Finance & Commercial</div><div class="domain-count">5 skills</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:62%;background:#A070D0"></div></div></div>
+            <div class="domain-row"><div class="domain-dot" style="background:#2EAA6A"></div><div class="domain-name">Leadership & People</div><div class="domain-count">6 skills</div><div class="domain-bar-wrap"><div class="domain-bar" style="width:75%;background:#2EAA6A"></div></div></div>
+          </div>
+        </div>
+
+        <!-- Role–Skill Mapping Sample -->
+        <div class="out-panel">
+          <div class="out-panel-head">
+            <div class="out-panel-title">Role–Skill Mapping Sample</div>
+            <div class="out-count">32 roles mapped</div>
+          </div>
+          <div class="role-sample">
+            <div class="role-row">
+              <div class="role-title">Senior Project Manager</div>
+              <div class="skill-pills">
+                <span class="skill-pill sp-crit">Project Planning</span>
+                <span class="skill-pill sp-crit">Risk Mgmt</span>
+                <span class="skill-pill sp-high">Digital Delivery</span>
+                <span class="skill-pill sp-high">Stakeholder Mgmt</span>
+                <span class="skill-pill sp-med">BIM</span>
+              </div>
+            </div>
+            <div class="role-row">
+              <div class="role-title">BIM Manager</div>
+              <div class="skill-pills">
+                <span class="skill-pill sp-crit">BIM (Advanced)</span>
+                <span class="skill-pill sp-crit">Digital Delivery</span>
+                <span class="skill-pill sp-crit">AI & ML Literacy</span>
+                <span class="skill-pill sp-high">IoT & Smart Infra</span>
+                <span class="skill-pill sp-high">Data Analytics</span>
+              </div>
+            </div>
+            <div class="role-row">
+              <div class="role-title">EHS Auditor</div>
+              <div class="skill-pills">
+                <span class="skill-pill sp-crit">ISO 45001</span>
+                <span class="skill-pill sp-crit">Site Safety</span>
+                <span class="skill-pill sp-high">EIA</span>
+                <span class="skill-pill sp-high">ESG Reporting</span>
+                <span class="skill-pill sp-med">Carbon & Net Zero</span>
+              </div>
+            </div>
+            <div class="role-row">
+              <div class="role-title">Data Analyst</div>
+              <div class="skill-pills">
+                <span class="skill-pill sp-crit">Data Analytics</span>
+                <span class="skill-pill sp-crit">AI & ML Literacy</span>
+                <span class="skill-pill sp-high">Cloud Infra</span>
+                <span class="skill-pill sp-high">Cybersecurity</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Proficiency Descriptors Sample -->
+        <div class="out-panel">
+          <div class="out-panel-head">
+            <div class="out-panel-title">Proficiency Descriptors — Sample</div>
+            <div class="out-count">4-level scale · All 48 skills</div>
+          </div>
+          <div class="prof-sample">
+            <div class="prof-skill-row">
+              <div class="psf-name">Building Information Modelling (BIM)</div>
+              <div class="psf-levels">
+                <div class="psf-level">L1 · Reads BIM models; understands layer structure</div>
+                <div class="psf-level">L2 · Creates & edits models in Revit independently</div>
+                <div class="psf-level target">L3 · Manages BIM workflows; reviews clash detection ★</div>
+                <div class="psf-level">L4 · Defines BIM standards; leads ISO 19650 compliance</div>
+              </div>
+            </div>
+            <div class="prof-skill-row">
+              <div class="psf-name">AI & Machine Learning Literacy</div>
+              <div class="psf-levels">
+                <div class="psf-level">L1 · Understands AI concepts; identifies use cases</div>
+                <div class="psf-level target">L2 · Uses AI tools; interprets model outputs ★</div>
+                <div class="psf-level">L3 · Evaluates AI systems; leads AI delivery pilots</div>
+                <div class="psf-level">L4 · Designs AI strategy; governs model risk</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Employee Baselines Sample -->
+        <div class="out-panel">
+          <div class="out-panel-head">
+            <div class="out-panel-title">Employee Baselines — Sample</div>
+            <div class="out-count">812 employees · AI-estimated</div>
+          </div>
+          <div class="role-sample">
+            <div class="role-row">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+                <div style="width:24px;height:24px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:9px;font-family:'Syne',sans-serif;font-weight:700;flex-shrink:0">PM</div>
+                <span style="font-size:12px;color:var(--paper)">Priya Menon</span>
+                <span style="font-size:10px;color:var(--ink-soft)">Sr Project Manager</span>
+                <span style="margin-left:auto;font-size:10px;color:var(--gold);background:var(--gold-dim);padding:2px 7px;border-radius:100px">Est. L2.9</span>
+              </div>
+              <div class="skill-pills">
+                <span class="skill-pill sp-crit">Planning L3</span>
+                <span class="skill-pill sp-high">Risk Mgmt L2</span>
+                <span class="skill-pill sp-med">Digital L2</span>
+                <span class="skill-pill sp-med">BIM L1</span>
+              </div>
+            </div>
+            <div class="role-row">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+                <div style="width:24px;height:24px;border-radius:50%;background:#0E7C72;display:flex;align-items:center;justify-content:center;font-size:9px;font-family:'Syne',sans-serif;font-weight:700;flex-shrink:0">TA</div>
+                <span style="font-size:12px;color:var(--paper)">Tariq Al-Rashidi</span>
+                <span style="font-size:10px;color:var(--ink-soft)">BIM Manager</span>
+                <span style="margin-left:auto;font-size:10px;color:#E87060;background:rgba(232,112,96,0.12);padding:2px 7px;border-radius:100px">Est. L2.1</span>
+              </div>
+              <div class="skill-pills">
+                <span class="skill-pill sp-high">BIM L2</span>
+                <span class="skill-pill sp-med">Digital L2</span>
+                <span class="skill-pill" style="border-color:rgba(232,112,96,0.4);color:#E87060">AI Lit. L1 ⚠</span>
+                <span class="skill-pill" style="border-color:rgba(232,112,96,0.4);color:#E87060">IoT L1 ⚠</span>
+              </div>
+            </div>
+            <div class="role-row">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+                <div style="width:24px;height:24px;border-radius:50%;background:#1A5C3A;display:flex;align-items:center;justify-content:center;font-size:9px;font-family:'Syne',sans-serif;font-weight:700;flex-shrink:0">AK</div>
+                <span style="font-size:12px;color:var(--paper)">Ananya Krishnaswamy</span>
+                <span style="font-size:10px;color:var(--ink-soft)">EHS Auditor</span>
+                <span style="margin-left:auto;font-size:10px;color:#3AB87A;background:rgba(58,184,122,0.12);padding:2px 7px;border-radius:100px">Est. L3.2</span>
+              </div>
+              <div class="skill-pills">
+                <span class="skill-pill sp-crit">ISO 45001 L3</span>
+                <span class="skill-pill sp-crit">Safety L4</span>
+                <span class="skill-pill sp-high">EIA L3</span>
+                <span class="skill-pill sp-med">ESG L2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="approval-cta">
+        <div class="cta-text">
+          <div class="cta-title">Framework Bible ready for 3-tier approval</div>
+          <div class="cta-sub">Tier 1 (L&D Manager) → Tier 2 (Department Heads) → Tier 3 (CHRO) · 14 edits flagged for human review</div>
+        </div>
+        <button class="cta-btn-outline" onclick="resetDemo()">↺ &nbsp;Re-run Pipeline</button>
+        <button class="cta-btn" onclick="window.location.href='approvalhub.html'">Send to ApprovalHub →</button>
+      </div>
+
+    </div><!-- /outputState -->
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+// ── PIPELINE DATA ──────────────────────────────────────────
+const STEPS = [
+  {
+    num: 1, name: "Context Extraction", duration: 3200,
+    desc: "Reading OrgSetup strategic context, goals, products, clients, and tools",
+    logs: [
+      { t: 200,  text: "→ Loading OrgSetup layer…",                          cls: "" },
+      { t: 700,  text: "→ Strategic goals: 4 identified",                     cls: "teal" },
+      { t: 1300, text: "→ Products & services: 4 catalogued",                 cls: "teal" },
+      { t: 2000, text: "→ Governing standards: ISO 45001, ISO 9001 flagged",  cls: "gold" },
+      { t: 2800, text: "✓ Context extraction complete",                       cls: "green" }
+    ]
+  },
+  {
+    num: 2, name: "Deep Context Synthesis", duration: 3600,
+    desc: "Synthesising industry context with Arcova's strategic priorities",
+    logs: [
+      { t: 300,  text: "→ Industry: Infrastructure & Construction · Pan-Asia",cls: "" },
+      { t: 900,  text: "→ Cross-referencing CIOB, BCA, FIDIC standards…",    cls: "" },
+      { t: 1800, text: "→ Strategic priority mapped: BIM capability gap",     cls: "gold" },
+      { t: 2600, text: "→ Digital transformation risk: HIGH",                 cls: "gold" },
+      { t: 3200, text: "✓ Context synthesised — 6 domain clusters identified",cls: "green" }
+    ]
+  },
+  {
+    num: 3, name: "Role Architecture Analysis", duration: 4000,
+    desc: "Mapping 32 job roles across 4 BUs — identifying clusters & criticality",
+    logs: [
+      { t: 400,  text: "→ Loading 32 job roles from DataPort…",              cls: "" },
+      { t: 1100, text: "→ Engineering cluster: 3 sub-groups identified",      cls: "teal" },
+      { t: 1900, text: "→ Digital cluster: flagged as highest-gap risk",      cls: "gold" },
+      { t: 2800, text: "→ Criticality scoring: 8 roles = critical tier",     cls: "gold" },
+      { t: 3600, text: "✓ Role architecture mapped — 32 roles × 6 domains",  cls: "green" }
+    ]
+  },
+  {
+    num: 4, name: "Skill Generation", duration: 4400,
+    desc: "Generating 48 skills across 6 domains with 4-level proficiency descriptors",
+    logs: [
+      { t: 500,  text: "→ Generating Engineering & Technical skills…",       cls: "" },
+      { t: 1200, text: "→ 8 skills · 32 behavioural descriptors written",    cls: "teal" },
+      { t: 2000, text: "→ Digital & Technology: AI Literacy flagged critical",cls: "gold" },
+      { t: 3000, text: "→ All 6 domains complete · 48 skills total",         cls: "teal" },
+      { t: 3900, text: "✓ Skill taxonomy generated — 192 descriptors written",cls: "green" }
+    ]
+  },
+  {
+    num: 5, name: "Competency Generation", duration: 3800,
+    desc: "Generating 8 behavioural & functional competencies with observable indicators",
+    logs: [
+      { t: 400,  text: "→ Behavioural competencies: 4 identified",            cls: "" },
+      { t: 1100, text: "→ Functional competencies: 3 identified",             cls: "teal" },
+      { t: 1800, text: "→ Leadership competency: Ethical Leadership added",   cls: "gold" },
+      { t: 2700, text: "→ Observable indicators: 4 per competency × 8",      cls: "teal" },
+      { t: 3400, text: "✓ Competency framework complete — 8 competencies",    cls: "green" }
+    ]
+  },
+  {
+    num: 6, name: "Role–Skill Mapping", duration: 4200,
+    desc: "Assigning required proficiency targets per skill per role — 32 × 48 matrix",
+    logs: [
+      { t: 500,  text: "→ Mapping Sr Project Manager profile…",               cls: "" },
+      { t: 1200, text: "→ BIM Manager: 4 critical skills flagged",            cls: "gold" },
+      { t: 2000, text: "→ Cross-referencing against strategic goals…",        cls: "" },
+      { t: 3000, text: "→ 1,536 role–skill data points written",              cls: "teal" },
+      { t: 3800, text: "✓ Role–skill matrix complete — ApprovalHub ready",    cls: "green" }
+    ]
+  },
+  {
+    num: 7, name: "Employee Baselines", duration: 4800,
+    desc: "Setting AI-estimated proficiency baselines for all 812 employees",
+    logs: [
+      { t: 600,  text: "→ Loading 812 employee records from DataPort…",      cls: "" },
+      { t: 1400, text: "→ Cross-referencing CVs, certs, project history…",   cls: "" },
+      { t: 2400, text: "→ 14 critical gap flags raised across digital skills",cls: "gold" },
+      { t: 3400, text: "→ Skill Passports initialised for 812 employees",    cls: "teal" },
+      { t: 4200, text: "✓ Baselines complete · Framework Bible published",    cls: "green" }
+    ]
+  }
+];
+
+// ── BUILD STEP CARDS ───────────────────────────────────────
+function buildStepCards() {
+  const grid = document.getElementById("stepsGrid");
+  grid.innerHTML = "";
+
+  STEPS.forEach(s => {
+    const card = document.createElement("div");
+    card.className = "step-card";
+    card.id = "step-" + s.num;
+    card.innerHTML = `
+      <div class="step-inner">
+        <div class="step-top">
+          <div class="step-num-badge">P${s.num}</div>
+          <div class="step-text">
+            <div class="step-name">${s.name}</div>
+            <div class="step-desc">${s.desc}</div>
+          </div>
+          <div class="step-status" id="status-${s.num}">Queued</div>
+        </div>
+        <div class="step-bar-track">
+          <div class="step-bar-fill" id="bar-${s.num}"></div>
+        </div>
+      </div>
+      <div class="step-log" id="log-${s.num}"></div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ── PIPELINE ENGINE ────────────────────────────────────────
+let running = false;
+
+function startPipeline() {
+  if (running) return;
+  running = true;
+
+  document.getElementById("preLaunch").style.display = "none";
+  const rs = document.getElementById("runningState");
+  rs.style.display = "flex";
+
+  buildStepCards();
+  runStep(0);
+}
+
+function runStep(idx) {
+  if (idx >= STEPS.length) {
+    setTimeout(showOutput, 600);
+    return;
+  }
+
+  const s = STEPS[idx];
+  const card   = document.getElementById("step-" + s.num);
+  const status = document.getElementById("status-" + s.num);
+  const bar    = document.getElementById("bar-" + s.num);
+  const logEl  = document.getElementById("log-" + s.num);
+
+  // Mark running
+  card.classList.add("running");
+  status.textContent = "Running…";
+
+  // Update header
+  document.getElementById("pipelineSubtitle").textContent =
+    "Prompt " + s.num + " of 7 — " + s.name;
+  document.getElementById("overallLabel").textContent =
+    "Step " + s.num + " of 7";
+
+  // Animate bar
+  const startTime = performance.now();
+  let barInterval = setInterval(() => {
+    const elapsed = performance.now() - startTime;
+    const pct = Math.min(100, (elapsed / s.duration) * 100);
+    bar.style.width = pct + "%";
+    if (pct >= 100) clearInterval(barInterval);
+  }, 40);
+
+  // Overall progress
+  const overallBase = (idx / 7) * 100;
+  let overallInterval = setInterval(() => {
+    const elapsed = performance.now() - startTime;
+    const stepPct = Math.min(1, elapsed / s.duration);
+    const overall = overallBase + (stepPct / 7) * 100;
+    const display = Math.min(99, Math.round(overall));
+    document.getElementById("overallPct").textContent = display + "%";
+    document.getElementById("overallBar").style.width = display + "%";
+    if (stepPct >= 1) clearInterval(overallInterval);
+  }, 60);
+
+  // Log lines
+  s.logs.forEach(log => {
+    setTimeout(() => {
+      const line = document.createElement("div");
+      line.className = "log-line" + (log.cls ? " " + log.cls : "");
+      line.textContent = log.text;
+      logEl.appendChild(line);
+      requestAnimationFrame(() => line.classList.add("visible"));
+      // keep only last 3 lines
+      const lines = logEl.querySelectorAll(".log-line");
+      if (lines.length > 3) lines[0].remove();
+    }, log.t);
+  });
+
+  // On complete
+  setTimeout(() => {
+    clearInterval(barInterval);
+    clearInterval(overallInterval);
+    bar.style.width = "100%";
+    card.classList.remove("running");
+    card.classList.add("done");
+    status.textContent = "Done ✓";
+
+    // Next step
+    setTimeout(() => runStep(idx + 1), 300);
+  }, s.duration);
+}
+
+function showOutput() {
+  document.getElementById("overallPct").textContent = "100%";
+  document.getElementById("overallBar").style.width = "100%";
+  document.getElementById("pipelineSubtitle").textContent =
+    "All 7 prompts complete — Framework Bible generated";
+  document.getElementById("overallLabel").textContent = "Complete";
+
+  setTimeout(() => {
+    document.getElementById("runningState").style.display = "none";
+    const out = document.getElementById("outputState");
+    out.style.display = "flex";
+  }, 800);
+}
+
+function resetDemo() {
+  running = false;
+  document.getElementById("outputState").style.display = "none";
+  document.getElementById("runningState").style.display = "none";
+  document.getElementById("preLaunch").style.display = "flex";
+}
+</script>
+
+<script>
+(function(){
+  var toast = document.createElement("div");
+  toast.id = "sip-toast";
+  toast.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#152438;border:1px solid rgba(255,255,255,0.1);color:#8AACC4;font-size:12px;font-family:'DM Sans',sans-serif;padding:10px 18px;border-radius:8px;opacity:0;transition:opacity 0.2s,transform 0.2s;pointer-events:none;z-index:9999;white-space:nowrap;";
+  document.body.appendChild(toast);
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.style.opacity = "1";
+    toast.style.transform = "translateX(-50%) translateY(0)";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function(){
+      toast.style.opacity="0";
+      toast.style.transform="translateX(-50%) translateY(8px)";
+    }, 2400);
+  }
+  document.addEventListener("click", function(e){
+    var a = e.target.closest("a");
+    if(a && a.getAttribute("href") === "#"){
+      e.preventDefault();
+      var label = (a.textContent || "").trim().replace(/\s+/g," ").substring(0,36);
+      showToast(label + " — available in full platform");
+    }
+  });
+})();
+</script>
+</body>
+</html>
