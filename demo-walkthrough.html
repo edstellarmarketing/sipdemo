@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Platform Story — Guided Demo · Arcova SIP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:        #0C1B2E;
+  --ink-panel:  #111F30;
+  --ink-card:   #162535;
+  --ink-border: rgba(255,255,255,0.07);
+  --ink-soft:   #5C7A96;
+  --paper:      #E8EEF4;
+  --paper-mid:  #A8BDD0;
+  --gold:       #C8A84B;
+  --gold-lt:    #E0C878;
+  --gold-dim:   rgba(200,168,75,0.10);
+  --blue:       #1A5C8A;
+  --blue-lt:    #2E7AB5;
+  --green:      #1A7A4A;
+  --green-lt:   #3AB87A;
+  --red:        #C0392B;
+  --red-lt:     #E87060;
+  --amber:      #D4820A;
+  --teal:       #0D8A8A;
+  --teal-lt:    #22C0B4;
+  --purple:     #6A3A9A;
+  --purple-lt:  #A070E0;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
+
+/* ── HEADER ── */
+.hero {
+  padding: 60px 48px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(200,168,75,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200,168,75,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(26,92,138,0.12) 0%, transparent 70%);
+  top: -200px; left: 50%; transform: translateX(-50%);
+  pointer-events: none;
+}
+.hero-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+.hero-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.brand-hex { width: 28px; height: 28px; background: var(--gold); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); flex-shrink: 0; }
+.brand-nm { font-family: 'Syne',sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--paper); }
+.hero-link {
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--ink-border);
+  font-size: 11px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: all .15s;
+}
+.hero-link:hover { border-color: rgba(200,168,75,0.3); color: var(--gold); }
+.hero-link.gold { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 600; }
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+.hero-eyebrow::before, .hero-eyebrow::after { content: ''; width: 28px; height: 1px; background: var(--gold); opacity: 0.5; }
+
+.hero h1 {
+  font-family: 'Syne',sans-serif;
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--paper);
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+.hero h1 span { color: var(--gold); }
+.hero-desc {
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto 32px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── FLOW LINE ── */
+.flow-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 32px 80px;
+  position: relative;
+}
+
+/* Vertical connector line */
+.flow-container::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 80px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--gold) 0%, rgba(200,168,75,0.15) 100%);
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+/* ── STEP ── */
+.step {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 40px;
+  animation: fadeUp 0.5s ease both;
+}
+.step:nth-child(1) { animation-delay: 0.1s; }
+.step:nth-child(2) { animation-delay: 0.2s; }
+.step:nth-child(3) { animation-delay: 0.3s; }
+.step:nth-child(4) { animation-delay: 0.4s; }
+.step:nth-child(5) { animation-delay: 0.5s; }
+.step:nth-child(6) { animation-delay: 0.6s; }
+.step:nth-child(7) { animation-delay: 0.7s; }
+
+/* Step number bubble */
+.step-bubble {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne',sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0 auto 20px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Step card */
+.step-card {
+  background: var(--ink-card);
+  border: 1px solid var(--ink-border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color .25s, transform .25s;
+}
+.step-card:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-3px); }
+
+.step-header {
+  padding: 24px 28px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  border-bottom: 1px solid var(--ink-border);
+}
+.step-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.step-icon svg { width: 22px; height: 22px; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.step-info { flex: 1; }
+.step-level {
+  font-size: 10px;
+  font-family: 'DM Mono',monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.step-title { font-family: 'Syne',sans-serif; font-size: 18px; font-weight: 800; color: var(--paper); margin-bottom: 6px; }
+.step-subtitle { font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+
+/* ── WHAT TO SEE SECTION ── */
+.step-body { padding: 20px 28px 24px; }
+.see-label {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.see-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.see-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--ink-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.see-num {
+  font-family: 'Syne',sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+  flex-shrink: 0;
+  min-width: 36px;
+}
+.see-text { font-size: 11.5px; color: var(--paper-mid); line-height: 1.5; }
+.see-text strong { color: var(--paper); font-weight: 500; }
+
+/* ── WHY IT MATTERS ── */
+.why-box {
+  background: rgba(26,92,138,0.08);
+  border: 1px solid rgba(26,92,138,0.2);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+.why-icon {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(26,92,138,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.why-icon svg { width: 11px; height: 11px; stroke: var(--blue-lt); fill: none; stroke-width: 2; stroke-linecap: round; }
+.why-text { font-size: 12px; color: var(--paper-mid); line-height: 1.6; }
+.why-text strong { color: var(--paper); font-weight: 500; }
+
+/* ── CTA LINK ── */
+.step-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-family: 'Syne',sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: opacity .15s, transform .15s;
+}
+.step-cta:hover { opacity: 0.88; transform: translateX(2px); }
+.step-cta svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+/* ── ARROW CONNECTOR ── */
+.flow-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin: -8px 0 -8px;
+  position: relative;
+  z-index: 1;
+}
+.flow-arrow-label {
+  font-size: 10px;
+  font-family: 'DM Mono',monospace;
+  color: var(--ink-soft);
+  background: var(--ink);
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1px solid var(--ink-border);
+  white-space: nowrap;
+}
+
+/* ── PORTAL TAG ── */
+.portal-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid;
+}
+.portal-tag.admin { background: rgba(26,92,138,0.1); border-color: rgba(26,92,138,0.3); color: var(--blue-lt); }
+.portal-tag.manager { background: var(--gold-dim); border-color: rgba(200,168,75,0.3); color: var(--gold); }
+.portal-tag.employee { background: rgba(26,122,74,0.1); border-color: rgba(26,122,74,0.3); color: var(--green-lt); }
+
+/* ── FOOTER ── */
+.demo-footer {
+  text-align: center;
+  padding: 40px 32px 48px;
+  border-top: 1px solid var(--ink-border);
+}
+.footer-text { font-size: 12px; color: var(--ink-soft); margin-bottom: 16px; }
+.footer-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 8px;
+  background: var(--gold);
+  color: var(--ink);
+  font-family: 'Syne',sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: opacity .15s;
+}
+.footer-cta:hover { opacity: 0.88; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(1.3); } }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-nav">
+    <a class="hero-brand" href="index.html">
+      <div class="brand-hex"></div>
+      <span class="brand-nm">Arcova SIP</span>
+    </a>
+    <a class="hero-link" href="index.html">Portal Home</a>
+    <a class="hero-link" href="nav-menus.html">All Screens</a>
+    <a class="hero-link" href="level-journey.html">Level Journey</a>
+    <a class="hero-link gold" href="#step1">Start Demo</a>
+  </div>
+  <div class="hero-eyebrow">Guided Platform Demo</div>
+  <h1>From workforce opacity<br>to <span>workforce intelligence</span></h1>
+  <p class="hero-desc">Follow the 7-step data journey of Arcova Infrastructure — 812 employees, 48 skills, one continuous intelligence pipeline. Click each step to see it live.</p>
+</div>
+
+<!-- FLOW -->
+<div class="flow-container">
+
+  <!-- ═══════════ STEP 1: DataPort ═══════════ -->
+  <div class="step" id="step1">
+    <div class="step-bubble" style="background:rgba(26,92,138,0.15);border:2px solid rgba(26,92,138,0.4);color:var(--blue-lt)">1</div>
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(26,92,138,0.12);border:1px solid rgba(26,92,138,0.25)">
+          <svg viewBox="0 0 24 24" style="stroke:var(--blue-lt)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <div class="step-info">
+          <div class="step-level" style="color:var(--blue-lt)">Level 1 · Admin Portal · M2: DataPort</div>
+          <div class="step-title">Import Your Workforce Data</div>
+          <div class="step-subtitle">The first question: <em>"Who works here, and what do we already know about them?"</em> DataPort ingests employee records, certifications, training history, and project data from Excel, HRIS sync, or manual entry.</div>
+        </div>
+        <span class="portal-tag admin">Admin</span>
+      </div>
+      <div class="step-body">
+        <div class="see-label">What to look for on this screen</div>
+        <div class="see-grid">
+          <div class="see-item">
+            <div class="see-num" style="color:var(--blue-lt)">812</div>
+            <div class="see-text"><strong>Employees imported</strong> from Workday HRIS across 4 regions and 10 departments</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--gold)">4</div>
+            <div class="see-text"><strong>Step wizard</strong> — Upload → Validate → Reconcile → Import. See row-level error handling</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--green-lt)">91%</div>
+            <div class="see-text"><strong>Data Quality Score</strong> — the platform measures its own data health from day one</div>
+          </div>
+        </div>
+        <div class="why-box">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+          <div class="why-text"><strong>Why this matters:</strong> AI is only as good as its data. Every downstream insight — skills, gaps, learning paths — depends on what enters here. The Data Quality Score tells you upfront if the foundation is solid.</div>
+        </div>
+        <a class="step-cta" href="admin/dataport.html" style="background:rgba(26,92,138,0.15);color:var(--blue-lt);border:1px solid rgba(26,92,138,0.3)">
+          Open DataPort <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow"><div class="flow-arrow-label">812 employees feed into AI</div></div>
+
+  <!-- ═══════════ STEP 2: SkillForge ═══════════ -->
+  <div class="step" id="step2">
+    <div class="step-bubble" style="background:rgba(106,58,154,0.15);border:2px solid rgba(106,58,154,0.4);color:var(--purple-lt)">2</div>
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(106,58,154,0.12);border:1px solid rgba(106,58,154,0.25)">
+          <svg viewBox="0 0 24 24" style="stroke:var(--purple-lt)"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        </div>
+        <div class="step-info">
+          <div class="step-level" style="color:var(--purple-lt)">Level 1 · Admin Portal · M3: SkillForge</div>
+          <div class="step-title">AI Generates the Skill Framework</div>
+          <div class="step-subtitle">The second question: <em>"What skills should our people have?"</em> SkillForge runs a 7-prompt Claude AI pipeline that reads the org context and generates a complete, org-specific skill taxonomy — not a generic template.</div>
+        </div>
+        <span class="portal-tag admin">Admin</span>
+      </div>
+      <div class="step-body">
+        <div class="see-label">What to look for on this screen</div>
+        <div class="see-grid">
+          <div class="see-item">
+            <div class="see-num" style="color:var(--purple-lt)">7</div>
+            <div class="see-text"><strong>AI prompts run sequentially</strong> — watch the pipeline progress from Context Extraction to Employee Baselines</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--gold)">48</div>
+            <div class="see-text"><strong>Skills generated</strong> across 6 domains — each with 4-level proficiency descriptors written in observable behavioural language</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--teal-lt)">8</div>
+            <div class="see-text"><strong>Competencies generated</strong> — Behavioural, Functional, and Leadership types linked to org values</div>
+          </div>
+        </div>
+        <div class="why-box">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+          <div class="why-text"><strong>Why this matters:</strong> Most companies spend 3-6 months manually defining skill frameworks. SkillForge does it in under 3 minutes — and it's specific to Arcova's industry, tools, standards, and strategic goals. Not a generic list.</div>
+        </div>
+        <a class="step-cta" href="admin/skillforge.html" style="background:rgba(106,58,154,0.15);color:var(--purple-lt);border:1px solid rgba(106,58,154,0.3)">
+          Open SkillForge <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow"><div class="flow-arrow-label">48 skills + 8 competencies sent to review</div></div>
+
+  <!-- ═══════════ STEP 3: ApprovalHub ═══════════ -->
+  <div class="step" id="step3">
+    <div class="step-bubble" style="background:rgba(212,130,10,0.15);border:2px solid rgba(212,130,10,0.4);color:var(--amber)">3</div>
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(212,130,10,0.12);border:1px solid rgba(212,130,10,0.25)">
+          <svg viewBox="0 0 24 24" style="stroke:var(--amber)"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <div class="step-info">
+          <div class="step-level" style="color:var(--amber)">Level 1 · Admin Portal · M4: ApprovalHub</div>
+          <div class="step-title">Human Governance — 3-Tier Approval</div>
+          <div class="step-subtitle">The trust gate: <em>"AI generated it — but do humans agree?"</em> Every AI output passes through a 3-tier review before it becomes the organisation's official framework.</div>
+        </div>
+        <span class="portal-tag admin">Admin</span>
+      </div>
+      <div class="step-body">
+        <div class="see-label">What to look for on this screen</div>
+        <div class="see-grid">
+          <div class="see-item">
+            <div class="see-num" style="color:var(--amber)">14</div>
+            <div class="see-text"><strong>Items flagged</strong> by Tier 1 (L&D Manager) — see inline edits, comments, and approval states</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--blue-lt)">3</div>
+            <div class="see-text"><strong>Tiers of review</strong> — L&D Manager → CLO/VP → CHRO. Each tier sees what the previous tier changed</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--green-lt)">1</div>
+            <div class="see-text"><strong>Final edit by CHRO</strong> — adjusted Digital Delivery target from L3 to L2 for Project Managers this cycle</div>
+          </div>
+        </div>
+        <div class="why-box">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+          <div class="why-text"><strong>Why this matters:</strong> AI-generated frameworks that go live unchecked lose trust. The 3-tier approval builds organisational buy-in and creates an audit trail. Every edit is logged — the framework is defensible.</div>
+        </div>
+        <a class="step-cta" href="admin/approvalhub.html" style="background:rgba(212,130,10,0.15);color:var(--amber);border:1px solid rgba(212,130,10,0.3)">
+          Open ApprovalHub <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow"><div class="flow-arrow-label">Framework published → L2 unlocked</div></div>
+
+  <!-- ═══════════ STEP 4: AssessEngine ═══════════ -->
+  <div class="step" id="step4">
+    <div class="step-bubble" style="background:rgba(13,138,138,0.15);border:2px solid rgba(13,138,138,0.4);color:var(--teal-lt)">4</div>
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(13,138,138,0.12);border:1px solid rgba(13,138,138,0.25)">
+          <svg viewBox="0 0 24 24" style="stroke:var(--teal-lt)"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 14l2 2 4-4"/></svg>
+        </div>
+        <div class="step-info">
+          <div class="step-level" style="color:var(--teal-lt)">Level 2 · Admin Portal · M10: AssessEngine</div>
+          <div class="step-title">Measure What People Actually Know</div>
+          <div class="step-subtitle">The critical question: <em>"We know what they should have — but what do they actually have?"</em> Six assessment categories measure everything from hard skills to wellbeing, with AI that builds assessments from a single brief.</div>
+        </div>
+        <span class="portal-tag admin">Admin</span>
+      </div>
+      <div class="step-body">
+        <div class="see-label">What to look for on this screen</div>
+        <div class="see-grid">
+          <div class="see-item">
+            <div class="see-num" style="color:var(--teal-lt)">6</div>
+            <div class="see-text"><strong>Assessment categories</strong> — Skills, Psychometric, Knowledge, 360°, Surveys, and Discovery — each with live status</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--paper)">681</div>
+            <div class="see-text"><strong>Employees assessed</strong> (84% of workforce) — with 8-status distribution tracking per cycle</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--gold)">88%</div>
+            <div class="see-text"><strong>AI Builder confidence</strong> — generated a 32-question BIM assessment from a one-line brief in seconds</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--red-lt)">5</div>
+            <div class="see-text"><strong>Weighted gap multipliers</strong> — not all gaps are equal. Criticality × Transformation × Timeline × Performance × Discovery</div>
+          </div>
+        </div>
+        <div class="why-box">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+          <div class="why-text"><strong>Why this matters:</strong> This is where opinions become intelligence. Self-declared skills are unverified. After AssessEngine, every proficiency score is dual-rated (self + manager), weighted, and intervention-typed. The data that feeds every downstream screen comes from here.</div>
+        </div>
+        <a class="step-cta" href="admin/assess-engine.html" style="background:rgba(13,138,138,0.15);color:var(--teal-lt);border:1px solid rgba(13,138,138,0.3)">
+          Open AssessEngine <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow"><div class="flow-arrow-label">Validated scores flow to intelligence layer</div></div>
+
+  <!-- ═══════════ STEP 5: Skills Matrix ═══════════ -->
+  <div class="step" id="step5">
+    <div class="step-bubble" style="background:var(--gold-dim);border:2px solid rgba(200,168,75,0.4);color:var(--gold)">5</div>
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:var(--gold-dim);border:1px solid rgba(200,168,75,0.25)">
+          <svg viewBox="0 0 24 24" style="stroke:var(--gold)"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="step-info">
+          <div class="step-level" style="color:var(--gold)">Level 2 · Manager Portal · Skills Matrix</div>
+          <div class="step-title">See the Entire Organisation at a Glance</div>
+          <div class="step-subtitle">The visibility moment: <em>"Where exactly are our gaps?"</em> A full 48-skill × 10-department interactive heatmap — colour-coded by gap severity, with perception gap analysis showing where self-ratings diverge from manager ratings.</div>
+        </div>
+        <span class="portal-tag manager">Manager</span>
+      </div>
+      <div class="step-body">
+        <div class="see-label">What to look for on this screen</div>
+        <div class="see-grid">
+          <div class="see-item">
+            <div class="see-num" style="color:var(--red-lt)">14</div>
+            <div class="see-text"><strong>Critical gaps</strong> visible in red cells. Click any cell to drill into employee-level detail with self vs manager ratings</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--gold)">0.6</div>
+            <div class="see-text"><strong>Avg perception gap</strong> — employees rate themselves 0.6 points higher than managers. Red dots flag the biggest over-raters</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--teal-lt)">4</div>
+            <div class="see-text"><strong>Filter modes</strong> — switch between Gap Score, Current Proficiency, Target, and Perception Gap views</div>
+          </div>
+        </div>
+        <div class="why-box">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+          <div class="why-text"><strong>Why this matters:</strong> A CHRO looking at this screen can instantly see that AI Literacy is red across every department — the only skill with a universal deficit. That's a strategic decision in one glance, not a 6-week consulting project.</div>
+        </div>
+        <a class="step-cta" href="manager/skills-matrix.html" style="background:var(--gold-dim);color:var(--gold);border:1px solid rgba(200,168,75,0.3)">
+          Open Skills Matrix <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow"><div class="flow-arrow-label">Gaps ranked + intervention-typed → LNA</div></div>
+
+  <!-- ═══════════ STEP 6: LNA Report + CHRO Dashboard ═══════════ -->
+  <div class="step" id="step6">
+    <div class="step-bubble" style="background:var(--gold-dim);border:2px solid rgba(200,168,75,0.4);color:var(--gold)">6</div>
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:var(--gold-dim);border:1px solid rgba(200,168,75,0.25)">
+          <svg viewBox="0 0 24 24" style="stroke:var(--gold)"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <div class="step-info">
+          <div class="step-level" style="color:var(--gold)">Level 2–3 · Manager Portal · InsightBoard + LNA</div>
+          <div class="step-title">Executive Intelligence + Department Drill-Down</div>
+          <div class="step-subtitle">Two screens, two audiences. The <strong>CHRO Dashboard</strong> shows org-wide KPIs, trends, and AI insights. The <strong>LNA Report</strong> drills into a specific department with employee-level risk ranking, intervention timelines, and budget.</div>
+        </div>
+        <span class="portal-tag manager">Manager</span>
+      </div>
+      <div class="step-body">
+        <div class="see-label">What to look for — CHRO Dashboard</div>
+        <div class="see-grid">
+          <div class="see-item">
+            <div class="see-num" style="color:var(--gold)">61%</div>
+            <div class="see-text"><strong>Org Readiness Score</strong> — up from 44% at L1. The trend chart shows 6 months of improvement</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--green-lt)">27%</div>
+            <div class="see-text"><strong>Gap closure since L1</strong> — concrete proof that the platform is delivering measurable value</div>
+          </div>
+        </div>
+        <div class="see-label" style="margin-top:12px">What to look for — LNA Report</div>
+        <div class="see-grid">
+          <div class="see-item">
+            <div class="see-num" style="color:var(--red-lt)">1.4</div>
+            <div class="see-text"><strong>Avg gap score for BIM & Digital</strong> — the AI narrative explains this is a skill velocity problem, not a talent deficit</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--paper)">SGD 93K</div>
+            <div class="see-text"><strong>Total intervention cost</strong> — budget mapped to specific programmes with timelines and employee counts</div>
+          </div>
+        </div>
+        <div class="why-box">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+          <div class="why-text"><strong>Why this matters:</strong> The CHRO sees the forest. The L&D Manager sees the trees. Same data, persona-adapted views. The AI narrative doesn't just show gaps — it explains root causes and recommends sequenced interventions with costs.</div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="step-cta" href="manager/chro-dashboard.html" style="background:var(--gold-dim);color:var(--gold);border:1px solid rgba(200,168,75,0.3)">
+            Open CHRO Dashboard <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+          </a>
+          <a class="step-cta" href="manager/lna-report.html" style="background:rgba(26,92,138,0.12);color:var(--blue-lt);border:1px solid rgba(26,92,138,0.3)">
+            Open LNA Report <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow"><div class="flow-arrow-label">Intelligence reaches every employee</div></div>
+
+  <!-- ═══════════ STEP 7: Skill Passport ═══════════ -->
+  <div class="step" id="step7">
+    <div class="step-bubble" style="background:rgba(26,122,74,0.15);border:2px solid rgba(26,122,74,0.4);color:var(--green-lt)">7</div>
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(26,122,74,0.12);border:1px solid rgba(26,122,74,0.25)">
+          <svg viewBox="0 0 24 24" style="stroke:var(--green-lt)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div class="step-info">
+          <div class="step-level" style="color:var(--green-lt)">All Levels · Employee Portal · M8: Skill Passport</div>
+          <div class="step-title">Every Employee's Verified Record</div>
+          <div class="step-subtitle">The employee's view: <em>"What does the platform know about me — and is it working for me?"</em> A living, verified professional profile showing skills, gaps, learning path, goals, certificates, and assessment history. Exportable with QR verification when they leave.</div>
+        </div>
+        <span class="portal-tag employee">Employee</span>
+      </div>
+      <div class="step-body">
+        <div class="see-label">What to look for on this screen</div>
+        <div class="see-grid">
+          <div class="see-item">
+            <div class="see-num" style="color:var(--green-lt)">748</div>
+            <div class="see-text"><strong>Active passports</strong> — 92% of workforce has a live, verified profile they can view and export</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--paper)">2.9</div>
+            <div class="see-text"><strong>Priya Menon's proficiency</strong> — see her skill radar, gaps in red, learning path in progress, and IDP goals</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--teal-lt)">QR</div>
+            <div class="see-text"><strong>Export with QR verification</strong> — the passport is the employee's portable, verified credential</div>
+          </div>
+        </div>
+        <div class="why-box">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+          <div class="why-text"><strong>Why this matters:</strong> The passport belongs to the employee. When they see the platform as working FOR them — not surveilling them — adoption follows. Every data point shows its source: assessed, AI-estimated, or self-declared. Full transparency builds trust.</div>
+        </div>
+        <a class="step-cta" href="employee/skill-passport.html" style="background:rgba(26,122,74,0.12);color:var(--green-lt);border:1px solid rgba(26,122,74,0.3)">
+          Open Skill Passport <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="demo-footer">
+  <div class="footer-text">7 steps · 3 portals · One continuous intelligence pipeline · From data import to individual development plan</div>
+  <a class="footer-cta" href="level-journey.html">
+    View the 5-Level Journey Map <svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+  </a>
+</div>
+
+</body>
+</html>
