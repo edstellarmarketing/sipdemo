@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHRO Dashboard — Arcova SIP</title>
+<title>CLO Dashboard — Arcova SIP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -274,7 +274,7 @@
   .kpi-down { color: #E87060; }
   .kpi-neu  { color: var(--ink-soft); }
 
-  /* ── ROW 2: Charts ── */
+  /* ── ROW: Charts ── */
   .row-charts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; animation: fadeUp 0.5s ease 0.2s both; }
 
   /* ── PANEL ── */
@@ -319,36 +319,10 @@
   /* Chart wrapper */
   .chart-wrap { position: relative; }
 
-  /* ── ROW 3: Heatmap + Dept Table ── */
-  .row-bottom { display: grid; grid-template-columns: 1fr 1.4fr; gap: 14px; animation: fadeUp 0.5s ease 0.35s both; }
+  /* ── PROGRAMME TABLE ── */
+  .prog-table { width: 100%; border-collapse: collapse; }
 
-  /* ── HEATMAP ── */
-  .heatmap-grid {
-    display: grid;
-    gap: 3px;
-  }
-
-  .heatmap-skill-label { font-size: 10px; color: var(--ink-soft); display: flex; align-items: center; }
-  .heatmap-dept-label  { font-size: 9px; color: var(--ink-soft); text-align: center; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-
-  .hm-cell {
-    border-radius: 3px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 10px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: transform 0.15s, filter 0.15s;
-  }
-
-  .hm-cell:hover { transform: scale(1.08); filter: brightness(1.2); z-index: 2; position: relative; }
-
-  /* ── DEPT TABLE ── */
-  .dept-table { width: 100%; border-collapse: collapse; }
-
-  .dept-table th {
+  .prog-table th {
     font-size: 10px;
     color: var(--ink-soft);
     letter-spacing: 0.08em;
@@ -358,37 +332,65 @@
     font-weight: 400;
   }
 
-  .dept-table th:not(:first-child) { text-align: center; }
+  .prog-table th:not(:first-child) { text-align: center; }
 
-  .dept-table tr { border-bottom: 1px solid var(--ink-border); }
-  .dept-table tr:last-child { border-bottom: none; }
+  .prog-table tr { border-bottom: 1px solid var(--ink-border); }
+  .prog-table tr:last-child { border-bottom: none; }
 
-  .dept-table td {
-    padding: 9px 12px;
+  .prog-table td {
+    padding: 10px 12px;
     font-size: 12px;
     color: var(--paper-mid);
   }
 
-  .dept-table td:first-child { color: var(--paper); font-size: 12.5px; }
-  .dept-table td:not(:first-child) { text-align: center; }
+  .prog-table td:first-child { color: var(--paper); font-size: 12.5px; }
+  .prog-table td:not(:first-child) { text-align: center; }
 
-  .trend-chip {
+  /* Status chip */
+  .status-chip {
     display: inline-flex;
     align-items: center;
     gap: 3px;
-    padding: 2px 7px;
+    padding: 2px 8px;
     border-radius: 100px;
     font-size: 10px;
     font-weight: 500;
   }
 
-  .trend-chip.up     { background: rgba(26,122,74,0.2);   color: #3AB87A; }
-  .trend-chip.risk   { background: rgba(192,57,43,0.2);   color: #E87060; }
-  .trend-chip.stable { background: rgba(92,122,150,0.15); color: var(--ink-soft); }
+  .status-chip.completed { background: rgba(26,122,74,0.2); color: #3AB87A; }
+  .status-chip.inprogress { background: rgba(26,92,138,0.2); color: #5BA8E0; }
+  .status-chip.upcoming  { background: rgba(92,122,150,0.15); color: var(--ink-soft); }
 
-  /* Readiness bar */
-  .rbar-wrap { width: 80px; height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; display: inline-block; vertical-align: middle; }
-  .rbar-fill { height: 100%; border-radius: 3px; }
+  /* ROI chip */
+  .roi-chip {
+    display: inline-flex;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 500;
+  }
+
+  .roi-chip.high     { background: rgba(26,122,74,0.2); color: #3AB87A; }
+  .roi-chip.veryhigh { background: rgba(26,122,74,0.3); color: #3AB87A; }
+  .roi-chip.pending  { background: rgba(92,122,150,0.15); color: var(--ink-soft); }
+  .roi-chip.na       { color: var(--ink-soft); }
+
+  /* Completion bar */
+  .cbar-wrap { width: 70px; height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; display: inline-block; vertical-align: middle; }
+  .cbar-fill { height: 100%; border-radius: 3px; }
+
+  /* ── VELOCITY BARS ── */
+  .vel-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--ink-border); }
+  .vel-row:last-child { border-bottom: none; }
+  .vel-label { font-size: 12px; color: var(--paper); width: 140px; flex-shrink: 0; }
+  .vel-bar-track { flex: 1; height: 8px; background: rgba(255,255,255,0.07); border-radius: 4px; overflow: hidden; }
+  .vel-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+  .vel-value { font-size: 11px; width: 90px; flex-shrink: 0; text-align: right; font-weight: 500; }
+  .vel-speed { font-size: 10px; width: 70px; flex-shrink: 0; text-align: center; padding: 2px 6px; border-radius: 100px; font-weight: 500; }
+  .vel-speed.fast { background: rgba(26,122,74,0.2); color: #3AB87A; }
+  .vel-speed.good { background: var(--amber-dim); color: var(--amber); }
+  .vel-speed.moderate { background: var(--amber-dim); color: var(--amber); }
+  .vel-speed.slow { background: var(--red-dim); color: #E87060; }
 
   /* AI insight box */
   .ai-insight {
@@ -418,16 +420,8 @@
   .ai-text { font-size: 11.5px; color: var(--paper-mid); line-height: 1.6; }
   .ai-text strong { color: var(--paper); font-weight: 500; }
 
-  /* ── TREND CHART ROW ── */
-  .row-trend { animation: fadeUp 0.5s ease 0.4s both; }
-
-  /* Proficiency dist bar */
-  .prof-dist { display: flex; flex-direction: column; gap: 10px; padding: 4px 0; }
-  .prof-row  { display: flex; align-items: center; gap: 10px; }
-  .prof-lbl  { font-size: 11px; color: var(--paper-mid); width: 100px; flex-shrink: 0; }
-  .prof-bar-track { flex: 1; height: 7px; background: rgba(255,255,255,0.07); border-radius: 4px; overflow: hidden; }
-  .prof-bar-fill  { height: 100%; border-radius: 4px; transition: width 1s ease; }
-  .prof-pct  { font-size: 11px; color: var(--ink-soft); width: 28px; text-align: right; flex-shrink: 0; }
+  /* ── ROW BOTTOM ── */
+  .row-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; animation: fadeUp 0.5s ease 0.35s both; }
 
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
@@ -465,8 +459,8 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
     <!-- Persona Switcher -->
     <div class="persona-switcher">
       <div class="persona-label">Viewing as</div>
-      <button class="persona-btn active"><span class="persona-dot"></span>CHRO</button>
-      <button class="persona-btn"><span class="persona-dot"></span>CLO</button>
+      <button class="persona-btn"><span class="persona-dot"></span>CHRO</button>
+      <button class="persona-btn active"><span class="persona-dot"></span>CLO</button>
       <button class="persona-btn"><span class="persona-dot"></span>HR Manager</button>
       <button class="persona-btn"><span class="persona-dot"></span>HRBP</button>
     </div>
@@ -511,10 +505,10 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
     </nav>
 
     <div class="sidebar-user">
-      <div class="user-avatar">SN</div>
+      <div class="user-avatar">RK</div>
       <div class="user-info">
-        <div class="user-name">Sunita Nair</div>
-        <div class="user-role">Chief HR Officer</div>
+        <div class="user-name">Rajiv Kumar</div>
+        <div class="user-role">Chief Learning Officer</div>
       </div>
     </div>
   </aside>
@@ -524,13 +518,13 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 
     <!-- TOPBAR -->
     <div class="topbar">
-      <div class="topbar-title">CHRO InsightBoard</div>
+      <div class="topbar-title">CLO InsightBoard</div>
       <a href="../level-journey.html" style="display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:#C8A84B;border:none;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;color:#0C1B2E;text-decoration:none;letter-spacing:0.05em;white-space:nowrap;transition:opacity .15s" onmouseover="this.style.opacity='0.86'" onmouseout="this.style.opacity='1'"><svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>L3 · See Journey</a>
     <a href="../nav-menus.html" style="display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;border:1px solid var(--ink-border);font-size:11px;color:var(--ink-soft);text-decoration:none;transition:background .15s,color .15s" onmouseover="this.style.background='rgba(255,255,255,0.05)';this.style.color='var(--paper)'" onmouseout="this.style.background='transparent';this.style.color='var(--ink-soft)'">
         <svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
         All screens
       </a>
-    <div class="topbar-meta">Arcova Infrastructure &nbsp;·&nbsp; 25 March 2026</div>
+    <div class="topbar-meta">Arcova Infrastructure &nbsp;·&nbsp; 27 March 2026</div>
       <div class="level-pill"><div class="level-dot"></div>L3 Active</div>
       <button class="notif-btn">
         <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -544,158 +538,157 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
       <!-- KPI STRIP -->
       <div class="kpi-strip">
         <div class="kpi-card">
-          <div class="kpi-label">Org Readiness</div>
-          <div class="kpi-value gold">61%</div>
-          <div class="kpi-sub kpi-up">↑ 17pts since L1</div>
+          <div class="kpi-label">Training Investment</div>
+          <div class="kpi-value gold">SGD 142K</div>
+          <div class="kpi-sub kpi-neu">Total L3 spend</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label">Avg Proficiency</div>
-          <div class="kpi-value">2.3<span style="font-size:13px;color:var(--ink-soft)">/4.0</span></div>
-          <div class="kpi-sub kpi-up">↑ 0.4 this cycle</div>
+          <div class="kpi-label">Programmes Active</div>
+          <div class="kpi-value">7</div>
+          <div class="kpi-sub kpi-neu">3 completed, 4 in progress</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-label">Critical Gaps</div>
-          <div class="kpi-value red">14</div>
-          <div class="kpi-sub kpi-down">↓ from 19 at L1</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Gap Closure</div>
-          <div class="kpi-value green">27%</div>
-          <div class="kpi-sub kpi-neu">Since Oct 2025</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Passport Coverage</div>
-          <div class="kpi-value">92%</div>
-          <div class="kpi-sub kpi-neu">748 / 812 employees</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Training Enrolled</div>
+          <div class="kpi-label">Employees Enrolled</div>
           <div class="kpi-value">284</div>
-          <div class="kpi-sub kpi-neu">7 active programmes</div>
+          <div class="kpi-sub kpi-neu">35% of workforce</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Avg Completion</div>
+          <div class="kpi-value green">87%</div>
+          <div class="kpi-sub kpi-up">&#8593; 12pts vs target</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Kirkpatrick L1</div>
+          <div class="kpi-value">4.2<span style="font-size:13px;color:var(--ink-soft)">/5</span></div>
+          <div class="kpi-sub kpi-neu">Reaction score</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Certificates Issued</div>
+          <div class="kpi-value">186</div>
+          <div class="kpi-sub kpi-neu">This cycle</div>
         </div>
       </div>
 
-      <!-- ROW 2: Charts -->
+      <!-- PROGRAMME EFFECTIVENESS TABLE -->
+      <div class="panel" style="animation:fadeUp 0.5s ease 0.2s both">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Programme Effectiveness</div>
+            <div class="panel-sub">7 programmes · L3 training cycle · Oct 2025 – Mar 2026</div>
+          </div>
+          <div class="panel-tag gold">Live Tracking</div>
+        </div>
+        <div class="panel-body no-pad" style="overflow-x:auto">
+          <table class="prog-table">
+            <thead>
+              <tr>
+                <th>Programme</th>
+                <th>Enrolled</th>
+                <th>Completed</th>
+                <th>Completion</th>
+                <th>Score</th>
+                <th>Status</th>
+                <th>Cost</th>
+                <th>ROI Signal</th>
+              </tr>
+            </thead>
+            <tbody id="progTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ROW: 3 Charts -->
       <div class="row-charts">
 
-        <!-- Gap closure trend -->
+        <!-- Chart 1: Training Spend vs Gap Closure -->
         <div class="panel">
           <div class="panel-head">
             <div>
-              <div class="panel-title">Gap Closure Trend</div>
-              <div class="panel-sub">Org readiness score · Oct 2025 – Mar 2026</div>
+              <div class="panel-title">Spend vs Gap Closure</div>
+              <div class="panel-sub">Cumulative SGD spend &amp; gap closure %</div>
             </div>
-            <div class="panel-tag green">+17pts</div>
+            <div class="panel-tag gold">Dual Axis</div>
           </div>
           <div class="panel-body">
-            <div class="chart-wrap" style="height:160px">
-              <canvas id="trendChart"></canvas>
+            <div class="chart-wrap" style="height:180px">
+              <canvas id="spendChart"></canvas>
             </div>
           </div>
         </div>
 
-        <!-- Proficiency distribution -->
+        <!-- Chart 2: Completion Rate by Department -->
         <div class="panel">
           <div class="panel-head">
             <div>
-              <div class="panel-title">Proficiency Distribution</div>
-              <div class="panel-sub">All 812 employees · Current cycle</div>
+              <div class="panel-title">Completion by Department</div>
+              <div class="panel-sub">Top 5 departments · Completion rate</div>
             </div>
-            <div class="panel-tag blue">L1–L4 Scale</div>
+            <div class="panel-tag green">Target 75%</div>
           </div>
-          <div class="panel-body" style="display:flex;align-items:center;">
-            <div style="flex:1;height:140px;position:relative">
-              <canvas id="distChart"></canvas>
-            </div>
-            <div class="prof-dist" style="width:130px;padding-left:14px">
-              <div class="prof-row">
-                <div class="prof-lbl">Awareness</div>
-                <div class="prof-bar-track"><div class="prof-bar-fill" style="width:28%;background:#E87060"></div></div>
-                <div class="prof-pct">28%</div>
-              </div>
-              <div class="prof-row">
-                <div class="prof-lbl">Working</div>
-                <div class="prof-bar-track"><div class="prof-bar-fill" style="width:42%;background:#D4820A"></div></div>
-                <div class="prof-pct">42%</div>
-              </div>
-              <div class="prof-row">
-                <div class="prof-lbl">Practitioner</div>
-                <div class="prof-bar-track"><div class="prof-bar-fill" style="width:24%;background:#3AB87A"></div></div>
-                <div class="prof-pct">24%</div>
-              </div>
-              <div class="prof-row">
-                <div class="prof-lbl">Expert</div>
-                <div class="prof-bar-track"><div class="prof-bar-fill" style="width:6%;background:#5BA8E0"></div></div>
-                <div class="prof-pct">6%</div>
-              </div>
+          <div class="panel-body">
+            <div class="chart-wrap" style="height:180px">
+              <canvas id="deptChart"></canvas>
             </div>
           </div>
         </div>
 
-        <!-- Regional readiness -->
+        <!-- Chart 3: Kirkpatrick Scores -->
         <div class="panel">
           <div class="panel-head">
             <div>
-              <div class="panel-title">Regional Readiness</div>
-              <div class="panel-sub">4 offices · Readiness score out of 100</div>
+              <div class="panel-title">Kirkpatrick Scores</div>
+              <div class="panel-sub">4-level evaluation model</div>
             </div>
-            <div class="panel-tag gold">Pan-Asia</div>
+            <div class="panel-tag blue">L1–L4</div>
           </div>
           <div class="panel-body">
-            <div class="chart-wrap" style="height:160px">
-              <canvas id="regionChart"></canvas>
+            <div class="chart-wrap" style="height:180px">
+              <canvas id="kirkChart"></canvas>
             </div>
           </div>
         </div>
 
       </div>
 
-      <!-- ROW 3: Heatmap + Dept Table -->
+      <!-- ROW: Skill Velocity + AI Insights -->
       <div class="row-bottom">
 
-        <!-- SKILL GAP HEATMAP -->
+        <!-- SKILL VELOCITY -->
         <div class="panel">
           <div class="panel-head">
             <div>
-              <div class="panel-title">Skill Gap Heatmap</div>
-              <div class="panel-sub">6 critical skills × 5 departments · Gap score 0–4</div>
+              <div class="panel-title">Skill Velocity</div>
+              <div class="panel-sub">Gap closure speed · points/month</div>
             </div>
-            <div class="panel-tag red">14 Critical</div>
+            <div class="panel-tag green">Tracking</div>
           </div>
-          <div class="panel-body" id="heatmapBody">
+          <div class="panel-body" id="velocityBody">
             <!-- rendered by JS -->
-          </div>
-          <div class="ai-insight">
-            <div class="ai-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div>
-            <div class="ai-text"><strong>AI insight:</strong> BIM & Digital Delivery carries 4 of 14 critical gaps. AI Literacy is the widest gap across all departments — no function is exempt. Recommend prioritising the AI & Data Literacy programme to unblock downstream digital delivery goals.</div>
           </div>
         </div>
 
-        <!-- DEPT TABLE -->
+        <!-- AI INSIGHTS -->
         <div class="panel">
           <div class="panel-head">
             <div>
-              <div class="panel-title">Department Readiness</div>
-              <div class="panel-sub">All 10 departments · Sorted by readiness</div>
+              <div class="panel-title">AI Insights</div>
+              <div class="panel-sub">Automated learning intelligence</div>
             </div>
-            <div class="panel-tag blue">Live data</div>
+            <div class="panel-tag blue">3 Insights</div>
           </div>
-          <div class="panel-body no-pad" style="overflow-y:auto">
-            <table class="dept-table">
-              <thead>
-                <tr>
-                  <th>Department</th>
-                  <th>Readiness</th>
-                  <th>Avg Gap</th>
-                  <th>Trend</th>
-                </tr>
-              </thead>
-              <tbody id="deptTableBody"></tbody>
-            </table>
-          </div>
-          <div class="ai-insight">
-            <div class="ai-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div>
-            <div class="ai-text"><strong>AI insight:</strong> IT Infrastructure is the only department trending <strong style="color:#E87060">at risk</strong> — readiness has stagnated at 49% for 6 weeks. Recommend an HRBP-led intervention review before next cycle closes.</div>
+          <div class="panel-body" style="padding:0;display:flex;flex-direction:column">
+            <div class="ai-insight" style="margin-top:10px">
+              <div class="ai-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div>
+              <div class="ai-text"><strong>ISO 45001 Lead Implementer</strong> delivered the highest ROI: 81% score at SGD 389/employee. The EHS department closed 4 of 6 gaps directly attributable to this programme. Recommend this as the benchmark model for future programmes.</div>
+            </div>
+            <div class="ai-insight">
+              <div class="ai-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div>
+              <div class="ai-text"><strong>AI &amp; Data Literacy</strong> completion rate (57%) is below the 75% target. 14 employees are overdue. Risk: if completion doesn't reach 70% by April, the L3 gap closure target for Digital &amp; Technology BU will be missed.</div>
+            </div>
+            <div class="ai-insight" style="margin-bottom:10px">
+              <div class="ai-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div>
+              <div class="ai-text"><strong>Strategic Leadership Programme</strong> has the highest per-employee cost (SGD 879) but is critical for succession pipeline. 3 of 5 succession candidates are enrolled. Do not cut — this is the pipeline investment.</div>
+            </div>
           </div>
         </div>
 
@@ -714,8 +707,7 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
     <div style="margin-left:auto;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.06em;color:#C8A84B;text-transform:uppercase">View full journey →</div>
   </a>
 
-  <!-- /content -->
-    <!-- confidence-statement -->
+  <!-- confidence-statement -->
   <div style="display:flex;align-items:center;gap:10px;padding:10px 28px;background:rgba(200,168,75,0.06);border-top:1px solid rgba(200,168,75,0.15);flex-shrink:0">
     <svg style="width:13px;height:13px;stroke:#C8A84B;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
     <span style="font-size:11px;color:#C8A84B;font-weight:500;letter-spacing:0.03em">Arcova &nbsp;·&nbsp; Day 14. First verified intelligence. 748 passports live.</span>
@@ -726,46 +718,22 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 
 <script>
 // ── DATA ──────────────────────────────────────────────────────
-const TREND = {
-  months:    ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar"],
-  readiness: [44, 48, 52, 56, 59, 61]
-};
+const PROGRAMMES = [
+  { name: "BIM Fundamentals & Revit",       enrolled: 54, completed: 48, score: 76, status: "Completed",   cost: "SGD 18.2K", roi: "High" },
+  { name: "Digital Project Delivery",        enrolled: 62, completed: 57, score: 72, status: "Completed",   cost: "SGD 22.4K", roi: "High" },
+  { name: "ISO 45001 Lead Implementer",      enrolled: 38, completed: 34, score: 81, status: "Completed",   cost: "SGD 14.8K", roi: "Very High" },
+  { name: "AI & Data Literacy for Engineers", enrolled: 72, completed: 41, score: 68, status: "In Progress", cost: "SGD 28.4K", roi: "Pending" },
+  { name: "Advanced Risk & Contract Mgmt",   enrolled: 44, completed: 18, score: 71, status: "In Progress", cost: "SGD 16.2K", roi: "Pending" },
+  { name: "Strategic Leadership Programme",  enrolled: 28, completed: 8,  score: 74, status: "In Progress", cost: "SGD 24.6K", roi: "Pending" },
+  { name: "ESG & Carbon Reporting",          enrolled: 46, completed: 0,  score: null, status: "Upcoming",  cost: "SGD 17.8K", roi: null }
+];
 
-const DIST = {
-  labels: ["Awareness", "Working", "Practitioner", "Expert"],
-  values: [28, 42, 24, 6],
-  colors: ["#E87060", "#D4820A", "#3AB87A", "#5BA8E0"]
-};
-
-const REGIONS = {
-  labels:    ["Singapore", "Mumbai", "Dubai", "Kuala Lumpur"],
-  readiness: [71, 58, 64, 54]
-};
-
-const HEATMAP = {
-  skills: ["BIM", "Digital Delivery", "Risk Mgmt", "AI Literacy", "ISO 45001", "Data Analytics"],
-  depts:  ["BIM & Digital", "Project Delivery", "Structural Eng", "EHS & Risk", "IT Infra"],
-  values: [
-    [1.8, 1.4, 0.6, 0.4, 1.1],
-    [1.6, 1.3, 0.8, 0.3, 1.4],
-    [0.9, 1.1, 0.7, 1.2, 0.6],
-    [2.1, 1.8, 1.4, 1.0, 1.6],
-    [0.4, 0.6, 0.3, 0.2, 0.5],
-    [1.7, 1.2, 0.9, 0.8, 1.3]
-  ]
-};
-
-const DEPTS = [
-  { dept: "Human Resources",          readiness: 78, gap: 0.4, trend: "stable"    },
-  { dept: "Finance & Procurement",    readiness: 74, gap: 0.5, trend: "stable"    },
-  { dept: "EHS & Risk",               readiness: 72, gap: 0.6, trend: "improving" },
-  { dept: "Legal & Compliance",       readiness: 71, gap: 0.6, trend: "stable"    },
-  { dept: "Structural Engineering",   readiness: 68, gap: 0.7, trend: "stable"    },
-  { dept: "Civil & Geotechnical",     readiness: 65, gap: 0.8, trend: "stable"    },
-  { dept: "Sustainability Advisory",  readiness: 63, gap: 0.9, trend: "improving" },
-  { dept: "Project Delivery",         readiness: 52, gap: 1.1, trend: "improving" },
-  { dept: "IT Infrastructure",        readiness: 49, gap: 1.2, trend: "at risk"   },
-  { dept: "BIM & Digital Delivery",   readiness: 44, gap: 1.4, trend: "improving" }
+const VELOCITY = [
+  { skill: "ISO 45001",       velocity: 0.8, label: "Fast",     cls: "fast" },
+  { skill: "BIM Fundamentals", velocity: 0.6, label: "Good",     cls: "good" },
+  { skill: "Digital Delivery", velocity: 0.4, label: "Moderate", cls: "moderate" },
+  { skill: "Risk Management",  velocity: 0.3, label: "Moderate", cls: "moderate" },
+  { skill: "AI & ML Literacy", velocity: 0.2, label: "Slow",     cls: "slow" }
 ];
 
 // ── CHART DEFAULTS ────────────────────────────────────────────
@@ -774,185 +742,216 @@ Chart.defaults.font.family = "'DM Sans', sans-serif";
 Chart.defaults.font.size = 11;
 
 function makeGradient(ctx, color) {
-  const g = ctx.createLinearGradient(0, 0, 0, 160);
+  const g = ctx.createLinearGradient(0, 0, 0, 180);
   g.addColorStop(0, color + "55");
   g.addColorStop(1, color + "00");
   return g;
 }
 
-// ── TREND CHART ───────────────────────────────────────────────
+// ── PROGRAMME TABLE ──────────────────────────────────────────
 (function() {
-  const ctx = document.getElementById("trendChart").getContext("2d");
-  new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: TREND.months,
-      datasets: [{
-        data: TREND.readiness,
-        borderColor: "#C8A84B",
-        borderWidth: 2,
-        backgroundColor: makeGradient(ctx, "#C8A84B"),
-        fill: true,
-        tension: 0.4,
-        pointBackgroundColor: "#C8A84B",
-        pointRadius: 3,
-        pointHoverRadius: 5
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: {
-        backgroundColor: "#162535",
-        borderColor: "rgba(255,255,255,0.1)",
-        borderWidth: 1,
-        callbacks: { label: ctx => " Readiness: " + ctx.raw + "%" }
-      }},
-      scales: {
-        x: { grid: { color: "rgba(255,255,255,0.04)" }, border: { display: false } },
-        y: { min: 30, max: 80, grid: { color: "rgba(255,255,255,0.04)" }, border: { display: false },
-             ticks: { callback: v => v + "%" } }
-      }
-    }
+  const tbody = document.getElementById("progTableBody");
+  PROGRAMMES.forEach(p => {
+    const pct = p.enrolled > 0 && p.completed > 0 ? Math.round((p.completed / p.enrolled) * 100) : 0;
+    const barColor = pct >= 80 ? "#3AB87A" : pct >= 50 ? "#D4820A" : pct > 0 ? "#E87060" : "rgba(255,255,255,0.1)";
+    const statusClass = p.status === "Completed" ? "completed" : p.status === "In Progress" ? "inprogress" : "upcoming";
+    const roiClass = p.roi === "Very High" ? "veryhigh" : p.roi === "High" ? "high" : p.roi === "Pending" ? "pending" : "na";
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${p.name}</td>
+      <td>${p.enrolled}</td>
+      <td>${p.completed}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px;justify-content:center">
+          <div class="cbar-wrap"><div class="cbar-fill" style="width:${pct}%;background:${barColor}"></div></div>
+          <span style="font-size:11px;color:${barColor};width:30px">${pct > 0 ? pct + '%' : '—'}</span>
+        </div>
+      </td>
+      <td>${p.score !== null ? p.score + '%' : '—'}</td>
+      <td><span class="status-chip ${statusClass}">${p.status}</span></td>
+      <td>${p.cost}</td>
+      <td>${p.roi ? '<span class="roi-chip ' + roiClass + '">' + p.roi + '</span>' : '—'}</td>
+    `;
+    tbody.appendChild(tr);
   });
 })();
 
-// ── DIST DOUGHNUT ─────────────────────────────────────────────
+// ── CHART 1: Spend vs Gap Closure ────────────────────────────
 (function() {
-  const ctx = document.getElementById("distChart").getContext("2d");
+  const ctx = document.getElementById("spendChart").getContext("2d");
   new Chart(ctx, {
-    type: "doughnut",
+    type: "line",
     data: {
-      labels: DIST.labels,
-      datasets: [{
-        data: DIST.values,
-        backgroundColor: DIST.colors,
-        borderWidth: 0,
-        hoverOffset: 6
-      }]
+      labels: ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar"],
+      datasets: [
+        {
+          label: "Cumulative Spend (SGD K)",
+          data: [18, 42, 68, 96, 122, 142],
+          borderColor: "#C8A84B",
+          borderWidth: 2,
+          backgroundColor: makeGradient(ctx, "#C8A84B"),
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: "#C8A84B",
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          yAxisID: "y"
+        },
+        {
+          label: "Gap Closure %",
+          data: [5, 10, 16, 20, 24, 27],
+          borderColor: "#3AB87A",
+          borderWidth: 2,
+          borderDash: [4, 3],
+          fill: false,
+          tension: 0.4,
+          pointBackgroundColor: "#3AB87A",
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          yAxisID: "y1"
+        }
+      ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      cutout: "68%",
       plugins: {
-        legend: { display: false },
+        legend: { display: true, labels: { boxWidth: 12, padding: 10, font: { size: 10 } } },
         tooltip: {
           backgroundColor: "#162535",
           borderColor: "rgba(255,255,255,0.1)",
-          borderWidth: 1,
-          callbacks: { label: ctx => " " + ctx.label + ": " + ctx.raw + "%" }
+          borderWidth: 1
+        }
+      },
+      scales: {
+        x: { grid: { color: "rgba(255,255,255,0.04)" }, border: { display: false } },
+        y: {
+          position: "left",
+          min: 0, max: 160,
+          grid: { color: "rgba(255,255,255,0.04)" },
+          border: { display: false },
+          ticks: { callback: v => "SGD " + v + "K" }
+        },
+        y1: {
+          position: "right",
+          min: 0, max: 40,
+          grid: { display: false },
+          border: { display: false },
+          ticks: { callback: v => v + "%" }
         }
       }
     }
   });
 })();
 
-// ── REGION BAR ────────────────────────────────────────────────
+// ── CHART 2: Completion by Department ────────────────────────
 (function() {
-  const ctx = document.getElementById("regionChart").getContext("2d");
+  const ctx = document.getElementById("deptChart").getContext("2d");
   new Chart(ctx, {
     type: "bar",
     data: {
-      labels: REGIONS.labels,
+      labels: ["EHS & Risk", "Project Delivery", "Structural Eng", "BIM & Digital", "IT Infra"],
       datasets: [{
-        data: REGIONS.readiness,
-        backgroundColor: ["#2E7AB5", "#E87060", "#D4820A", "#C8A84B"],
+        data: [92, 84, 78, 71, 58],
+        backgroundColor: ["#3AB87A", "#3AB87A", "#2E7AB5", "#D4820A", "#E87060"],
+        borderRadius: 5,
+        borderWidth: 0
+      }]
+    },
+    options: {
+      indexAxis: "y",
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: "#162535",
+          borderColor: "rgba(255,255,255,0.1)",
+          borderWidth: 1,
+          callbacks: { label: ctx => " Completion: " + ctx.raw + "%" }
+        }
+      },
+      scales: {
+        x: { min: 0, max: 100, grid: { color: "rgba(255,255,255,0.04)" }, border: { display: false },
+             ticks: { callback: v => v + "%" } },
+        y: { grid: { display: false }, border: { display: false } }
+      }
+    }
+  });
+})();
+
+// ── CHART 3: Kirkpatrick Scores ──────────────────────────────
+(function() {
+  const ctx = document.getElementById("kirkChart").getContext("2d");
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["L1 Reaction", "L2 Learning", "L3 Behaviour", "L4 Results"],
+      datasets: [{
+        data: [84, 74, 15, 5],
+        backgroundColor: ["#3AB87A", "#2E7AB5", "#D4820A", "#5C7A96"],
         borderRadius: 5,
         borderWidth: 0
       }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: {
-        backgroundColor: "#162535",
-        borderColor: "rgba(255,255,255,0.1)",
-        borderWidth: 1,
-        callbacks: { label: ctx => " Readiness: " + ctx.raw + "%" }
-      }},
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: "#162535",
+          borderColor: "rgba(255,255,255,0.1)",
+          borderWidth: 1,
+          callbacks: {
+            label: function(ctx) {
+              if (ctx.dataIndex === 0) return " 4.2/5 (Reaction)";
+              if (ctx.dataIndex === 1) return " 74% (Learning)";
+              if (ctx.dataIndex === 2) return " In Progress";
+              return " Pending";
+            }
+          }
+        }
+      },
       scales: {
         x: { grid: { display: false }, border: { display: false } },
         y: { min: 0, max: 100, grid: { color: "rgba(255,255,255,0.04)" }, border: { display: false },
              ticks: { callback: v => v + "%" } }
       }
-    }
+    },
+    plugins: [{
+      id: "kirkLabels",
+      afterDraw: function(chart) {
+        const ctx2 = chart.ctx;
+        const labels = ["4.2/5", "74%", "In Progress", "Pending"];
+        chart.data.datasets[0].data.forEach(function(val, i) {
+          const meta = chart.getDatasetMeta(0).data[i];
+          ctx2.save();
+          ctx2.fillStyle = "#E8EEF4";
+          ctx2.font = "500 10px 'DM Sans', sans-serif";
+          ctx2.textAlign = "center";
+          ctx2.fillText(labels[i], meta.x, meta.y - 6);
+          ctx2.restore();
+        });
+      }
+    }]
   });
 })();
 
-// ── HEATMAP ───────────────────────────────────────────────────
+// ── SKILL VELOCITY ───────────────────────────────────────────
 (function() {
-  const body = document.getElementById("heatmapBody");
-  const nS = HEATMAP.skills.length;
-  const nD = HEATMAP.depts.length;
-
-  body.style.display = "grid";
-  body.style.gridTemplateColumns = "90px " + "1fr ".repeat(nD);
-  body.style.gridTemplateRows = "20px " + "32px ".repeat(nS);
-  body.style.gap = "3px";
-  body.style.padding = "12px 16px";
-  body.style.alignItems = "center";
-
-  // top-left empty
-  const empty = document.createElement("div");
-  body.appendChild(empty);
-
-  // dept headers
-  HEATMAP.depts.forEach(d => {
-    const el = document.createElement("div");
-    el.className = "heatmap-dept-label";
-    el.textContent = d;
-    body.appendChild(el);
-  });
-
-  // rows
-  HEATMAP.skills.forEach((skill, si) => {
-    const lbl = document.createElement("div");
-    lbl.className = "heatmap-skill-label";
-    lbl.textContent = skill;
-    lbl.style.fontSize = "10px";
-    body.appendChild(lbl);
-
-    HEATMAP.depts.forEach((_, di) => {
-      const val = HEATMAP.values[si][di];
-      const cell = document.createElement("div");
-      cell.className = "hm-cell";
-      cell.title = skill + " · " + HEATMAP.depts[di] + " · Gap: " + val.toFixed(1);
-      cell.textContent = val.toFixed(1);
-
-      // colour: 0=green → 2=red
-      const ratio = val / 2.5;
-      const r = Math.round(50 + 180 * ratio);
-      const g = Math.round(170 - 130 * ratio);
-      const b = Math.round(80  - 60  * ratio);
-      cell.style.background = `rgba(${r},${g},${b},0.25)`;
-      cell.style.color       = `rgb(${r},${g},${b})`;
-      cell.style.border      = `1px solid rgba(${r},${g},${b},0.4)`;
-
-      body.appendChild(cell);
-    });
-  });
-})();
-
-// ── DEPT TABLE ────────────────────────────────────────────────
-(function() {
-  const tbody = document.getElementById("deptTableBody");
-  DEPTS.forEach(d => {
-    const barColor = d.readiness >= 70 ? "#3AB87A" : d.readiness >= 55 ? "#D4820A" : "#E87060";
-    const trendClass = d.trend === "improving" ? "up" : d.trend === "at risk" ? "risk" : "stable";
-    const trendIcon  = d.trend === "improving" ? "↑" : d.trend === "at risk" ? "↓" : "→";
-    const trendLabel = d.trend === "improving" ? "Improving" : d.trend === "at risk" ? "At risk" : "Stable";
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${d.dept}</td>
-      <td>
-        <div style="display:flex;align-items:center;gap:6px;justify-content:center">
-          <div class="rbar-wrap"><div class="rbar-fill" style="width:${d.readiness}%;background:${barColor}"></div></div>
-          <span style="font-size:11px;color:${barColor};width:26px">${d.readiness}%</span>
-        </div>
-      </td>
-      <td style="color:${d.gap >= 1.2 ? '#E87060' : d.gap >= 0.9 ? '#D4820A' : 'var(--paper-mid)'}">${d.gap.toFixed(1)}</td>
-      <td><span class="trend-chip ${trendClass}">${trendIcon} ${trendLabel}</span></td>
+  const body = document.getElementById("velocityBody");
+  VELOCITY.forEach(v => {
+    const maxVel = 1.0;
+    const pct = Math.round((v.velocity / maxVel) * 100);
+    const barColor = v.cls === "fast" ? "#3AB87A" : v.cls === "slow" ? "#E87060" : "#D4820A";
+    const row = document.createElement("div");
+    row.className = "vel-row";
+    row.innerHTML = `
+      <div class="vel-label">${v.skill}</div>
+      <div class="vel-bar-track"><div class="vel-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>
+      <div class="vel-value" style="color:${barColor}">${v.velocity}/month</div>
+      <div class="vel-speed ${v.cls}">${v.label}</div>
     `;
-    tbody.appendChild(tr);
+    body.appendChild(row);
   });
 })();
 

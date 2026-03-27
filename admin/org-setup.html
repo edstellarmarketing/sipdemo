@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OrgSetup — Organisational Context · Arcova SIP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:        #080F18;
+  --ink-panel:  #0C1825;
+  --ink-card:   #101E2E;
+  --ink-raised: #152438;
+  --ink-border: rgba(255,255,255,0.07);
+  --ink-soft:   #4A6A84;
+  --paper:      #D8E8F4;
+  --paper-mid:  #8AACC4;
+  --gold:       #C8A84B;
+  --gold-lt:    #E0CC70;
+  --gold-dim:   rgba(200,168,75,0.10);
+  --blue:       #1A5C8A;
+  --blue-lt:    #3A8CC0;
+  --blue-dim:   rgba(26,92,138,0.15);
+  --green:      #1A7A4A;
+  --green-lt:   #3AB87A;
+  --green-dim:  rgba(26,122,74,0.12);
+  --amber:      #D4820A;
+  --amber-lt:   #F0A030;
+  --amber-dim:  rgba(212,130,10,0.12);
+  --red:        #C0392B;
+  --red-lt:     #E87060;
+  --red-dim:    rgba(192,57,43,0.12);
+  --purple:     #6A3A9A;
+  --purple-lt:  #A070E0;
+  --purple-dim: rgba(106,58,154,0.15);
+  --sidebar-w:  220px;
+}
+
+html, body { height: 100%; background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans-serif; overflow: hidden; }
+.app { display: flex; height: 100vh; }
+
+/* ── SIDEBAR ── */
+.sidebar { width: var(--sidebar-w); background: var(--ink-panel); border-right: 1px solid var(--ink-border); display: flex; flex-direction: column; flex-shrink: 0; }
+a.sidebar-brand { padding: 22px 20px 20px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; text-decoration: none; cursor: pointer; }
+a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
+.brand-hex { width: 28px; height: 28px; background: var(--gold); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); flex-shrink: 0; }
+.brand-nm { font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--paper); }
+.brand-tg { font-size: 10px; color: var(--ink-soft); letter-spacing: 0.06em; text-transform: uppercase; }
+.sidebar-nav { flex: 1; padding: 12px 14px; overflow-y: auto; }
+.nav-section-label { font-size: 10px; color: var(--ink-soft); letter-spacing: .1em; text-transform: uppercase; padding: 10px 6px 6px; }
+.nav-item { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 6px; font-size: 12.5px; color: var(--paper-mid); cursor: pointer; text-decoration: none; transition: background .15s, color .15s; margin-bottom: 1px; }
+.nav-item:hover { background: rgba(255,255,255,0.05); color: var(--paper); }
+.nav-item.active { background: var(--blue-dim); color: var(--blue-lt); }
+.nav-item svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; opacity: .7; }
+.nav-item.active svg { opacity: 1; }
+.nav-badge { margin-left: auto; padding: 1px 6px; border-radius: 100px; font-size: 10px; font-weight: 500; }
+.nb-green { background: var(--green-dim); color: var(--green-lt); }
+.nb-gold  { background: var(--gold-dim);  color: var(--gold); }
+.nb-blue  { background: var(--blue-dim);  color: var(--blue-lt); }
+.nb-amber { background: var(--amber-dim); color: var(--amber-lt); }
+.sidebar-user { padding: 14px 16px; border-top: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; }
+.user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; color: var(--paper); flex-shrink: 0; }
+.user-name { font-size: 12px; font-weight: 500; color: var(--paper); }
+.user-role { font-size: 10px; color: var(--ink-soft); }
+
+/* ── MAIN ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.topbar { height: 54px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; padding: 0 28px; gap: 14px; flex-shrink: 0; background: var(--ink-panel); }
+.topbar-title { font-family: 'Syne',sans-serif; font-size: 15px; font-weight: 700; color: var(--paper); flex: 1; }
+.topbar-meta { font-size: 11px; color: var(--ink-soft); }
+.tb-pill { padding: 4px 11px; border-radius: 100px; font-size: 11px; border: 1px solid; white-space: nowrap; }
+.tb-pill.blue { border-color: rgba(58,140,192,.35); color: var(--blue-lt); }
+.tb-pill.gold { border-color: rgba(200,168,75,.3); color: var(--gold); }
+.tb-btn { padding: 7px 14px; border-radius: 6px; border: 1px solid var(--ink-border); background: transparent; color: var(--paper-mid); font-family: 'DM Sans',sans-serif; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background .15s, color .15s; text-decoration: none; }
+.tb-btn:hover { background: rgba(255,255,255,0.05); color: var(--paper); }
+.tb-btn.primary { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 600; }
+.tb-btn.primary:hover { opacity: .88; }
+
+/* ── CONTENT ── */
+.content { flex: 1; overflow-y: auto; padding: 24px 28px; display: flex; flex-direction: column; gap: 20px; }
+.content::-webkit-scrollbar { width: 4px; }
+.content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+/* ── PANELS ── */
+.panel { background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: 12px; overflow: hidden; }
+.panel-head { padding: 14px 20px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; }
+.panel-title { font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; color: var(--paper); flex: 1; }
+.panel-badge { padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 500; }
+.panel-body { padding: 18px 20px; }
+
+/* ── CONTEXT METER ── */
+.context-meter {
+  background: linear-gradient(135deg, var(--ink-card) 0%, rgba(26,122,74,0.08) 100%);
+  border: 1px solid rgba(58,184,122,0.25);
+  border-radius: 14px; padding: 22px 28px;
+  display: flex; align-items: center; gap: 28px;
+}
+.cm-gauge { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
+.cm-gauge canvas { width: 100%; height: 100%; }
+.cm-gauge-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.cm-pct { font-family: 'Syne',sans-serif; font-size: 22px; font-weight: 800; color: var(--green-lt); line-height: 1; }
+.cm-pct-sub { font-size: 9px; color: var(--ink-soft); letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
+.cm-info { flex: 1; }
+.cm-title { font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 700; color: var(--paper); margin-bottom: 6px; }
+.cm-sub-text { font-size: 12px; color: var(--paper-mid); margin-bottom: 10px; }
+.cm-segments { display: flex; gap: 18px; }
+.cm-seg { display: flex; align-items: center; gap: 6px; }
+.cm-seg-dot { width: 8px; height: 8px; border-radius: 50%; }
+.cm-seg-label { font-size: 11px; color: var(--ink-soft); }
+.cm-seg-val { font-family: 'DM Mono',monospace; font-size: 12px; font-weight: 500; }
+
+/* ── ORG IDENTITY ── */
+.org-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; }
+.org-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.org-key { font-size: 11px; color: var(--ink-soft); letter-spacing: .04em; }
+.org-val { font-size: 12px; color: var(--paper); font-weight: 500; }
+.org-val.mono { font-family: 'DM Mono',monospace; font-size: 11px; }
+.connected-badge { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 100px; font-size: 10px; background: var(--green-dim); border: 1px solid rgba(58,184,122,0.3); color: var(--green-lt); font-weight: 500; }
+.connected-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-lt); }
+
+/* ── HIERARCHY TREE ── */
+.tree-wrap { padding: 16px 20px; }
+.tree-org { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.tree-org-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--gold-dim); border: 1px solid rgba(200,168,75,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.tree-org-icon svg { width: 16px; height: 16px; stroke: var(--gold); fill: none; stroke-width: 1.8; stroke-linecap: round; }
+.tree-org-name { font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 700; color: var(--paper); }
+.tree-org-count { font-size: 11px; color: var(--ink-soft); margin-left: 4px; }
+
+.bu-group { margin-left: 18px; margin-bottom: 8px; }
+.bu-header { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: background .15s; border-left: 3px solid transparent; }
+.bu-header:hover { background: rgba(255,255,255,0.04); }
+.bu-header.expanded { background: rgba(255,255,255,0.03); }
+.bu-chevron { width: 14px; height: 14px; stroke: var(--ink-soft); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; flex-shrink: 0; }
+.bu-header.expanded .bu-chevron { transform: rotate(90deg); }
+.bu-name { font-size: 12.5px; font-weight: 500; color: var(--paper); }
+.bu-count { font-family: 'DM Mono',monospace; font-size: 11px; color: var(--ink-soft); margin-left: auto; }
+.bu-depts { display: none; padding: 6px 0 6px 32px; gap: 8px; flex-wrap: wrap; }
+.bu-depts.show { display: flex; }
+.dept-chip { padding: 5px 12px; border-radius: 6px; font-size: 11px; color: var(--paper-mid); border: 1px solid var(--ink-border); background: rgba(255,255,255,0.02); display: flex; align-items: center; gap: 6px; }
+.dept-count { font-family: 'DM Mono',monospace; font-size: 10px; color: var(--ink-soft); }
+
+.bu-eng .bu-header { border-left-color: var(--blue-lt); }
+.bu-eng .dept-chip { border-color: rgba(58,140,192,0.2); background: rgba(26,92,138,0.08); }
+.bu-dig .bu-header { border-left-color: var(--purple-lt); }
+.bu-dig .dept-chip { border-color: rgba(106,58,154,0.2); background: rgba(106,58,154,0.08); }
+.bu-corp .bu-header { border-left-color: var(--amber-lt); }
+.bu-corp .dept-chip { border-color: rgba(212,130,10,0.15); background: rgba(212,130,10,0.06); }
+.bu-sus .bu-header { border-left-color: var(--green-lt); }
+.bu-sus .dept-chip { border-color: rgba(58,184,122,0.2); background: rgba(26,122,74,0.08); }
+
+/* ── GOALS ── */
+.goal-item { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.goal-item:last-child { border-bottom: none; }
+.goal-num { width: 26px; height: 26px; border-radius: 6px; background: var(--gold-dim); border: 1px solid rgba(200,168,75,0.25); display: flex; align-items: center; justify-content: center; font-family: 'DM Mono',monospace; font-size: 10px; color: var(--gold); flex-shrink: 0; font-weight: 500; }
+.goal-info { flex: 1; }
+.goal-text { font-size: 12.5px; color: var(--paper); line-height: 1.5; margin-bottom: 8px; }
+.goal-bar-wrap { display: flex; align-items: center; gap: 10px; }
+.goal-bar { flex: 1; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+.goal-bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+.goal-pct { font-family: 'DM Mono',monospace; font-size: 11px; min-width: 32px; }
+.goal-date { font-size: 10px; color: var(--ink-soft); white-space: nowrap; }
+
+/* ── GRID LAYOUTS ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+/* ── PRODUCTS ── */
+.product-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.product-item:last-child { border-bottom: none; }
+.product-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-lt); flex-shrink: 0; }
+.product-name { font-size: 12px; color: var(--paper-mid); }
+
+/* ── STANDARDS ── */
+.standard-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.standard-row:last-child { border-bottom: none; }
+.standard-name { font-size: 12px; color: var(--paper); font-weight: 500; }
+.standard-badge { padding: 2px 9px; border-radius: 100px; font-size: 10px; font-weight: 500; }
+.sb-active { background: var(--green-dim); color: var(--green-lt); border: 1px solid rgba(58,184,122,0.3); }
+.sb-pending { background: var(--amber-dim); color: var(--amber-lt); border: 1px solid rgba(212,130,10,0.3); }
+
+/* ── TOOLS ── */
+.tools-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.tool-chip { padding: 6px 12px; border-radius: 7px; font-size: 11.5px; color: var(--paper-mid); border: 1px solid var(--ink-border); background: rgba(255,255,255,0.02); display: flex; align-items: center; gap: 8px; }
+.tool-lifecycle { padding: 1px 7px; border-radius: 100px; font-size: 9px; font-weight: 500; }
+.tl-current { background: var(--green-dim); color: var(--green-lt); }
+.tl-eval { background: var(--purple-dim); color: var(--purple-lt); }
+
+/* ── CRITICALITY ── */
+.crit-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.crit-row:last-child { border-bottom: none; }
+.crit-tag { padding: 3px 10px; border-radius: 5px; font-family: 'DM Mono',monospace; font-size: 10px; font-weight: 500; min-width: 30px; text-align: center; }
+.crit-label { font-size: 11px; font-weight: 500; }
+.crit-desc { font-size: 11px; color: var(--ink-soft); margin-left: auto; }
+.ct-c1 { background: var(--red-dim); color: var(--red-lt); }
+.ct-c2 { background: var(--amber-dim); color: var(--amber-lt); }
+.ct-c3 { background: var(--blue-dim); color: var(--blue-lt); }
+.ct-c4 { background: rgba(255,255,255,0.05); color: var(--ink-soft); }
+
+@keyframes fadeUp   { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(1.3); } }
+
+.fade-up { animation: fadeUp .4s ease both; }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-hex"></div>
+    <div style="display:flex;flex-direction:column;gap:1px">
+      <span class="brand-nm">Arcova SIP</span>
+      <span class="brand-tg">Admin Portal</span>
+    </div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Setup</div>
+    <a class="nav-item active" href="org-setup.html">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+      OrgSetup
+    </a>
+    <a class="nav-item" href="dataport.html">
+      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      DataPort <span class="nav-badge nb-green">Done</span>
+    </a>
+    <div class="nav-section-label">AI Pipeline</div>
+    <a class="nav-item" href="skillforge.html">
+      <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      SkillForge <span class="nav-badge nb-green">Done</span>
+    </a>
+    <a class="nav-item" href="approvalhub.html">
+      <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+      ApprovalHub <span class="nav-badge nb-green">Done</span>
+    </a>
+    <div class="nav-section-label">Assessment</div>
+    <a class="nav-item" href="assess-engine.html">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      AssessEngine <span class="nav-badge nb-amber">L2</span>
+    </a>
+    <div class="nav-section-label">Intelligence</div>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      InsightBoard
+    </a>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      ReportGen
+    </a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-avatar">KR</div>
+    <div style="display:flex;flex-direction:column;gap:1px">
+      <div class="user-name">Kavitha Ramachandran</div>
+      <div class="user-role">L&amp;D Manager</div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">OrgSetup — Organisational Context</div>
+    <a href="../level-journey.html" style="display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:#C8A84B;border:none;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;color:#0C1B2E;text-decoration:none;letter-spacing:0.05em;white-space:nowrap;transition:opacity .15s" onmouseover="this.style.opacity='0.86'" onmouseout="this.style.opacity='1'">
+      <svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>L3 · See Journey
+    </a>
+    <a href="../nav-menus.html" class="tb-btn" style="font-size:11px;padding:5px 11px">
+      <svg style="width:11px;height:11px" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      All screens
+    </a>
+    <div class="topbar-meta">25 March 2026</div>
+    <div class="tb-pill blue">L3 Active</div>
+    <a href="skillforge.html" class="tb-btn primary" style="font-size:12px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.04em">Feed into SkillForge &rarr;</a>
+  </div>
+
+  <!-- level-banner-strip -->
+  <a href="../level-journey.html" style="display:flex;align-items:center;gap:12px;padding:0 28px;height:36px;background:linear-gradient(90deg,rgba(200,168,75,0.12) 0%,rgba(8,15,24,0) 60%);border-bottom:1px solid rgba(200,168,75,0.2);text-decoration:none;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='linear-gradient(90deg,rgba(200,168,75,0.18) 0%,rgba(8,15,24,0) 70%)'" onmouseout="this.style.background='linear-gradient(90deg,rgba(200,168,75,0.12) 0%,rgba(8,15,24,0) 60%)'">
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:#C8A84B;animation:pulse 2s ease-in-out infinite"></div><span style="font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.08em;color:#C8A84B">L3 ACTIVE</span></div>
+    <div style="width:1px;height:14px;background:rgba(200,168,75,0.2)"></div>
+    <div style="font-size:11px;color:#8AACC4">Training Execution &amp; Delivery</div>
+    <div style="width:80px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden"><div style="width:63%;height:100%;background:#C8A84B;border-radius:2px"></div></div>
+    <div style="font-size:11px;color:#C8A84B;font-weight:500">63% complete</div>
+    <div style="width:1px;height:14px;background:rgba(200,168,75,0.2)"></div>
+    <div style="font-size:11px;color:#8AACC4">2 actions to unlock L4 &rarr;</div>
+    <div style="margin-left:auto;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.06em;color:#C8A84B;text-transform:uppercase">View full journey &rarr;</div>
+  </a>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- 1. DATA CONTEXT METER -->
+    <div class="context-meter fade-up">
+      <div class="cm-gauge">
+        <canvas id="gaugeCanvas" width="180" height="180"></canvas>
+        <div class="cm-gauge-label">
+          <div class="cm-pct">91%</div>
+          <div class="cm-pct-sub">Complete</div>
+        </div>
+      </div>
+      <div class="cm-info">
+        <div class="cm-title">Context Completeness: 91%</div>
+        <div class="cm-sub-text">Organisational context data feeds into SkillForge AI pipeline. Higher completeness improves skill-mapping accuracy.</div>
+        <div class="cm-segments">
+          <div class="cm-seg">
+            <div class="cm-seg-dot" style="background:var(--green-lt)"></div>
+            <span class="cm-seg-label">Core:</span>
+            <span class="cm-seg-val" style="color:var(--green-lt)">100%</span>
+          </div>
+          <div class="cm-seg">
+            <div class="cm-seg-dot" style="background:var(--blue-lt)"></div>
+            <span class="cm-seg-label">Enrichment:</span>
+            <span class="cm-seg-val" style="color:var(--blue-lt)">86%</span>
+          </div>
+          <div class="cm-seg">
+            <div class="cm-seg-dot" style="background:var(--amber-lt)"></div>
+            <span class="cm-seg-label">Signals:</span>
+            <span class="cm-seg-val" style="color:var(--amber-lt)">78%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. ORG IDENTITY CARD -->
+    <div class="panel fade-up" style="animation-delay:.06s">
+      <div class="panel-head">
+        <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <div class="panel-title">Org Identity</div>
+        <div class="panel-badge" style="background:var(--green-dim);color:var(--green-lt)">Verified</div>
+      </div>
+      <div class="panel-body">
+        <div class="org-grid">
+          <div class="org-row"><span class="org-key">Company</span><span class="org-val">Arcova Infrastructure Pte. Ltd.</span></div>
+          <div class="org-row"><span class="org-key">Industry</span><span class="org-val">Infrastructure &amp; Construction</span></div>
+          <div class="org-row"><span class="org-key">Founded</span><span class="org-val mono">2009</span></div>
+          <div class="org-row"><span class="org-key">Headquarters</span><span class="org-val">Singapore</span></div>
+          <div class="org-row"><span class="org-key">Employees</span><span class="org-val mono">812</span></div>
+          <div class="org-row"><span class="org-key">Offices</span><span class="org-val">Singapore, Mumbai, Dubai, Kuala Lumpur</span></div>
+          <div class="org-row"><span class="org-key">Operating Model</span><span class="org-val">Services &amp; Project Delivery</span></div>
+          <div class="org-row"><span class="org-key">Stage</span><span class="org-val">Mature — Transformation</span></div>
+          <div class="org-row"><span class="org-key">HRIS</span><span class="connected-badge"><span class="connected-dot"></span>Workday connected</span></div>
+          <div class="org-row"><span class="org-key">LMS</span><span class="connected-badge"><span class="connected-dot"></span>Cornerstone OnDemand connected</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. HIERARCHY BUILDER -->
+    <div class="panel fade-up" style="animation-delay:.12s">
+      <div class="panel-head">
+        <svg style="width:14px;height:14px;stroke:var(--blue-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg>
+        <div class="panel-title">Hierarchy Builder</div>
+        <div class="panel-badge" style="background:var(--blue-dim);color:var(--blue-lt)">4 BUs · 11 Depts</div>
+      </div>
+      <div class="tree-wrap">
+        <div class="tree-org">
+          <div class="tree-org-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+          <div>
+            <span class="tree-org-name">Arcova Infrastructure</span>
+            <span class="tree-org-count">(812 employees)</span>
+          </div>
+        </div>
+
+        <!-- BU: Engineering -->
+        <div class="bu-group bu-eng">
+          <div class="bu-header expanded" onclick="toggleBU(this)">
+            <svg class="bu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            <span class="bu-name">Engineering &amp; Delivery</span>
+            <span class="bu-count">324</span>
+          </div>
+          <div class="bu-depts show">
+            <div class="dept-chip">Structural Engineering <span class="dept-count">112</span></div>
+            <div class="dept-chip">Civil &amp; Geotechnical <span class="dept-count">98</span></div>
+            <div class="dept-chip">Project Delivery <span class="dept-count">114</span></div>
+          </div>
+        </div>
+
+        <!-- BU: Digital -->
+        <div class="bu-group bu-dig">
+          <div class="bu-header expanded" onclick="toggleBU(this)">
+            <svg class="bu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            <span class="bu-name">Digital &amp; Technology</span>
+            <span class="bu-count">118</span>
+          </div>
+          <div class="bu-depts show">
+            <div class="dept-chip">BIM &amp; Digital Delivery <span class="dept-count">54</span></div>
+            <div class="dept-chip">IT Infrastructure <span class="dept-count">64</span></div>
+          </div>
+        </div>
+
+        <!-- BU: Corporate -->
+        <div class="bu-group bu-corp">
+          <div class="bu-header expanded" onclick="toggleBU(this)">
+            <svg class="bu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            <span class="bu-name">Corporate Functions</span>
+            <span class="bu-count">198</span>
+          </div>
+          <div class="bu-depts show">
+            <div class="dept-chip">Finance &amp; Procurement <span class="dept-count">76</span></div>
+            <div class="dept-chip">Human Resources <span class="dept-count">48</span></div>
+            <div class="dept-chip">Legal &amp; Compliance <span class="dept-count">74</span></div>
+          </div>
+        </div>
+
+        <!-- BU: Sustainability -->
+        <div class="bu-group bu-sus">
+          <div class="bu-header expanded" onclick="toggleBU(this)">
+            <svg class="bu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            <span class="bu-name">Sustainability &amp; EHS</span>
+            <span class="bu-count">172</span>
+          </div>
+          <div class="bu-depts show">
+            <div class="dept-chip">EHS &amp; Risk <span class="dept-count">96</span></div>
+            <div class="dept-chip">Sustainability Advisory <span class="dept-count">76</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. STRATEGIC GOALS -->
+    <div class="panel fade-up" style="animation-delay:.18s">
+      <div class="panel-head">
+        <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        <div class="panel-title">Strategic Goals</div>
+        <div class="panel-badge" style="background:var(--gold-dim);color:var(--gold)">FY2026</div>
+      </div>
+      <div class="panel-body">
+        <div class="goal-item">
+          <div class="goal-num">G1</div>
+          <div class="goal-info">
+            <div class="goal-text">Expand digital delivery capability across all project sites by Q4 2026</div>
+            <div class="goal-bar-wrap">
+              <div class="goal-bar"><div class="goal-bar-fill" style="width:42%;background:var(--blue-lt)"></div></div>
+              <span class="goal-pct" style="color:var(--blue-lt)">42%</span>
+              <span class="goal-date">Target: Q4 2026</span>
+            </div>
+          </div>
+        </div>
+        <div class="goal-item">
+          <div class="goal-num">G2</div>
+          <div class="goal-info">
+            <div class="goal-text">Achieve ISO 45001 &amp; ISO 9001 compliance across all regional offices by Q3 2026</div>
+            <div class="goal-bar-wrap">
+              <div class="goal-bar"><div class="goal-bar-fill" style="width:68%;background:var(--green-lt)"></div></div>
+              <span class="goal-pct" style="color:var(--green-lt)">68%</span>
+              <span class="goal-date">Target: Q3 2026</span>
+            </div>
+          </div>
+        </div>
+        <div class="goal-item">
+          <div class="goal-num">G3</div>
+          <div class="goal-info">
+            <div class="goal-text">Build internal BIM and smart infrastructure competency to reduce third-party dependency by 40%</div>
+            <div class="goal-bar-wrap">
+              <div class="goal-bar"><div class="goal-bar-fill" style="width:35%;background:var(--purple-lt)"></div></div>
+              <span class="goal-pct" style="color:var(--purple-lt)">35%</span>
+              <span class="goal-date">Target: Q4 2026</span>
+            </div>
+          </div>
+        </div>
+        <div class="goal-item">
+          <div class="goal-num">G4</div>
+          <div class="goal-info">
+            <div class="goal-text">Develop a succession-ready leadership pipeline for 12 critical roles by end of FY2026</div>
+            <div class="goal-bar-wrap">
+              <div class="goal-bar"><div class="goal-bar-fill" style="width:54%;background:var(--amber-lt)"></div></div>
+              <span class="goal-pct" style="color:var(--amber-lt)">54%</span>
+              <span class="goal-date">Target: FY2026</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TWO-COL: Products + Standards -->
+    <div class="two-col">
+
+      <!-- 5. PRODUCTS & SERVICES -->
+      <div class="panel fade-up" style="animation-delay:.24s">
+        <div class="panel-head">
+          <svg style="width:14px;height:14px;stroke:var(--blue-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          <div class="panel-title">Products &amp; Services</div>
+        </div>
+        <div class="panel-body">
+          <div class="product-item"><div class="product-dot"></div><span class="product-name">Civil &amp; Structural Engineering</span></div>
+          <div class="product-item"><div class="product-dot" style="background:var(--purple-lt)"></div><span class="product-name">Smart Building Solutions</span></div>
+          <div class="product-item"><div class="product-dot" style="background:var(--amber-lt)"></div><span class="product-name">Infrastructure Asset Management</span></div>
+          <div class="product-item"><div class="product-dot" style="background:var(--green-lt)"></div><span class="product-name">Environmental &amp; Sustainability Consulting</span></div>
+        </div>
+      </div>
+
+      <!-- 6. GOVERNING STANDARDS -->
+      <div class="panel fade-up" style="animation-delay:.28s">
+        <div class="panel-head">
+          <svg style="width:14px;height:14px;stroke:var(--green-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          <div class="panel-title">Governing Standards</div>
+        </div>
+        <div class="panel-body">
+          <div class="standard-row"><span class="standard-name">ISO 45001</span><span class="standard-badge sb-active">Active</span></div>
+          <div class="standard-row"><span class="standard-name">ISO 9001</span><span class="standard-badge sb-active">Active</span></div>
+          <div class="standard-row"><span class="standard-name">GDPR</span><span class="standard-badge sb-active">Active</span></div>
+          <div class="standard-row"><span class="standard-name">SOX Compliance</span><span class="standard-badge sb-pending">Pending</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. TOOLS & TECHNOLOGIES -->
+    <div class="panel fade-up" style="animation-delay:.32s">
+      <div class="panel-head">
+        <svg style="width:14px;height:14px;stroke:var(--purple-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <div class="panel-title">Tools &amp; Technologies</div>
+        <div class="panel-badge" style="background:var(--purple-dim);color:var(--purple-lt)">10 tools</div>
+      </div>
+      <div class="panel-body">
+        <div class="tools-grid">
+          <div class="tool-chip">Workday <span class="tool-lifecycle tl-current">Current</span></div>
+          <div class="tool-chip">Cornerstone OnDemand <span class="tool-lifecycle tl-current">Current</span></div>
+          <div class="tool-chip">Autodesk Revit <span class="tool-lifecycle tl-current">Current</span></div>
+          <div class="tool-chip">Navisworks <span class="tool-lifecycle tl-current">Current</span></div>
+          <div class="tool-chip">AutoCAD <span class="tool-lifecycle tl-current">Current</span></div>
+          <div class="tool-chip">Primavera P6 <span class="tool-lifecycle tl-current">Current</span></div>
+          <div class="tool-chip">MS Project <span class="tool-lifecycle tl-current">Current</span></div>
+          <div class="tool-chip">Power BI <span class="tool-lifecycle tl-current">Current</span></div>
+          <div class="tool-chip">SAP <span class="tool-lifecycle tl-eval">Evaluating</span></div>
+          <div class="tool-chip">Jira <span class="tool-lifecycle tl-eval">Evaluating</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. SKILL CRITICALITY FRAMEWORK -->
+    <div class="panel fade-up" style="animation-delay:.36s">
+      <div class="panel-head">
+        <svg style="width:14px;height:14px;stroke:var(--red-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div class="panel-title">Skill Criticality Framework</div>
+        <div class="panel-badge" style="background:var(--red-dim);color:var(--red-lt)">4-Tier Model</div>
+      </div>
+      <div class="panel-body">
+        <div class="crit-row">
+          <span class="crit-tag ct-c1">C1</span>
+          <span class="crit-label" style="color:var(--red-lt)">Critical</span>
+          <span class="crit-desc">Platform-critical, zero tolerance for gap</span>
+        </div>
+        <div class="crit-row">
+          <span class="crit-tag ct-c2">C2</span>
+          <span class="crit-label" style="color:var(--amber-lt)">High</span>
+          <span class="crit-desc">Strategically important</span>
+        </div>
+        <div class="crit-row">
+          <span class="crit-tag ct-c3">C3</span>
+          <span class="crit-label" style="color:var(--blue-lt)">Medium</span>
+          <span class="crit-desc">Operationally relevant</span>
+        </div>
+        <div class="crit-row">
+          <span class="crit-tag ct-c4">C4</span>
+          <span class="crit-label" style="color:var(--ink-soft)">Low</span>
+          <span class="crit-desc">Nice to have</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- confidence-statement -->
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 28px;background:rgba(200,168,75,0.06);border-top:1px solid rgba(200,168,75,0.15);flex-shrink:0">
+    <svg style="width:13px;height:13px;stroke:#C8A84B;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+    <span style="font-size:11px;color:#C8A84B;font-weight:500;letter-spacing:0.03em">Admin-configured context &nbsp;&middot;&nbsp; Feeds directly into SkillForge AI pipeline for skill taxonomy generation</span>
+    <span style="margin-left:auto;font-size:10px;color:#4A6A84;letter-spacing:0.06em;text-transform:uppercase">AI governance</span>
+  </div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+// Hierarchy tree toggle
+function toggleBU(header) {
+  header.classList.toggle('expanded');
+  var depts = header.nextElementSibling;
+  depts.classList.toggle('show');
+}
+
+// Draw circular gauge
+(function() {
+  var canvas = document.getElementById('gaugeCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var w = canvas.width, h = canvas.height;
+  var cx = w / 2, cy = h / 2, r = 72;
+  var lineW = 10;
+  var pct = 0.91;
+
+  // Background arc
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = lineW;
+  ctx.stroke();
+
+  // Fill arc
+  var start = -Math.PI / 2;
+  var end = start + (Math.PI * 2 * pct);
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, start, end);
+  var grad = ctx.createLinearGradient(0, 0, w, h);
+  grad.addColorStop(0, '#3AB87A');
+  grad.addColorStop(1, '#1A7A4A');
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = lineW;
+  ctx.lineCap = 'round';
+  ctx.stroke();
+})();
+</script>
+
+<!-- Toast handler for # links -->
+<script>
+(function(){
+  var toast = document.createElement("div");
+  toast.id = "sip-toast";
+  toast.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#152438;border:1px solid rgba(255,255,255,0.1);color:#8AACC4;font-size:12px;font-family:'DM Sans',sans-serif;padding:10px 18px;border-radius:8px;opacity:0;transition:opacity 0.2s,transform 0.2s;pointer-events:none;z-index:9999;white-space:nowrap;";
+  document.body.appendChild(toast);
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.style.opacity = "1";
+    toast.style.transform = "translateX(-50%) translateY(0)";
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function(){
+      toast.style.opacity="0";
+      toast.style.transform="translateX(-50%) translateY(8px)";
+    }, 2400);
+  }
+  document.addEventListener("click", function(e){
+    var a = e.target.closest("a");
+    if(a && a.getAttribute("href") === "#"){
+      e.preventDefault();
+      var label = (a.textContent || "").trim().replace(/\s+/g," ").substring(0,36);
+      showToast(label + " \u2014 available in full platform");
+    }
+  });
+})();
+</script>
+</body>
+</html>

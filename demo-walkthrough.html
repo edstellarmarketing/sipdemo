@@ -378,15 +378,64 @@ body { background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans
   </div>
   <div class="hero-eyebrow">Guided Platform Demo</div>
   <h1>From workforce opacity<br>to <span>workforce intelligence</span></h1>
-  <p class="hero-desc">Follow the 7-step data journey of Arcova Infrastructure — 812 employees, 48 skills, one continuous intelligence pipeline. Click each step to see it live.</p>
+  <p class="hero-desc">Follow the 10-step data journey of Arcova Infrastructure — 812 employees, 48 skills, one continuous intelligence pipeline. Click each step to see it live. Or jump to a persona journey below.</p>
+  <div style="display:flex;gap:10px;justify-content:center;margin-top:8px;position:relative;z-index:1">
+    <a href="#journey-admin" class="hero-link" style="border-color:rgba(26,92,138,0.4);color:var(--blue-lt)">Admin Journey</a>
+    <a href="#journey-manager" class="hero-link" style="border-color:rgba(200,168,75,0.4);color:var(--gold)">Manager Journey</a>
+    <a href="#journey-employee" class="hero-link" style="border-color:rgba(26,122,74,0.4);color:var(--green-lt)">Employee Journey</a>
+  </div>
 </div>
 
 <!-- FLOW -->
 <div class="flow-container">
 
-  <!-- ═══════════ STEP 1: DataPort ═══════════ -->
+  <!-- ═══════════ STEP 1: OrgSetup ═══════════ -->
   <div class="step" id="step1">
     <div class="step-bubble" style="background:rgba(26,92,138,0.15);border:2px solid rgba(26,92,138,0.4);color:var(--blue-lt)">1</div>
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(26,92,138,0.12);border:1px solid rgba(26,92,138,0.25)">
+          <svg viewBox="0 0 24 24" style="stroke:var(--blue-lt)"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09"/></svg>
+        </div>
+        <div class="step-info">
+          <div class="step-level" style="color:var(--blue-lt)">Level 1 · Admin Portal · M1: OrgSetup</div>
+          <div class="step-title">Tell the Platform About Your Organisation</div>
+          <div class="step-subtitle">The starting point: <em>"What makes your company unique?"</em> OrgSetup captures everything the AI needs — hierarchy, strategy, standards, tools — so the generated skill framework is specific to your org, not a generic template.</div>
+        </div>
+        <span class="portal-tag admin">Admin</span>
+      </div>
+      <div class="step-body">
+        <div class="see-label">What to look for on this screen</div>
+        <div class="see-grid">
+          <div class="see-item">
+            <div class="see-num" style="color:var(--blue-lt)">91%</div>
+            <div class="see-text"><strong>Context Completeness</strong> — the platform measures how much it knows about you before AI runs</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--gold)">4</div>
+            <div class="see-text"><strong>Business Units</strong> → 10 Departments → 32 Roles. See the full interactive hierarchy tree</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--green-lt)">4</div>
+            <div class="see-text"><strong>Strategic Goals</strong> with progress tracking — these directly influence which skills the AI prioritises</div>
+          </div>
+        </div>
+        <div class="why-box">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+          <div class="why-text"><strong>Why this matters:</strong> The richer the context, the more precise the AI output. Arcova's strategic goal to "reduce BIM dependency by 40%" directly causes SkillForge to generate BIM-related skills with Critical priority. Context drives intelligence.</div>
+        </div>
+        <a class="step-cta" href="admin/org-setup.html" style="background:rgba(26,92,138,0.15);color:var(--blue-lt);border:1px solid rgba(26,92,138,0.3)">
+          Open OrgSetup <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="flow-arrow"><div class="flow-arrow-label">Org context feeds into DataPort + AI</div></div>
+
+  <!-- ═══════════ STEP 2: DataPort ═══════════ -->
+  <div class="step" id="step2a">
+    <div class="step-bubble" style="background:rgba(26,92,138,0.15);border:2px solid rgba(26,92,138,0.4);color:var(--blue-lt)">2</div>
     <div class="step-card">
       <div class="step-header">
         <div class="step-icon" style="background:rgba(26,92,138,0.12);border:1px solid rgba(26,92,138,0.25)">
@@ -428,9 +477,9 @@ body { background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans
 
   <div class="flow-arrow"><div class="flow-arrow-label">812 employees feed into AI</div></div>
 
-  <!-- ═══════════ STEP 2: SkillForge ═══════════ -->
-  <div class="step" id="step2">
-    <div class="step-bubble" style="background:rgba(106,58,154,0.15);border:2px solid rgba(106,58,154,0.4);color:var(--purple-lt)">2</div>
+  <!-- ═══════════ STEP 3: SkillForge ═══════════ -->
+  <div class="step" id="step3">
+    <div class="step-bubble" style="background:rgba(106,58,154,0.15);border:2px solid rgba(106,58,154,0.4);color:var(--purple-lt)">3</div>
     <div class="step-card">
       <div class="step-header">
         <div class="step-icon" style="background:rgba(106,58,154,0.12);border:1px solid rgba(106,58,154,0.25)">
@@ -472,9 +521,9 @@ body { background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans
 
   <div class="flow-arrow"><div class="flow-arrow-label">48 skills + 8 competencies sent to review</div></div>
 
-  <!-- ═══════════ STEP 3: ApprovalHub ═══════════ -->
-  <div class="step" id="step3">
-    <div class="step-bubble" style="background:rgba(212,130,10,0.15);border:2px solid rgba(212,130,10,0.4);color:var(--amber)">3</div>
+  <!-- ═══════════ STEP 4: ApprovalHub ═══════════ -->
+  <div class="step" id="step4a">
+    <div class="step-bubble" style="background:rgba(212,130,10,0.15);border:2px solid rgba(212,130,10,0.4);color:var(--amber)">4</div>
     <div class="step-card">
       <div class="step-header">
         <div class="step-icon" style="background:rgba(212,130,10,0.12);border:1px solid rgba(212,130,10,0.25)">
@@ -516,9 +565,9 @@ body { background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans
 
   <div class="flow-arrow"><div class="flow-arrow-label">Framework published → L2 unlocked</div></div>
 
-  <!-- ═══════════ STEP 4: AssessEngine ═══════════ -->
-  <div class="step" id="step4">
-    <div class="step-bubble" style="background:rgba(13,138,138,0.15);border:2px solid rgba(13,138,138,0.4);color:var(--teal-lt)">4</div>
+  <!-- ═══════════ STEP 5: AssessEngine ═══════════ -->
+  <div class="step" id="step5a">
+    <div class="step-bubble" style="background:rgba(13,138,138,0.15);border:2px solid rgba(13,138,138,0.4);color:var(--teal-lt)">5</div>
     <div class="step-card">
       <div class="step-header">
         <div class="step-icon" style="background:rgba(13,138,138,0.12);border:1px solid rgba(13,138,138,0.25)">
@@ -564,9 +613,9 @@ body { background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans
 
   <div class="flow-arrow"><div class="flow-arrow-label">Validated scores flow to intelligence layer</div></div>
 
-  <!-- ═══════════ STEP 5: Skills Matrix ═══════════ -->
-  <div class="step" id="step5">
-    <div class="step-bubble" style="background:var(--gold-dim);border:2px solid rgba(200,168,75,0.4);color:var(--gold)">5</div>
+  <!-- ═══════════ STEP 6: Skills Matrix ═══════════ -->
+  <div class="step" id="step6a">
+    <div class="step-bubble" style="background:var(--gold-dim);border:2px solid rgba(200,168,75,0.4);color:var(--gold)">6</div>
     <div class="step-card">
       <div class="step-header">
         <div class="step-icon" style="background:var(--gold-dim);border:1px solid rgba(200,168,75,0.25)">
@@ -608,9 +657,9 @@ body { background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans
 
   <div class="flow-arrow"><div class="flow-arrow-label">Gaps ranked + intervention-typed → LNA</div></div>
 
-  <!-- ═══════════ STEP 6: LNA Report + CHRO Dashboard ═══════════ -->
-  <div class="step" id="step6">
-    <div class="step-bubble" style="background:var(--gold-dim);border:2px solid rgba(200,168,75,0.4);color:var(--gold)">6</div>
+  <!-- ═══════════ STEP 7: Dashboards + LNA ═══════════ -->
+  <div class="step" id="step7a">
+    <div class="step-bubble" style="background:var(--gold-dim);border:2px solid rgba(200,168,75,0.4);color:var(--gold)">7</div>
     <div class="step-card">
       <div class="step-header">
         <div class="step-icon" style="background:var(--gold-dim);border:1px solid rgba(200,168,75,0.25)">
@@ -619,7 +668,7 @@ body { background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans
         <div class="step-info">
           <div class="step-level" style="color:var(--gold)">Level 2–3 · Manager Portal · InsightBoard + LNA</div>
           <div class="step-title">Executive Intelligence + Department Drill-Down</div>
-          <div class="step-subtitle">Two screens, two audiences. The <strong>CHRO Dashboard</strong> shows org-wide KPIs, trends, and AI insights. The <strong>LNA Report</strong> drills into a specific department with employee-level risk ranking, intervention timelines, and budget.</div>
+          <div class="step-subtitle">Three screens, three audiences. The <strong>CHRO Dashboard</strong> shows org-wide readiness. The <strong>CLO Dashboard</strong> shows training ROI and programme effectiveness. The <strong>LNA Report</strong> drills into a department with employee-level risk ranking and budget.</div>
         </div>
         <span class="portal-tag manager">Manager</span>
       </div>
@@ -654,6 +703,9 @@ body { background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans
           <a class="step-cta" href="manager/chro-dashboard.html" style="background:var(--gold-dim);color:var(--gold);border:1px solid rgba(200,168,75,0.3)">
             Open CHRO Dashboard <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
           </a>
+          <a class="step-cta" href="manager/clo-dashboard.html" style="background:rgba(106,58,154,0.12);color:var(--purple-lt);border:1px solid rgba(106,58,154,0.3)">
+            Open CLO Dashboard <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+          </a>
           <a class="step-cta" href="manager/lna-report.html" style="background:rgba(26,92,138,0.12);color:var(--blue-lt);border:1px solid rgba(26,92,138,0.3)">
             Open LNA Report <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
           </a>
@@ -662,11 +714,55 @@ body { background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans
     </div>
   </div>
 
+  <div class="flow-arrow"><div class="flow-arrow-label">Gaps inform succession risk</div></div>
+
+  <!-- ═══════════ STEP 8: Succession Planning ═══════════ -->
+  <div class="step" id="step8">
+    <div class="step-bubble" style="background:rgba(192,57,43,0.15);border:2px solid rgba(192,57,43,0.4);color:var(--red-lt)">8</div>
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(192,57,43,0.12);border:1px solid rgba(192,57,43,0.25)">
+          <svg viewBox="0 0 24 24" style="stroke:var(--red-lt)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="step-info">
+          <div class="step-level" style="color:var(--red-lt)">Level 2 · Manager Portal · M16: Succession Planning</div>
+          <div class="step-title">Who Replaces Your Critical People?</div>
+          <div class="step-subtitle">The risk question: <em>"If Rahul leaves tomorrow, who steps in?"</em> Succession Planning identifies critical roles, maps candidate pipelines by readiness band, and uses AI to flag single-point-of-failure risks before they become crises.</div>
+        </div>
+        <span class="portal-tag manager">Manager</span>
+      </div>
+      <div class="step-body">
+        <div class="see-label">What to look for on this screen</div>
+        <div class="see-grid">
+          <div class="see-item">
+            <div class="see-num" style="color:var(--red-lt)">5</div>
+            <div class="see-text"><strong>Critical roles</strong> tracked — Principal Structural Engineer is VACANT with high urgency. See the candidate pipeline with readiness bands.</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--gold)">86%</div>
+            <div class="see-text"><strong>Amir Hassan's readiness</strong> for Principal Eng — closest candidate. Needs BIM Advanced cert to be fully ready.</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--amber)">3</div>
+            <div class="see-text"><strong>AI Risk Alerts</strong> — single-point-of-failure, concentration risk, and one positive signal. Data-driven, not guesswork.</div>
+          </div>
+        </div>
+        <div class="why-box">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+          <div class="why-text"><strong>Why this matters:</strong> Most succession planning is a spreadsheet updated once a year. This is live — fed by assessment data, gap scores, and training progress. When Amir completes his BIM certification, his readiness score updates automatically.</div>
+        </div>
+        <a class="step-cta" href="manager/succession.html" style="background:rgba(192,57,43,0.12);color:var(--red-lt);border:1px solid rgba(192,57,43,0.3)">
+          Open Succession Planning <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <div class="flow-arrow"><div class="flow-arrow-label">Intelligence reaches every employee</div></div>
 
-  <!-- ═══════════ STEP 7: Skill Passport ═══════════ -->
-  <div class="step" id="step7">
-    <div class="step-bubble" style="background:rgba(26,122,74,0.15);border:2px solid rgba(26,122,74,0.4);color:var(--green-lt)">7</div>
+  <!-- ═══════════ STEP 9: Skill Passport ═══════════ -->
+  <div class="step" id="step9">
+    <div class="step-bubble" style="background:rgba(26,122,74,0.15);border:2px solid rgba(26,122,74,0.4);color:var(--green-lt)">9</div>
     <div class="step-card">
       <div class="step-header">
         <div class="step-icon" style="background:rgba(26,122,74,0.12);border:1px solid rgba(26,122,74,0.25)">
@@ -706,11 +802,144 @@ body { background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans
     </div>
   </div>
 
+  <div class="flow-arrow"><div class="flow-arrow-label">Gaps become learning journeys</div></div>
+
+  <!-- ═══════════ STEP 10: Learning Path + Certificates ═══════════ -->
+  <div class="step" id="step10">
+    <div class="step-bubble" style="background:rgba(26,122,74,0.15);border:2px solid rgba(26,122,74,0.4);color:var(--green-lt)">10</div>
+    <div class="step-card">
+      <div class="step-header">
+        <div class="step-icon" style="background:rgba(26,122,74,0.12);border:1px solid rgba(26,122,74,0.25)">
+          <svg viewBox="0 0 24 24" style="stroke:var(--green-lt)"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <div class="step-info">
+          <div class="step-level" style="color:var(--green-lt)">Level 3 · Employee Portal · Learning Path + Certificates</div>
+          <div class="step-title">From Gap to Growth — Close the Loop</div>
+          <div class="step-subtitle">The action layer: <em>"What do I need to learn, and can I prove I learned it?"</em> Every employee gets an AI-personalised learning path mapped to their specific gaps, and verified certificates on completion — portable, QR-authenticated, and linked to their Skill Passport.</div>
+        </div>
+        <span class="portal-tag employee">Employee</span>
+      </div>
+      <div class="step-body">
+        <div class="see-label">What to look for — Learning Path</div>
+        <div class="see-grid">
+          <div class="see-item">
+            <div class="see-num" style="color:var(--green-lt)">3</div>
+            <div class="see-text"><strong>Programmes on Priya's path</strong> — 1 completed, 1 in progress (64%), 1 upcoming. Each mapped to specific skill gaps.</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--teal-lt)">8</div>
+            <div class="see-text"><strong>Modules in AI & Data Literacy</strong> — see which are done, which is current (Python for Data Analysis), and what's next</div>
+          </div>
+        </div>
+        <div class="see-label" style="margin-top:12px">What to look for — Certificates</div>
+        <div class="see-grid">
+          <div class="see-item">
+            <div class="see-num" style="color:var(--gold)">4</div>
+            <div class="see-text"><strong>Certificates</strong> — 3 verified, 1 in progress. See the branded certificate preview with QR code and verification URL.</div>
+          </div>
+          <div class="see-item">
+            <div class="see-num" style="color:var(--red-lt)">90d</div>
+            <div class="see-text"><strong>PMP expiring</strong> — platform alerts before credentials lapse. Ties back to AssessEngine's AI suggestion for renewal assessment.</div>
+          </div>
+        </div>
+        <div class="why-box">
+          <div class="why-icon"><svg viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg></div>
+          <div class="why-text"><strong>Why this matters:</strong> The learning path closes the gap between "you need this skill" and "you have this skill." The certificate proves it happened. When Priya completes AI & Data Literacy, her Skill Passport updates automatically, the Skills Matrix cell turns green, and the CHRO Dashboard shows gap closure improving. One action, visible everywhere.</div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="step-cta" href="employee/learning-path.html" style="background:rgba(26,122,74,0.12);color:var(--green-lt);border:1px solid rgba(26,122,74,0.3)">
+            Open Learning Path <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+          </a>
+          <a class="step-cta" href="employee/certificates.html" style="background:var(--gold-dim);color:var(--gold);border:1px solid rgba(200,168,75,0.3)">
+            Open Certificates <svg viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     PERSONA JOURNEY SIMULATIONS
+════════════════════════════════════════════════════════════ -->
+<div style="max-width:960px;margin:0 auto;padding:0 32px 40px">
+
+  <div style="text-align:center;margin-bottom:40px">
+    <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Simulate a Journey</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--paper);margin-bottom:8px">Three personas. Three stories.</h2>
+    <p style="font-size:14px;color:var(--ink-soft);max-width:500px;margin:0 auto">Click through each journey to experience the platform from a different perspective.</p>
+  </div>
+
+  <!-- ADMIN JOURNEY -->
+  <div id="journey-admin" style="background:var(--ink-card);border:1px solid var(--ink-border);border-radius:16px;padding:28px;margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+      <div style="width:44px;height:44px;border-radius:10px;background:rgba(26,92,138,0.12);border:1px solid rgba(26,92,138,0.25);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--blue-lt)">KR</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--paper)">Admin Journey — Kavitha Ramachandran</div>
+        <div style="font-size:11px;color:var(--ink-soft)">L&D Manager · Sets up the platform, runs the AI, manages assessments</div>
+      </div>
+      <span class="portal-tag admin" style="margin-left:auto">Admin Portal</span>
+    </div>
+    <div style="font-size:12px;color:var(--paper-mid);line-height:1.7;margin-bottom:16px">
+      <strong style="color:var(--paper)">Kavitha's story:</strong> She's been tasked by the CHRO to get the Skills Intelligence Platform running for Arcova's 812 employees. She starts by configuring the org context, imports workforce data, triggers the AI pipeline, reviews the generated framework through 3-tier approval, then sets up assessments to measure actual proficiency. Her journey builds the foundation that everyone else uses.
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a href="admin/org-setup.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:rgba(26,92,138,0.1);border:1px solid rgba(26,92,138,0.25);color:var(--blue-lt);font-size:11px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">1. OrgSetup →</a>
+      <a href="admin/dataport.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:rgba(26,92,138,0.1);border:1px solid rgba(26,92,138,0.25);color:var(--blue-lt);font-size:11px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">2. DataPort →</a>
+      <a href="admin/skillforge.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:rgba(106,58,154,0.1);border:1px solid rgba(106,58,154,0.25);color:var(--purple-lt);font-size:11px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">3. SkillForge →</a>
+      <a href="admin/approvalhub.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:rgba(212,130,10,0.1);border:1px solid rgba(212,130,10,0.25);color:var(--amber);font-size:11px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">4. ApprovalHub →</a>
+      <a href="admin/assess-engine.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:rgba(13,138,138,0.1);border:1px solid rgba(13,138,138,0.25);color:var(--teal-lt);font-size:11px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">5. AssessEngine →</a>
+    </div>
+  </div>
+
+  <!-- MANAGER JOURNEY -->
+  <div id="journey-manager" style="background:var(--ink-card);border:1px solid var(--ink-border);border-radius:16px;padding:28px;margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+      <div style="width:44px;height:44px;border-radius:10px;background:var(--gold-dim);border:1px solid rgba(200,168,75,0.25);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--gold)">SN</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--paper)">Manager Journey — Sunita Nair</div>
+        <div style="font-size:11px;color:var(--ink-soft)">CHRO · Sees the big picture, makes strategic workforce decisions</div>
+      </div>
+      <span class="portal-tag manager" style="margin-left:auto">Manager Portal</span>
+    </div>
+    <div style="font-size:12px;color:var(--paper-mid);line-height:1.7;margin-bottom:16px">
+      <strong style="color:var(--paper)">Sunita's story:</strong> As CHRO, she needs to know: Are we ready? Where are the gaps? Who's at risk of leaving? She opens her dashboard to see org readiness at 61% (up from 44%). She drills into the Skills Matrix to find AI Literacy is red across every department. She checks the LNA report for BIM & Digital, then reviews the succession pipeline where Principal Structural Engineer is vacant. She switches to CLO view to check training ROI.
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a href="manager/chro-dashboard.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:var(--gold-dim);border:1px solid rgba(200,168,75,0.25);color:var(--gold);font-size:11px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">1. CHRO Dashboard →</a>
+      <a href="manager/skills-matrix.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:var(--gold-dim);border:1px solid rgba(200,168,75,0.25);color:var(--gold);font-size:11px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">2. Skills Matrix →</a>
+      <a href="manager/lna-report.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:rgba(26,92,138,0.1);border:1px solid rgba(26,92,138,0.25);color:var(--blue-lt);font-size:11px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">3. LNA Report →</a>
+      <a href="manager/succession.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.25);color:var(--red-lt);font-size:11px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">4. Succession →</a>
+      <a href="manager/clo-dashboard.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:rgba(106,58,154,0.1);border:1px solid rgba(106,58,154,0.25);color:var(--purple-lt);font-size:11px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">5. CLO Dashboard →</a>
+    </div>
+  </div>
+
+  <!-- EMPLOYEE JOURNEY -->
+  <div id="journey-employee" style="background:var(--ink-card);border:1px solid var(--ink-border);border-radius:16px;padding:28px;margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+      <div style="width:44px;height:44px;border-radius:10px;background:rgba(26,122,74,0.12);border:1px solid rgba(26,122,74,0.25);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--green-lt)">PM</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--paper)">Employee Journey — Priya Menon</div>
+        <div style="font-size:11px;color:var(--ink-soft)">Senior Project Manager · Sees her own skills, learns, earns credentials</div>
+      </div>
+      <span class="portal-tag employee" style="margin-left:auto">Employee Portal</span>
+    </div>
+    <div style="font-size:12px;color:var(--paper-mid);line-height:1.7;margin-bottom:16px">
+      <strong style="color:var(--paper)">Priya's story:</strong> She opens her Skill Passport to see her verified profile — 2.9 avg proficiency, 4 skill gaps identified. She checks her AI-personalised Learning Path: Digital Project Delivery is completed (certificate earned), AI & Data Literacy is 64% done with 3 modules left, and Advanced Risk is coming in June. She views her certificates — 3 verified, PMP expiring in 90 days. The platform works FOR her, not against her.
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a href="employee/skill-passport.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:rgba(26,122,74,0.1);border:1px solid rgba(26,122,74,0.25);color:var(--green-lt);font-size:11px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">1. Skill Passport →</a>
+      <a href="employee/learning-path.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:rgba(26,122,74,0.1);border:1px solid rgba(26,122,74,0.25);color:var(--green-lt);font-size:11px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">2. Learning Path →</a>
+      <a href="employee/certificates.html" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:var(--gold-dim);border:1px solid rgba(200,168,75,0.25);color:var(--gold);font-size:11px;font-weight:600;text-decoration:none;transition:opacity .15s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">3. Certificates →</a>
+    </div>
+  </div>
+
 </div>
 
 <!-- FOOTER -->
 <div class="demo-footer">
-  <div class="footer-text">7 steps · 3 portals · One continuous intelligence pipeline · From data import to individual development plan</div>
+  <div class="footer-text">10 steps · 3 portals · 3 persona journeys · 17 screens · One continuous intelligence pipeline</div>
   <a class="footer-cta" href="level-journey.html">
     View the 5-Level Journey Map <svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
   </a>
