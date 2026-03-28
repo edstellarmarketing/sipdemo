@@ -67,14 +67,14 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 .user-role { font-size: 10px; color: var(--ink-soft); }
 
 /* ── MAIN ── */
-.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
 .topbar { height: 54px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; padding: 0 28px; gap: 14px; flex-shrink: 0; background: var(--ink-panel); }
-.topbar-title { font-family: 'Syne',sans-serif; font-size: 15px; font-weight: 700; color: var(--paper); flex: 1; }
-.topbar-meta { font-size: 11px; color: var(--ink-soft); }
+.topbar-title { font-family: 'Syne',sans-serif; font-size: 15px; font-weight: 700; color: var(--paper); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.topbar-meta { font-size: 11px; color: var(--ink-soft); white-space: nowrap; }
 .tb-pill { padding: 4px 11px; border-radius: 100px; font-size: 11px; border: 1px solid; white-space: nowrap; }
 .tb-pill.blue { border-color: rgba(58,140,192,.35); color: var(--blue-lt); }
 .tb-pill.gold { border-color: rgba(200,168,75,.3); color: var(--gold); }
-.tb-btn { padding: 7px 14px; border-radius: 6px; border: 1px solid var(--ink-border); background: transparent; color: var(--paper-mid); font-family: 'DM Sans',sans-serif; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background .15s, color .15s; text-decoration: none; }
+.tb-btn { padding: 7px 14px; border-radius: 6px; border: 1px solid var(--ink-border); background: transparent; color: var(--paper-mid); font-family: 'DM Sans',sans-serif; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background .15s, color .15s; text-decoration: none; white-space: nowrap; }
 .tb-btn:hover { background: rgba(255,255,255,0.05); color: var(--paper); }
 .tb-btn.primary { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 600; }
 .tb-btn.primary:hover { opacity: .88; }
@@ -86,10 +86,23 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 
 /* ── PANELS ── */
 .panel { background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: 12px; overflow: hidden; }
-.panel-head { padding: 14px 20px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; }
-.panel-title { font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; color: var(--paper); flex: 1; }
+.panel-head { padding: 14px 20px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.panel-title { font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; color: var(--paper); flex: 1; min-width: 120px; }
 .panel-badge { padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 500; }
 .panel-body { padding: 18px 20px; }
+
+/* ── STEPPER ── */
+.stepper-bar { display: flex; align-items: center; gap: 0; padding: 16px 0; flex-shrink: 0; }
+.step-item { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 14px; border-radius: 8px; transition: background .15s; position: relative; }
+.step-item:hover { background: rgba(255,255,255,0.04); }
+.step-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono',monospace; font-size: 11px; font-weight: 500; border: 2px solid var(--ink-border); color: var(--ink-soft); background: transparent; transition: all .3s; flex-shrink: 0; }
+.step-label { font-size: 11px; color: var(--ink-soft); transition: color .3s; white-space: nowrap; }
+.step-item.active .step-num { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+.step-item.active .step-label { color: var(--gold); font-weight: 500; }
+.step-item.done .step-num { border-color: var(--green-lt); color: var(--green-lt); background: var(--green-dim); }
+.step-item.done .step-label { color: var(--green-lt); }
+.step-connector { width: 24px; height: 2px; background: var(--ink-border); flex-shrink: 0; }
+.step-connector.done { background: var(--green-lt); }
 
 /* ── CONTEXT METER ── */
 .context-meter {
@@ -97,29 +110,31 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
   border: 1px solid rgba(58,184,122,0.25);
   border-radius: 14px; padding: 22px 28px;
   display: flex; align-items: center; gap: 28px;
+  flex-wrap: wrap;
 }
 .cm-gauge { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
 .cm-gauge canvas { width: 100%; height: 100%; }
 .cm-gauge-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .cm-pct { font-family: 'Syne',sans-serif; font-size: 22px; font-weight: 800; color: var(--green-lt); line-height: 1; }
 .cm-pct-sub { font-size: 9px; color: var(--ink-soft); letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
-.cm-info { flex: 1; }
+.cm-info { flex: 1; min-width: 200px; }
 .cm-title { font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 700; color: var(--paper); margin-bottom: 6px; }
 .cm-sub-text { font-size: 12px; color: var(--paper-mid); margin-bottom: 10px; }
-.cm-segments { display: flex; gap: 18px; }
-.cm-seg { display: flex; align-items: center; gap: 6px; }
-.cm-seg-dot { width: 8px; height: 8px; border-radius: 50%; }
-.cm-seg-label { font-size: 11px; color: var(--ink-soft); }
+.cm-segments { display: flex; gap: 18px; flex-wrap: wrap; }
+.cm-seg { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.cm-seg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.cm-seg-label { font-size: 11px; color: var(--ink-soft); white-space: nowrap; }
 .cm-seg-val { font-family: 'DM Mono',monospace; font-size: 12px; font-weight: 500; }
 
 /* ── ORG IDENTITY ── */
 .org-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; }
-.org-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.org-key { font-size: 11px; color: var(--ink-soft); letter-spacing: .04em; }
-.org-val { font-size: 12px; color: var(--paper); font-weight: 500; }
+@media (max-width: 900px) { .org-grid { grid-template-columns: 1fr; } }
+.org-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); gap: 12px; }
+.org-key { font-size: 11px; color: var(--ink-soft); letter-spacing: .04em; flex-shrink: 0; }
+.org-val { font-size: 12px; color: var(--paper); font-weight: 500; text-align: right; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .org-val.mono { font-family: 'DM Mono',monospace; font-size: 11px; }
-.connected-badge { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 100px; font-size: 10px; background: var(--green-dim); border: 1px solid rgba(58,184,122,0.3); color: var(--green-lt); font-weight: 500; }
-.connected-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-lt); }
+.connected-badge { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 100px; font-size: 10px; background: var(--green-dim); border: 1px solid rgba(58,184,122,0.3); color: var(--green-lt); font-weight: 500; white-space: nowrap; }
+.connected-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-lt); flex-shrink: 0; }
 
 /* ── HIERARCHY TREE ── */
 .tree-wrap { padding: 16px 20px; }
@@ -135,8 +150,8 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 .bu-header.expanded { background: rgba(255,255,255,0.03); }
 .bu-chevron { width: 14px; height: 14px; stroke: var(--ink-soft); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; flex-shrink: 0; }
 .bu-header.expanded .bu-chevron { transform: rotate(90deg); }
-.bu-name { font-size: 12.5px; font-weight: 500; color: var(--paper); }
-.bu-count { font-family: 'DM Mono',monospace; font-size: 11px; color: var(--ink-soft); margin-left: auto; }
+.bu-name { font-size: 12.5px; font-weight: 500; color: var(--paper); min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.bu-count { font-family: 'DM Mono',monospace; font-size: 11px; color: var(--ink-soft); margin-left: auto; flex-shrink: 0; }
 .bu-depts { display: none; padding: 6px 0 6px 32px; gap: 8px; flex-wrap: wrap; }
 .bu-depts.show { display: flex; }
 .dept-chip { padding: 5px 12px; border-radius: 6px; font-size: 11px; color: var(--paper-mid); border: 1px solid var(--ink-border); background: rgba(255,255,255,0.02); display: flex; align-items: center; gap: 6px; }
@@ -155,55 +170,119 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 .goal-item { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
 .goal-item:last-child { border-bottom: none; }
 .goal-num { width: 26px; height: 26px; border-radius: 6px; background: var(--gold-dim); border: 1px solid rgba(200,168,75,0.25); display: flex; align-items: center; justify-content: center; font-family: 'DM Mono',monospace; font-size: 10px; color: var(--gold); flex-shrink: 0; font-weight: 500; }
-.goal-info { flex: 1; }
+.goal-info { flex: 1; min-width: 0; }
 .goal-text { font-size: 12.5px; color: var(--paper); line-height: 1.5; margin-bottom: 8px; }
-.goal-bar-wrap { display: flex; align-items: center; gap: 10px; }
-.goal-bar { flex: 1; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+.goal-bar-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.goal-bar { flex: 1; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; min-width: 80px; }
 .goal-bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
 .goal-pct { font-family: 'DM Mono',monospace; font-size: 11px; min-width: 32px; }
 .goal-date { font-size: 10px; color: var(--ink-soft); white-space: nowrap; }
 
-/* ── GRID LAYOUTS ── */
+/* ── GRID LAYOUTS — FIXED RESPONSIVE ── */
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 960px) { .two-col { grid-template-columns: 1fr; } }
 .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+@media (max-width: 960px) { .three-col { grid-template-columns: 1fr; } }
 
 /* ── PRODUCTS ── */
 .product-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
 .product-item:last-child { border-bottom: none; }
 .product-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-lt); flex-shrink: 0; }
-.product-name { font-size: 12px; color: var(--paper-mid); }
+.product-name { font-size: 12px; color: var(--paper-mid); min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 
 /* ── STANDARDS ── */
-.standard-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.standard-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.04); gap: 8px; }
 .standard-row:last-child { border-bottom: none; }
-.standard-name { font-size: 12px; color: var(--paper); font-weight: 500; }
-.standard-badge { padding: 2px 9px; border-radius: 100px; font-size: 10px; font-weight: 500; }
+.standard-name { font-size: 12px; color: var(--paper); font-weight: 500; min-width: 0; }
+.standard-badge { padding: 2px 9px; border-radius: 100px; font-size: 10px; font-weight: 500; flex-shrink: 0; }
 .sb-active { background: var(--green-dim); color: var(--green-lt); border: 1px solid rgba(58,184,122,0.3); }
 .sb-pending { background: var(--amber-dim); color: var(--amber-lt); border: 1px solid rgba(212,130,10,0.3); }
 
 /* ── TOOLS ── */
 .tools-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-.tool-chip { padding: 6px 12px; border-radius: 7px; font-size: 11.5px; color: var(--paper-mid); border: 1px solid var(--ink-border); background: rgba(255,255,255,0.02); display: flex; align-items: center; gap: 8px; }
-.tool-lifecycle { padding: 1px 7px; border-radius: 100px; font-size: 9px; font-weight: 500; }
+.tool-chip { padding: 6px 12px; border-radius: 7px; font-size: 11.5px; color: var(--paper-mid); border: 1px solid var(--ink-border); background: rgba(255,255,255,0.02); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.tool-lifecycle { padding: 1px 7px; border-radius: 100px; font-size: 9px; font-weight: 500; white-space: nowrap; }
 .tl-current { background: var(--green-dim); color: var(--green-lt); }
 .tl-eval { background: var(--purple-dim); color: var(--purple-lt); }
 
 /* ── CRITICALITY ── */
 .crit-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
 .crit-row:last-child { border-bottom: none; }
-.crit-tag { padding: 3px 10px; border-radius: 5px; font-family: 'DM Mono',monospace; font-size: 10px; font-weight: 500; min-width: 30px; text-align: center; }
-.crit-label { font-size: 11px; font-weight: 500; }
-.crit-desc { font-size: 11px; color: var(--ink-soft); margin-left: auto; }
+.crit-tag { padding: 3px 10px; border-radius: 5px; font-family: 'DM Mono',monospace; font-size: 10px; font-weight: 500; min-width: 30px; text-align: center; flex-shrink: 0; }
+.crit-label { font-size: 11px; font-weight: 500; flex-shrink: 0; }
+.crit-desc { font-size: 11px; color: var(--ink-soft); margin-left: auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ct-c1 { background: var(--red-dim); color: var(--red-lt); }
 .ct-c2 { background: var(--amber-dim); color: var(--amber-lt); }
 .ct-c3 { background: var(--blue-dim); color: var(--blue-lt); }
 .ct-c4 { background: rgba(255,255,255,0.05); color: var(--ink-soft); }
+
+/* ── FORM STYLES ── */
+.form-group { margin-bottom: 14px; }
+.form-label { display: block; font-size: 11px; color: var(--ink-soft); letter-spacing: .04em; margin-bottom: 5px; text-transform: uppercase; }
+.form-input, .form-select { width: 100%; padding: 9px 12px; border-radius: 7px; border: 1px solid var(--ink-border); background: var(--ink-raised); color: var(--paper); font-family: 'DM Sans',sans-serif; font-size: 12.5px; outline: none; transition: border-color .2s; }
+.form-input:focus, .form-select:focus { border-color: var(--blue-lt); }
+.form-input::placeholder { color: var(--ink-soft); }
+.form-select option { background: var(--ink-raised); color: var(--paper); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 700px) { .form-row { grid-template-columns: 1fr; } }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+@media (max-width: 700px) { .form-row-3 { grid-template-columns: 1fr; } }
+
+.btn { padding: 9px 20px; border-radius: 7px; border: 1px solid var(--ink-border); background: transparent; color: var(--paper-mid); font-family: 'DM Sans',sans-serif; font-size: 12.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: all .15s; }
+.btn:hover { background: rgba(255,255,255,0.05); color: var(--paper); }
+.btn-gold { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 600; }
+.btn-gold:hover { opacity: .88; background: var(--gold); color: var(--ink); }
+.btn-green { background: var(--green); border-color: var(--green); color: var(--paper); font-weight: 500; }
+.btn-green:hover { opacity: .88; background: var(--green); color: var(--paper); }
+.btn-blue { background: var(--blue); border-color: var(--blue); color: var(--paper); font-weight: 500; }
+.btn-blue:hover { opacity: .88; background: var(--blue); color: var(--paper); }
+.btn-sm { padding: 5px 12px; font-size: 11px; }
+
+.autofill-hint { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 8px; background: rgba(200,168,75,0.06); border: 1px solid rgba(200,168,75,0.15); margin-bottom: 16px; }
+.autofill-hint span { font-size: 11px; color: var(--gold); }
+
+/* ── STEP PANELS ── */
+.step-panel { display: none; }
+.step-panel.visible { display: block; animation: fadeUp .35s ease both; }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align: center; padding: 40px 20px; }
+.empty-icon { width: 48px; height: 48px; margin: 0 auto 14px; border-radius: 12px; background: var(--ink-raised); border: 1px solid var(--ink-border); display: flex; align-items: center; justify-content: center; }
+.empty-icon svg { width: 22px; height: 22px; stroke: var(--ink-soft); fill: none; stroke-width: 1.5; }
+.empty-title { font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 700; color: var(--paper-mid); margin-bottom: 6px; }
+.empty-desc { font-size: 12px; color: var(--ink-soft); max-width: 320px; margin: 0 auto; }
+
+/* ── DYNAMIC BU BUILDER ── */
+.bu-add-row { display: flex; gap: 10px; align-items: flex-end; margin-top: 12px; }
+.bu-add-row .form-group { margin-bottom: 0; flex: 1; }
+.added-items { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.added-chip { padding: 6px 12px; border-radius: 7px; font-size: 11.5px; color: var(--paper); border: 1px solid var(--ink-border); background: var(--ink-raised); display: flex; align-items: center; gap: 8px; }
+.added-chip .remove-chip { cursor: pointer; opacity: .5; transition: opacity .15s; font-size: 14px; }
+.added-chip .remove-chip:hover { opacity: 1; color: var(--red-lt); }
+
+/* ── REVIEW SECTION ── */
+.review-section { margin-bottom: 18px; }
+.review-section-title { font-family: 'Syne',sans-serif; font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.review-check { width: 16px; height: 16px; border-radius: 50%; background: var(--green-dim); border: 1px solid var(--green-lt); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.review-check svg { width: 10px; height: 10px; stroke: var(--green-lt); fill: none; stroke-width: 2.5; }
+
+/* ── TOAST ── */
+.toast-msg { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--ink-raised); border: 1px solid rgba(58,184,122,0.3); color: var(--green-lt); font-size: 12px; font-family: 'DM Sans',sans-serif; padding: 10px 20px; border-radius: 8px; opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; z-index: 9999; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+.toast-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 @keyframes fadeUp   { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(1.3); } }
 
 .fade-up { animation: fadeUp .4s ease both; }
+
+/* ── SUCCESS BANNER ── */
+.success-banner { display: none; padding: 18px 24px; background: linear-gradient(135deg, rgba(26,122,74,0.15) 0%, rgba(26,92,138,0.1) 100%); border: 1px solid rgba(58,184,122,0.3); border-radius: 12px; align-items: center; gap: 16px; }
+.success-banner.show { display: flex; animation: fadeUp .5s ease both; }
+.success-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--green-dim); border: 2px solid var(--green-lt); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.success-icon svg { width: 20px; height: 20px; stroke: var(--green-lt); fill: none; stroke-width: 2.5; }
+.success-text h3 { font-family: 'Syne',sans-serif; font-size: 15px; font-weight: 700; color: var(--green-lt); margin-bottom: 4px; }
+.success-text p { font-size: 12px; color: var(--paper-mid); }
 </style>
 </head>
 <body>
@@ -272,291 +351,409 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
       <svg style="width:11px;height:11px" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
       All screens
     </a>
-    <div class="topbar-meta">25 March 2026</div>
-    <div class="tb-pill blue">L3 Active</div>
-    <a href="skillforge.html" class="tb-btn primary" style="font-size:12px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.04em">Feed into SkillForge &rarr;</a>
+    <div class="topbar-meta">28 March 2026</div>
+    <div class="tb-pill blue" id="levelPill">Setup Mode</div>
+    <button class="tb-btn" id="resetBtn" onclick="resetDemo()" style="font-size:11px;padding:5px 11px;color:var(--amber-lt);border-color:rgba(212,130,10,0.3)">
+      <svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Reset Demo
+    </button>
   </div>
 
   <!-- level-banner-strip -->
   <a href="../level-journey.html" style="display:flex;align-items:center;gap:12px;padding:0 28px;height:36px;background:linear-gradient(90deg,rgba(200,168,75,0.12) 0%,rgba(8,15,24,0) 60%);border-bottom:1px solid rgba(200,168,75,0.2);text-decoration:none;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='linear-gradient(90deg,rgba(200,168,75,0.18) 0%,rgba(8,15,24,0) 70%)'" onmouseout="this.style.background='linear-gradient(90deg,rgba(200,168,75,0.12) 0%,rgba(8,15,24,0) 60%)'">
-    <div style="display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:#C8A84B;animation:pulse 2s ease-in-out infinite"></div><span style="font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.08em;color:#C8A84B">L3 ACTIVE</span></div>
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:#C8A84B;animation:pulse 2s ease-in-out infinite"></div><span style="font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.08em;color:#C8A84B">L1 SETUP</span></div>
     <div style="width:1px;height:14px;background:rgba(200,168,75,0.2)"></div>
-    <div style="font-size:11px;color:#8AACC4">Training Execution &amp; Delivery</div>
-    <div style="width:80px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden"><div style="width:63%;height:100%;background:#C8A84B;border-radius:2px"></div></div>
-    <div style="font-size:11px;color:#C8A84B;font-weight:500">63% complete</div>
-    <div style="width:1px;height:14px;background:rgba(200,168,75,0.2)"></div>
-    <div style="font-size:11px;color:#8AACC4">2 actions to unlock L4 &rarr;</div>
+    <div style="font-size:11px;color:#8AACC4">OrgSetup feeds context into SkillForge AI pipeline</div>
+    <div style="width:80px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden"><div id="bannerProgress" style="width:0%;height:100%;background:#C8A84B;border-radius:2px;transition:width .6s"></div></div>
+    <div id="bannerPct" style="font-size:11px;color:#C8A84B;font-weight:500">0% complete</div>
     <div style="margin-left:auto;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.06em;color:#C8A84B;text-transform:uppercase">View full journey &rarr;</div>
   </a>
 
   <!-- CONTENT -->
   <div class="content">
 
-    <!-- 1. DATA CONTEXT METER -->
+    <!-- CONTEXT METER -->
     <div class="context-meter fade-up">
       <div class="cm-gauge">
         <canvas id="gaugeCanvas" width="180" height="180"></canvas>
         <div class="cm-gauge-label">
-          <div class="cm-pct">91%</div>
+          <div class="cm-pct" id="gaugePct">0%</div>
           <div class="cm-pct-sub">Complete</div>
         </div>
       </div>
       <div class="cm-info">
-        <div class="cm-title">Context Completeness: 91%</div>
-        <div class="cm-sub-text">Organisational context data feeds into SkillForge AI pipeline. Higher completeness improves skill-mapping accuracy.</div>
+        <div class="cm-title" id="gaugeTitle">Context Completeness: 0%</div>
+        <div class="cm-sub-text">Complete each section below to build the organisational context. Higher completeness improves SkillForge AI accuracy.</div>
         <div class="cm-segments">
           <div class="cm-seg">
             <div class="cm-seg-dot" style="background:var(--green-lt)"></div>
-            <span class="cm-seg-label">Core:</span>
-            <span class="cm-seg-val" style="color:var(--green-lt)">100%</span>
+            <span class="cm-seg-label">Identity:</span>
+            <span class="cm-seg-val" id="segIdentity" style="color:var(--ink-soft)">0%</span>
           </div>
           <div class="cm-seg">
             <div class="cm-seg-dot" style="background:var(--blue-lt)"></div>
-            <span class="cm-seg-label">Enrichment:</span>
-            <span class="cm-seg-val" style="color:var(--blue-lt)">86%</span>
+            <span class="cm-seg-label">Structure:</span>
+            <span class="cm-seg-val" id="segStructure" style="color:var(--ink-soft)">0%</span>
+          </div>
+          <div class="cm-seg">
+            <div class="cm-seg-dot" style="background:var(--purple-lt)"></div>
+            <span class="cm-seg-label">Strategy:</span>
+            <span class="cm-seg-val" id="segStrategy" style="color:var(--ink-soft)">0%</span>
           </div>
           <div class="cm-seg">
             <div class="cm-seg-dot" style="background:var(--amber-lt)"></div>
-            <span class="cm-seg-label">Signals:</span>
-            <span class="cm-seg-val" style="color:var(--amber-lt)">78%</span>
+            <span class="cm-seg-label">Ecosystem:</span>
+            <span class="cm-seg-val" id="segEcosystem" style="color:var(--ink-soft)">0%</span>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 2. ORG IDENTITY CARD -->
-    <div class="panel fade-up" style="animation-delay:.06s">
-      <div class="panel-head">
-        <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        <div class="panel-title">Org Identity</div>
-        <div class="panel-badge" style="background:var(--green-dim);color:var(--green-lt)">Verified</div>
+    <!-- STEPPER -->
+    <div class="stepper-bar" id="stepper">
+      <div class="step-item active" data-step="1" onclick="goToStep(1)">
+        <div class="step-num">1</div>
+        <span class="step-label">Org Identity</span>
       </div>
-      <div class="panel-body">
-        <div class="org-grid">
-          <div class="org-row"><span class="org-key">Company</span><span class="org-val">Arcova Infrastructure Pte. Ltd.</span></div>
-          <div class="org-row"><span class="org-key">Industry</span><span class="org-val">Infrastructure &amp; Construction</span></div>
-          <div class="org-row"><span class="org-key">Founded</span><span class="org-val mono">2009</span></div>
-          <div class="org-row"><span class="org-key">Headquarters</span><span class="org-val">Singapore</span></div>
-          <div class="org-row"><span class="org-key">Employees</span><span class="org-val mono">812</span></div>
-          <div class="org-row"><span class="org-key">Offices</span><span class="org-val">Singapore, Mumbai, Dubai, Kuala Lumpur</span></div>
-          <div class="org-row"><span class="org-key">Operating Model</span><span class="org-val">Services &amp; Project Delivery</span></div>
-          <div class="org-row"><span class="org-key">Stage</span><span class="org-val">Mature — Transformation</span></div>
-          <div class="org-row"><span class="org-key">HRIS</span><span class="connected-badge"><span class="connected-dot"></span>Workday connected</span></div>
-          <div class="org-row"><span class="org-key">LMS</span><span class="connected-badge"><span class="connected-dot"></span>Cornerstone OnDemand connected</span></div>
-        </div>
+      <div class="step-connector" data-conn="1"></div>
+      <div class="step-item" data-step="2" onclick="goToStep(2)">
+        <div class="step-num">2</div>
+        <span class="step-label">Hierarchy</span>
       </div>
-    </div>
-
-    <!-- 3. HIERARCHY BUILDER -->
-    <div class="panel fade-up" style="animation-delay:.12s">
-      <div class="panel-head">
-        <svg style="width:14px;height:14px;stroke:var(--blue-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg>
-        <div class="panel-title">Hierarchy Builder</div>
-        <div class="panel-badge" style="background:var(--blue-dim);color:var(--blue-lt)">4 BUs · 11 Depts</div>
+      <div class="step-connector" data-conn="2"></div>
+      <div class="step-item" data-step="3" onclick="goToStep(3)">
+        <div class="step-num">3</div>
+        <span class="step-label">Goals</span>
       </div>
-      <div class="tree-wrap">
-        <div class="tree-org">
-          <div class="tree-org-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
-          <div>
-            <span class="tree-org-name">Arcova Infrastructure</span>
-            <span class="tree-org-count">(812 employees)</span>
-          </div>
-        </div>
-
-        <!-- BU: Engineering -->
-        <div class="bu-group bu-eng">
-          <div class="bu-header expanded" onclick="toggleBU(this)">
-            <svg class="bu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            <span class="bu-name">Engineering &amp; Delivery</span>
-            <span class="bu-count">324</span>
-          </div>
-          <div class="bu-depts show">
-            <div class="dept-chip">Structural Engineering <span class="dept-count">112</span></div>
-            <div class="dept-chip">Civil &amp; Geotechnical <span class="dept-count">98</span></div>
-            <div class="dept-chip">Project Delivery <span class="dept-count">114</span></div>
-          </div>
-        </div>
-
-        <!-- BU: Digital -->
-        <div class="bu-group bu-dig">
-          <div class="bu-header expanded" onclick="toggleBU(this)">
-            <svg class="bu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            <span class="bu-name">Digital &amp; Technology</span>
-            <span class="bu-count">118</span>
-          </div>
-          <div class="bu-depts show">
-            <div class="dept-chip">BIM &amp; Digital Delivery <span class="dept-count">54</span></div>
-            <div class="dept-chip">IT Infrastructure <span class="dept-count">64</span></div>
-          </div>
-        </div>
-
-        <!-- BU: Corporate -->
-        <div class="bu-group bu-corp">
-          <div class="bu-header expanded" onclick="toggleBU(this)">
-            <svg class="bu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            <span class="bu-name">Corporate Functions</span>
-            <span class="bu-count">198</span>
-          </div>
-          <div class="bu-depts show">
-            <div class="dept-chip">Finance &amp; Procurement <span class="dept-count">76</span></div>
-            <div class="dept-chip">Human Resources <span class="dept-count">48</span></div>
-            <div class="dept-chip">Legal &amp; Compliance <span class="dept-count">74</span></div>
-          </div>
-        </div>
-
-        <!-- BU: Sustainability -->
-        <div class="bu-group bu-sus">
-          <div class="bu-header expanded" onclick="toggleBU(this)">
-            <svg class="bu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            <span class="bu-name">Sustainability &amp; EHS</span>
-            <span class="bu-count">172</span>
-          </div>
-          <div class="bu-depts show">
-            <div class="dept-chip">EHS &amp; Risk <span class="dept-count">96</span></div>
-            <div class="dept-chip">Sustainability Advisory <span class="dept-count">76</span></div>
-          </div>
-        </div>
+      <div class="step-connector" data-conn="3"></div>
+      <div class="step-item" data-step="4" onclick="goToStep(4)">
+        <div class="step-num">4</div>
+        <span class="step-label">Products & Standards</span>
+      </div>
+      <div class="step-connector" data-conn="4"></div>
+      <div class="step-item" data-step="5" onclick="goToStep(5)">
+        <div class="step-num">5</div>
+        <span class="step-label">Tools</span>
+      </div>
+      <div class="step-connector" data-conn="5"></div>
+      <div class="step-item" data-step="6" onclick="goToStep(6)">
+        <div class="step-num">6</div>
+        <span class="step-label">Review</span>
       </div>
     </div>
 
-    <!-- 4. STRATEGIC GOALS -->
-    <div class="panel fade-up" style="animation-delay:.18s">
-      <div class="panel-head">
-        <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-        <div class="panel-title">Strategic Goals</div>
-        <div class="panel-badge" style="background:var(--gold-dim);color:var(--gold)">FY2026</div>
+    <!-- SUCCESS BANNER (shown after completion) -->
+    <div class="success-banner" id="successBanner">
+      <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="success-text">
+        <h3>OrgSetup Complete — Context Locked</h3>
+        <p>All organisational context has been captured. SkillForge AI pipeline is now ready to generate your skill taxonomy.</p>
       </div>
-      <div class="panel-body">
-        <div class="goal-item">
-          <div class="goal-num">G1</div>
-          <div class="goal-info">
-            <div class="goal-text">Expand digital delivery capability across all project sites by Q4 2026</div>
-            <div class="goal-bar-wrap">
-              <div class="goal-bar"><div class="goal-bar-fill" style="width:42%;background:var(--blue-lt)"></div></div>
-              <span class="goal-pct" style="color:var(--blue-lt)">42%</span>
-              <span class="goal-date">Target: Q4 2026</span>
-            </div>
-          </div>
-        </div>
-        <div class="goal-item">
-          <div class="goal-num">G2</div>
-          <div class="goal-info">
-            <div class="goal-text">Achieve ISO 45001 &amp; ISO 9001 compliance across all regional offices by Q3 2026</div>
-            <div class="goal-bar-wrap">
-              <div class="goal-bar"><div class="goal-bar-fill" style="width:68%;background:var(--green-lt)"></div></div>
-              <span class="goal-pct" style="color:var(--green-lt)">68%</span>
-              <span class="goal-date">Target: Q3 2026</span>
-            </div>
-          </div>
-        </div>
-        <div class="goal-item">
-          <div class="goal-num">G3</div>
-          <div class="goal-info">
-            <div class="goal-text">Build internal BIM and smart infrastructure competency to reduce third-party dependency by 40%</div>
-            <div class="goal-bar-wrap">
-              <div class="goal-bar"><div class="goal-bar-fill" style="width:35%;background:var(--purple-lt)"></div></div>
-              <span class="goal-pct" style="color:var(--purple-lt)">35%</span>
-              <span class="goal-date">Target: Q4 2026</span>
-            </div>
-          </div>
-        </div>
-        <div class="goal-item">
-          <div class="goal-num">G4</div>
-          <div class="goal-info">
-            <div class="goal-text">Develop a succession-ready leadership pipeline for 12 critical roles by end of FY2026</div>
-            <div class="goal-bar-wrap">
-              <div class="goal-bar"><div class="goal-bar-fill" style="width:54%;background:var(--amber-lt)"></div></div>
-              <span class="goal-pct" style="color:var(--amber-lt)">54%</span>
-              <span class="goal-date">Target: FY2026</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <a href="skillforge.html" class="btn btn-gold" style="margin-left:auto;white-space:nowrap">Feed into SkillForge &rarr;</a>
     </div>
 
-    <!-- TWO-COL: Products + Standards -->
-    <div class="two-col">
-
-      <!-- 5. PRODUCTS & SERVICES -->
-      <div class="panel fade-up" style="animation-delay:.24s">
+    <!-- ════════════════════════════════════════ -->
+    <!-- STEP 1: ORG IDENTITY -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="step-panel visible" id="step1">
+      <div class="panel fade-up">
         <div class="panel-head">
-          <svg style="width:14px;height:14px;stroke:var(--blue-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-          <div class="panel-title">Products &amp; Services</div>
+          <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <div class="panel-title">Step 1 — Org Identity</div>
+          <button class="btn btn-sm btn-gold" onclick="autofillStep1()">Auto-fill Arcova Demo</button>
         </div>
         <div class="panel-body">
-          <div class="product-item"><div class="product-dot"></div><span class="product-name">Civil &amp; Structural Engineering</span></div>
-          <div class="product-item"><div class="product-dot" style="background:var(--purple-lt)"></div><span class="product-name">Smart Building Solutions</span></div>
-          <div class="product-item"><div class="product-dot" style="background:var(--amber-lt)"></div><span class="product-name">Infrastructure Asset Management</span></div>
-          <div class="product-item"><div class="product-dot" style="background:var(--green-lt)"></div><span class="product-name">Environmental &amp; Sustainability Consulting</span></div>
+          <div class="autofill-hint">
+            <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Fill in your company details or click <strong>Auto-fill Arcova Demo</strong> to see a complete example</span>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Company Name</label>
+              <input class="form-input" id="f-company" placeholder="e.g. Arcova Infrastructure Pte. Ltd.">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Industry</label>
+              <select class="form-select" id="f-industry">
+                <option value="">Select industry...</option>
+                <option value="Infrastructure & Construction">Infrastructure & Construction</option>
+                <option value="Technology & Software">Technology & Software</option>
+                <option value="Financial Services">Financial Services</option>
+                <option value="Healthcare & Life Sciences">Healthcare & Life Sciences</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Energy & Utilities">Energy & Utilities</option>
+                <option value="Retail & E-commerce">Retail & E-commerce</option>
+                <option value="Professional Services">Professional Services</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Founded Year</label>
+              <input class="form-input" id="f-founded" type="number" placeholder="e.g. 2009" min="1900" max="2026">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Headquarters</label>
+              <input class="form-input" id="f-hq" placeholder="e.g. Singapore">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Total Employees</label>
+              <input class="form-input" id="f-employees" type="number" placeholder="e.g. 812">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Offices / Locations</label>
+              <input class="form-input" id="f-offices" placeholder="e.g. Singapore, Mumbai, Dubai, Kuala Lumpur">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Operating Model</label>
+              <select class="form-select" id="f-model">
+                <option value="">Select model...</option>
+                <option value="Services & Project Delivery">Services & Project Delivery</option>
+                <option value="Product-Led">Product-Led</option>
+                <option value="Platform & SaaS">Platform & SaaS</option>
+                <option value="Hybrid">Hybrid</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Organisation Stage</label>
+              <select class="form-select" id="f-stage">
+                <option value="">Select stage...</option>
+                <option value="Startup">Startup</option>
+                <option value="Growth">Growth</option>
+                <option value="Mature — Optimisation">Mature — Optimisation</option>
+                <option value="Mature — Transformation">Mature — Transformation</option>
+                <option value="Enterprise">Enterprise</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">HRIS System</label>
+              <input class="form-input" id="f-hris" placeholder="e.g. Workday">
+            </div>
+            <div class="form-group">
+              <label class="form-label">LMS System</label>
+              <input class="form-input" id="f-lms" placeholder="e.g. Cornerstone OnDemand">
+            </div>
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:18px">
+            <button class="btn btn-gold" onclick="saveStep1()">Save & Continue &rarr;</button>
+          </div>
         </div>
       </div>
+    </div>
 
-      <!-- 6. GOVERNING STANDARDS -->
-      <div class="panel fade-up" style="animation-delay:.28s">
+    <!-- ════════════════════════════════════════ -->
+    <!-- STEP 2: HIERARCHY BUILDER -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="step-panel" id="step2">
+      <div class="panel fade-up">
         <div class="panel-head">
-          <svg style="width:14px;height:14px;stroke:var(--green-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-          <div class="panel-title">Governing Standards</div>
+          <svg style="width:14px;height:14px;stroke:var(--blue-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg>
+          <div class="panel-title">Step 2 — Hierarchy Builder</div>
+          <button class="btn btn-sm btn-gold" onclick="autofillStep2()">Auto-fill Arcova Demo</button>
         </div>
         <div class="panel-body">
-          <div class="standard-row"><span class="standard-name">ISO 45001</span><span class="standard-badge sb-active">Active</span></div>
-          <div class="standard-row"><span class="standard-name">ISO 9001</span><span class="standard-badge sb-active">Active</span></div>
-          <div class="standard-row"><span class="standard-name">GDPR</span><span class="standard-badge sb-active">Active</span></div>
-          <div class="standard-row"><span class="standard-name">SOX Compliance</span><span class="standard-badge sb-pending">Pending</span></div>
+          <div class="autofill-hint">
+            <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Add Business Units and their departments. Each BU groups related departments together.</span>
+          </div>
+
+          <div id="buList"></div>
+
+          <div style="border:1px dashed var(--ink-border);border-radius:10px;padding:16px 20px;margin-top:14px">
+            <div style="font-size:12px;font-weight:500;color:var(--paper);margin-bottom:10px">Add Business Unit</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">BU Name</label>
+                <input class="form-input" id="f-bu-name" placeholder="e.g. Engineering & Delivery">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Headcount</label>
+                <input class="form-input" id="f-bu-count" type="number" placeholder="e.g. 324">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Departments (comma-separated)</label>
+              <input class="form-input" id="f-bu-depts" placeholder="e.g. Structural Engineering: 112, Civil & Geotechnical: 98, Project Delivery: 114">
+            </div>
+            <button class="btn btn-blue btn-sm" onclick="addBU()" style="margin-top:6px">+ Add Business Unit</button>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;gap:10px;margin-top:18px">
+            <button class="btn" onclick="goToStep(1)">&larr; Back</button>
+            <button class="btn btn-gold" onclick="saveStep2()">Save & Continue &rarr;</button>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 7. TOOLS & TECHNOLOGIES -->
-    <div class="panel fade-up" style="animation-delay:.32s">
-      <div class="panel-head">
-        <svg style="width:14px;height:14px;stroke:var(--purple-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-        <div class="panel-title">Tools &amp; Technologies</div>
-        <div class="panel-badge" style="background:var(--purple-dim);color:var(--purple-lt)">10 tools</div>
-      </div>
-      <div class="panel-body">
-        <div class="tools-grid">
-          <div class="tool-chip">Workday <span class="tool-lifecycle tl-current">Current</span></div>
-          <div class="tool-chip">Cornerstone OnDemand <span class="tool-lifecycle tl-current">Current</span></div>
-          <div class="tool-chip">Autodesk Revit <span class="tool-lifecycle tl-current">Current</span></div>
-          <div class="tool-chip">Navisworks <span class="tool-lifecycle tl-current">Current</span></div>
-          <div class="tool-chip">AutoCAD <span class="tool-lifecycle tl-current">Current</span></div>
-          <div class="tool-chip">Primavera P6 <span class="tool-lifecycle tl-current">Current</span></div>
-          <div class="tool-chip">MS Project <span class="tool-lifecycle tl-current">Current</span></div>
-          <div class="tool-chip">Power BI <span class="tool-lifecycle tl-current">Current</span></div>
-          <div class="tool-chip">SAP <span class="tool-lifecycle tl-eval">Evaluating</span></div>
-          <div class="tool-chip">Jira <span class="tool-lifecycle tl-eval">Evaluating</span></div>
+    <!-- ════════════════════════════════════════ -->
+    <!-- STEP 3: STRATEGIC GOALS -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="step-panel" id="step3">
+      <div class="panel fade-up">
+        <div class="panel-head">
+          <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          <div class="panel-title">Step 3 — Strategic Goals</div>
+          <button class="btn btn-sm btn-gold" onclick="autofillStep3()">Auto-fill Arcova Demo</button>
+        </div>
+        <div class="panel-body">
+          <div class="autofill-hint">
+            <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <span>Add strategic goals that the skills programme should align with. These drive SkillForge's AI prioritisation.</span>
+          </div>
+
+          <div id="goalList"></div>
+
+          <div style="border:1px dashed var(--ink-border);border-radius:10px;padding:16px 20px;margin-top:14px">
+            <div style="font-size:12px;font-weight:500;color:var(--paper);margin-bottom:10px">Add Goal</div>
+            <div class="form-group">
+              <label class="form-label">Goal Description</label>
+              <input class="form-input" id="f-goal-text" placeholder="e.g. Expand digital delivery capability across all project sites">
+            </div>
+            <div class="form-row-3">
+              <div class="form-group">
+                <label class="form-label">Target Date</label>
+                <input class="form-input" id="f-goal-date" placeholder="e.g. Q4 2026">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Current Progress (%)</label>
+                <input class="form-input" id="f-goal-pct" type="number" placeholder="e.g. 42" min="0" max="100">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Color</label>
+                <select class="form-select" id="f-goal-color">
+                  <option value="var(--blue-lt)">Blue</option>
+                  <option value="var(--green-lt)">Green</option>
+                  <option value="var(--purple-lt)">Purple</option>
+                  <option value="var(--amber-lt)">Amber</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-blue btn-sm" onclick="addGoal()" style="margin-top:6px">+ Add Goal</button>
+          </div>
+
+          <div style="display:flex;justify-content:space-between;gap:10px;margin-top:18px">
+            <button class="btn" onclick="goToStep(2)">&larr; Back</button>
+            <button class="btn btn-gold" onclick="saveStep3()">Save & Continue &rarr;</button>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 8. SKILL CRITICALITY FRAMEWORK -->
-    <div class="panel fade-up" style="animation-delay:.36s">
-      <div class="panel-head">
-        <svg style="width:14px;height:14px;stroke:var(--red-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <div class="panel-title">Skill Criticality Framework</div>
-        <div class="panel-badge" style="background:var(--red-dim);color:var(--red-lt)">4-Tier Model</div>
+    <!-- ════════════════════════════════════════ -->
+    <!-- STEP 4: PRODUCTS & STANDARDS -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="step-panel" id="step4">
+      <div class="two-col">
+        <div class="panel fade-up">
+          <div class="panel-head">
+            <svg style="width:14px;height:14px;stroke:var(--blue-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            <div class="panel-title">Products & Services</div>
+          </div>
+          <div class="panel-body">
+            <div id="productList"></div>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <input class="form-input" id="f-product" placeholder="Add product or service..." style="flex:1">
+              <button class="btn btn-blue btn-sm" onclick="addProduct()">+ Add</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel fade-up" style="animation-delay:.06s">
+          <div class="panel-head">
+            <svg style="width:14px;height:14px;stroke:var(--green-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <div class="panel-title">Governing Standards</div>
+          </div>
+          <div class="panel-body">
+            <div id="standardList"></div>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <input class="form-input" id="f-standard" placeholder="e.g. ISO 45001" style="flex:1">
+              <select class="form-select" id="f-standard-status" style="width:120px">
+                <option value="Active">Active</option>
+                <option value="Pending">Pending</option>
+              </select>
+              <button class="btn btn-blue btn-sm" onclick="addStandard()">+ Add</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="panel-body">
-        <div class="crit-row">
-          <span class="crit-tag ct-c1">C1</span>
-          <span class="crit-label" style="color:var(--red-lt)">Critical</span>
-          <span class="crit-desc">Platform-critical, zero tolerance for gap</span>
+      <div style="display:flex;justify-content:space-between;gap:10px;margin-top:10px">
+        <button class="btn" onclick="goToStep(3)">&larr; Back</button>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-sm btn-gold" onclick="autofillStep4()" style="font-size:11px">Auto-fill Arcova Demo</button>
+          <button class="btn btn-gold" onclick="saveStep4()">Save & Continue &rarr;</button>
         </div>
-        <div class="crit-row">
-          <span class="crit-tag ct-c2">C2</span>
-          <span class="crit-label" style="color:var(--amber-lt)">High</span>
-          <span class="crit-desc">Strategically important</span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- STEP 5: TOOLS & CRITICALITY -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="step-panel" id="step5">
+      <div class="panel fade-up">
+        <div class="panel-head">
+          <svg style="width:14px;height:14px;stroke:var(--purple-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          <div class="panel-title">Step 5 — Tools & Technologies</div>
+          <button class="btn btn-sm btn-gold" onclick="autofillStep5()">Auto-fill Arcova Demo</button>
         </div>
-        <div class="crit-row">
-          <span class="crit-tag ct-c3">C3</span>
-          <span class="crit-label" style="color:var(--blue-lt)">Medium</span>
-          <span class="crit-desc">Operationally relevant</span>
+        <div class="panel-body">
+          <div id="toolList" class="tools-grid" style="margin-bottom:14px"></div>
+          <div style="display:flex;gap:8px">
+            <input class="form-input" id="f-tool" placeholder="Add tool name..." style="flex:1">
+            <select class="form-select" id="f-tool-status" style="width:130px">
+              <option value="Current">Current</option>
+              <option value="Evaluating">Evaluating</option>
+            </select>
+            <button class="btn btn-blue btn-sm" onclick="addTool()">+ Add</button>
+          </div>
         </div>
-        <div class="crit-row">
-          <span class="crit-tag ct-c4">C4</span>
-          <span class="crit-label" style="color:var(--ink-soft)">Low</span>
-          <span class="crit-desc">Nice to have</span>
+      </div>
+
+      <div class="panel fade-up" style="animation-delay:.06s;margin-top:20px">
+        <div class="panel-head">
+          <svg style="width:14px;height:14px;stroke:var(--red-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="panel-title">Skill Criticality Framework</div>
+          <div class="panel-badge" style="background:var(--red-dim);color:var(--red-lt)">4-Tier Model</div>
         </div>
+        <div class="panel-body">
+          <div style="font-size:12px;color:var(--paper-mid);margin-bottom:14px">Define how skills are prioritised in your organisation. This feeds directly into SkillForge's gap analysis weighting.</div>
+          <div class="crit-row"><span class="crit-tag ct-c1">C1</span><span class="crit-label" style="color:var(--red-lt)">Critical</span><span class="crit-desc">Platform-critical, zero tolerance for gap</span></div>
+          <div class="crit-row"><span class="crit-tag ct-c2">C2</span><span class="crit-label" style="color:var(--amber-lt)">High</span><span class="crit-desc">Strategically important</span></div>
+          <div class="crit-row"><span class="crit-tag ct-c3">C3</span><span class="crit-label" style="color:var(--blue-lt)">Medium</span><span class="crit-desc">Operationally relevant</span></div>
+          <div class="crit-row"><span class="crit-tag ct-c4">C4</span><span class="crit-label" style="color:var(--ink-soft)">Low</span><span class="crit-desc">Nice to have</span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;gap:10px;margin-top:10px">
+        <button class="btn" onclick="goToStep(4)">&larr; Back</button>
+        <button class="btn btn-gold" onclick="saveStep5()">Save & Continue &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- STEP 6: REVIEW -->
+    <!-- ════════════════════════════════════════ -->
+    <div class="step-panel" id="step6">
+      <div class="panel fade-up">
+        <div class="panel-head">
+          <svg style="width:14px;height:14px;stroke:var(--green-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+          <div class="panel-title">Step 6 — Review & Confirm</div>
+        </div>
+        <div class="panel-body" id="reviewBody">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;gap:10px;margin-top:10px">
+        <button class="btn" onclick="goToStep(5)">&larr; Back</button>
+        <button class="btn btn-gold" onclick="confirmSetup()" style="font-size:13px;padding:10px 28px">
+          <svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Confirm & Lock OrgSetup
+        </button>
       </div>
     </div>
 
@@ -572,72 +769,540 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 </div><!-- /main -->
 </div><!-- /app -->
 
+<div class="toast-msg" id="toast"></div>
+
 <script>
-// Hierarchy tree toggle
-function toggleBU(header) {
-  header.classList.toggle('expanded');
-  var depts = header.nextElementSibling;
-  depts.classList.toggle('show');
+// ── STATE ──
+var state = {
+  currentStep: 1,
+  completed: { 1: false, 2: false, 3: false, 4: false, 5: false },
+  org: {},
+  bus: [],
+  goals: [],
+  products: [],
+  standards: [],
+  tools: []
+};
+
+var buColors = ['bu-eng','bu-dig','bu-corp','bu-sus','bu-eng','bu-dig','bu-corp','bu-sus'];
+
+// ── TOAST ──
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(function(){ t.classList.remove('show'); }, 2400);
 }
 
-// Draw circular gauge
-(function() {
+// ── GAUGE DRAWING ──
+function drawGauge(pct) {
   var canvas = document.getElementById('gaugeCanvas');
   if (!canvas) return;
   var ctx = canvas.getContext('2d');
   var w = canvas.width, h = canvas.height;
-  var cx = w / 2, cy = h / 2, r = 72;
-  var lineW = 10;
-  var pct = 0.91;
+  var cx = w / 2, cy = h / 2, r = 72, lineW = 10;
+  ctx.clearRect(0, 0, w, h);
 
-  // Background arc
   ctx.beginPath();
   ctx.arc(cx, cy, r, 0, Math.PI * 2);
   ctx.strokeStyle = 'rgba(255,255,255,0.08)';
   ctx.lineWidth = lineW;
   ctx.stroke();
 
-  // Fill arc
-  var start = -Math.PI / 2;
-  var end = start + (Math.PI * 2 * pct);
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, start, end);
-  var grad = ctx.createLinearGradient(0, 0, w, h);
-  grad.addColorStop(0, '#3AB87A');
-  grad.addColorStop(1, '#1A7A4A');
-  ctx.strokeStyle = grad;
-  ctx.lineWidth = lineW;
-  ctx.lineCap = 'round';
-  ctx.stroke();
-})();
-</script>
-
-<!-- Toast handler for # links -->
-<script>
-(function(){
-  var toast = document.createElement("div");
-  toast.id = "sip-toast";
-  toast.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#152438;border:1px solid rgba(255,255,255,0.1);color:#8AACC4;font-size:12px;font-family:'DM Sans',sans-serif;padding:10px 18px;border-radius:8px;opacity:0;transition:opacity 0.2s,transform 0.2s;pointer-events:none;z-index:9999;white-space:nowrap;";
-  document.body.appendChild(toast);
-  function showToast(msg){
-    toast.textContent = msg;
-    toast.style.opacity = "1";
-    toast.style.transform = "translateX(-50%) translateY(0)";
-    clearTimeout(toast._t);
-    toast._t = setTimeout(function(){
-      toast.style.opacity="0";
-      toast.style.transform="translateX(-50%) translateY(8px)";
-    }, 2400);
+  if (pct > 0) {
+    var start = -Math.PI / 2;
+    var end = start + (Math.PI * 2 * pct);
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, start, end);
+    var grad = ctx.createLinearGradient(0, 0, w, h);
+    if (pct < 0.5) { grad.addColorStop(0, '#F0A030'); grad.addColorStop(1, '#D4820A'); }
+    else if (pct < 0.8) { grad.addColorStop(0, '#3A8CC0'); grad.addColorStop(1, '#1A5C8A'); }
+    else { grad.addColorStop(0, '#3AB87A'); grad.addColorStop(1, '#1A7A4A'); }
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = lineW;
+    ctx.lineCap = 'round';
+    ctx.stroke();
   }
-  document.addEventListener("click", function(e){
-    var a = e.target.closest("a");
-    if(a && a.getAttribute("href") === "#"){
-      e.preventDefault();
-      var label = (a.textContent || "").trim().replace(/\s+/g," ").substring(0,36);
-      showToast(label + " \u2014 available in full platform");
+
+  var pctNum = Math.round(pct * 100);
+  document.getElementById('gaugePct').textContent = pctNum + '%';
+  document.getElementById('gaugePct').style.color = pct < 0.5 ? 'var(--amber-lt)' : pct < 0.8 ? 'var(--blue-lt)' : 'var(--green-lt)';
+  document.getElementById('gaugeTitle').textContent = 'Context Completeness: ' + pctNum + '%';
+}
+
+function updateProgress() {
+  var doneCount = 0;
+  for (var k in state.completed) { if (state.completed[k]) doneCount++; }
+  var pct = doneCount / 5;
+
+  // Update segments
+  var ide = state.completed[1] ? '100%' : '0%';
+  var str = state.completed[2] ? '100%' : '0%';
+  var strat = state.completed[3] ? '100%' : '0%';
+  var eco = (state.completed[4] && state.completed[5]) ? '100%' : (state.completed[4] || state.completed[5]) ? '50%' : '0%';
+
+  document.getElementById('segIdentity').textContent = ide;
+  document.getElementById('segIdentity').style.color = ide === '100%' ? 'var(--green-lt)' : 'var(--ink-soft)';
+  document.getElementById('segStructure').textContent = str;
+  document.getElementById('segStructure').style.color = str === '100%' ? 'var(--blue-lt)' : 'var(--ink-soft)';
+  document.getElementById('segStrategy').textContent = strat;
+  document.getElementById('segStrategy').style.color = strat === '100%' ? 'var(--purple-lt)' : 'var(--ink-soft)';
+  document.getElementById('segEcosystem').textContent = eco;
+  document.getElementById('segEcosystem').style.color = eco === '100%' ? 'var(--amber-lt)' : eco === '50%' ? 'var(--amber-lt)' : 'var(--ink-soft)';
+
+  drawGauge(pct);
+
+  // Banner
+  var bannerPct = Math.round(pct * 100);
+  document.getElementById('bannerProgress').style.width = bannerPct + '%';
+  document.getElementById('bannerPct').textContent = bannerPct + '% complete';
+
+  // Level pill
+  var pill = document.getElementById('levelPill');
+  if (pct >= 1) { pill.textContent = 'Setup Complete'; pill.className = 'tb-pill gold'; }
+  else { pill.textContent = 'Setup Mode'; pill.className = 'tb-pill blue'; }
+
+  // Update stepper
+  for (var s = 1; s <= 5; s++) {
+    var item = document.querySelector('.step-item[data-step="' + s + '"]');
+    var conn = document.querySelector('.step-connector[data-conn="' + s + '"]');
+    if (state.completed[s]) {
+      item.classList.add('done');
+      item.querySelector('.step-num').innerHTML = '<svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+      if (conn) conn.classList.add('done');
     }
+  }
+}
+
+// ── STEP NAVIGATION ──
+function goToStep(n) {
+  // Allow navigation to completed steps or the next uncompleted step
+  state.currentStep = n;
+  for (var i = 1; i <= 6; i++) {
+    var panel = document.getElementById('step' + i);
+    var item = document.querySelector('.step-item[data-step="' + i + '"]');
+    if (i === n) {
+      panel.classList.add('visible');
+      item.classList.add('active');
+    } else {
+      panel.classList.remove('visible');
+      item.classList.remove('active');
+    }
+  }
+  // Scroll content to top
+  document.querySelector('.content').scrollTop = 0;
+}
+
+// ── STEP 1: ORG IDENTITY ──
+function autofillStep1() {
+  document.getElementById('f-company').value = 'Arcova Infrastructure Pte. Ltd.';
+  document.getElementById('f-industry').value = 'Infrastructure & Construction';
+  document.getElementById('f-founded').value = '2009';
+  document.getElementById('f-hq').value = 'Singapore';
+  document.getElementById('f-employees').value = '812';
+  document.getElementById('f-offices').value = 'Singapore, Mumbai, Dubai, Kuala Lumpur';
+  document.getElementById('f-model').value = 'Services & Project Delivery';
+  document.getElementById('f-stage').value = 'Mature — Transformation';
+  document.getElementById('f-hris').value = 'Workday';
+  document.getElementById('f-lms').value = 'Cornerstone OnDemand';
+  showToast('Arcova demo data loaded');
+}
+
+function saveStep1() {
+  var company = document.getElementById('f-company').value.trim();
+  if (!company) { showToast('Please enter a company name'); return; }
+  state.org = {
+    company: company,
+    industry: document.getElementById('f-industry').value,
+    founded: document.getElementById('f-founded').value,
+    hq: document.getElementById('f-hq').value,
+    employees: document.getElementById('f-employees').value,
+    offices: document.getElementById('f-offices').value,
+    model: document.getElementById('f-model').value,
+    stage: document.getElementById('f-stage').value,
+    hris: document.getElementById('f-hris').value,
+    lms: document.getElementById('f-lms').value
+  };
+  state.completed[1] = true;
+  updateProgress();
+  goToStep(2);
+  showToast('Org identity saved');
+}
+
+// ── STEP 2: HIERARCHY ──
+function renderBUs() {
+  var html = '';
+  state.bus.forEach(function(bu, idx) {
+    var colorClass = buColors[idx % buColors.length];
+    html += '<div class="bu-group ' + colorClass + '" style="margin-bottom:10px">';
+    html += '<div class="bu-header expanded" onclick="toggleBU(this)">';
+    html += '<svg class="bu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+    html += '<span class="bu-name">' + bu.name + '</span>';
+    html += '<span class="bu-count">' + bu.count + '</span>';
+    html += '<span class="remove-chip" onclick="event.stopPropagation();removeBU(' + idx + ')" style="cursor:pointer;opacity:.4;margin-left:8px;font-size:13px" onmouseover="this.style.opacity=1;this.style.color=\'var(--red-lt)\'" onmouseout="this.style.opacity=.4;this.style.color=\'inherit\'">&times;</span>';
+    html += '</div>';
+    html += '<div class="bu-depts show">';
+    bu.depts.forEach(function(d) {
+      html += '<div class="dept-chip">' + d.name + ' <span class="dept-count">' + d.count + '</span></div>';
+    });
+    html += '</div></div>';
   });
-})();
+  document.getElementById('buList').innerHTML = html;
+}
+
+function addBU() {
+  var name = document.getElementById('f-bu-name').value.trim();
+  var count = document.getElementById('f-bu-count').value.trim();
+  var deptsRaw = document.getElementById('f-bu-depts').value.trim();
+  if (!name) { showToast('Enter a BU name'); return; }
+
+  var depts = [];
+  if (deptsRaw) {
+    deptsRaw.split(',').forEach(function(part) {
+      var m = part.trim().match(/^(.+?):\s*(\d+)$/);
+      if (m) depts.push({ name: m[1].trim(), count: parseInt(m[2]) });
+      else depts.push({ name: part.trim(), count: 0 });
+    });
+  }
+
+  state.bus.push({ name: name, count: parseInt(count) || 0, depts: depts });
+  renderBUs();
+  document.getElementById('f-bu-name').value = '';
+  document.getElementById('f-bu-count').value = '';
+  document.getElementById('f-bu-depts').value = '';
+  showToast(name + ' added');
+}
+
+function removeBU(idx) { state.bus.splice(idx, 1); renderBUs(); }
+
+function autofillStep2() {
+  state.bus = [
+    { name: 'Engineering & Delivery', count: 324, depts: [
+      { name: 'Structural Engineering', count: 112 }, { name: 'Civil & Geotechnical', count: 98 }, { name: 'Project Delivery', count: 114 }
+    ]},
+    { name: 'Digital & Technology', count: 118, depts: [
+      { name: 'BIM & Digital Delivery', count: 54 }, { name: 'IT Infrastructure', count: 64 }
+    ]},
+    { name: 'Corporate Functions', count: 198, depts: [
+      { name: 'Finance & Procurement', count: 76 }, { name: 'Human Resources', count: 48 }, { name: 'Legal & Compliance', count: 74 }
+    ]},
+    { name: 'Sustainability & EHS', count: 172, depts: [
+      { name: 'EHS & Risk', count: 96 }, { name: 'Sustainability Advisory', count: 76 }
+    ]}
+  ];
+  renderBUs();
+  showToast('Arcova hierarchy loaded — 4 BUs, 11 departments');
+}
+
+function saveStep2() {
+  if (state.bus.length === 0) { showToast('Add at least one Business Unit'); return; }
+  state.completed[2] = true;
+  updateProgress();
+  goToStep(3);
+  showToast('Hierarchy saved');
+}
+
+// ── STEP 3: GOALS ──
+function renderGoals() {
+  var html = '';
+  state.goals.forEach(function(g, idx) {
+    html += '<div class="goal-item">';
+    html += '<div class="goal-num">G' + (idx + 1) + '</div>';
+    html += '<div class="goal-info">';
+    html += '<div class="goal-text">' + g.text + '</div>';
+    html += '<div class="goal-bar-wrap">';
+    html += '<div class="goal-bar"><div class="goal-bar-fill" style="width:' + g.pct + '%;background:' + g.color + '"></div></div>';
+    html += '<span class="goal-pct" style="color:' + g.color + '">' + g.pct + '%</span>';
+    html += '<span class="goal-date">Target: ' + g.date + '</span>';
+    html += '<span class="remove-chip" onclick="removeGoal(' + idx + ')" style="cursor:pointer;opacity:.4;font-size:14px;margin-left:6px" onmouseover="this.style.opacity=1;this.style.color=\'var(--red-lt)\'" onmouseout="this.style.opacity=.4;this.style.color=\'inherit\'">&times;</span>';
+    html += '</div></div></div>';
+  });
+  document.getElementById('goalList').innerHTML = html;
+}
+
+function addGoal() {
+  var text = document.getElementById('f-goal-text').value.trim();
+  if (!text) { showToast('Enter a goal description'); return; }
+  state.goals.push({
+    text: text,
+    date: document.getElementById('f-goal-date').value || 'TBD',
+    pct: parseInt(document.getElementById('f-goal-pct').value) || 0,
+    color: document.getElementById('f-goal-color').value
+  });
+  renderGoals();
+  document.getElementById('f-goal-text').value = '';
+  document.getElementById('f-goal-date').value = '';
+  document.getElementById('f-goal-pct').value = '';
+  showToast('Goal G' + state.goals.length + ' added');
+}
+
+function removeGoal(idx) { state.goals.splice(idx, 1); renderGoals(); }
+
+function autofillStep3() {
+  state.goals = [
+    { text: 'Expand digital delivery capability across all project sites by Q4 2026', date: 'Q4 2026', pct: 42, color: 'var(--blue-lt)' },
+    { text: 'Achieve ISO 45001 & ISO 9001 compliance across all regional offices by Q3 2026', date: 'Q3 2026', pct: 68, color: 'var(--green-lt)' },
+    { text: 'Build internal BIM and smart infrastructure competency to reduce third-party dependency by 40%', date: 'Q4 2026', pct: 35, color: 'var(--purple-lt)' },
+    { text: 'Develop a succession-ready leadership pipeline for 12 critical roles by end of FY2026', date: 'FY2026', pct: 54, color: 'var(--amber-lt)' }
+  ];
+  renderGoals();
+  showToast('4 strategic goals loaded');
+}
+
+function saveStep3() {
+  if (state.goals.length === 0) { showToast('Add at least one strategic goal'); return; }
+  state.completed[3] = true;
+  updateProgress();
+  goToStep(4);
+  showToast('Strategic goals saved');
+}
+
+// ── STEP 4: PRODUCTS & STANDARDS ──
+var productColors = ['var(--blue-lt)','var(--purple-lt)','var(--amber-lt)','var(--green-lt)','var(--red-lt)','var(--gold)'];
+
+function renderProducts() {
+  var html = '';
+  state.products.forEach(function(p, idx) {
+    html += '<div class="product-item"><div class="product-dot" style="background:' + productColors[idx % productColors.length] + '"></div>';
+    html += '<span class="product-name">' + p + '</span>';
+    html += '<span class="remove-chip" onclick="removeProduct(' + idx + ')" style="cursor:pointer;opacity:.4;margin-left:auto;font-size:14px" onmouseover="this.style.opacity=1;this.style.color=\'var(--red-lt)\'" onmouseout="this.style.opacity=.4;this.style.color=\'inherit\'">&times;</span>';
+    html += '</div>';
+  });
+  document.getElementById('productList').innerHTML = html;
+}
+
+function addProduct() {
+  var v = document.getElementById('f-product').value.trim();
+  if (!v) return;
+  state.products.push(v);
+  renderProducts();
+  document.getElementById('f-product').value = '';
+}
+
+function removeProduct(idx) { state.products.splice(idx, 1); renderProducts(); }
+
+function renderStandards() {
+  var html = '';
+  state.standards.forEach(function(s, idx) {
+    var cls = s.status === 'Active' ? 'sb-active' : 'sb-pending';
+    html += '<div class="standard-row"><span class="standard-name">' + s.name + '</span>';
+    html += '<span class="standard-badge ' + cls + '">' + s.status + '</span>';
+    html += '<span class="remove-chip" onclick="removeStandard(' + idx + ')" style="cursor:pointer;opacity:.4;margin-left:8px;font-size:14px" onmouseover="this.style.opacity=1;this.style.color=\'var(--red-lt)\'" onmouseout="this.style.opacity=.4;this.style.color=\'inherit\'">&times;</span>';
+    html += '</div>';
+  });
+  document.getElementById('standardList').innerHTML = html;
+}
+
+function addStandard() {
+  var v = document.getElementById('f-standard').value.trim();
+  if (!v) return;
+  state.standards.push({ name: v, status: document.getElementById('f-standard-status').value });
+  renderStandards();
+  document.getElementById('f-standard').value = '';
+}
+
+function removeStandard(idx) { state.standards.splice(idx, 1); renderStandards(); }
+
+function autofillStep4() {
+  state.products = ['Civil & Structural Engineering','Smart Building Solutions','Infrastructure Asset Management','Environmental & Sustainability Consulting'];
+  state.standards = [
+    { name: 'ISO 45001', status: 'Active' }, { name: 'ISO 9001', status: 'Active' },
+    { name: 'GDPR', status: 'Active' }, { name: 'SOX Compliance', status: 'Pending' }
+  ];
+  renderProducts();
+  renderStandards();
+  showToast('Products & standards loaded');
+}
+
+function saveStep4() {
+  if (state.products.length === 0 && state.standards.length === 0) { showToast('Add at least one product or standard'); return; }
+  state.completed[4] = true;
+  updateProgress();
+  goToStep(5);
+  showToast('Products & standards saved');
+}
+
+// ── STEP 5: TOOLS ──
+function renderTools() {
+  var html = '';
+  state.tools.forEach(function(t, idx) {
+    var cls = t.status === 'Current' ? 'tl-current' : 'tl-eval';
+    html += '<div class="tool-chip">' + t.name + ' <span class="tool-lifecycle ' + cls + '">' + t.status + '</span>';
+    html += '<span class="remove-chip" onclick="removeTool(' + idx + ')" style="cursor:pointer;opacity:.4;font-size:13px" onmouseover="this.style.opacity=1;this.style.color=\'var(--red-lt)\'" onmouseout="this.style.opacity=.4;this.style.color=\'inherit\'">&times;</span>';
+    html += '</div>';
+  });
+  document.getElementById('toolList').innerHTML = html;
+}
+
+function addTool() {
+  var v = document.getElementById('f-tool').value.trim();
+  if (!v) return;
+  state.tools.push({ name: v, status: document.getElementById('f-tool-status').value });
+  renderTools();
+  document.getElementById('f-tool').value = '';
+}
+
+function removeTool(idx) { state.tools.splice(idx, 1); renderTools(); }
+
+function autofillStep5() {
+  state.tools = [
+    { name: 'Workday', status: 'Current' }, { name: 'Cornerstone OnDemand', status: 'Current' },
+    { name: 'Autodesk Revit', status: 'Current' }, { name: 'Navisworks', status: 'Current' },
+    { name: 'AutoCAD', status: 'Current' }, { name: 'Primavera P6', status: 'Current' },
+    { name: 'MS Project', status: 'Current' }, { name: 'Power BI', status: 'Current' },
+    { name: 'SAP', status: 'Evaluating' }, { name: 'Jira', status: 'Evaluating' }
+  ];
+  renderTools();
+  showToast('10 tools loaded');
+}
+
+function saveStep5() {
+  if (state.tools.length === 0) { showToast('Add at least one tool'); return; }
+  state.completed[5] = true;
+  updateProgress();
+  buildReview();
+  goToStep(6);
+  showToast('Tools & criticality saved');
+}
+
+// ── STEP 6: REVIEW ──
+function buildReview() {
+  var o = state.org;
+  var html = '';
+
+  // Org Identity
+  html += '<div class="review-section">';
+  html += '<div class="review-section-title"><div class="review-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Org Identity</div>';
+  html += '<div class="org-grid">';
+  html += '<div class="org-row"><span class="org-key">Company</span><span class="org-val">' + (o.company || '—') + '</span></div>';
+  html += '<div class="org-row"><span class="org-key">Industry</span><span class="org-val">' + (o.industry || '—') + '</span></div>';
+  html += '<div class="org-row"><span class="org-key">Founded</span><span class="org-val mono">' + (o.founded || '—') + '</span></div>';
+  html += '<div class="org-row"><span class="org-key">Headquarters</span><span class="org-val">' + (o.hq || '—') + '</span></div>';
+  html += '<div class="org-row"><span class="org-key">Employees</span><span class="org-val mono">' + (o.employees || '—') + '</span></div>';
+  html += '<div class="org-row"><span class="org-key">Offices</span><span class="org-val">' + (o.offices || '—') + '</span></div>';
+  html += '<div class="org-row"><span class="org-key">Operating Model</span><span class="org-val">' + (o.model || '—') + '</span></div>';
+  html += '<div class="org-row"><span class="org-key">Stage</span><span class="org-val">' + (o.stage || '—') + '</span></div>';
+  if (o.hris) html += '<div class="org-row"><span class="org-key">HRIS</span><span class="connected-badge"><span class="connected-dot"></span>' + o.hris + ' connected</span></div>';
+  if (o.lms) html += '<div class="org-row"><span class="org-key">LMS</span><span class="connected-badge"><span class="connected-dot"></span>' + o.lms + ' connected</span></div>';
+  html += '</div></div>';
+
+  // Hierarchy
+  html += '<div class="review-section">';
+  html += '<div class="review-section-title"><div class="review-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Hierarchy — ' + state.bus.length + ' BUs</div>';
+  state.bus.forEach(function(bu) {
+    html += '<div style="display:flex;align-items:center;gap:8px;padding:4px 0"><span style="font-size:12px;color:var(--paper);font-weight:500">' + bu.name + '</span><span style="font-family:\'DM Mono\',monospace;font-size:11px;color:var(--ink-soft)">' + bu.count + ' employees</span></div>';
+  });
+  html += '</div>';
+
+  // Goals
+  html += '<div class="review-section">';
+  html += '<div class="review-section-title"><div class="review-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Strategic Goals — ' + state.goals.length + ' goals</div>';
+  state.goals.forEach(function(g, i) {
+    html += '<div style="display:flex;align-items:center;gap:10px;padding:4px 0"><span style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--gold);padding:2px 6px;background:var(--gold-dim);border-radius:4px">G' + (i+1) + '</span><span style="font-size:12px;color:var(--paper-mid);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + g.text + '</span><span style="font-family:\'DM Mono\',monospace;font-size:11px;color:' + g.color + '">' + g.pct + '%</span></div>';
+  });
+  html += '</div>';
+
+  // Products & Standards
+  html += '<div class="review-section">';
+  html += '<div class="review-section-title"><div class="review-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Products & Standards</div>';
+  html += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">';
+  state.products.forEach(function(p) { html += '<span style="padding:4px 10px;border-radius:5px;font-size:11px;color:var(--blue-lt);border:1px solid rgba(58,140,192,0.25);background:var(--blue-dim)">' + p + '</span>'; });
+  html += '</div>';
+  html += '<div style="display:flex;flex-wrap:wrap;gap:6px">';
+  state.standards.forEach(function(s) {
+    var c = s.status === 'Active' ? 'color:var(--green-lt);border-color:rgba(58,184,122,0.3);background:var(--green-dim)' : 'color:var(--amber-lt);border-color:rgba(212,130,10,0.3);background:var(--amber-dim)';
+    html += '<span style="padding:4px 10px;border-radius:5px;font-size:11px;border:1px solid;' + c + '">' + s.name + ' · ' + s.status + '</span>';
+  });
+  html += '</div></div>';
+
+  // Tools
+  html += '<div class="review-section">';
+  html += '<div class="review-section-title"><div class="review-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Tools & Technologies — ' + state.tools.length + ' tools</div>';
+  html += '<div class="tools-grid">';
+  state.tools.forEach(function(t) {
+    var cls = t.status === 'Current' ? 'tl-current' : 'tl-eval';
+    html += '<div class="tool-chip">' + t.name + ' <span class="tool-lifecycle ' + cls + '">' + t.status + '</span></div>';
+  });
+  html += '</div></div>';
+
+  // Criticality
+  html += '<div class="review-section">';
+  html += '<div class="review-section-title"><div class="review-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Skill Criticality Framework — 4-Tier</div>';
+  html += '<div style="display:flex;gap:12px;flex-wrap:wrap">';
+  html += '<span style="padding:3px 10px;border-radius:5px;font-family:\'DM Mono\',monospace;font-size:10px;background:var(--red-dim);color:var(--red-lt)">C1 Critical</span>';
+  html += '<span style="padding:3px 10px;border-radius:5px;font-family:\'DM Mono\',monospace;font-size:10px;background:var(--amber-dim);color:var(--amber-lt)">C2 High</span>';
+  html += '<span style="padding:3px 10px;border-radius:5px;font-family:\'DM Mono\',monospace;font-size:10px;background:var(--blue-dim);color:var(--blue-lt)">C3 Medium</span>';
+  html += '<span style="padding:3px 10px;border-radius:5px;font-family:\'DM Mono\',monospace;font-size:10px;background:rgba(255,255,255,0.05);color:var(--ink-soft)">C4 Low</span>';
+  html += '</div></div>';
+
+  document.getElementById('reviewBody').innerHTML = html;
+}
+
+function confirmSetup() {
+  document.getElementById('successBanner').classList.add('show');
+  document.getElementById('stepper').style.display = 'none';
+  for (var i = 1; i <= 6; i++) document.getElementById('step' + i).classList.remove('visible');
+  showToast('OrgSetup locked — ready for SkillForge');
+  // Set context meter to full
+  drawGauge(0.91);
+  document.getElementById('gaugePct').textContent = '91%';
+  document.getElementById('gaugePct').style.color = 'var(--green-lt)';
+  document.getElementById('gaugeTitle').textContent = 'Context Completeness: 91%';
+  document.getElementById('segIdentity').textContent = '100%'; document.getElementById('segIdentity').style.color = 'var(--green-lt)';
+  document.getElementById('segStructure').textContent = '100%'; document.getElementById('segStructure').style.color = 'var(--blue-lt)';
+  document.getElementById('segStrategy').textContent = '100%'; document.getElementById('segStrategy').style.color = 'var(--purple-lt)';
+  document.getElementById('segEcosystem').textContent = '86%'; document.getElementById('segEcosystem').style.color = 'var(--amber-lt)';
+  document.getElementById('bannerProgress').style.width = '91%';
+  document.getElementById('bannerPct').textContent = '91% complete';
+  var pill = document.getElementById('levelPill');
+  pill.textContent = 'L3 Active';
+  pill.className = 'tb-pill blue';
+}
+
+// ── RESET ──
+function resetDemo() {
+  state = { currentStep: 1, completed: { 1: false, 2: false, 3: false, 4: false, 5: false }, org: {}, bus: [], goals: [], products: [], standards: [], tools: [] };
+  // Clear all form fields
+  var inputs = document.querySelectorAll('.form-input, .form-select');
+  inputs.forEach(function(el) { if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = ''; });
+  // Clear dynamic lists
+  document.getElementById('buList').innerHTML = '';
+  document.getElementById('goalList').innerHTML = '';
+  document.getElementById('productList').innerHTML = '';
+  document.getElementById('standardList').innerHTML = '';
+  document.getElementById('toolList').innerHTML = '';
+  // Reset stepper
+  document.querySelectorAll('.step-item').forEach(function(el) { el.classList.remove('done','active'); el.querySelector('.step-num').textContent = el.getAttribute('data-step'); });
+  document.querySelectorAll('.step-connector').forEach(function(el) { el.classList.remove('done'); });
+  // Reset UI
+  document.getElementById('successBanner').classList.remove('show');
+  document.getElementById('stepper').style.display = 'flex';
+  drawGauge(0);
+  updateProgress();
+  goToStep(1);
+  showToast('Demo reset — start fresh');
+}
+
+// ── HIERARCHY TOGGLE ──
+function toggleBU(header) {
+  header.classList.toggle('expanded');
+  var depts = header.nextElementSibling;
+  if (depts) depts.classList.toggle('show');
+}
+
+// ── INIT ──
+drawGauge(0);
+
+// Toast handler for # links
+document.addEventListener("click", function(e){
+  var a = e.target.closest("a");
+  if(a && a.getAttribute("href") === "#"){
+    e.preventDefault();
+    var label = (a.textContent || "").trim().replace(/\s+/g," ").substring(0,36);
+    showToast(label + " \u2014 available in full platform");
+  }
+});
 </script>
 </body>
 </html>
