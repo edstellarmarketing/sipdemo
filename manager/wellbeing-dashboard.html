@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wellbeing Intelligence — Arcova SIP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#080F18;--ink-panel:#0C1825;--ink-card:#101E2E;--ink-raised:#152438;--ink-border:rgba(255,255,255,0.07);--ink-soft:#4A6A84;--paper:#D8E8F4;--paper-mid:#8AACC4;--gold:#C8A84B;--gold-lt:#E0CC70;--gold-dim:rgba(200,168,75,0.10);--blue:#1A5C8A;--blue-lt:#3A8CC0;--blue-dim:rgba(26,92,138,0.15);--green:#1A7A4A;--green-lt:#3AB87A;--green-dim:rgba(26,122,74,0.12);--amber:#D4820A;--amber-lt:#F0A030;--amber-dim:rgba(212,130,10,0.12);--red:#C0392B;--red-lt:#E87060;--red-dim:rgba(192,57,43,0.12);--purple:#6A3A9A;--purple-lt:#A070E0;--purple-dim:rgba(106,58,154,0.15);--sidebar-w:220px}
+html,body{height:100%;background:var(--ink);color:var(--paper);font-family:'DM Sans',sans-serif;overflow:hidden}
+.app{display:flex;height:100vh}
+.sidebar{width:var(--sidebar-w);background:var(--ink-panel);border-right:1px solid var(--ink-border);display:flex;flex-direction:column;flex-shrink:0}
+a.sidebar-brand{padding:22px 20px 20px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-hex{width:28px;height:28px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);flex-shrink:0}
+.brand-nm{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--paper)}
+.brand-tg{font-size:10px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase}
+.sidebar-nav{flex:1;padding:12px 14px;overflow-y:auto}
+.nav-section-label{font-size:10px;color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase;padding:10px 6px 6px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;font-size:12.5px;color:var(--paper-mid);cursor:pointer;text-decoration:none;transition:background .15s,color .15s;margin-bottom:1px}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.nav-item.active{background:var(--blue-dim);color:var(--paper)}
+.nav-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.nav-badge{margin-left:auto;padding:1px 6px;border-radius:100px;font-size:10px;font-weight:500}
+.nb-red{background:var(--red-dim);color:var(--red-lt)}
+.sidebar-user{padding:14px 16px;border-top:1px solid var(--ink-border);display:flex;align-items:center;gap:10px}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--paper);flex-shrink:0}
+.user-name{font-size:12px;font-weight:500;color:var(--paper)}
+.user-role{font-size:10px;color:var(--ink-soft)}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:54px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;padding:0 28px;gap:14px;flex-shrink:0;background:var(--ink-panel)}
+.topbar-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--paper);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-pill{padding:4px 11px;border-radius:100px;font-size:11px;border:1px solid;white-space:nowrap}
+.tb-pill.gold{border-color:rgba(200,168,75,.3);color:var(--gold)}
+.tb-btn{padding:6px 14px;border-radius:6px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s,color .15s;text-decoration:none;white-space:nowrap}
+.tb-btn:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.content{flex:1;overflow-y:auto;padding:24px 28px;display:flex;flex-direction:column;gap:20px}
+.content>*{flex-shrink:0}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+.panel{background:var(--ink-card);border:1px solid var(--ink-border);border-radius:12px;overflow:hidden}
+.panel-head{padding:14px 20px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.panel-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--paper);flex:1;min-width:120px}
+.panel-badge{padding:2px 8px;border-radius:100px;font-size:10px;font-weight:500}
+.panel-body{padding:18px 20px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:960px){.stats-row{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:var(--ink-card);border:1px solid var(--ink-border);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.stat-label{font-size:11px;color:var(--ink-soft);white-space:nowrap}
+.stat-val{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;line-height:1}
+.stat-sub{font-size:11px;color:var(--ink-soft)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:960px){.two-col{grid-template-columns:1fr}}
+
+/* RISK GAUGE */
+.risk-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.risk-row:last-child{border-bottom:none}
+.risk-dept{font-size:12px;color:var(--paper-mid);width:130px;flex-shrink:0}
+.risk-bar{flex:1;height:24px;background:rgba(255,255,255,0.04);border-radius:6px;overflow:hidden;display:flex}
+.risk-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;transition:width .5s}
+.risk-count{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-soft);width:40px;text-align:right;flex-shrink:0}
+
+/* EMPLOYEE BURNOUT LIST */
+.burn-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.burn-item:last-child{border-bottom:none}
+.burn-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;flex-shrink:0}
+.burn-info{flex:1;min-width:0}
+.burn-name{font-size:12px;color:var(--paper);font-weight:500}
+.burn-role{font-size:10px;color:var(--ink-soft)}
+.burn-score{font-family:'DM Mono',monospace;font-size:13px;font-weight:600;flex-shrink:0}
+.burn-tag{padding:3px 10px;border-radius:100px;font-size:9px;font-weight:500;flex-shrink:0}
+.burn-action{padding:4px 10px;border-radius:5px;font-size:10px;border:1px solid var(--ink-border);color:var(--paper-mid);cursor:pointer;flex-shrink:0;background:transparent;font-family:'DM Sans',sans-serif;transition:all .15s}
+.burn-action:hover{border-color:var(--blue-lt);color:var(--blue-lt)}
+
+/* PULSE QUESTIONS */
+.pulse-q{padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.pulse-q:last-child{border-bottom:none}
+.pq-text{font-size:12px;color:var(--paper);margin-bottom:8px}
+.pq-bar-wrap{display:flex;align-items:center;gap:10px}
+.pq-bar{flex:1;height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden}
+.pq-fill{height:100%;border-radius:4px;transition:width .6s}
+.pq-val{font-family:'DM Mono',monospace;font-size:11px;width:32px;text-align:right;flex-shrink:0}
+.pq-trend{font-size:10px;flex-shrink:0;display:flex;align-items:center;gap:3px}
+
+/* MANAGER PROMPTS */
+.prompt-card{border:1px solid var(--ink-border);border-radius:10px;padding:14px 16px;margin-bottom:10px;transition:border-color .2s}
+.prompt-card:hover{border-color:rgba(255,255,255,0.12)}
+.pc-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.pc-name{font-size:12px;color:var(--paper);font-weight:500;flex:1}
+.pc-tag{padding:2px 8px;border-radius:100px;font-size:9px;font-weight:500;flex-shrink:0}
+.pc-body{font-size:11px;color:var(--paper-mid);line-height:1.6;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:7px;border-left:3px solid var(--amber-lt)}
+.pc-actions{display:flex;gap:8px;margin-top:8px}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.fade-up{animation:fadeUp .4s ease both}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <a class="sidebar-brand" href="../index.html"><div class="brand-hex"></div><div style="display:flex;flex-direction:column;gap:1px"><span class="brand-nm">Arcova SIP</span><span class="brand-tg">Manager Portal</span></div></a>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Intelligence</div>
+    <a class="nav-item" href="clo-dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>InsightBoard</a>
+    <a class="nav-item" href="skills-matrix.html"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Skills Matrix</a>
+    <div class="nav-section-label">Analysis</div>
+    <a class="nav-item" href="gap-analysis.html"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Gap Analysis</a>
+    <a class="nav-item" href="lna-report.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>LNA / TNA</a>
+    <a class="nav-item" href="assessment-results.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Assessment Results</a>
+    <a class="nav-item active" href="wellbeing-dashboard.html"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Wellbeing <span class="nav-badge nb-red">12</span></a>
+    <a class="nav-item" href="reports-l2.html"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>ReportGen L2</a>
+    <div class="nav-section-label">Strategy</div>
+    <a class="nav-item" href="succession.html"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Succession</a>
+  </nav>
+  <div class="sidebar-user"><div class="user-avatar">RK</div><div style="display:flex;flex-direction:column;gap:1px"><div class="user-name">Rajiv Kumar</div><div class="user-role">Chief Learning Officer</div></div></div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Wellbeing Intelligence</div>
+    <a href="../nav-menus.html" class="tb-btn" style="font-size:11px;padding:5px 11px">All screens</a>
+    <div style="font-size:11px;color:var(--ink-soft);white-space:nowrap">Q1 2026 Pulse</div>
+    <div class="tb-pill gold">L2 Wellbeing</div>
+  </div>
+
+  <a href="../level-journey.html" style="display:flex;align-items:center;gap:12px;padding:0 28px;height:36px;background:linear-gradient(90deg,rgba(200,168,75,0.12) 0%,rgba(8,15,24,0) 60%);border-bottom:1px solid rgba(200,168,75,0.2);text-decoration:none;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:#C8A84B;animation:pulse 2s ease-in-out infinite"></div><span style="font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.08em;color:#C8A84B">L2 ACTIVE</span></div>
+    <div style="width:1px;height:14px;background:rgba(200,168,75,0.2)"></div>
+    <div style="font-size:11px;color:#8AACC4">Wellbeing Intelligence — pulse survey &amp; burnout risk</div>
+    <div style="margin-left:auto;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.06em;color:#C8A84B;text-transform:uppercase">View journey &rarr;</div>
+  </a>
+
+  <div class="content">
+
+    <!-- STATS -->
+    <div class="stats-row fade-up">
+      <div class="stat-card"><div class="stat-label">Pulse Response Rate</div><div class="stat-val" style="color:var(--green-lt)">78%</div><div class="stat-sub">634 of 812 responded</div></div>
+      <div class="stat-card"><div class="stat-label">Burnout Risk — Elevated</div><div class="stat-val" style="color:var(--red-lt)">12</div><div class="stat-sub">8 Project Delivery, 4 EHS</div></div>
+      <div class="stat-card"><div class="stat-label">Avg Capacity Score</div><div class="stat-val" style="color:var(--blue-lt)">71%</div><div class="stat-sub">Up from 64% in Q4 2025</div></div>
+      <div class="stat-card"><div class="stat-label">Dev Timeline Adjustments</div><div class="stat-val" style="color:var(--amber-lt)">12</div><div class="stat-sub">Deferred by 4-6 weeks</div></div>
+    </div>
+
+    <!-- TWO COL: Burnout by Dept + Pulse Questions -->
+    <div class="two-col">
+      <!-- Burnout Risk by Department -->
+      <div class="panel fade-up" style="animation-delay:.06s">
+        <div class="panel-head">
+          <svg style="width:14px;height:14px;stroke:var(--red-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <div class="panel-title">Burnout Risk by Department</div>
+        </div>
+        <div class="panel-body">
+          <div class="risk-row"><div class="risk-dept">Project Delivery</div><div class="risk-bar"><div class="risk-seg" style="width:12%;background:rgba(192,57,43,0.6);color:var(--paper)">8</div><div class="risk-seg" style="width:18%;background:rgba(212,130,10,0.4);color:var(--paper)">14</div><div class="risk-seg" style="width:70%;background:rgba(26,122,74,0.2);color:var(--green-lt)">92</div></div><div class="risk-count">114</div></div>
+          <div class="risk-row"><div class="risk-dept">EHS & Risk</div><div class="risk-bar"><div class="risk-seg" style="width:8%;background:rgba(192,57,43,0.6);color:var(--paper)">4</div><div class="risk-seg" style="width:14%;background:rgba(212,130,10,0.4);color:var(--paper)">10</div><div class="risk-seg" style="width:78%;background:rgba(26,122,74,0.2);color:var(--green-lt)">82</div></div><div class="risk-count">96</div></div>
+          <div class="risk-row"><div class="risk-dept">Structural Eng</div><div class="risk-bar"><div class="risk-seg" style="width:0%;background:rgba(192,57,43,0.6)"></div><div class="risk-seg" style="width:10%;background:rgba(212,130,10,0.4);color:var(--paper)">8</div><div class="risk-seg" style="width:90%;background:rgba(26,122,74,0.2);color:var(--green-lt)">104</div></div><div class="risk-count">112</div></div>
+          <div class="risk-row"><div class="risk-dept">BIM & Digital</div><div class="risk-bar"><div class="risk-seg" style="width:0%;background:rgba(192,57,43,0.6)"></div><div class="risk-seg" style="width:6%;background:rgba(212,130,10,0.4);color:var(--paper)">3</div><div class="risk-seg" style="width:94%;background:rgba(26,122,74,0.2);color:var(--green-lt)">51</div></div><div class="risk-count">54</div></div>
+          <div class="risk-row"><div class="risk-dept">Finance</div><div class="risk-bar"><div class="risk-seg" style="width:0%"></div><div class="risk-seg" style="width:8%;background:rgba(212,130,10,0.4);color:var(--paper)">6</div><div class="risk-seg" style="width:92%;background:rgba(26,122,74,0.2);color:var(--green-lt)">70</div></div><div class="risk-count">76</div></div>
+          <div style="display:flex;gap:12px;margin-top:12px;font-size:10px;color:var(--ink-soft)">
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:rgba(192,57,43,0.6);margin-right:4px"></span>Elevated/High</span>
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:rgba(212,130,10,0.4);margin-right:4px"></span>Moderate</span>
+            <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:rgba(26,122,74,0.2);margin-right:4px"></span>Low</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pulse Survey Results -->
+      <div class="panel fade-up" style="animation-delay:.12s">
+        <div class="panel-head">
+          <svg style="width:14px;height:14px;stroke:var(--blue-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <div class="panel-title">Pulse Survey Results — 5 Questions</div>
+          <div class="panel-badge" style="background:var(--green-dim);color:var(--green-lt)">78% response</div>
+        </div>
+        <div class="panel-body">
+          <div class="pulse-q"><div class="pq-text">"I feel my workload is manageable"</div><div class="pq-bar-wrap"><div class="pq-bar"><div class="pq-fill" style="width:68%;background:var(--blue-lt)"></div></div><div class="pq-val" style="color:var(--blue-lt)">3.4</div><div class="pq-trend" style="color:var(--green-lt)"><svg style="width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>+0.3</div></div></div>
+          <div class="pulse-q"><div class="pq-text">"I have the tools I need to develop my skills"</div><div class="pq-bar-wrap"><div class="pq-bar"><div class="pq-fill" style="width:74%;background:var(--green-lt)"></div></div><div class="pq-val" style="color:var(--green-lt)">3.7</div><div class="pq-trend" style="color:var(--green-lt)"><svg style="width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>+0.5</div></div></div>
+          <div class="pulse-q"><div class="pq-text">"I feel supported by my manager in my development"</div><div class="pq-bar-wrap"><div class="pq-bar"><div class="pq-fill" style="width:78%;background:var(--green-lt)"></div></div><div class="pq-val" style="color:var(--green-lt)">3.9</div><div class="pq-trend" style="color:var(--green-lt)"><svg style="width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>+0.2</div></div></div>
+          <div class="pulse-q"><div class="pq-text">"I am not at risk of burnout"</div><div class="pq-bar-wrap"><div class="pq-bar"><div class="pq-fill" style="width:62%;background:var(--amber-lt)"></div></div><div class="pq-val" style="color:var(--amber-lt)">3.1</div><div class="pq-trend" style="color:var(--red-lt)"><svg style="width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>-0.2</div></div></div>
+          <div class="pulse-q"><div class="pq-text">"I can balance learning with my day-to-day work"</div><div class="pq-bar-wrap"><div class="pq-bar"><div class="pq-fill" style="width:66%;background:var(--blue-lt)"></div></div><div class="pq-val" style="color:var(--blue-lt)">3.3</div><div class="pq-trend" style="color:var(--ink-soft)">—</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ELEVATED BURNOUT EMPLOYEES -->
+    <div class="panel fade-up" style="animation-delay:.18s">
+      <div class="panel-head">
+        <svg style="width:14px;height:14px;stroke:var(--red-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div class="panel-title">Employees with Elevated Burnout Risk</div>
+        <div class="panel-badge" style="background:var(--red-dim);color:var(--red-lt)">12 flagged</div>
+      </div>
+      <div class="panel-body">
+        <div class="burn-item"><div class="burn-av" style="background:var(--red);color:var(--paper)">RS</div><div class="burn-info"><div class="burn-name">Rahul Sharma</div><div class="burn-role">Project Manager · Project Delivery</div></div><div class="burn-score" style="color:var(--red-lt)">High</div><div class="burn-tag" style="background:var(--red-dim);color:var(--red-lt)">Score: 8.2/10</div><button class="burn-action" onclick="showToast('Conversation prompt sent to Rahul\'s manager')">Send Manager Prompt</button></div>
+        <div class="burn-item"><div class="burn-av" style="background:var(--red);color:var(--paper)">AK</div><div class="burn-info"><div class="burn-name">Amit Kumar</div><div class="burn-role">Site Engineer · Project Delivery</div></div><div class="burn-score" style="color:var(--red-lt)">High</div><div class="burn-tag" style="background:var(--red-dim);color:var(--red-lt)">Score: 7.8/10</div><button class="burn-action" onclick="showToast('Conversation prompt sent')">Send Manager Prompt</button></div>
+        <div class="burn-item"><div class="burn-av" style="background:var(--amber);color:var(--paper)">MS</div><div class="burn-info"><div class="burn-name">Meera Sundaram</div><div class="burn-role">Safety Manager · EHS & Risk</div></div><div class="burn-score" style="color:var(--amber-lt)">Elevated</div><div class="burn-tag" style="background:var(--amber-dim);color:var(--amber-lt)">Score: 6.4/10</div><button class="burn-action" onclick="showToast('Conversation prompt sent')">Send Manager Prompt</button></div>
+        <div class="burn-item"><div class="burn-av" style="background:var(--amber);color:var(--paper)">NK</div><div class="burn-info"><div class="burn-name">Naveen Krishnan</div><div class="burn-role">Project Coordinator · Project Delivery</div></div><div class="burn-score" style="color:var(--amber-lt)">Elevated</div><div class="burn-tag" style="background:var(--amber-dim);color:var(--amber-lt)">Score: 6.1/10</div><button class="burn-action" onclick="showToast('Conversation prompt sent')">Send Manager Prompt</button></div>
+        <div class="burn-item"><div class="burn-av" style="background:var(--amber);color:var(--paper)">PV</div><div class="burn-info"><div class="burn-name">Pradeep Venkat</div><div class="burn-role">EHS Auditor · EHS & Risk</div></div><div class="burn-score" style="color:var(--amber-lt)">Elevated</div><div class="burn-tag" style="background:var(--amber-dim);color:var(--amber-lt)">Score: 5.9/10</div><button class="burn-action" onclick="showToast('Conversation prompt sent')">Send Manager Prompt</button></div>
+        <div style="text-align:center;padding:8px 0;font-size:11px;color:var(--ink-soft)">+ 7 more employees with elevated risk. <span style="color:var(--blue-lt);cursor:pointer" onclick="showToast('Loading full list...')">View all</span></div>
+      </div>
+    </div>
+
+    <!-- MANAGER CONVERSATION PROMPTS -->
+    <div class="panel fade-up" style="animation-delay:.24s">
+      <div class="panel-head">
+        <svg style="width:14px;height:14px;stroke:var(--amber-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <div class="panel-title">AI-Generated Manager Conversation Prompts</div>
+        <div class="panel-badge" style="background:var(--amber-dim);color:var(--amber-lt)">4 prompts</div>
+      </div>
+      <div class="panel-body">
+        <div class="prompt-card">
+          <div class="pc-head"><div class="burn-av" style="width:24px;height:24px;background:var(--blue);color:var(--paper);font-size:8px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;flex-shrink:0">RS</div><div class="pc-name">For: Arun Krishnan (Manager of Rahul Sharma)</div><div class="pc-tag" style="background:var(--red-dim);color:var(--red-lt)">High Priority</div></div>
+          <div class="pc-body">"Rahul's burnout score has increased from 6.2 to 8.2 over the past 6 weeks, coinciding with the Marina Bay phase 3 deadline. Consider: (1) Redistributing his QC oversight to Rajesh Gupta, (2) Deferring his BIM training by 4 weeks until project milestone completes, (3) Scheduling a 1:1 to discuss workload before the next sprint."</div>
+          <div class="pc-actions"><button class="burn-action" onclick="showToast('Prompt sent to Arun Krishnan via email')">Send to Manager</button><button class="burn-action" onclick="showToast('Timeline adjustment applied — BIM deferred 4 weeks')">Apply Timeline Adjustment</button></div>
+        </div>
+        <div class="prompt-card">
+          <div class="pc-head"><div class="burn-av" style="width:24px;height:24px;background:var(--blue);color:var(--paper);font-size:8px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;flex-shrink:0">MS</div><div class="pc-name">For: Dept Head (Manager of Meera Sundaram)</div><div class="pc-tag" style="background:var(--amber-dim);color:var(--amber-lt)">Elevated</div></div>
+          <div class="pc-body">"Meera's elevated score appears linked to audit season. Her Digital Delivery training (24 hrs) overlaps with Q1 compliance audits. Recommend: (1) Shift training start to May, (2) Reduce learning pace from Standard to Minimum Viable track, (3) Check-in after audit season ends in April."</div>
+          <div class="pc-actions"><button class="burn-action" onclick="showToast('Prompt sent to department head')">Send to Manager</button><button class="burn-action" onclick="showToast('Learning pace adjusted to Minimum Viable track')">Adjust Learning Pace</button></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 28px;background:rgba(200,168,75,0.06);border-top:1px solid rgba(200,168,75,0.15);flex-shrink:0">
+    <svg style="width:13px;height:13px;stroke:#C8A84B;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+    <span style="font-size:11px;color:#C8A84B;font-weight:500;letter-spacing:.03em">Anonymous pulse data &middot; AI Burnout Risk Composite &middot; Adjusts development timelines automatically</span>
+    <span style="margin-left:auto;font-size:10px;color:#4A6A84;letter-spacing:.06em;text-transform:uppercase">L2 Wellbeing</span>
+  </div>
+</div>
+</div>
+<script>
+function showToast(msg){var t=document.getElementById('sip-toast');if(!t){t=document.createElement('div');t.id='sip-toast';t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#152438;border:1px solid rgba(255,255,255,0.1);color:#8AACC4;font-size:12px;font-family:"DM Sans",sans-serif;padding:10px 18px;border-radius:8px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:9999;white-space:nowrap';document.body.appendChild(t)}t.textContent=msg;t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity='0';t.style.transform='translateX(-50%) translateY(8px)'},2400)}
+document.addEventListener('click',function(e){var a=e.target.closest('a');if(a&&a.getAttribute('href')==='#'){e.preventDefault();showToast((a.textContent||'').trim().substring(0,36)+' — available in full platform')}});
+</script>
+</body>
+</html>
