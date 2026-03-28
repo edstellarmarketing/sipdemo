@@ -8,281 +8,170 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --ink:        #080F18;
-  --ink-panel:  #0C1825;
-  --ink-card:   #101E2E;
-  --ink-raised: #152438;
-  --ink-border: rgba(255,255,255,0.07);
-  --ink-soft:   #4A6A84;
-  --paper:      #D8E8F4;
-  --paper-mid:  #8AACC4;
-  --gold:       #C8A84B;
-  --gold-lt:    #E0CC70;
-  --gold-dim:   rgba(200,168,75,0.10);
-  --blue:       #1A5C8A;
-  --blue-lt:    #3A8CC0;
-  --blue-dim:   rgba(26,92,138,0.15);
-  --green:      #1A7A4A;
-  --green-lt:   #3AB87A;
-  --green-dim:  rgba(26,122,74,0.12);
-  --amber:      #D4820A;
-  --amber-lt:   #F0A030;
-  --amber-dim:  rgba(212,130,10,0.12);
-  --red:        #C0392B;
-  --red-lt:     #E87060;
-  --red-dim:    rgba(192,57,43,0.12);
-  --purple:     #6A3A9A;
-  --purple-lt:  #A070E0;
-  --purple-dim: rgba(106,58,154,0.15);
-  --sidebar-w:  220px;
+  --ink:#080F18;--ink-panel:#0C1825;--ink-card:#101E2E;--ink-raised:#152438;--ink-border:rgba(255,255,255,0.07);--ink-soft:#4A6A84;
+  --paper:#D8E8F4;--paper-mid:#8AACC4;
+  --gold:#C8A84B;--gold-lt:#E0CC70;--gold-dim:rgba(200,168,75,0.10);
+  --blue:#1A5C8A;--blue-lt:#3A8CC0;--blue-dim:rgba(26,92,138,0.15);
+  --green:#1A7A4A;--green-lt:#3AB87A;--green-dim:rgba(26,122,74,0.12);
+  --amber:#D4820A;--amber-lt:#F0A030;--amber-dim:rgba(212,130,10,0.12);
+  --red:#C0392B;--red-lt:#E87060;--red-dim:rgba(192,57,43,0.12);
+  --purple:#6A3A9A;--purple-lt:#A070E0;--purple-dim:rgba(106,58,154,0.15);
+  --sidebar-w:220px;
 }
+html,body{height:100%;background:var(--ink);color:var(--paper);font-family:'DM Sans',sans-serif;overflow:hidden}
+.app{display:flex;height:100vh}
 
-html, body { height: 100%; background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans-serif; overflow: hidden; }
-.app { display: flex; height: 100vh; }
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);background:var(--ink-panel);border-right:1px solid var(--ink-border);display:flex;flex-direction:column;flex-shrink:0}
+a.sidebar-brand{padding:22px 20px 20px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px;text-decoration:none;cursor:pointer}
+a.sidebar-brand:hover .brand-hex{opacity:.75;transition:opacity .15s}
+.brand-hex{width:28px;height:28px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);flex-shrink:0}
+.brand-nm{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--paper)}
+.brand-tg{font-size:10px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase}
+.sidebar-nav{flex:1;padding:12px 14px;overflow-y:auto}
+.nav-section-label{font-size:10px;color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase;padding:10px 6px 6px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;font-size:12.5px;color:var(--paper-mid);cursor:pointer;text-decoration:none;transition:background .15s,color .15s;margin-bottom:1px}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.nav-item.active{background:var(--blue-dim);color:var(--blue-lt)}
+.nav-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.nav-badge{margin-left:auto;padding:1px 6px;border-radius:100px;font-size:10px;font-weight:500}
+.nb-green{background:var(--green-dim);color:var(--green-lt)}
+.nb-amber{background:var(--amber-dim);color:var(--amber-lt)}
+.sidebar-user{padding:14px 16px;border-top:1px solid var(--ink-border);display:flex;align-items:center;gap:10px}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--paper);flex-shrink:0}
+.user-name{font-size:12px;font-weight:500;color:var(--paper)}
+.user-role{font-size:10px;color:var(--ink-soft)}
 
-/* ── SIDEBAR ── */
-.sidebar { width: var(--sidebar-w); background: var(--ink-panel); border-right: 1px solid var(--ink-border); display: flex; flex-direction: column; flex-shrink: 0; }
-a.sidebar-brand { padding: 22px 20px 20px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; text-decoration: none; cursor: pointer; }
-a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
-.brand-hex { width: 28px; height: 28px; background: var(--gold); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); flex-shrink: 0; }
-.brand-nm { font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--paper); }
-.brand-tg { font-size: 10px; color: var(--ink-soft); letter-spacing: 0.06em; text-transform: uppercase; }
-.sidebar-nav { flex: 1; padding: 12px 14px; overflow-y: auto; }
-.nav-section-label { font-size: 10px; color: var(--ink-soft); letter-spacing: .1em; text-transform: uppercase; padding: 10px 6px 6px; }
-.nav-item { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 6px; font-size: 12.5px; color: var(--paper-mid); cursor: pointer; text-decoration: none; transition: background .15s, color .15s; margin-bottom: 1px; }
-.nav-item:hover { background: rgba(255,255,255,0.05); color: var(--paper); }
-.nav-item.active { background: var(--blue-dim); color: var(--blue-lt); }
-.nav-item svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; opacity: .7; }
-.nav-item.active svg { opacity: 1; }
-.nav-badge { margin-left: auto; padding: 1px 6px; border-radius: 100px; font-size: 10px; font-weight: 500; }
-.nb-green { background: var(--green-dim); color: var(--green-lt); }
-.nb-gold  { background: var(--gold-dim);  color: var(--gold); }
-.nb-blue  { background: var(--blue-dim);  color: var(--blue-lt); }
-.nb-amber { background: var(--amber-dim); color: var(--amber-lt); }
-.sidebar-user { padding: 14px 16px; border-top: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; }
-.user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; color: var(--paper); flex-shrink: 0; }
-.user-name { font-size: 12px; font-weight: 500; color: var(--paper); }
-.user-role { font-size: 10px; color: var(--ink-soft); }
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:54px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;padding:0 28px;gap:14px;flex-shrink:0;background:var(--ink-panel)}
+.topbar-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--paper);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar-meta{font-size:11px;color:var(--ink-soft);white-space:nowrap}
+.tb-pill{padding:4px 11px;border-radius:100px;font-size:11px;border:1px solid;white-space:nowrap}
+.tb-pill.blue{border-color:rgba(58,140,192,.35);color:var(--blue-lt)}
+.tb-pill.gold{border-color:rgba(200,168,75,.3);color:var(--gold)}
+.tb-btn{padding:7px 14px;border-radius:6px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s,color .15s;text-decoration:none;white-space:nowrap}
+.tb-btn:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.tb-btn.primary{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:600}
+.tb-btn.primary:hover{opacity:.88}
 
-/* ── MAIN ── */
-.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-.topbar { height: 54px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; padding: 0 28px; gap: 14px; flex-shrink: 0; background: var(--ink-panel); }
-.topbar-title { font-family: 'Syne',sans-serif; font-size: 15px; font-weight: 700; color: var(--paper); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
-.topbar-meta { font-size: 11px; color: var(--ink-soft); white-space: nowrap; }
-.tb-pill { padding: 4px 11px; border-radius: 100px; font-size: 11px; border: 1px solid; white-space: nowrap; }
-.tb-pill.blue { border-color: rgba(58,140,192,.35); color: var(--blue-lt); }
-.tb-pill.gold { border-color: rgba(200,168,75,.3); color: var(--gold); }
-.tb-btn { padding: 7px 14px; border-radius: 6px; border: 1px solid var(--ink-border); background: transparent; color: var(--paper-mid); font-family: 'DM Sans',sans-serif; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background .15s, color .15s; text-decoration: none; white-space: nowrap; }
-.tb-btn:hover { background: rgba(255,255,255,0.05); color: var(--paper); }
-.tb-btn.primary { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 600; }
-.tb-btn.primary:hover { opacity: .88; }
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:24px 28px;display:flex;flex-direction:column;gap:20px}
+.content>*{flex-shrink:0}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
 
-/* ── CONTENT ── */
-.content { flex: 1; overflow-y: auto; padding: 24px 28px; display: flex; flex-direction: column; gap: 20px; }
-.content::-webkit-scrollbar { width: 4px; }
-.content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+/* PANELS */
+.panel{background:var(--ink-card);border:1px solid var(--ink-border);border-radius:12px;overflow:hidden}
+.panel-head{padding:14px 20px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.panel-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--paper);flex:1;min-width:120px}
+.panel-badge{padding:2px 8px;border-radius:100px;font-size:10px;font-weight:500}
+.panel-body{padding:18px 20px}
 
-/* ── PANELS ── */
-.panel { background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: 12px; overflow: hidden; }
-.panel-head { padding: 14px 20px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.panel-title { font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; color: var(--paper); flex: 1; min-width: 120px; }
-.panel-badge { padding: 2px 8px; border-radius: 100px; font-size: 10px; font-weight: 500; }
-.panel-body { padding: 18px 20px; }
+/* STEPPER */
+.stepper-bar{display:flex;align-items:center;gap:0;padding:12px 0;flex-shrink:0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.step-item{display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 10px;border-radius:8px;transition:background .15s;flex-shrink:0}
+.step-item:hover{background:rgba(255,255,255,0.04)}
+.step-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;border:2px solid var(--ink-border);color:var(--ink-soft);background:transparent;transition:all .3s;flex-shrink:0}
+.step-label{font-size:10px;color:var(--ink-soft);transition:color .3s;white-space:nowrap}
+.step-item.active .step-num{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+.step-item.active .step-label{color:var(--gold);font-weight:500}
+.step-item.done .step-num{border-color:var(--green-lt);color:var(--green-lt);background:var(--green-dim)}
+.step-item.done .step-label{color:var(--green-lt)}
+.step-conn{width:16px;height:2px;background:var(--ink-border);flex-shrink:0}
+.step-conn.done{background:var(--green-lt)}
 
-/* ── STEPPER ── */
-.stepper-bar { display: flex; align-items: center; gap: 0; padding: 16px 0; flex-shrink: 0; }
-.step-item { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 14px; border-radius: 8px; transition: background .15s; position: relative; }
-.step-item:hover { background: rgba(255,255,255,0.04); }
-.step-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'DM Mono',monospace; font-size: 11px; font-weight: 500; border: 2px solid var(--ink-border); color: var(--ink-soft); background: transparent; transition: all .3s; flex-shrink: 0; }
-.step-label { font-size: 11px; color: var(--ink-soft); transition: color .3s; white-space: nowrap; }
-.step-item.active .step-num { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-.step-item.active .step-label { color: var(--gold); font-weight: 500; }
-.step-item.done .step-num { border-color: var(--green-lt); color: var(--green-lt); background: var(--green-dim); }
-.step-item.done .step-label { color: var(--green-lt); }
-.step-connector { width: 24px; height: 2px; background: var(--ink-border); flex-shrink: 0; }
-.step-connector.done { background: var(--green-lt); }
+/* CONTEXT METER */
+.context-meter{background:linear-gradient(135deg,var(--ink-card) 0%,rgba(26,122,74,0.08) 100%);border:1px solid rgba(58,184,122,0.25);border-radius:14px;padding:20px 24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.cm-gauge{position:relative;width:80px;height:80px;flex-shrink:0}
+.cm-gauge canvas{width:100%;height:100%}
+.cm-gauge-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.cm-pct{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--green-lt);line-height:1}
+.cm-pct-sub{font-size:8px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
+.cm-info{flex:1;min-width:200px}
+.cm-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--paper);margin-bottom:4px}
+.cm-sub{font-size:11px;color:var(--paper-mid);margin-bottom:8px}
+.cm-segs{display:flex;gap:14px;flex-wrap:wrap}
+.cm-seg{display:flex;align-items:center;gap:5px}
+.cm-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cm-seg-label{font-size:10px;color:var(--ink-soft)}
+.cm-seg-val{font-family:'DM Mono',monospace;font-size:11px;font-weight:500}
 
-/* ── CONTEXT METER ── */
-.context-meter {
-  background: linear-gradient(135deg, var(--ink-card) 0%, rgba(26,122,74,0.08) 100%);
-  border: 1px solid rgba(58,184,122,0.25);
-  border-radius: 14px; padding: 22px 28px;
-  display: flex; align-items: center; gap: 28px;
-  flex-wrap: wrap;
-}
-.cm-gauge { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
-.cm-gauge canvas { width: 100%; height: 100%; }
-.cm-gauge-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.cm-pct { font-family: 'Syne',sans-serif; font-size: 22px; font-weight: 800; color: var(--green-lt); line-height: 1; }
-.cm-pct-sub { font-size: 9px; color: var(--ink-soft); letter-spacing: .06em; text-transform: uppercase; margin-top: 2px; }
-.cm-info { flex: 1; min-width: 200px; }
-.cm-title { font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 700; color: var(--paper); margin-bottom: 6px; }
-.cm-sub-text { font-size: 12px; color: var(--paper-mid); margin-bottom: 10px; }
-.cm-segments { display: flex; gap: 18px; flex-wrap: wrap; }
-.cm-seg { display: flex; align-items: center; gap: 6px; min-width: 0; }
-.cm-seg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.cm-seg-label { font-size: 11px; color: var(--ink-soft); white-space: nowrap; }
-.cm-seg-val { font-family: 'DM Mono',monospace; font-size: 12px; font-weight: 500; }
+/* FORMS */
+.form-group{margin-bottom:12px}
+.form-label{display:block;font-size:10px;color:var(--ink-soft);letter-spacing:.04em;margin-bottom:4px;text-transform:uppercase}
+.form-input,.form-select,.form-textarea{width:100%;padding:8px 12px;border-radius:7px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;transition:border-color .2s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--blue-lt)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--ink-soft)}
+.form-select option{background:var(--ink-raised);color:var(--paper)}
+.form-textarea{resize:vertical;min-height:60px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.form-row-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+@media(max-width:800px){.form-row,.form-row-3,.form-row-4{grid-template-columns:1fr}}
 
-/* ── ORG IDENTITY ── */
-.org-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; }
-@media (max-width: 900px) { .org-grid { grid-template-columns: 1fr; } }
-.org-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); gap: 12px; }
-.org-key { font-size: 11px; color: var(--ink-soft); letter-spacing: .04em; flex-shrink: 0; }
-.org-val { font-size: 12px; color: var(--paper); font-weight: 500; text-align: right; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-.org-val.mono { font-family: 'DM Mono',monospace; font-size: 11px; }
-.connected-badge { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border-radius: 100px; font-size: 10px; background: var(--green-dim); border: 1px solid rgba(58,184,122,0.3); color: var(--green-lt); font-weight: 500; white-space: nowrap; }
-.connected-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-lt); flex-shrink: 0; }
+.btn{padding:8px 18px;border-radius:7px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.btn:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.btn-gold{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:600}
+.btn-gold:hover{opacity:.88;background:var(--gold);color:var(--ink)}
+.btn-blue{background:var(--blue);border-color:var(--blue);color:var(--paper);font-weight:500}
+.btn-blue:hover{opacity:.88;background:var(--blue);color:var(--paper)}
+.btn-sm{padding:5px 12px;font-size:11px}
 
-/* ── HIERARCHY TREE ── */
-.tree-wrap { padding: 16px 20px; }
-.tree-org { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-.tree-org-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--gold-dim); border: 1px solid rgba(200,168,75,0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.tree-org-icon svg { width: 16px; height: 16px; stroke: var(--gold); fill: none; stroke-width: 1.8; stroke-linecap: round; }
-.tree-org-name { font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 700; color: var(--paper); }
-.tree-org-count { font-size: 11px; color: var(--ink-soft); margin-left: 4px; }
+.autofill-hint{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:8px;background:rgba(200,168,75,0.06);border:1px solid rgba(200,168,75,0.15);margin-bottom:14px;font-size:11px;color:var(--gold)}
+.section-desc{font-size:11px;color:var(--paper-mid);line-height:1.6;margin-bottom:14px;padding:10px 14px;background:rgba(255,255,255,0.02);border-radius:8px;border-left:3px solid var(--blue-lt)}
 
-.bu-group { margin-left: 18px; margin-bottom: 8px; }
-.bu-header { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: background .15s; border-left: 3px solid transparent; }
-.bu-header:hover { background: rgba(255,255,255,0.04); }
-.bu-header.expanded { background: rgba(255,255,255,0.03); }
-.bu-chevron { width: 14px; height: 14px; stroke: var(--ink-soft); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; flex-shrink: 0; }
-.bu-header.expanded .bu-chevron { transform: rotate(90deg); }
-.bu-name { font-size: 12.5px; font-weight: 500; color: var(--paper); min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-.bu-count { font-family: 'DM Mono',monospace; font-size: 11px; color: var(--ink-soft); margin-left: auto; flex-shrink: 0; }
-.bu-depts { display: none; padding: 6px 0 6px 32px; gap: 8px; flex-wrap: wrap; }
-.bu-depts.show { display: flex; }
-.dept-chip { padding: 5px 12px; border-radius: 6px; font-size: 11px; color: var(--paper-mid); border: 1px solid var(--ink-border); background: rgba(255,255,255,0.02); display: flex; align-items: center; gap: 6px; }
-.dept-count { font-family: 'DM Mono',monospace; font-size: 10px; color: var(--ink-soft); }
+/* DYNAMIC LISTS */
+.added-items{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.added-chip{padding:5px 10px;border-radius:6px;font-size:11px;color:var(--paper);border:1px solid var(--ink-border);background:var(--ink-raised);display:flex;align-items:center;gap:6px}
+.remove-chip{cursor:pointer;opacity:.4;transition:opacity .15s;font-size:13px}
+.remove-chip:hover{opacity:1;color:var(--red-lt)}
+.add-row{display:flex;gap:8px;align-items:flex-end}
+.add-row .form-group{margin-bottom:0;flex:1}
+.dashed-box{border:1px dashed var(--ink-border);border-radius:10px;padding:14px 18px;margin-top:12px}
+.dashed-title{font-size:12px;font-weight:500;color:var(--paper);margin-bottom:8px}
 
-.bu-eng .bu-header { border-left-color: var(--blue-lt); }
-.bu-eng .dept-chip { border-color: rgba(58,140,192,0.2); background: rgba(26,92,138,0.08); }
-.bu-dig .bu-header { border-left-color: var(--purple-lt); }
-.bu-dig .dept-chip { border-color: rgba(106,58,154,0.2); background: rgba(106,58,154,0.08); }
-.bu-corp .bu-header { border-left-color: var(--amber-lt); }
-.bu-corp .dept-chip { border-color: rgba(212,130,10,0.15); background: rgba(212,130,10,0.06); }
-.bu-sus .bu-header { border-left-color: var(--green-lt); }
-.bu-sus .dept-chip { border-color: rgba(58,184,122,0.2); background: rgba(26,122,74,0.08); }
+/* STEP PANELS */
+.step-panel{display:none}
+.step-panel.visible{display:block;animation:fadeUp .35s ease both}
 
-/* ── GOALS ── */
-.goal-item { display: flex; align-items: flex-start; gap: 14px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.goal-item:last-child { border-bottom: none; }
-.goal-num { width: 26px; height: 26px; border-radius: 6px; background: var(--gold-dim); border: 1px solid rgba(200,168,75,0.25); display: flex; align-items: center; justify-content: center; font-family: 'DM Mono',monospace; font-size: 10px; color: var(--gold); flex-shrink: 0; font-weight: 500; }
-.goal-info { flex: 1; min-width: 0; }
-.goal-text { font-size: 12.5px; color: var(--paper); line-height: 1.5; margin-bottom: 8px; }
-.goal-bar-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.goal-bar { flex: 1; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; min-width: 80px; }
-.goal-bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
-.goal-pct { font-family: 'DM Mono',monospace; font-size: 11px; min-width: 32px; }
-.goal-date { font-size: 10px; color: var(--ink-soft); white-space: nowrap; }
+/* CRIT ROW */
+.crit-row{display:flex;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.crit-row:last-child{border-bottom:none}
+.crit-tag{padding:3px 10px;border-radius:5px;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;min-width:30px;text-align:center;flex-shrink:0}
+.crit-label{font-size:11px;font-weight:500;flex-shrink:0}
+.crit-desc{font-size:11px;color:var(--ink-soft);margin-left:auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ct-c1{background:var(--red-dim);color:var(--red-lt)}
+.ct-c2{background:var(--amber-dim);color:var(--amber-lt)}
+.ct-c3{background:var(--blue-dim);color:var(--blue-lt)}
+.ct-c4{background:rgba(255,255,255,0.05);color:var(--ink-soft)}
 
-/* ── GRID LAYOUTS — FIXED RESPONSIVE ── */
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-@media (max-width: 960px) { .two-col { grid-template-columns: 1fr; } }
-.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-@media (max-width: 960px) { .three-col { grid-template-columns: 1fr; } }
+/* REVIEW */
+.rv-section{margin-bottom:16px}
+.rv-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.rv-check{width:14px;height:14px;border-radius:50%;background:var(--green-dim);border:1px solid var(--green-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rv-check svg{width:8px;height:8px;stroke:var(--green-lt);fill:none;stroke-width:3}
+.rv-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px}
+@media(max-width:800px){.rv-grid{grid-template-columns:1fr}}
+.rv-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);gap:8px}
+.rv-key{font-size:10px;color:var(--ink-soft);flex-shrink:0}
+.rv-val{font-size:11px;color:var(--paper);font-weight:500;text-align:right;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.rv-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.rv-chip{padding:3px 8px;border-radius:5px;font-size:10px;border:1px solid var(--ink-border);color:var(--paper-mid)}
 
-/* ── PRODUCTS ── */
-.product-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.product-item:last-child { border-bottom: none; }
-.product-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-lt); flex-shrink: 0; }
-.product-name { font-size: 12px; color: var(--paper-mid); min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+/* SUCCESS */
+.success-banner{display:none;padding:18px 24px;background:linear-gradient(135deg,rgba(26,122,74,0.15) 0%,rgba(26,92,138,0.1) 100%);border:1px solid rgba(58,184,122,0.3);border-radius:12px;align-items:center;gap:16px}
+.success-banner.show{display:flex;animation:fadeUp .5s ease both}
 
-/* ── STANDARDS ── */
-.standard-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.04); gap: 8px; }
-.standard-row:last-child { border-bottom: none; }
-.standard-name { font-size: 12px; color: var(--paper); font-weight: 500; min-width: 0; }
-.standard-badge { padding: 2px 9px; border-radius: 100px; font-size: 10px; font-weight: 500; flex-shrink: 0; }
-.sb-active { background: var(--green-dim); color: var(--green-lt); border: 1px solid rgba(58,184,122,0.3); }
-.sb-pending { background: var(--amber-dim); color: var(--amber-lt); border: 1px solid rgba(212,130,10,0.3); }
+/* TOAST */
+.toast-msg{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink-raised);border:1px solid rgba(58,184,122,0.3);color:var(--green-lt);font-size:12px;font-family:'DM Sans',sans-serif;padding:10px 20px;border-radius:8px;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:9999;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.toast-msg.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ── TOOLS ── */
-.tools-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-.tool-chip { padding: 6px 12px; border-radius: 7px; font-size: 11.5px; color: var(--paper-mid); border: 1px solid var(--ink-border); background: rgba(255,255,255,0.02); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
-.tool-lifecycle { padding: 1px 7px; border-radius: 100px; font-size: 9px; font-weight: 500; white-space: nowrap; }
-.tl-current { background: var(--green-dim); color: var(--green-lt); }
-.tl-eval { background: var(--purple-dim); color: var(--purple-lt); }
-
-/* ── CRITICALITY ── */
-.crit-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.crit-row:last-child { border-bottom: none; }
-.crit-tag { padding: 3px 10px; border-radius: 5px; font-family: 'DM Mono',monospace; font-size: 10px; font-weight: 500; min-width: 30px; text-align: center; flex-shrink: 0; }
-.crit-label { font-size: 11px; font-weight: 500; flex-shrink: 0; }
-.crit-desc { font-size: 11px; color: var(--ink-soft); margin-left: auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ct-c1 { background: var(--red-dim); color: var(--red-lt); }
-.ct-c2 { background: var(--amber-dim); color: var(--amber-lt); }
-.ct-c3 { background: var(--blue-dim); color: var(--blue-lt); }
-.ct-c4 { background: rgba(255,255,255,0.05); color: var(--ink-soft); }
-
-/* ── FORM STYLES ── */
-.form-group { margin-bottom: 14px; }
-.form-label { display: block; font-size: 11px; color: var(--ink-soft); letter-spacing: .04em; margin-bottom: 5px; text-transform: uppercase; }
-.form-input, .form-select { width: 100%; padding: 9px 12px; border-radius: 7px; border: 1px solid var(--ink-border); background: var(--ink-raised); color: var(--paper); font-family: 'DM Sans',sans-serif; font-size: 12.5px; outline: none; transition: border-color .2s; }
-.form-input:focus, .form-select:focus { border-color: var(--blue-lt); }
-.form-input::placeholder { color: var(--ink-soft); }
-.form-select option { background: var(--ink-raised); color: var(--paper); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media (max-width: 700px) { .form-row { grid-template-columns: 1fr; } }
-.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-@media (max-width: 700px) { .form-row-3 { grid-template-columns: 1fr; } }
-
-.btn { padding: 9px 20px; border-radius: 7px; border: 1px solid var(--ink-border); background: transparent; color: var(--paper-mid); font-family: 'DM Sans',sans-serif; font-size: 12.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; transition: all .15s; }
-.btn:hover { background: rgba(255,255,255,0.05); color: var(--paper); }
-.btn-gold { background: var(--gold); border-color: var(--gold); color: var(--ink); font-weight: 600; }
-.btn-gold:hover { opacity: .88; background: var(--gold); color: var(--ink); }
-.btn-green { background: var(--green); border-color: var(--green); color: var(--paper); font-weight: 500; }
-.btn-green:hover { opacity: .88; background: var(--green); color: var(--paper); }
-.btn-blue { background: var(--blue); border-color: var(--blue); color: var(--paper); font-weight: 500; }
-.btn-blue:hover { opacity: .88; background: var(--blue); color: var(--paper); }
-.btn-sm { padding: 5px 12px; font-size: 11px; }
-
-.autofill-hint { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 8px; background: rgba(200,168,75,0.06); border: 1px solid rgba(200,168,75,0.15); margin-bottom: 16px; }
-.autofill-hint span { font-size: 11px; color: var(--gold); }
-
-/* ── STEP PANELS ── */
-.step-panel { display: none; }
-.step-panel.visible { display: block; animation: fadeUp .35s ease both; }
-
-/* ── EMPTY STATE ── */
-.empty-state { text-align: center; padding: 40px 20px; }
-.empty-icon { width: 48px; height: 48px; margin: 0 auto 14px; border-radius: 12px; background: var(--ink-raised); border: 1px solid var(--ink-border); display: flex; align-items: center; justify-content: center; }
-.empty-icon svg { width: 22px; height: 22px; stroke: var(--ink-soft); fill: none; stroke-width: 1.5; }
-.empty-title { font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 700; color: var(--paper-mid); margin-bottom: 6px; }
-.empty-desc { font-size: 12px; color: var(--ink-soft); max-width: 320px; margin: 0 auto; }
-
-/* ── DYNAMIC BU BUILDER ── */
-.bu-add-row { display: flex; gap: 10px; align-items: flex-end; margin-top: 12px; }
-.bu-add-row .form-group { margin-bottom: 0; flex: 1; }
-.added-items { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-.added-chip { padding: 6px 12px; border-radius: 7px; font-size: 11.5px; color: var(--paper); border: 1px solid var(--ink-border); background: var(--ink-raised); display: flex; align-items: center; gap: 8px; }
-.added-chip .remove-chip { cursor: pointer; opacity: .5; transition: opacity .15s; font-size: 14px; }
-.added-chip .remove-chip:hover { opacity: 1; color: var(--red-lt); }
-
-/* ── REVIEW SECTION ── */
-.review-section { margin-bottom: 18px; }
-.review-section-title { font-family: 'Syne',sans-serif; font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-.review-check { width: 16px; height: 16px; border-radius: 50%; background: var(--green-dim); border: 1px solid var(--green-lt); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.review-check svg { width: 10px; height: 10px; stroke: var(--green-lt); fill: none; stroke-width: 2.5; }
-
-/* ── TOAST ── */
-.toast-msg { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--ink-raised); border: 1px solid rgba(58,184,122,0.3); color: var(--green-lt); font-size: 12px; font-family: 'DM Sans',sans-serif; padding: 10px 20px; border-radius: 8px; opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; z-index: 9999; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
-.toast-msg.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-@keyframes fadeUp   { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(1.3); } }
-
-.fade-up { animation: fadeUp .4s ease both; }
-
-/* ── SUCCESS BANNER ── */
-.success-banner { display: none; padding: 18px 24px; background: linear-gradient(135deg, rgba(26,122,74,0.15) 0%, rgba(26,92,138,0.1) 100%); border: 1px solid rgba(58,184,122,0.3); border-radius: 12px; align-items: center; gap: 16px; }
-.success-banner.show { display: flex; animation: fadeUp .5s ease both; }
-.success-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--green-dim); border: 2px solid var(--green-lt); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.success-icon svg { width: 20px; height: 20px; stroke: var(--green-lt); fill: none; stroke-width: 2.5; }
-.success-text h3 { font-family: 'Syne',sans-serif; font-size: 15px; font-weight: 700; color: var(--green-lt); margin-bottom: 4px; }
-.success-text p { font-size: 12px; color: var(--paper-mid); }
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.fade-up{animation:fadeUp .4s ease both}
 </style>
 </head>
 <body>
@@ -292,51 +181,24 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 <aside class="sidebar">
   <a class="sidebar-brand" href="../index.html">
     <div class="brand-hex"></div>
-    <div style="display:flex;flex-direction:column;gap:1px">
-      <span class="brand-nm">Arcova SIP</span>
-      <span class="brand-tg">Admin Portal</span>
-    </div>
+    <div style="display:flex;flex-direction:column;gap:1px"><span class="brand-nm">Arcova SIP</span><span class="brand-tg">Admin Portal</span></div>
   </a>
   <nav class="sidebar-nav">
     <div class="nav-section-label">Setup</div>
-    <a class="nav-item active" href="org-setup.html">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-      OrgSetup
-    </a>
-    <a class="nav-item" href="dataport.html">
-      <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      DataPort <span class="nav-badge nb-green">Done</span>
-    </a>
+    <a class="nav-item active" href="org-setup.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>OrgSetup</a>
+    <a class="nav-item" href="dataport.html"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>DataPort <span class="nav-badge nb-green">Done</span></a>
     <div class="nav-section-label">AI Pipeline</div>
-    <a class="nav-item" href="skillforge.html">
-      <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      SkillForge <span class="nav-badge nb-green">Done</span>
-    </a>
-    <a class="nav-item" href="approvalhub.html">
-      <svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
-      ApprovalHub <span class="nav-badge nb-green">Done</span>
-    </a>
+    <a class="nav-item" href="skillforge.html"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>SkillForge <span class="nav-badge nb-green">Done</span></a>
+    <a class="nav-item" href="approvalhub.html"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>ApprovalHub <span class="nav-badge nb-green">Done</span></a>
     <div class="nav-section-label">Assessment</div>
-    <a class="nav-item" href="assess-engine.html">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      AssessEngine <span class="nav-badge nb-amber">L2</span>
-    </a>
+    <a class="nav-item" href="assess-engine.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>AssessEngine <span class="nav-badge nb-amber">L2</span></a>
     <div class="nav-section-label">Intelligence</div>
-    <a class="nav-item" href="#">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      InsightBoard
-    </a>
-    <a class="nav-item" href="#">
-      <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      ReportGen
-    </a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>InsightBoard</a>
+    <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>ReportGen</a>
   </nav>
   <div class="sidebar-user">
     <div class="user-avatar">KR</div>
-    <div style="display:flex;flex-direction:column;gap:1px">
-      <div class="user-name">Kavitha Ramachandran</div>
-      <div class="user-role">L&amp;D Manager</div>
-    </div>
+    <div style="display:flex;flex-direction:column;gap:1px"><div class="user-name">Kavitha Ramachandran</div><div class="user-role">L&amp;D Manager</div></div>
   </div>
 </aside>
 
@@ -344,29 +206,23 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 <div class="main">
   <div class="topbar">
     <div class="topbar-title">OrgSetup — Organisational Context</div>
-    <a href="../level-journey.html" style="display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:#C8A84B;border:none;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;color:#0C1B2E;text-decoration:none;letter-spacing:0.05em;white-space:nowrap;transition:opacity .15s" onmouseover="this.style.opacity='0.86'" onmouseout="this.style.opacity='1'">
-      <svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>L3 · See Journey
+    <a href="../level-journey.html" style="display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:#C8A84B;border:none;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;color:#0C1B2E;text-decoration:none;letter-spacing:.05em;white-space:nowrap;transition:opacity .15s" onmouseover="this.style.opacity='0.86'" onmouseout="this.style.opacity='1'">
+      <svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>See Journey
     </a>
-    <a href="../nav-menus.html" class="tb-btn" style="font-size:11px;padding:5px 11px">
-      <svg style="width:11px;height:11px" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      All screens
-    </a>
+    <a href="../nav-menus.html" class="tb-btn" style="font-size:11px;padding:5px 11px">All screens</a>
     <div class="topbar-meta">28 March 2026</div>
     <div class="tb-pill blue" id="levelPill">Setup Mode</div>
-    <button class="tb-btn" id="resetBtn" onclick="resetDemo()" style="font-size:11px;padding:5px 11px;color:var(--amber-lt);border-color:rgba(212,130,10,0.3)">
-      <svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-      Reset Demo
-    </button>
+    <button class="tb-btn" id="resetBtn" onclick="resetDemo()" style="font-size:11px;padding:5px 11px;color:var(--amber-lt);border-color:rgba(212,130,10,0.3)">Reset Demo</button>
   </div>
 
-  <!-- level-banner-strip -->
-  <a href="../level-journey.html" style="display:flex;align-items:center;gap:12px;padding:0 28px;height:36px;background:linear-gradient(90deg,rgba(200,168,75,0.12) 0%,rgba(8,15,24,0) 60%);border-bottom:1px solid rgba(200,168,75,0.2);text-decoration:none;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='linear-gradient(90deg,rgba(200,168,75,0.18) 0%,rgba(8,15,24,0) 70%)'" onmouseout="this.style.background='linear-gradient(90deg,rgba(200,168,75,0.12) 0%,rgba(8,15,24,0) 60%)'">
-    <div style="display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:#C8A84B;animation:pulse 2s ease-in-out infinite"></div><span style="font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.08em;color:#C8A84B">L1 SETUP</span></div>
+  <!-- level-banner -->
+  <a href="../level-journey.html" style="display:flex;align-items:center;gap:12px;padding:0 28px;height:36px;background:linear-gradient(90deg,rgba(200,168,75,0.12) 0%,rgba(8,15,24,0) 60%);border-bottom:1px solid rgba(200,168,75,0.2);text-decoration:none;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:#C8A84B;animation:pulse 2s ease-in-out infinite"></div><span style="font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.08em;color:#C8A84B">L1 SETUP</span></div>
     <div style="width:1px;height:14px;background:rgba(200,168,75,0.2)"></div>
     <div style="font-size:11px;color:#8AACC4">OrgSetup feeds context into SkillForge AI pipeline</div>
-    <div style="width:80px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden"><div id="bannerProgress" style="width:0%;height:100%;background:#C8A84B;border-radius:2px;transition:width .6s"></div></div>
-    <div id="bannerPct" style="font-size:11px;color:#C8A84B;font-weight:500">0% complete</div>
-    <div style="margin-left:auto;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.06em;color:#C8A84B;text-transform:uppercase">View full journey &rarr;</div>
+    <div style="width:80px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden"><div id="bannerBar" style="width:0%;height:100%;background:#C8A84B;border-radius:2px;transition:width .6s"></div></div>
+    <div id="bannerPct" style="font-size:11px;color:#C8A84B;font-weight:500">0%</div>
+    <div style="margin-left:auto;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.06em;color:#C8A84B;text-transform:uppercase">View full journey &rarr;</div>
   </a>
 
   <!-- CONTENT -->
@@ -374,935 +230,537 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 
     <!-- CONTEXT METER -->
     <div class="context-meter fade-up">
-      <div class="cm-gauge">
-        <canvas id="gaugeCanvas" width="180" height="180"></canvas>
-        <div class="cm-gauge-label">
-          <div class="cm-pct" id="gaugePct">0%</div>
-          <div class="cm-pct-sub">Complete</div>
-        </div>
+      <div class="cm-gauge"><canvas id="gaugeCanvas" width="160" height="160"></canvas>
+        <div class="cm-gauge-label"><div class="cm-pct" id="gaugePct">0%</div><div class="cm-pct-sub">Complete</div></div>
       </div>
       <div class="cm-info">
         <div class="cm-title" id="gaugeTitle">Context Completeness: 0%</div>
-        <div class="cm-sub-text">Complete each section below to build the organisational context. Higher completeness improves SkillForge AI accuracy.</div>
-        <div class="cm-segments">
-          <div class="cm-seg">
-            <div class="cm-seg-dot" style="background:var(--green-lt)"></div>
-            <span class="cm-seg-label">Identity:</span>
-            <span class="cm-seg-val" id="segIdentity" style="color:var(--ink-soft)">0%</span>
-          </div>
-          <div class="cm-seg">
-            <div class="cm-seg-dot" style="background:var(--blue-lt)"></div>
-            <span class="cm-seg-label">Structure:</span>
-            <span class="cm-seg-val" id="segStructure" style="color:var(--ink-soft)">0%</span>
-          </div>
-          <div class="cm-seg">
-            <div class="cm-seg-dot" style="background:var(--purple-lt)"></div>
-            <span class="cm-seg-label">Strategy:</span>
-            <span class="cm-seg-val" id="segStrategy" style="color:var(--ink-soft)">0%</span>
-          </div>
-          <div class="cm-seg">
-            <div class="cm-seg-dot" style="background:var(--amber-lt)"></div>
-            <span class="cm-seg-label">Ecosystem:</span>
-            <span class="cm-seg-val" id="segEcosystem" style="color:var(--ink-soft)">0%</span>
-          </div>
-        </div>
+        <div class="cm-sub">Complete each section to build the organisational context. Higher completeness improves SkillForge AI accuracy.</div>
+        <div class="cm-segs" id="segContainer"></div>
       </div>
     </div>
 
     <!-- STEPPER -->
-    <div class="stepper-bar" id="stepper">
-      <div class="step-item active" data-step="1" onclick="goToStep(1)">
-        <div class="step-num">1</div>
-        <span class="step-label">Org Identity</span>
-      </div>
-      <div class="step-connector" data-conn="1"></div>
-      <div class="step-item" data-step="2" onclick="goToStep(2)">
-        <div class="step-num">2</div>
-        <span class="step-label">Hierarchy</span>
-      </div>
-      <div class="step-connector" data-conn="2"></div>
-      <div class="step-item" data-step="3" onclick="goToStep(3)">
-        <div class="step-num">3</div>
-        <span class="step-label">Goals</span>
-      </div>
-      <div class="step-connector" data-conn="3"></div>
-      <div class="step-item" data-step="4" onclick="goToStep(4)">
-        <div class="step-num">4</div>
-        <span class="step-label">Products & Standards</span>
-      </div>
-      <div class="step-connector" data-conn="4"></div>
-      <div class="step-item" data-step="5" onclick="goToStep(5)">
-        <div class="step-num">5</div>
-        <span class="step-label">Tools</span>
-      </div>
-      <div class="step-connector" data-conn="5"></div>
-      <div class="step-item" data-step="6" onclick="goToStep(6)">
-        <div class="step-num">6</div>
-        <span class="step-label">Review</span>
-      </div>
-    </div>
+    <div class="stepper-bar" id="stepper"></div>
 
-    <!-- SUCCESS BANNER (shown after completion) -->
+    <!-- SUCCESS BANNER -->
     <div class="success-banner" id="successBanner">
-      <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <div class="success-text">
-        <h3>OrgSetup Complete — Context Locked</h3>
-        <p>All organisational context has been captured. SkillForge AI pipeline is now ready to generate your skill taxonomy.</p>
-      </div>
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--green-dim);border:2px solid var(--green-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg style="width:20px;height:20px;stroke:var(--green-lt);fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div><h3 style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--green-lt);margin-bottom:4px">OrgSetup Complete — Context Locked</h3><p style="font-size:12px;color:var(--paper-mid)">All 113 organisational context fields captured across 9 sections. SkillForge AI pipeline ready.</p></div>
       <a href="skillforge.html" class="btn btn-gold" style="margin-left:auto;white-space:nowrap">Feed into SkillForge &rarr;</a>
     </div>
 
-    <!-- ════════════════════════════════════════ -->
-    <!-- STEP 1: ORG IDENTITY -->
-    <!-- ════════════════════════════════════════ -->
-    <div class="step-panel visible" id="step1">
-      <div class="panel fade-up">
-        <div class="panel-head">
-          <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          <div class="panel-title">Step 1 — Org Identity</div>
-          <button class="btn btn-sm btn-gold" onclick="autofillStep1()">Auto-fill Arcova Demo</button>
-        </div>
-        <div class="panel-body">
-          <div class="autofill-hint">
-            <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            <span>Fill in your company details or click <strong>Auto-fill Arcova Demo</strong> to see a complete example</span>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Company Name</label>
-              <input class="form-input" id="f-company" placeholder="e.g. Arcova Infrastructure Pte. Ltd.">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Industry</label>
-              <select class="form-select" id="f-industry">
-                <option value="">Select industry...</option>
-                <option value="Infrastructure & Construction">Infrastructure & Construction</option>
-                <option value="Technology & Software">Technology & Software</option>
-                <option value="Financial Services">Financial Services</option>
-                <option value="Healthcare & Life Sciences">Healthcare & Life Sciences</option>
-                <option value="Manufacturing">Manufacturing</option>
-                <option value="Energy & Utilities">Energy & Utilities</option>
-                <option value="Retail & E-commerce">Retail & E-commerce</option>
-                <option value="Professional Services">Professional Services</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Founded Year</label>
-              <input class="form-input" id="f-founded" type="number" placeholder="e.g. 2009" min="1900" max="2026">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Headquarters</label>
-              <input class="form-input" id="f-hq" placeholder="e.g. Singapore">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Total Employees</label>
-              <input class="form-input" id="f-employees" type="number" placeholder="e.g. 812">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Offices / Locations</label>
-              <input class="form-input" id="f-offices" placeholder="e.g. Singapore, Mumbai, Dubai, Kuala Lumpur">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">Operating Model</label>
-              <select class="form-select" id="f-model">
-                <option value="">Select model...</option>
-                <option value="Services & Project Delivery">Services & Project Delivery</option>
-                <option value="Product-Led">Product-Led</option>
-                <option value="Platform & SaaS">Platform & SaaS</option>
-                <option value="Hybrid">Hybrid</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Organisation Stage</label>
-              <select class="form-select" id="f-stage">
-                <option value="">Select stage...</option>
-                <option value="Startup">Startup</option>
-                <option value="Growth">Growth</option>
-                <option value="Mature — Optimisation">Mature — Optimisation</option>
-                <option value="Mature — Transformation">Mature — Transformation</option>
-                <option value="Enterprise">Enterprise</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label">HRIS System</label>
-              <input class="form-input" id="f-hris" placeholder="e.g. Workday">
-            </div>
-            <div class="form-group">
-              <label class="form-label">LMS System</label>
-              <input class="form-input" id="f-lms" placeholder="e.g. Cornerstone OnDemand">
-            </div>
-          </div>
-          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:18px">
-            <button class="btn btn-gold" onclick="saveStep1()">Save & Continue &rarr;</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ════════════════════════════════════════ -->
-    <!-- STEP 2: HIERARCHY BUILDER -->
-    <!-- ════════════════════════════════════════ -->
-    <div class="step-panel" id="step2">
-      <div class="panel fade-up">
-        <div class="panel-head">
-          <svg style="width:14px;height:14px;stroke:var(--blue-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/></svg>
-          <div class="panel-title">Step 2 — Hierarchy Builder</div>
-          <button class="btn btn-sm btn-gold" onclick="autofillStep2()">Auto-fill Arcova Demo</button>
-        </div>
-        <div class="panel-body">
-          <div class="autofill-hint">
-            <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            <span>Add Business Units and their departments. Each BU groups related departments together.</span>
-          </div>
-
-          <div id="buList"></div>
-
-          <div style="border:1px dashed var(--ink-border);border-radius:10px;padding:16px 20px;margin-top:14px">
-            <div style="font-size:12px;font-weight:500;color:var(--paper);margin-bottom:10px">Add Business Unit</div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">BU Name</label>
-                <input class="form-input" id="f-bu-name" placeholder="e.g. Engineering & Delivery">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Headcount</label>
-                <input class="form-input" id="f-bu-count" type="number" placeholder="e.g. 324">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Departments (comma-separated)</label>
-              <input class="form-input" id="f-bu-depts" placeholder="e.g. Structural Engineering: 112, Civil & Geotechnical: 98, Project Delivery: 114">
-            </div>
-            <button class="btn btn-blue btn-sm" onclick="addBU()" style="margin-top:6px">+ Add Business Unit</button>
-          </div>
-
-          <div style="display:flex;justify-content:space-between;gap:10px;margin-top:18px">
-            <button class="btn" onclick="goToStep(1)">&larr; Back</button>
-            <button class="btn btn-gold" onclick="saveStep2()">Save & Continue &rarr;</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ════════════════════════════════════════ -->
-    <!-- STEP 3: STRATEGIC GOALS -->
-    <!-- ════════════════════════════════════════ -->
-    <div class="step-panel" id="step3">
-      <div class="panel fade-up">
-        <div class="panel-head">
-          <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-          <div class="panel-title">Step 3 — Strategic Goals</div>
-          <button class="btn btn-sm btn-gold" onclick="autofillStep3()">Auto-fill Arcova Demo</button>
-        </div>
-        <div class="panel-body">
-          <div class="autofill-hint">
-            <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            <span>Add strategic goals that the skills programme should align with. These drive SkillForge's AI prioritisation.</span>
-          </div>
-
-          <div id="goalList"></div>
-
-          <div style="border:1px dashed var(--ink-border);border-radius:10px;padding:16px 20px;margin-top:14px">
-            <div style="font-size:12px;font-weight:500;color:var(--paper);margin-bottom:10px">Add Goal</div>
-            <div class="form-group">
-              <label class="form-label">Goal Description</label>
-              <input class="form-input" id="f-goal-text" placeholder="e.g. Expand digital delivery capability across all project sites">
-            </div>
-            <div class="form-row-3">
-              <div class="form-group">
-                <label class="form-label">Target Date</label>
-                <input class="form-input" id="f-goal-date" placeholder="e.g. Q4 2026">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Current Progress (%)</label>
-                <input class="form-input" id="f-goal-pct" type="number" placeholder="e.g. 42" min="0" max="100">
-              </div>
-              <div class="form-group">
-                <label class="form-label">Color</label>
-                <select class="form-select" id="f-goal-color">
-                  <option value="var(--blue-lt)">Blue</option>
-                  <option value="var(--green-lt)">Green</option>
-                  <option value="var(--purple-lt)">Purple</option>
-                  <option value="var(--amber-lt)">Amber</option>
-                </select>
-              </div>
-            </div>
-            <button class="btn btn-blue btn-sm" onclick="addGoal()" style="margin-top:6px">+ Add Goal</button>
-          </div>
-
-          <div style="display:flex;justify-content:space-between;gap:10px;margin-top:18px">
-            <button class="btn" onclick="goToStep(2)">&larr; Back</button>
-            <button class="btn btn-gold" onclick="saveStep3()">Save & Continue &rarr;</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ════════════════════════════════════════ -->
-    <!-- STEP 4: PRODUCTS & STANDARDS -->
-    <!-- ════════════════════════════════════════ -->
-    <div class="step-panel" id="step4">
-      <div class="two-col">
-        <div class="panel fade-up">
-          <div class="panel-head">
-            <svg style="width:14px;height:14px;stroke:var(--blue-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-            <div class="panel-title">Products & Services</div>
-          </div>
-          <div class="panel-body">
-            <div id="productList"></div>
-            <div style="display:flex;gap:8px;margin-top:10px">
-              <input class="form-input" id="f-product" placeholder="Add product or service..." style="flex:1">
-              <button class="btn btn-blue btn-sm" onclick="addProduct()">+ Add</button>
-            </div>
-          </div>
-        </div>
-        <div class="panel fade-up" style="animation-delay:.06s">
-          <div class="panel-head">
-            <svg style="width:14px;height:14px;stroke:var(--green-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-            <div class="panel-title">Governing Standards</div>
-          </div>
-          <div class="panel-body">
-            <div id="standardList"></div>
-            <div style="display:flex;gap:8px;margin-top:10px">
-              <input class="form-input" id="f-standard" placeholder="e.g. ISO 45001" style="flex:1">
-              <select class="form-select" id="f-standard-status" style="width:120px">
-                <option value="Active">Active</option>
-                <option value="Pending">Pending</option>
-              </select>
-              <button class="btn btn-blue btn-sm" onclick="addStandard()">+ Add</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div style="display:flex;justify-content:space-between;gap:10px;margin-top:10px">
-        <button class="btn" onclick="goToStep(3)">&larr; Back</button>
-        <div style="display:flex;gap:10px">
-          <button class="btn btn-sm btn-gold" onclick="autofillStep4()" style="font-size:11px">Auto-fill Arcova Demo</button>
-          <button class="btn btn-gold" onclick="saveStep4()">Save & Continue &rarr;</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ════════════════════════════════════════ -->
-    <!-- STEP 5: TOOLS & CRITICALITY -->
-    <!-- ════════════════════════════════════════ -->
-    <div class="step-panel" id="step5">
-      <div class="panel fade-up">
-        <div class="panel-head">
-          <svg style="width:14px;height:14px;stroke:var(--purple-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          <div class="panel-title">Step 5 — Tools & Technologies</div>
-          <button class="btn btn-sm btn-gold" onclick="autofillStep5()">Auto-fill Arcova Demo</button>
-        </div>
-        <div class="panel-body">
-          <div id="toolList" class="tools-grid" style="margin-bottom:14px"></div>
-          <div style="display:flex;gap:8px">
-            <input class="form-input" id="f-tool" placeholder="Add tool name..." style="flex:1">
-            <select class="form-select" id="f-tool-status" style="width:130px">
-              <option value="Current">Current</option>
-              <option value="Evaluating">Evaluating</option>
-            </select>
-            <button class="btn btn-blue btn-sm" onclick="addTool()">+ Add</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel fade-up" style="animation-delay:.06s;margin-top:20px">
-        <div class="panel-head">
-          <svg style="width:14px;height:14px;stroke:var(--red-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div class="panel-title">Skill Criticality Framework</div>
-          <div class="panel-badge" style="background:var(--red-dim);color:var(--red-lt)">4-Tier Model</div>
-        </div>
-        <div class="panel-body">
-          <div style="font-size:12px;color:var(--paper-mid);margin-bottom:14px">Define how skills are prioritised in your organisation. This feeds directly into SkillForge's gap analysis weighting.</div>
-          <div class="crit-row"><span class="crit-tag ct-c1">C1</span><span class="crit-label" style="color:var(--red-lt)">Critical</span><span class="crit-desc">Platform-critical, zero tolerance for gap</span></div>
-          <div class="crit-row"><span class="crit-tag ct-c2">C2</span><span class="crit-label" style="color:var(--amber-lt)">High</span><span class="crit-desc">Strategically important</span></div>
-          <div class="crit-row"><span class="crit-tag ct-c3">C3</span><span class="crit-label" style="color:var(--blue-lt)">Medium</span><span class="crit-desc">Operationally relevant</span></div>
-          <div class="crit-row"><span class="crit-tag ct-c4">C4</span><span class="crit-label" style="color:var(--ink-soft)">Low</span><span class="crit-desc">Nice to have</span></div>
-        </div>
-      </div>
-
-      <div style="display:flex;justify-content:space-between;gap:10px;margin-top:10px">
-        <button class="btn" onclick="goToStep(4)">&larr; Back</button>
-        <button class="btn btn-gold" onclick="saveStep5()">Save & Continue &rarr;</button>
-      </div>
-    </div>
-
-    <!-- ════════════════════════════════════════ -->
-    <!-- STEP 6: REVIEW -->
-    <!-- ════════════════════════════════════════ -->
-    <div class="step-panel" id="step6">
-      <div class="panel fade-up">
-        <div class="panel-head">
-          <svg style="width:14px;height:14px;stroke:var(--green-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
-          <div class="panel-title">Step 6 — Review & Confirm</div>
-        </div>
-        <div class="panel-body" id="reviewBody">
-          <!-- Populated dynamically -->
-        </div>
-      </div>
-      <div style="display:flex;justify-content:space-between;gap:10px;margin-top:10px">
-        <button class="btn" onclick="goToStep(5)">&larr; Back</button>
-        <button class="btn btn-gold" onclick="confirmSetup()" style="font-size:13px;padding:10px 28px">
-          <svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          Confirm & Lock OrgSetup
-        </button>
-      </div>
-    </div>
+    <!-- ALL STEP PANELS RENDERED BY JS -->
+    <div id="stepContainer"></div>
 
   </div><!-- /content -->
 
-  <!-- confidence-statement -->
+  <!-- confidence -->
   <div style="display:flex;align-items:center;gap:10px;padding:10px 28px;background:rgba(200,168,75,0.06);border-top:1px solid rgba(200,168,75,0.15);flex-shrink:0">
     <svg style="width:13px;height:13px;stroke:#C8A84B;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-    <span style="font-size:11px;color:#C8A84B;font-weight:500;letter-spacing:0.03em">Admin-configured context &nbsp;&middot;&nbsp; Feeds directly into SkillForge AI pipeline for skill taxonomy generation</span>
-    <span style="margin-left:auto;font-size:10px;color:#4A6A84;letter-spacing:0.06em;text-transform:uppercase">AI governance</span>
+    <span style="font-size:11px;color:#C8A84B;font-weight:500;letter-spacing:.03em">Admin-configured context &middot; 113 fields across 9 sections &middot; Feeds directly into SkillForge AI pipeline</span>
+    <span style="margin-left:auto;font-size:10px;color:#4A6A84;letter-spacing:.06em;text-transform:uppercase">AI governance</span>
   </div>
-
-</div><!-- /main -->
-</div><!-- /app -->
-
+</div>
+</div>
 <div class="toast-msg" id="toast"></div>
 
 <script>
-// ── STATE ──
-var state = {
-  currentStep: 1,
-  completed: { 1: false, 2: false, 3: false, 4: false, 5: false },
-  org: {},
-  bus: [],
-  goals: [],
-  products: [],
-  standards: [],
-  tools: []
-};
+// ═══════════════════════════════════════════════════
+// STEP DEFINITIONS — 9 data steps + 1 review
+// ═══════════════════════════════════════════════════
+var STEPS = [
+  { id:1, title:'Org Identity', seg:'Identity', segColor:'var(--green-lt)', icon:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33"/>' },
+  { id:2, title:'Hierarchy & Teams', seg:'Structure', segColor:'var(--blue-lt)', icon:'<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6"/><path d="M23 11h-6"/>' },
+  { id:3, title:'Role Profiles', seg:'Roles', segColor:'var(--purple-lt)', icon:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>' },
+  { id:4, title:'Goals & OKRs', seg:'Strategy', segColor:'var(--gold)', icon:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>' },
+  { id:5, title:'Products & Clients', seg:'Market', segColor:'var(--amber-lt)', icon:'<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>' },
+  { id:6, title:'Standards', seg:'Compliance', segColor:'var(--green-lt)', icon:'<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622"/>' },
+  { id:7, title:'Tools & Tech', seg:'Ecosystem', segColor:'var(--blue-lt)', icon:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>' },
+  { id:8, title:'Skills & Proficiency', seg:'Framework', segColor:'var(--purple-lt)', icon:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>' },
+  { id:9, title:'Competency & Culture', seg:'Culture', segColor:'var(--red-lt)', icon:'<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>' },
+  { id:10, title:'Review', seg:null, icon:'<path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>' }
+];
 
-var buColors = ['bu-eng','bu-dig','bu-corp','bu-sus','bu-eng','bu-dig','bu-corp','bu-sus'];
+var state = { current:1, completed:{}, data:{} };
+for (var i=1;i<=9;i++) state.completed[i]=false;
 
-// ── TOAST ──
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._t);
-  t._t = setTimeout(function(){ t.classList.remove('show'); }, 2400);
+// ═══════════════════════════════════════════════════
+// STEP HTML BUILDERS
+// ═══════════════════════════════════════════════════
+function buildStep1(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Step 1 — Org Identity</div><button class="btn btn-sm btn-gold" onclick="autofill(1)">Auto-fill Arcova</button></div><div class="panel-body">'
+  +'<div class="section-desc">Core company information that identifies your organisation. Includes branding, location, and system integrations. <strong>19 fields</strong> feed into SkillForge context extraction.</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Company Name *</label><input class="form-input" id="f-company" placeholder="e.g. Arcova Infrastructure Pte. Ltd."></div><div class="form-group"><label class="form-label">Industry *</label><select class="form-select" id="f-industry"><option value="">Select...</option><option>Infrastructure & Construction</option><option>Technology & Software</option><option>Financial Services</option><option>Healthcare & Life Sciences</option><option>Manufacturing</option><option>Energy & Utilities</option><option>Retail & E-commerce</option><option>Professional Services</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Industry Sub-sectors</label><input class="form-input" id="f-subsectors" placeholder="e.g. Civil Engineering, Smart Infrastructure, BIM"></div><div class="form-group"><label class="form-label">Size Band</label><select class="form-select" id="f-sizeband"><option value="">Select...</option><option>SMB (1-200)</option><option>Mid-Market (201-1000)</option><option>Enterprise (1001-5000)</option><option>Large Enterprise (5000+)</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Founded Year</label><input class="form-input" id="f-founded" type="number" placeholder="e.g. 2009"></div><div class="form-group"><label class="form-label">Headquarters</label><input class="form-input" id="f-hq" placeholder="e.g. Singapore"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">HQ Country (ISO)</label><input class="form-input" id="f-hqcountry" placeholder="e.g. SG" maxlength="2" style="text-transform:uppercase"></div><div class="form-group"><label class="form-label">Total Employees *</label><input class="form-input" id="f-employees" type="number" placeholder="e.g. 812"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Offices / Locations</label><input class="form-input" id="f-offices" placeholder="e.g. Singapore, Mumbai, Dubai, Kuala Lumpur"></div><div class="form-group"><label class="form-label">Timezone</label><select class="form-select" id="f-timezone"><option value="">Select...</option><option>Asia/Singapore (SGT +8)</option><option>Asia/Kolkata (IST +5:30)</option><option>Asia/Dubai (GST +4)</option><option>Europe/London (GMT/BST)</option><option>America/New_York (EST/EDT)</option><option>America/Los_Angeles (PST/PDT)</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Operating Model</label><select class="form-select" id="f-model"><option value="">Select...</option><option>Services & Project Delivery</option><option>Product-Led</option><option>Platform & SaaS</option><option>Hybrid</option></select></div><div class="form-group"><label class="form-label">Organisation Stage</label><select class="form-select" id="f-stage"><option value="">Select...</option><option>Startup</option><option>Growth</option><option>Mature — Optimisation</option><option>Mature — Transformation</option><option>Enterprise</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Fiscal Year Start Month</label><select class="form-select" id="f-fiscal"><option value="">Select...</option><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div><div class="form-group"><label class="form-label">Data Residency Region</label><select class="form-select" id="f-residency"><option value="">Select...</option><option>Asia-Pacific (Singapore)</option><option>Europe (Frankfurt)</option><option>North America (Virginia)</option><option>Middle East (Bahrain)</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Logo URL</label><input class="form-input" id="f-logo" placeholder="https://cdn.example.com/logo.png"></div><div class="form-group"><label class="form-label">Primary Brand Colour</label><input class="form-input" id="f-brandcolor" type="color" value="#C8A84B" style="height:36px;padding:4px"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">HRIS System</label><input class="form-input" id="f-hris" placeholder="e.g. Workday"></div><div class="form-group"><label class="form-label">LMS System</label><input class="form-input" id="f-lms" placeholder="e.g. Cornerstone OnDemand"></div></div>'
+  +'<div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px"><button class="btn btn-gold" onclick="saveStep(1)">Save & Continue &rarr;</button></div></div></div>';
 }
 
-// ── GAUGE DRAWING ──
-function drawGauge(pct) {
-  var canvas = document.getElementById('gaugeCanvas');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var w = canvas.width, h = canvas.height;
-  var cx = w / 2, cy = h / 2, r = 72, lineW = 10;
-  ctx.clearRect(0, 0, w, h);
+function buildStep2(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Step 2 — Hierarchy & Teams</div><button class="btn btn-sm btn-gold" onclick="autofill(2)">Auto-fill Arcova</button></div><div class="panel-body">'
+  +'<div class="section-desc">Define your organisational structure. Supports 9 org models (Traditional, Matrix, Agile/Spotify, etc.). Add Business Units with codes, heads, cost centres, and departments. Also define teams and employee cohorts. <strong>18 fields</strong> per node.</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Org Model</label><select class="form-select" id="f-orgmodel"><option value="">Select...</option><option>Traditional Hierarchy</option><option>Matrix Organisation</option><option>Agile / Spotify Model</option><option>Consulting / Professional Services</option><option>Manufacturing</option><option>Holding Company</option><option>Government / Public Sector</option><option>Flat Organisation</option><option>Geographic / Regional</option></select></div><div class="form-group"><label class="form-label">Hierarchy Levels</label><input class="form-input" id="f-hierlevels" placeholder="e.g. Organisation > BU > Sub-BU > Department > Team"></div></div>'
+  +'<div id="buList"></div>'
+  +'<div class="dashed-box"><div class="dashed-title">Add Business Unit</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">BU Name</label><input class="form-input" id="f-bu-name" placeholder="e.g. Engineering & Delivery"></div><div class="form-group"><label class="form-label">BU Code</label><input class="form-input" id="f-bu-code" placeholder="e.g. ENG" style="text-transform:uppercase"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Headcount</label><input class="form-input" id="f-bu-count" type="number" placeholder="e.g. 324"></div><div class="form-group"><label class="form-label">BU Head</label><input class="form-input" id="f-bu-head" placeholder="e.g. Rahul Sharma"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Cost Centre Code</label><input class="form-input" id="f-bu-cc" placeholder="e.g. CC-ENG-001"></div><div class="form-group"><label class="form-label">Location</label><input class="form-input" id="f-bu-loc" placeholder="e.g. Singapore, Mumbai"></div></div>'
+  +'<div class="form-group"><label class="form-label">Departments (name:count, comma-separated)</label><input class="form-input" id="f-bu-depts" placeholder="e.g. Structural Engineering:112, Civil & Geotechnical:98, Project Delivery:114"></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addBU()" style="margin-top:6px">+ Add Business Unit</button></div>'
+  +'<div class="dashed-box" style="margin-top:12px"><div class="dashed-title">Teams & Cohorts</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Teams (comma-separated)</label><input class="form-input" id="f-teams" placeholder="e.g. Marina Bay Project Team, Digital Transformation Squad, EHS Task Force"></div><div class="form-group"><label class="form-label">Employee Cohorts</label><input class="form-input" id="f-cohorts" placeholder="e.g. Graduate Intake 2025, Leadership Pipeline, BIM Champions"></div></div></div>'
+  +'<div style="display:flex;justify-content:space-between;gap:10px;margin-top:16px"><button class="btn" onclick="goToStep(1)">&larr; Back</button><button class="btn btn-gold" onclick="saveStep(2)">Save & Continue &rarr;</button></div></div></div>';
+}
 
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
-  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-  ctx.lineWidth = lineW;
-  ctx.stroke();
+function buildStep3(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Step 3 — Role Profiles</div><button class="btn btn-sm btn-gold" onclick="autofill(3)">Auto-fill Arcova</button></div><div class="panel-body">'
+  +'<div class="section-desc">Define job titles, KRAs, career pathways, and succession criticality. Role profiles feed directly into SkillForge Prompt 3 (Role Architecture Analysis) for role-to-skill mapping. <strong>12 fields</strong> per role.</div>'
+  +'<div id="roleList"></div>'
+  +'<div class="dashed-box"><div class="dashed-title">Add Role Profile</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Job Title *</label><input class="form-input" id="f-role-title" placeholder="e.g. Senior Structural Engineer"></div><div class="form-group"><label class="form-label">Role Family</label><select class="form-select" id="f-role-family"><option value="">Select...</option><option>Engineering</option><option>Technology</option><option>Operations</option><option>Corporate</option><option>Leadership</option><option>Support</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Department</label><input class="form-input" id="f-role-dept" placeholder="e.g. Structural Engineering"></div><div class="form-group"><label class="form-label">Seniority Band</label><select class="form-select" id="f-role-senior"><option value="">Select...</option><option>L1 — Entry</option><option>L2 — Associate</option><option>L3 — Mid-Level</option><option>L4 — Senior</option><option>L5 — Lead / Principal</option><option>L6 — Director</option><option>L7 — VP / C-Suite</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">KRAs (Key Result Areas)</label><input class="form-input" id="f-role-kra" placeholder="e.g. Design accuracy, code compliance, project delivery"></div><div class="form-group"><label class="form-label">Career Pathway</label><input class="form-input" id="f-role-career" placeholder="e.g. Engineer → Senior → Principal → Director"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Min Qualifications</label><input class="form-input" id="f-role-qual" placeholder="e.g. BE/BTech Civil, PE certification"></div><div class="form-group"><label class="form-label">Role Criticality</label><select class="form-select" id="f-role-crit"><option value="">Select...</option><option>C1 — Critical</option><option>C2 — High</option><option>C3 — Medium</option><option>C4 — Low</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Is People Manager?</label><select class="form-select" id="f-role-mgr"><option value="">Select...</option><option value="yes">Yes</option><option value="no">No</option></select></div><div class="form-group"><label class="form-label">Succession Criticality</label><select class="form-select" id="f-role-spof"><option value="">Select...</option><option>Single Point of Failure</option><option>Key Person Risk</option><option>Pipeline Available</option><option>Not Critical</option></select></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addRole()" style="margin-top:6px">+ Add Role Profile</button></div>'
+  +'<div style="display:flex;justify-content:space-between;gap:10px;margin-top:16px"><button class="btn" onclick="goToStep(2)">&larr; Back</button><button class="btn btn-gold" onclick="saveStep(3)">Save & Continue &rarr;</button></div></div></div>';
+}
 
-  if (pct > 0) {
-    var start = -Math.PI / 2;
-    var end = start + (Math.PI * 2 * pct);
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, start, end);
-    var grad = ctx.createLinearGradient(0, 0, w, h);
-    if (pct < 0.5) { grad.addColorStop(0, '#F0A030'); grad.addColorStop(1, '#D4820A'); }
-    else if (pct < 0.8) { grad.addColorStop(0, '#3A8CC0'); grad.addColorStop(1, '#1A5C8A'); }
-    else { grad.addColorStop(0, '#3AB87A'); grad.addColorStop(1, '#1A7A4A'); }
-    ctx.strokeStyle = grad;
-    ctx.lineWidth = lineW;
-    ctx.lineCap = 'round';
-    ctx.stroke();
+function buildStep4(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Step 4 — Strategic Goals & OKRs</div><button class="btn btn-sm btn-gold" onclick="autofill(4)">Auto-fill Arcova</button></div><div class="panel-body">'
+  +'<div class="section-desc">Strategic goals drive SkillForge AI prioritisation. Define goal types (Strategic / OKR / Annual), assign ownership, priority weighting, and link to required skills. <strong>10 fields</strong> per goal.</div>'
+  +'<div id="goalList"></div>'
+  +'<div class="dashed-box"><div class="dashed-title">Add Goal</div>'
+  +'<div class="form-group"><label class="form-label">Goal Description *</label><input class="form-input" id="f-goal-text" placeholder="e.g. Expand digital delivery capability across all project sites"></div>'
+  +'<div class="form-row-4"><div class="form-group"><label class="form-label">Type</label><select class="form-select" id="f-goal-type"><option>Strategic Objective</option><option>OKR</option><option>Annual Target</option><option>Transformation Priority</option></select></div><div class="form-group"><label class="form-label">Priority</label><select class="form-select" id="f-goal-priority"><option>High</option><option>Medium</option><option>Low</option></select></div><div class="form-group"><label class="form-label">Target Date</label><input class="form-input" id="f-goal-date" placeholder="Q4 2026"></div><div class="form-group"><label class="form-label">Progress %</label><input class="form-input" id="f-goal-pct" type="number" placeholder="42" min="0" max="100"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Goal Owner</label><input class="form-input" id="f-goal-owner" placeholder="e.g. CTO Office"></div><div class="form-group"><label class="form-label">Scope</label><select class="form-select" id="f-goal-scope"><option>Organisation-wide</option><option>Business Unit</option><option>Department</option></select></div></div>'
+  +'<div class="form-group"><label class="form-label">Linked Skills / Capabilities</label><input class="form-input" id="f-goal-skills" placeholder="e.g. BIM, Digital Delivery, AI Literacy"></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addGoal()" style="margin-top:6px">+ Add Goal</button></div>'
+  +'<div style="display:flex;justify-content:space-between;gap:10px;margin-top:16px"><button class="btn" onclick="goToStep(3)">&larr; Back</button><button class="btn btn-gold" onclick="saveStep(4)">Save & Continue &rarr;</button></div></div></div>';
+}
+
+function buildStep5(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Step 5 — Products, Services & Clients</div><button class="btn btn-sm btn-gold" onclick="autofill(5)">Auto-fill Arcova</button></div><div class="panel-body">'
+  +'<div class="section-desc">What your company delivers and who it serves. Product/service lines with lifecycle stages, plus client context with industry tags and geographic presence. Client types generate skill signals for the AI. <strong>10 fields</strong>.</div>'
+  +'<div style="font-size:12px;font-weight:500;color:var(--paper);margin-bottom:8px">Products & Services</div>'
+  +'<div id="productList"></div>'
+  +'<div class="add-row" style="margin-top:8px"><div class="form-group"><label class="form-label">Product / Service</label><input class="form-input" id="f-product" placeholder="e.g. Civil & Structural Engineering"></div><div class="form-group" style="max-width:140px"><label class="form-label">Category</label><select class="form-select" id="f-prod-cat"><option>Product</option><option>Service</option><option>Platform</option></select></div><div class="form-group" style="max-width:140px"><label class="form-label">Lifecycle</label><select class="form-select" id="f-prod-life"><option>Active</option><option>Growth</option><option>Mature</option><option>Sunset</option></select></div><button class="btn btn-blue btn-sm" onclick="addProduct()" style="margin-bottom:12px;flex-shrink:0">+ Add</button></div>'
+  +'<div style="font-size:12px;font-weight:500;color:var(--paper);margin:16px 0 8px;padding-top:14px;border-top:1px solid var(--ink-border)">Client & Market Context</div>'
+  +'<div id="clientList"></div>'
+  +'<div class="add-row" style="margin-top:8px"><div class="form-group"><label class="form-label">Client Name</label><input class="form-input" id="f-client" placeholder="e.g. Marina Bay Sands"></div><div class="form-group"><label class="form-label">Industry Tags</label><input class="form-input" id="f-client-ind" placeholder="e.g. Hospitality, Real Estate"></div><div class="form-group" style="max-width:140px"><label class="form-label">Region</label><input class="form-input" id="f-client-geo" placeholder="e.g. APAC"></div><button class="btn btn-blue btn-sm" onclick="addClient()" style="margin-bottom:12px;flex-shrink:0">+ Add</button></div>'
+  +'<div style="display:flex;justify-content:space-between;gap:10px;margin-top:16px"><button class="btn" onclick="goToStep(4)">&larr; Back</button><button class="btn btn-gold" onclick="saveStep(5)">Save & Continue &rarr;</button></div></div></div>';
+}
+
+function buildStep6(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Step 6 — Standards & Compliance</div><button class="btn btn-sm btn-gold" onclick="autofill(6)">Auto-fill Arcova</button></div><div class="panel-body">'
+  +'<div class="section-desc">Governing standards drive mandatory skill requirements and compliance training. Define category, applicable scope, deadlines, and mandatory training links. <strong>8 fields</strong> per standard.</div>'
+  +'<div id="standardList"></div>'
+  +'<div class="dashed-box"><div class="dashed-title">Add Standard</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Standard Name *</label><input class="form-input" id="f-std-name" placeholder="e.g. ISO 45001"></div><div class="form-group"><label class="form-label">Category</label><select class="form-select" id="f-std-cat"><option>Quality Management</option><option>Information Security</option><option>Data Protection</option><option>Industry-Specific</option><option>Project & Delivery</option><option>Environmental & Safety</option><option>Custom Standard</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Status</label><select class="form-select" id="f-std-status"><option>Active</option><option>Pending</option><option>Expired</option></select></div><div class="form-group"><label class="form-label">Compliance Deadline</label><input class="form-input" id="f-std-deadline" placeholder="e.g. Q3 2026"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Applicable Scope (roles/departments)</label><input class="form-input" id="f-std-scope" placeholder="e.g. All site-based roles, EHS dept"></div><div class="form-group"><label class="form-label">Mandatory Training Links</label><input class="form-input" id="f-std-training" placeholder="e.g. ISO 45001 Awareness, Safety Audit Procedures"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Renewal Period</label><input class="form-input" id="f-std-renewal" placeholder="e.g. Annual, Every 3 years"></div><div class="form-group"><label class="form-label">Jurisdiction</label><input class="form-input" id="f-std-juris" placeholder="e.g. Singapore, All regions"></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addStandard()" style="margin-top:6px">+ Add Standard</button></div>'
+  +'<div style="display:flex;justify-content:space-between;gap:10px;margin-top:16px"><button class="btn" onclick="goToStep(5)">&larr; Back</button><button class="btn btn-gold" onclick="saveStep(6)">Save & Continue &rarr;</button></div></div></div>';
+}
+
+function buildStep7(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Step 7 — Tools & Technologies</div><button class="btn btn-sm btn-gold" onclick="autofill(7)">Auto-fill Arcova</button></div><div class="panel-body">'
+  +'<div class="section-desc">Map your technology landscape. Tools with sunset flags generate migration skill requirements. Department mapping shows who needs what skills. <strong>9 fields</strong> per tool.</div>'
+  +'<div id="toolList" style="margin-bottom:12px"></div>'
+  +'<div class="dashed-box"><div class="dashed-title">Add Tool</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Tool Name *</label><input class="form-input" id="f-tool-name" placeholder="e.g. Autodesk Revit"></div><div class="form-group"><label class="form-label">Category</label><select class="form-select" id="f-tool-cat"><option>Core Business Apps</option><option>Dev & Engineering</option><option>Data & Analytics</option><option>Collaboration</option><option>Security</option><option>Customer-Facing</option><option>AI & Automation</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Status</label><select class="form-select" id="f-tool-status"><option>Current</option><option>Evaluating</option><option>Sunset / Phase-out</option></select></div><div class="form-group"><label class="form-label">Version</label><input class="form-input" id="f-tool-ver" placeholder="e.g. 2025.1"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Departments Using</label><input class="form-input" id="f-tool-depts" placeholder="e.g. Structural Engineering, BIM, Project Delivery"></div><div class="form-group"><label class="form-label">Usage Depth</label><select class="form-select" id="f-tool-depth"><option>Core Workflow</option><option>Regular Use</option><option>Occasional</option><option>Admin Only</option></select></div></div>'
+  +'<div class="form-group"><label class="form-label">User Roles (who uses this tool)</label><input class="form-input" id="f-tool-roles" placeholder="e.g. Admin, Power User, Basic User"></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addTool()" style="margin-top:6px">+ Add Tool</button></div>'
+  +'<div style="display:flex;justify-content:space-between;gap:10px;margin-top:16px"><button class="btn" onclick="goToStep(6)">&larr; Back</button><button class="btn btn-gold" onclick="saveStep(7)">Save & Continue &rarr;</button></div></div></div>';
+}
+
+function buildStep8(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Step 8 — Skills, Proficiency & Criticality</div><button class="btn btn-sm btn-gold" onclick="autofill(8)">Auto-fill Arcova</button></div><div class="panel-body">'
+  +'<div class="section-desc">Configure the skill criticality framework (4-tier with editable weights), proficiency level definitions (L1-L4 behavioural descriptors), and the skills dictionary taxonomy. <strong>15 fields</strong>.</div>'
+  +'<div style="font-size:12px;font-weight:500;color:var(--paper);margin-bottom:10px">Skill Criticality Framework — Editable</div>'
+  +'<div class="form-row" style="margin-bottom:6px"><div class="form-group"><label class="form-label">C1 Label</label><input class="form-input" id="f-c1-label" value="Critical" style="color:var(--red-lt)"></div><div class="form-group"><label class="form-label">C1 Weight</label><input class="form-input" id="f-c1-weight" value="2.0x" style="width:80px"></div><div class="form-group"><label class="form-label">C1 Description</label><input class="form-input" id="f-c1-desc" value="Platform-critical, zero tolerance for gap"></div></div>'
+  +'<div class="form-row" style="margin-bottom:6px"><div class="form-group"><label class="form-label">C2 Label</label><input class="form-input" id="f-c2-label" value="High" style="color:var(--amber-lt)"></div><div class="form-group"><label class="form-label">C2 Weight</label><input class="form-input" id="f-c2-weight" value="1.5x" style="width:80px"></div><div class="form-group"><label class="form-label">C2 Description</label><input class="form-input" id="f-c2-desc" value="Strategically important, 6-month closure target"></div></div>'
+  +'<div class="form-row" style="margin-bottom:6px"><div class="form-group"><label class="form-label">C3 Label</label><input class="form-input" id="f-c3-label" value="Medium" style="color:var(--blue-lt)"></div><div class="form-group"><label class="form-label">C3 Weight</label><input class="form-input" id="f-c3-weight" value="1.0x" style="width:80px"></div><div class="form-group"><label class="form-label">C3 Description</label><input class="form-input" id="f-c3-desc" value="Operationally relevant, 12-month plan"></div></div>'
+  +'<div class="form-row" style="margin-bottom:14px"><div class="form-group"><label class="form-label">C4 Label</label><input class="form-input" id="f-c4-label" value="Low" style="color:var(--ink-soft)"></div><div class="form-group"><label class="form-label">C4 Weight</label><input class="form-input" id="f-c4-weight" value="0.5x" style="width:80px"></div><div class="form-group"><label class="form-label">C4 Description</label><input class="form-input" id="f-c4-desc" value="Nice to have, opportunistic development"></div></div>'
+  +'<div style="font-size:12px;font-weight:500;color:var(--paper);margin:16px 0 10px;padding-top:14px;border-top:1px solid var(--ink-border)">Proficiency Level Definitions</div>'
+  +'<div class="form-row" style="margin-bottom:6px"><div class="form-group"><label class="form-label">L1 — Awareness</label><input class="form-input" id="f-prof-l1" placeholder="e.g. Has basic awareness, follows instructions with guidance"></div><div class="form-group"><label class="form-label">L2 — Working</label><input class="form-input" id="f-prof-l2" placeholder="e.g. Applies knowledge in routine situations with support"></div></div>'
+  +'<div class="form-row" style="margin-bottom:14px"><div class="form-group"><label class="form-label">L3 — Practitioner</label><input class="form-input" id="f-prof-l3" placeholder="e.g. Performs independently, handles complex situations"></div><div class="form-group"><label class="form-label">L4 — Expert</label><input class="form-input" id="f-prof-l4" placeholder="e.g. Leads, mentors, innovates, shapes org-wide standards"></div></div>'
+  +'<div style="font-size:12px;font-weight:500;color:var(--paper);margin:16px 0 10px;padding-top:14px;border-top:1px solid var(--ink-border)">Skills Dictionary Configuration</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Taxonomy Hierarchy</label><input class="form-input" id="f-taxonomy" placeholder="e.g. Domain > Knowledge Area > Skill Category > Skill"></div><div class="form-group"><label class="form-label">Skill Types</label><input class="form-input" id="f-skill-types" placeholder="e.g. Technical, Behavioural, Leadership, Functional"></div></div>'
+  +'<div class="form-group"><label class="form-label">Benchmark Linkages</label><input class="form-input" id="f-benchmarks" placeholder="e.g. SFIA v9, O*NET, European e-Competence Framework"></div>'
+  +'<div style="display:flex;justify-content:space-between;gap:10px;margin-top:16px"><button class="btn" onclick="goToStep(7)">&larr; Back</button><button class="btn btn-gold" onclick="saveStep(8)">Save & Continue &rarr;</button></div></div></div>';
+}
+
+function buildStep9(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Step 9 — Competency Framework, Culture & Transformation</div><button class="btn btn-sm btn-gold" onclick="autofill(9)">Auto-fill Arcova</button></div><div class="panel-body">'
+  +'<div class="section-desc">Define competency types linked to org values, culture dimensions with current/target proficiency, and the Transformation Dial settings that shift skill requirements. <strong>12 fields</strong>.</div>'
+  +'<div style="font-size:12px;font-weight:500;color:var(--paper);margin-bottom:10px">Competency Framework</div>'
+  +'<div id="compList"></div>'
+  +'<div class="add-row" style="margin-top:8px"><div class="form-group"><label class="form-label">Competency Name</label><input class="form-input" id="f-comp-name" placeholder="e.g. Innovation Mindset"></div><div class="form-group" style="max-width:160px"><label class="form-label">Type</label><select class="form-select" id="f-comp-type"><option>Core / Behavioural</option><option>Leadership</option><option>Technical</option><option>Functional</option></select></div><div class="form-group"><label class="form-label">Linked Org Value</label><input class="form-input" id="f-comp-value" placeholder="e.g. Excellence"></div><button class="btn btn-blue btn-sm" onclick="addComp()" style="margin-bottom:12px;flex-shrink:0">+ Add</button></div>'
+  +'<div style="font-size:12px;font-weight:500;color:var(--paper);margin:16px 0 10px;padding-top:14px;border-top:1px solid var(--ink-border)">Culture Definition</div>'
+  +'<div id="cultureList"></div>'
+  +'<div class="add-row" style="margin-top:8px"><div class="form-group"><label class="form-label">Culture Dimension</label><input class="form-input" id="f-cult-dim" placeholder="e.g. Safety-First Mindset"></div><div class="form-group" style="max-width:80px"><label class="form-label">Current</label><input class="form-input" id="f-cult-curr" type="number" placeholder="3" min="1" max="5"></div><div class="form-group" style="max-width:80px"><label class="form-label">Target Y1</label><input class="form-input" id="f-cult-tgt" type="number" placeholder="4" min="1" max="5"></div><button class="btn btn-blue btn-sm" onclick="addCulture()" style="margin-bottom:12px;flex-shrink:0">+ Add</button></div>'
+  +'<div style="font-size:12px;font-weight:500;color:var(--paper);margin:16px 0 10px;padding-top:14px;border-top:1px solid var(--ink-border)">Transformation Dial</div>'
+  +'<div class="section-desc" style="border-left-color:var(--amber-lt)">The Transformation Dial shifts skill requirements on a -5 to +5 scale. A positive dial on "Digital Delivery" increases the target proficiency for all digital skills. Presets bundle multiple dial changes for common transformations.</div>'
+  +'<div id="dialList"></div>'
+  +'<div class="add-row" style="margin-top:8px"><div class="form-group"><label class="form-label">Skill / Capability</label><input class="form-input" id="f-dial-skill" placeholder="e.g. Digital Delivery"></div><div class="form-group" style="max-width:100px"><label class="form-label">Dial (-5 to +5)</label><input class="form-input" id="f-dial-val" type="number" placeholder="3" min="-5" max="5"></div><div class="form-group"><label class="form-label">Rationale</label><input class="form-input" id="f-dial-why" placeholder="e.g. Strategic push to reduce BIM dependency"></div><button class="btn btn-blue btn-sm" onclick="addDial()" style="margin-bottom:12px;flex-shrink:0">+ Add</button></div>'
+  +'<div class="form-group" style="margin-top:12px"><label class="form-label">Transformation Statement</label><textarea class="form-textarea" id="f-trans-stmt" placeholder="e.g. Arcova is transitioning from a traditional infrastructure firm to a digitally-enabled delivery organisation. Over the next 3 years, every project site will operate BIM-first, requiring 40% of the workforce to reach L3 digital proficiency."></textarea></div>'
+  +'<div style="display:flex;justify-content:space-between;gap:10px;margin-top:16px"><button class="btn" onclick="goToStep(8)">&larr; Back</button><button class="btn btn-gold" onclick="saveStep(9)">Save & Continue &rarr;</button></div></div></div>';
+}
+
+function buildStep10(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Step 10 — Review & Confirm</div></div><div class="panel-body" id="reviewBody"><div style="text-align:center;padding:20px;color:var(--ink-soft)">Complete all 9 steps to see the full review.</div></div></div>'
+  +'<div style="display:flex;justify-content:space-between;gap:10px;margin-top:10px"><button class="btn" onclick="goToStep(9)">&larr; Back</button><button class="btn btn-gold" onclick="confirmSetup()" style="font-size:13px;padding:10px 28px"><svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Confirm & Lock OrgSetup</button></div>';
+}
+
+var stepBuilders = [buildStep1,buildStep2,buildStep3,buildStep4,buildStep5,buildStep6,buildStep7,buildStep8,buildStep9,buildStep10];
+
+// ═══════════════════════════════════════════════════
+// DYNAMIC LIST DATA
+// ═══════════════════════════════════════════════════
+var D = { bus:[], roles:[], goals:[], products:[], clients:[], standards:[], tools:[], comps:[], cultures:[], dials:[] };
+
+// ═══════════════════════════════════════════════════
+// RENDERING
+// ═══════════════════════════════════════════════════
+function renderStepper(){
+  var h='';
+  STEPS.forEach(function(s,i){
+    if(i>0) h+='<div class="step-conn'+(state.completed[i]?' done':'')+'"></div>';
+    var cls = s.id===state.current?' active':'';
+    if(state.completed[s.id]) cls=' done';
+    h+='<div class="step-item'+cls+'" data-step="'+s.id+'" onclick="goToStep('+s.id+')">';
+    h+='<div class="step-num">'+(state.completed[s.id]?'<svg style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':s.id)+'</div>';
+    h+='<span class="step-label">'+s.title+'</span></div>';
+  });
+  document.getElementById('stepper').innerHTML=h;
+}
+
+function renderSegs(){
+  var h='';
+  STEPS.forEach(function(s){
+    if(!s.seg) return;
+    var done=state.completed[s.id];
+    var val=done?'100%':'0%';
+    var col=done?s.segColor:'var(--ink-soft)';
+    h+='<div class="cm-seg"><div class="cm-dot" style="background:'+s.segColor+'"></div><span class="cm-seg-label">'+s.seg+':</span><span class="cm-seg-val" style="color:'+col+'">'+val+'</span></div>';
+  });
+  document.getElementById('segContainer').innerHTML=h;
+}
+
+function renderSteps(){
+  var h='';
+  STEPS.forEach(function(s,i){
+    var vis=s.id===state.current?' visible':'';
+    h+='<div class="step-panel'+vis+'" id="step'+s.id+'">'+stepBuilders[i]()+'</div>';
+  });
+  document.getElementById('stepContainer').innerHTML=h;
+}
+
+function goToStep(n){
+  state.current=n;
+  renderStepper();
+  STEPS.forEach(function(s){
+    var el=document.getElementById('step'+s.id);
+    if(el){if(s.id===n)el.classList.add('visible');else el.classList.remove('visible')}
+  });
+  document.querySelector('.content').scrollTop=0;
+}
+
+function drawGauge(pct){
+  var c=document.getElementById('gaugeCanvas');if(!c)return;
+  var ctx=c.getContext('2d'),w=c.width,h=c.height,cx=w/2,cy=h/2,r=65;
+  ctx.clearRect(0,0,w,h);
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=9;ctx.stroke();
+  if(pct>0){ctx.beginPath();ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*pct);var g=ctx.createLinearGradient(0,0,w,h);if(pct<.5){g.addColorStop(0,'#F0A030');g.addColorStop(1,'#D4820A')}else if(pct<.8){g.addColorStop(0,'#3A8CC0');g.addColorStop(1,'#1A5C8A')}else{g.addColorStop(0,'#3AB87A');g.addColorStop(1,'#1A7A4A')}ctx.strokeStyle=g;ctx.lineWidth=9;ctx.lineCap='round';ctx.stroke()}
+  var p=Math.round(pct*100);
+  document.getElementById('gaugePct').textContent=p+'%';
+  document.getElementById('gaugePct').style.color=pct<.5?'var(--amber-lt)':pct<.8?'var(--blue-lt)':'var(--green-lt)';
+  document.getElementById('gaugeTitle').textContent='Context Completeness: '+p+'%';
+  document.getElementById('bannerBar').style.width=p+'%';
+  document.getElementById('bannerPct').textContent=p+'% complete';
+}
+
+function updateProgress(){
+  var done=0;for(var k in state.completed)if(state.completed[k])done++;
+  drawGauge(done/9);renderSegs();renderStepper();
+  document.getElementById('levelPill').textContent=done>=9?'Setup Complete':'Setup Mode';
+  document.getElementById('levelPill').className=done>=9?'tb-pill gold':'tb-pill blue';
+}
+
+// ═══════════════════════════════════════════════════
+// SAVE / ADD FUNCTIONS
+// ═══════════════════════════════════════════════════
+function saveStep(n){
+  if(n===1&&!document.getElementById('f-company').value.trim()){showToast('Enter company name');return}
+  if(n===2&&D.bus.length===0){showToast('Add at least one BU');return}
+  if(n===3&&D.roles.length===0){showToast('Add at least one role');return}
+  if(n===4&&D.goals.length===0){showToast('Add at least one goal');return}
+  state.completed[n]=true;updateProgress();goToStep(n<10?n+1:10);
+  if(n===9)buildReview();
+  showToast('Step '+n+' saved');
+}
+
+function addBU(){
+  var name=document.getElementById('f-bu-name').value.trim();if(!name){showToast('Enter BU name');return}
+  var depts=[];var raw=document.getElementById('f-bu-depts').value.trim();
+  if(raw)raw.split(',').forEach(function(p){var m=p.trim().match(/^(.+?):(\d+)$/);depts.push(m?{name:m[1].trim(),count:+m[2]}:{name:p.trim(),count:0})});
+  D.bus.push({name:name,code:document.getElementById('f-bu-code').value.trim(),count:+document.getElementById('f-bu-count').value||0,head:document.getElementById('f-bu-head').value.trim(),cc:document.getElementById('f-bu-cc').value.trim(),loc:document.getElementById('f-bu-loc').value.trim(),depts:depts});
+  renderList('buList',D.bus,function(b){return b.name+' ('+b.code+') — '+b.count+' employees, '+b.depts.length+' depts'},'bus');
+  ['f-bu-name','f-bu-code','f-bu-count','f-bu-head','f-bu-cc','f-bu-loc','f-bu-depts'].forEach(function(id){document.getElementById(id).value=''});
+  showToast(name+' added');
+}
+
+function addRole(){
+  var t=document.getElementById('f-role-title').value.trim();if(!t){showToast('Enter job title');return}
+  D.roles.push({title:t,family:document.getElementById('f-role-family').value,dept:document.getElementById('f-role-dept').value.trim(),senior:document.getElementById('f-role-senior').value,kra:document.getElementById('f-role-kra').value.trim(),career:document.getElementById('f-role-career').value.trim(),qual:document.getElementById('f-role-qual').value.trim(),crit:document.getElementById('f-role-crit').value,mgr:document.getElementById('f-role-mgr').value,spof:document.getElementById('f-role-spof').value});
+  renderList('roleList',D.roles,function(r){return r.title+' — '+r.family+' · '+r.senior+(r.spof?' · '+r.spof:'')},'roles');
+  ['f-role-title','f-role-dept','f-role-kra','f-role-career','f-role-qual'].forEach(function(id){document.getElementById(id).value=''});
+  showToast(t+' added');
+}
+
+function addGoal(){
+  var t=document.getElementById('f-goal-text').value.trim();if(!t){showToast('Enter goal');return}
+  D.goals.push({text:t,type:document.getElementById('f-goal-type').value,priority:document.getElementById('f-goal-priority').value,date:document.getElementById('f-goal-date').value,pct:+document.getElementById('f-goal-pct').value||0,owner:document.getElementById('f-goal-owner').value.trim(),scope:document.getElementById('f-goal-scope').value,skills:document.getElementById('f-goal-skills').value.trim()});
+  renderList('goalList',D.goals,function(g){return g.type+': '+g.text.substring(0,60)+'... ('+g.pct+'%)'},'goals');
+  ['f-goal-text','f-goal-date','f-goal-pct','f-goal-owner','f-goal-skills'].forEach(function(id){document.getElementById(id).value=''});
+  showToast('Goal added');
+}
+
+function addProduct(){
+  var v=document.getElementById('f-product').value.trim();if(!v)return;
+  D.products.push({name:v,cat:document.getElementById('f-prod-cat').value,life:document.getElementById('f-prod-life').value});
+  renderList('productList',D.products,function(p){return p.name+' · '+p.cat+' · '+p.life},'products');
+  document.getElementById('f-product').value='';
+}
+
+function addClient(){
+  var v=document.getElementById('f-client').value.trim();if(!v)return;
+  D.clients.push({name:v,industry:document.getElementById('f-client-ind').value.trim(),geo:document.getElementById('f-client-geo').value.trim()});
+  renderList('clientList',D.clients,function(c){return c.name+' · '+c.industry+' · '+c.geo},'clients');
+  document.getElementById('f-client').value='';document.getElementById('f-client-ind').value='';document.getElementById('f-client-geo').value='';
+}
+
+function addStandard(){
+  var v=document.getElementById('f-std-name').value.trim();if(!v)return;
+  D.standards.push({name:v,cat:document.getElementById('f-std-cat').value,status:document.getElementById('f-std-status').value,deadline:document.getElementById('f-std-deadline').value.trim(),scope:document.getElementById('f-std-scope').value.trim(),training:document.getElementById('f-std-training').value.trim(),renewal:document.getElementById('f-std-renewal').value.trim(),juris:document.getElementById('f-std-juris').value.trim()});
+  renderList('standardList',D.standards,function(s){return s.name+' · '+s.cat+' · '+s.status},'standards');
+  ['f-std-name','f-std-deadline','f-std-scope','f-std-training','f-std-renewal','f-std-juris'].forEach(function(id){document.getElementById(id).value=''});
+  showToast(v+' added');
+}
+
+function addTool(){
+  var v=document.getElementById('f-tool-name').value.trim();if(!v)return;
+  D.tools.push({name:v,cat:document.getElementById('f-tool-cat').value,status:document.getElementById('f-tool-status').value,ver:document.getElementById('f-tool-ver').value.trim(),depts:document.getElementById('f-tool-depts').value.trim(),depth:document.getElementById('f-tool-depth').value,roles:document.getElementById('f-tool-roles').value.trim()});
+  renderList('toolList',D.tools,function(t){return t.name+' · '+t.cat+' · '+t.status+(t.status==='Sunset / Phase-out'?' ⚠':'');},'tools');
+  ['f-tool-name','f-tool-ver','f-tool-depts','f-tool-roles'].forEach(function(id){document.getElementById(id).value=''});
+  showToast(v+' added');
+}
+
+function addComp(){
+  var v=document.getElementById('f-comp-name').value.trim();if(!v)return;
+  D.comps.push({name:v,type:document.getElementById('f-comp-type').value,value:document.getElementById('f-comp-value').value.trim()});
+  renderList('compList',D.comps,function(c){return c.name+' · '+c.type+' · '+c.value},'comps');
+  document.getElementById('f-comp-name').value='';document.getElementById('f-comp-value').value='';
+}
+
+function addCulture(){
+  var v=document.getElementById('f-cult-dim').value.trim();if(!v)return;
+  D.cultures.push({dim:v,curr:+document.getElementById('f-cult-curr').value||0,tgt:+document.getElementById('f-cult-tgt').value||0});
+  renderList('cultureList',D.cultures,function(c){return c.dim+': Current '+c.curr+' → Target '+c.tgt},'cultures');
+  document.getElementById('f-cult-dim').value='';document.getElementById('f-cult-curr').value='';document.getElementById('f-cult-tgt').value='';
+}
+
+function addDial(){
+  var v=document.getElementById('f-dial-skill').value.trim();if(!v)return;
+  D.dials.push({skill:v,val:+document.getElementById('f-dial-val').value||0,why:document.getElementById('f-dial-why').value.trim()});
+  renderList('dialList',D.dials,function(d){return d.skill+': '+(d.val>0?'+':'')+d.val+' — '+d.why},'dials');
+  document.getElementById('f-dial-skill').value='';document.getElementById('f-dial-val').value='';document.getElementById('f-dial-why').value='';
+}
+
+function renderList(elId,arr,fmt,key){
+  var h='';arr.forEach(function(item,i){h+='<div class="added-chip">'+fmt(item)+'<span class="remove-chip" onclick="removeItem(\''+key+'\','+i+',\''+elId+'\')">&times;</span></div>'});
+  var el=document.getElementById(elId);if(el)el.innerHTML=h?'<div class="added-items">'+h+'</div>':'';
+}
+
+function removeItem(key,idx,elId){D[key].splice(idx,1);renderList(elId,D[key],arguments.callee,key);renderSteps();goToStep(state.current)}
+
+// ═══════════════════════════════════════════════════
+// AUTO-FILL
+// ═══════════════════════════════════════════════════
+function autofill(step){
+  if(step===1){
+    var m={'f-company':'Arcova Infrastructure Pte. Ltd.','f-industry':'Infrastructure & Construction','f-subsectors':'Civil Engineering, Smart Infrastructure, BIM, Sustainability Advisory','f-sizeband':'Mid-Market (201-1000)','f-founded':'2009','f-hq':'Singapore','f-hqcountry':'SG','f-employees':'812','f-offices':'Singapore, Mumbai, Dubai, Kuala Lumpur','f-timezone':'Asia/Singapore (SGT +8)','f-model':'Services & Project Delivery','f-stage':'Mature — Transformation','f-fiscal':'1','f-residency':'Asia-Pacific (Singapore)','f-logo':'https://cdn.arcova.sg/logo.svg','f-hris':'Workday','f-lms':'Cornerstone OnDemand'};
+    for(var k in m){var el=document.getElementById(k);if(el)el.value=m[k]}
+    document.getElementById('f-brandcolor').value='#C8A84B';
   }
-
-  var pctNum = Math.round(pct * 100);
-  document.getElementById('gaugePct').textContent = pctNum + '%';
-  document.getElementById('gaugePct').style.color = pct < 0.5 ? 'var(--amber-lt)' : pct < 0.8 ? 'var(--blue-lt)' : 'var(--green-lt)';
-  document.getElementById('gaugeTitle').textContent = 'Context Completeness: ' + pctNum + '%';
-}
-
-function updateProgress() {
-  var doneCount = 0;
-  for (var k in state.completed) { if (state.completed[k]) doneCount++; }
-  var pct = doneCount / 5;
-
-  // Update segments
-  var ide = state.completed[1] ? '100%' : '0%';
-  var str = state.completed[2] ? '100%' : '0%';
-  var strat = state.completed[3] ? '100%' : '0%';
-  var eco = (state.completed[4] && state.completed[5]) ? '100%' : (state.completed[4] || state.completed[5]) ? '50%' : '0%';
-
-  document.getElementById('segIdentity').textContent = ide;
-  document.getElementById('segIdentity').style.color = ide === '100%' ? 'var(--green-lt)' : 'var(--ink-soft)';
-  document.getElementById('segStructure').textContent = str;
-  document.getElementById('segStructure').style.color = str === '100%' ? 'var(--blue-lt)' : 'var(--ink-soft)';
-  document.getElementById('segStrategy').textContent = strat;
-  document.getElementById('segStrategy').style.color = strat === '100%' ? 'var(--purple-lt)' : 'var(--ink-soft)';
-  document.getElementById('segEcosystem').textContent = eco;
-  document.getElementById('segEcosystem').style.color = eco === '100%' ? 'var(--amber-lt)' : eco === '50%' ? 'var(--amber-lt)' : 'var(--ink-soft)';
-
-  drawGauge(pct);
-
-  // Banner
-  var bannerPct = Math.round(pct * 100);
-  document.getElementById('bannerProgress').style.width = bannerPct + '%';
-  document.getElementById('bannerPct').textContent = bannerPct + '% complete';
-
-  // Level pill
-  var pill = document.getElementById('levelPill');
-  if (pct >= 1) { pill.textContent = 'Setup Complete'; pill.className = 'tb-pill gold'; }
-  else { pill.textContent = 'Setup Mode'; pill.className = 'tb-pill blue'; }
-
-  // Update stepper
-  for (var s = 1; s <= 5; s++) {
-    var item = document.querySelector('.step-item[data-step="' + s + '"]');
-    var conn = document.querySelector('.step-connector[data-conn="' + s + '"]');
-    if (state.completed[s]) {
-      item.classList.add('done');
-      item.querySelector('.step-num').innerHTML = '<svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
-      if (conn) conn.classList.add('done');
-    }
+  if(step===2){
+    document.getElementById('f-orgmodel').value='Traditional Hierarchy';
+    document.getElementById('f-hierlevels').value='Organisation > Business Unit > Department > Team';
+    document.getElementById('f-teams').value='Marina Bay Project Team, Digital Transformation Squad, EHS Task Force, Graduate Cohort 2025';
+    document.getElementById('f-cohorts').value='Graduate Intake 2025, Leadership Pipeline, BIM Champions, Safety Ambassadors';
+    D.bus=[
+      {name:'Engineering & Delivery',code:'ENG',count:324,head:'Rahul Sharma',cc:'CC-ENG-001',loc:'Singapore, Mumbai',depts:[{name:'Structural Engineering',count:112},{name:'Civil & Geotechnical',count:98},{name:'Project Delivery',count:114}]},
+      {name:'Digital & Technology',code:'DIG',count:118,head:'Vikram Patel',cc:'CC-DIG-001',loc:'Singapore',depts:[{name:'BIM & Digital Delivery',count:54},{name:'IT Infrastructure',count:64}]},
+      {name:'Corporate Functions',code:'CORP',count:198,head:'Kavitha Ramachandran',cc:'CC-CORP-001',loc:'Singapore, Dubai',depts:[{name:'Finance & Procurement',count:76},{name:'Human Resources',count:48},{name:'Legal & Compliance',count:74}]},
+      {name:'Sustainability & EHS',code:'SUS',count:172,head:'Meera Sundaram',cc:'CC-SUS-001',loc:'All regions',depts:[{name:'EHS & Risk',count:96},{name:'Sustainability Advisory',count:76}]}
+    ];
+    renderList('buList',D.bus,function(b){return b.name+' ('+b.code+') — '+b.count+' employees, '+b.depts.length+' depts'},'bus');
   }
-}
-
-// ── STEP NAVIGATION ──
-function goToStep(n) {
-  // Allow navigation to completed steps or the next uncompleted step
-  state.currentStep = n;
-  for (var i = 1; i <= 6; i++) {
-    var panel = document.getElementById('step' + i);
-    var item = document.querySelector('.step-item[data-step="' + i + '"]');
-    if (i === n) {
-      panel.classList.add('visible');
-      item.classList.add('active');
-    } else {
-      panel.classList.remove('visible');
-      item.classList.remove('active');
-    }
+  if(step===3){
+    D.roles=[
+      {title:'Senior Structural Engineer',family:'Engineering',dept:'Structural Engineering',senior:'L4 — Senior',kra:'Design accuracy, code compliance, project delivery',career:'Engineer → Senior → Principal → Director',qual:'BE/BTech Civil, PE certification',crit:'C1 — Critical',mgr:'no',spof:'Key Person Risk'},
+      {title:'BIM Coordinator',family:'Technology',dept:'BIM & Digital Delivery',senior:'L3 — Mid-Level',kra:'Model management, clash detection, BIM standards',career:'CAD Tech → BIM Coord → BIM Manager → Digital Director',qual:'Autodesk Revit Professional',crit:'C2 — High',mgr:'no',spof:'Pipeline Available'},
+      {title:'Project Manager',family:'Operations',dept:'Project Delivery',senior:'L4 — Senior',kra:'Schedule, budget, stakeholder mgmt, risk',career:'Site Eng → PM → Senior PM → Programme Director',qual:'PMP, BSc Engineering',crit:'C1 — Critical',mgr:'yes',spof:'Key Person Risk'},
+      {title:'Safety Manager',family:'Operations',dept:'EHS & Risk',senior:'L4 — Senior',kra:'Safety audits, incident investigation, compliance',career:'Safety Officer → Manager → Head of EHS → Director',qual:'NEBOSH, ISO 45001 Lead Auditor',crit:'C1 — Critical',mgr:'yes',spof:'Single Point of Failure'},
+      {title:'L&D Manager',family:'Corporate',dept:'Human Resources',senior:'L4 — Senior',kra:'Training strategy, programme design, vendor mgmt',career:'L&D Coord → Manager → Head of L&D → CLO',qual:'CIPD, MSc HRD preferred',crit:'C2 — High',mgr:'yes',spof:'Pipeline Available'},
+      {title:'Cloud Architect',family:'Technology',dept:'IT Infrastructure',senior:'L5 — Lead / Principal',kra:'Cloud strategy, security, migration, cost optimisation',career:'Dev → Senior Dev → Architect → CTO',qual:'AWS/Azure Solutions Architect',crit:'C2 — High',mgr:'no',spof:'Single Point of Failure'}
+    ];
+    renderList('roleList',D.roles,function(r){return r.title+' — '+r.family+' · '+r.senior+(r.spof?' · '+r.spof:'')},'roles');
   }
-  // Scroll content to top
-  document.querySelector('.content').scrollTop = 0;
-}
-
-// ── STEP 1: ORG IDENTITY ──
-function autofillStep1() {
-  document.getElementById('f-company').value = 'Arcova Infrastructure Pte. Ltd.';
-  document.getElementById('f-industry').value = 'Infrastructure & Construction';
-  document.getElementById('f-founded').value = '2009';
-  document.getElementById('f-hq').value = 'Singapore';
-  document.getElementById('f-employees').value = '812';
-  document.getElementById('f-offices').value = 'Singapore, Mumbai, Dubai, Kuala Lumpur';
-  document.getElementById('f-model').value = 'Services & Project Delivery';
-  document.getElementById('f-stage').value = 'Mature — Transformation';
-  document.getElementById('f-hris').value = 'Workday';
-  document.getElementById('f-lms').value = 'Cornerstone OnDemand';
-  showToast('Arcova demo data loaded');
-}
-
-function saveStep1() {
-  var company = document.getElementById('f-company').value.trim();
-  if (!company) { showToast('Please enter a company name'); return; }
-  state.org = {
-    company: company,
-    industry: document.getElementById('f-industry').value,
-    founded: document.getElementById('f-founded').value,
-    hq: document.getElementById('f-hq').value,
-    employees: document.getElementById('f-employees').value,
-    offices: document.getElementById('f-offices').value,
-    model: document.getElementById('f-model').value,
-    stage: document.getElementById('f-stage').value,
-    hris: document.getElementById('f-hris').value,
-    lms: document.getElementById('f-lms').value
-  };
-  state.completed[1] = true;
-  updateProgress();
-  goToStep(2);
-  showToast('Org identity saved');
-}
-
-// ── STEP 2: HIERARCHY ──
-function renderBUs() {
-  var html = '';
-  state.bus.forEach(function(bu, idx) {
-    var colorClass = buColors[idx % buColors.length];
-    html += '<div class="bu-group ' + colorClass + '" style="margin-bottom:10px">';
-    html += '<div class="bu-header expanded" onclick="toggleBU(this)">';
-    html += '<svg class="bu-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
-    html += '<span class="bu-name">' + bu.name + '</span>';
-    html += '<span class="bu-count">' + bu.count + '</span>';
-    html += '<span class="remove-chip" onclick="event.stopPropagation();removeBU(' + idx + ')" style="cursor:pointer;opacity:.4;margin-left:8px;font-size:13px" onmouseover="this.style.opacity=1;this.style.color=\'var(--red-lt)\'" onmouseout="this.style.opacity=.4;this.style.color=\'inherit\'">&times;</span>';
-    html += '</div>';
-    html += '<div class="bu-depts show">';
-    bu.depts.forEach(function(d) {
-      html += '<div class="dept-chip">' + d.name + ' <span class="dept-count">' + d.count + '</span></div>';
-    });
-    html += '</div></div>';
-  });
-  document.getElementById('buList').innerHTML = html;
-}
-
-function addBU() {
-  var name = document.getElementById('f-bu-name').value.trim();
-  var count = document.getElementById('f-bu-count').value.trim();
-  var deptsRaw = document.getElementById('f-bu-depts').value.trim();
-  if (!name) { showToast('Enter a BU name'); return; }
-
-  var depts = [];
-  if (deptsRaw) {
-    deptsRaw.split(',').forEach(function(part) {
-      var m = part.trim().match(/^(.+?):\s*(\d+)$/);
-      if (m) depts.push({ name: m[1].trim(), count: parseInt(m[2]) });
-      else depts.push({ name: part.trim(), count: 0 });
-    });
+  if(step===4){
+    D.goals=[
+      {text:'Expand digital delivery capability across all project sites by Q4 2026',type:'Strategic Objective',priority:'High',date:'Q4 2026',pct:42,owner:'CTO Office',scope:'Organisation-wide',skills:'BIM, Digital Delivery, AI Literacy, Cloud'},
+      {text:'Achieve ISO 45001 & ISO 9001 compliance across all regional offices',type:'Annual Target',priority:'High',date:'Q3 2026',pct:68,owner:'Head of EHS',scope:'Organisation-wide',skills:'Safety Compliance, Audit, Risk Management'},
+      {text:'Build internal BIM and smart infrastructure competency to reduce third-party dependency by 40%',type:'Transformation Priority',priority:'High',date:'Q4 2026',pct:35,owner:'VP Engineering',scope:'Business Unit',skills:'BIM, Revit, Navisworks, Digital Twin'},
+      {text:'Develop a succession-ready leadership pipeline for 12 critical roles',type:'Strategic Objective',priority:'Medium',date:'FY2026',pct:54,owner:'CHRO',scope:'Organisation-wide',skills:'Leadership, Stakeholder Mgmt, Mentoring, Decision Making'}
+    ];
+    renderList('goalList',D.goals,function(g){return g.type+': '+g.text.substring(0,60)+'... ('+g.pct+'%)'},'goals');
   }
-
-  state.bus.push({ name: name, count: parseInt(count) || 0, depts: depts });
-  renderBUs();
-  document.getElementById('f-bu-name').value = '';
-  document.getElementById('f-bu-count').value = '';
-  document.getElementById('f-bu-depts').value = '';
-  showToast(name + ' added');
+  if(step===5){
+    D.products=[{name:'Civil & Structural Engineering',cat:'Service',life:'Active'},{name:'Smart Building Solutions',cat:'Product',life:'Growth'},{name:'Infrastructure Asset Management',cat:'Service',life:'Active'},{name:'Environmental & Sustainability Consulting',cat:'Service',life:'Growth'}];
+    D.clients=[{name:'Marina Bay Sands',industry:'Hospitality, Real Estate',geo:'APAC'},{name:'Singapore Land Authority',industry:'Government',geo:'Singapore'},{name:'Tata Projects',industry:'Infrastructure',geo:'India'},{name:'Dubai Municipality',industry:'Government, Urban Development',geo:'Middle East'}];
+    renderList('productList',D.products,function(p){return p.name+' · '+p.cat+' · '+p.life},'products');
+    renderList('clientList',D.clients,function(c){return c.name+' · '+c.industry+' · '+c.geo},'clients');
+  }
+  if(step===6){
+    D.standards=[
+      {name:'ISO 45001',cat:'Environmental & Safety',status:'Active',deadline:'',scope:'All site-based roles',training:'ISO 45001 Awareness, Safety Audit Procedures',renewal:'Annual',juris:'All regions'},
+      {name:'ISO 9001',cat:'Quality Management',status:'Active',deadline:'',scope:'All departments',training:'QMS Fundamentals',renewal:'Every 3 years',juris:'All regions'},
+      {name:'GDPR',cat:'Data Protection',status:'Active',deadline:'',scope:'IT, HR, Legal',training:'Data Protection Awareness',renewal:'Annual',juris:'EU operations (Singapore PDPA equivalent)'},
+      {name:'SOX Compliance',cat:'Industry-Specific',status:'Pending',deadline:'Q3 2026',scope:'Finance, Procurement, Audit',training:'SOX Compliance Training',renewal:'Annual',juris:'US-listed operations'},
+      {name:'BCA Green Mark',cat:'Industry-Specific',status:'Active',deadline:'',scope:'Sustainability Advisory, Project Delivery',training:'Green Building Standards',renewal:'Per project',juris:'Singapore'}
+    ];
+    renderList('standardList',D.standards,function(s){return s.name+' · '+s.cat+' · '+s.status},'standards');
+  }
+  if(step===7){
+    D.tools=[
+      {name:'Workday',cat:'Core Business Apps',status:'Current',ver:'2025.R1',depts:'All departments',depth:'Core Workflow',roles:'Admin, All employees'},
+      {name:'Cornerstone OnDemand',cat:'Core Business Apps',status:'Current',ver:'',depts:'HR, All departments',depth:'Core Workflow',roles:'Admin, Learners'},
+      {name:'Autodesk Revit',cat:'Dev & Engineering',status:'Current',ver:'2025.1',depts:'Structural Engineering, BIM',depth:'Core Workflow',roles:'Power User'},
+      {name:'Navisworks',cat:'Dev & Engineering',status:'Current',ver:'2025',depts:'BIM, Project Delivery',depth:'Regular Use',roles:'Power User'},
+      {name:'AutoCAD',cat:'Dev & Engineering',status:'Current',ver:'2025',depts:'All engineering depts',depth:'Core Workflow',roles:'Power User, Basic User'},
+      {name:'Primavera P6',cat:'Dev & Engineering',status:'Current',ver:'22.12',depts:'Project Delivery',depth:'Core Workflow',roles:'Admin, Power User'},
+      {name:'Power BI',cat:'Data & Analytics',status:'Current',ver:'',depts:'All departments',depth:'Regular Use',roles:'Admin, Report Viewers'},
+      {name:'SAP',cat:'Core Business Apps',status:'Evaluating',ver:'S/4HANA',depts:'Finance, Procurement',depth:'Core Workflow',roles:'Admin, Power User'},
+      {name:'Jira',cat:'Collaboration',status:'Evaluating',ver:'Cloud',depts:'Digital & Technology',depth:'Regular Use',roles:'All team members'},
+      {name:'MS Project',cat:'Dev & Engineering',status:'Sunset / Phase-out',ver:'2021',depts:'Project Delivery',depth:'Occasional',roles:'Basic User'}
+    ];
+    renderList('toolList',D.tools,function(t){return t.name+' · '+t.cat+' · '+t.status+(t.status==='Sunset / Phase-out'?' ⚠':'')},'tools');
+  }
+  if(step===8){
+    var m={'f-c1-label':'Critical','f-c1-weight':'2.0x','f-c1-desc':'Platform-critical, zero tolerance for gap. Auto-escalation to CHRO.','f-c2-label':'High','f-c2-weight':'1.5x','f-c2-desc':'Strategically important, 6-month closure target.','f-c3-label':'Medium','f-c3-weight':'1.0x','f-c3-desc':'Operationally relevant, 12-month development plan.','f-c4-label':'Low','f-c4-weight':'0.5x','f-c4-desc':'Nice to have, opportunistic development only.','f-prof-l1':'Has basic awareness of the skill area. Can follow instructions and recognise key concepts with guidance.','f-prof-l2':'Applies knowledge in routine situations. Can perform standard tasks with occasional support.','f-prof-l3':'Performs independently in complex situations. Handles exceptions, coaches others, improves processes.','f-prof-l4':'Expert-level mastery. Leads, mentors, innovates, and shapes organisational standards in this area.','f-taxonomy':'Domain > Knowledge Area > Skill Category > Skill','f-skill-types':'Technical, Behavioural, Leadership, Functional, Digital','f-benchmarks':'SFIA v9, O*NET 28.1, European e-Competence Framework 4.0'};
+    for(var k in m){var el=document.getElementById(k);if(el)el.value=m[k]}
+  }
+  if(step===9){
+    D.comps=[{name:'Safety-First Mindset',type:'Core / Behavioural',value:'Safety'},{name:'Innovation & Continuous Improvement',type:'Core / Behavioural',value:'Excellence'},{name:'Client Partnership',type:'Core / Behavioural',value:'Integrity'},{name:'Digital Fluency',type:'Technical',value:'Innovation'},{name:'Strategic Leadership',type:'Leadership',value:'Leadership'},{name:'Cross-Cultural Collaboration',type:'Core / Behavioural',value:'Respect'}];
+    D.cultures=[{dim:'Safety-First Culture',curr:4,tgt:5},{dim:'Digital Readiness',curr:2,tgt:4},{dim:'Innovation Orientation',curr:2,tgt:4},{dim:'Learning Agility',curr:3,tgt:4},{dim:'Client Centricity',curr:3,tgt:5}];
+    D.dials=[{skill:'Digital Delivery',val:3,why:'Strategic push to reduce BIM dependency by 40%'},{skill:'AI & Automation',val:2,why:'Future-proofing workforce for AI-enabled project delivery'},{skill:'Traditional Drafting',val:-2,why:'Phasing out manual CAD in favour of BIM-first workflows'},{skill:'Sustainability & ESG',val:2,why:'Green Mark and ESG reporting requirements increasing'}];
+    renderList('compList',D.comps,function(c){return c.name+' · '+c.type+' · '+c.value},'comps');
+    renderList('cultureList',D.cultures,function(c){return c.dim+': Current '+c.curr+' → Target '+c.tgt},'cultures');
+    renderList('dialList',D.dials,function(d){return d.skill+': '+(d.val>0?'+':'')+d.val+' — '+d.why},'dials');
+    document.getElementById('f-trans-stmt').value='Arcova is transitioning from a traditional infrastructure firm to a digitally-enabled delivery organisation. Over the next 3 years, every project site will operate BIM-first, requiring 40% of the workforce to reach L3 digital proficiency. This transformation is driven by client demand for smart infrastructure and regulatory pressure for ESG compliance.';
+  }
+  showToast('Arcova demo data loaded for Step '+step);
 }
 
-function removeBU(idx) { state.bus.splice(idx, 1); renderBUs(); }
-
-function autofillStep2() {
-  state.bus = [
-    { name: 'Engineering & Delivery', count: 324, depts: [
-      { name: 'Structural Engineering', count: 112 }, { name: 'Civil & Geotechnical', count: 98 }, { name: 'Project Delivery', count: 114 }
-    ]},
-    { name: 'Digital & Technology', count: 118, depts: [
-      { name: 'BIM & Digital Delivery', count: 54 }, { name: 'IT Infrastructure', count: 64 }
-    ]},
-    { name: 'Corporate Functions', count: 198, depts: [
-      { name: 'Finance & Procurement', count: 76 }, { name: 'Human Resources', count: 48 }, { name: 'Legal & Compliance', count: 74 }
-    ]},
-    { name: 'Sustainability & EHS', count: 172, depts: [
-      { name: 'EHS & Risk', count: 96 }, { name: 'Sustainability Advisory', count: 76 }
-    ]}
-  ];
-  renderBUs();
-  showToast('Arcova hierarchy loaded — 4 BUs, 11 departments');
-}
-
-function saveStep2() {
-  if (state.bus.length === 0) { showToast('Add at least one Business Unit'); return; }
-  state.completed[2] = true;
-  updateProgress();
-  goToStep(3);
-  showToast('Hierarchy saved');
-}
-
-// ── STEP 3: GOALS ──
-function renderGoals() {
-  var html = '';
-  state.goals.forEach(function(g, idx) {
-    html += '<div class="goal-item">';
-    html += '<div class="goal-num">G' + (idx + 1) + '</div>';
-    html += '<div class="goal-info">';
-    html += '<div class="goal-text">' + g.text + '</div>';
-    html += '<div class="goal-bar-wrap">';
-    html += '<div class="goal-bar"><div class="goal-bar-fill" style="width:' + g.pct + '%;background:' + g.color + '"></div></div>';
-    html += '<span class="goal-pct" style="color:' + g.color + '">' + g.pct + '%</span>';
-    html += '<span class="goal-date">Target: ' + g.date + '</span>';
-    html += '<span class="remove-chip" onclick="removeGoal(' + idx + ')" style="cursor:pointer;opacity:.4;font-size:14px;margin-left:6px" onmouseover="this.style.opacity=1;this.style.color=\'var(--red-lt)\'" onmouseout="this.style.opacity=.4;this.style.color=\'inherit\'">&times;</span>';
-    html += '</div></div></div>';
-  });
-  document.getElementById('goalList').innerHTML = html;
-}
-
-function addGoal() {
-  var text = document.getElementById('f-goal-text').value.trim();
-  if (!text) { showToast('Enter a goal description'); return; }
-  state.goals.push({
-    text: text,
-    date: document.getElementById('f-goal-date').value || 'TBD',
-    pct: parseInt(document.getElementById('f-goal-pct').value) || 0,
-    color: document.getElementById('f-goal-color').value
-  });
-  renderGoals();
-  document.getElementById('f-goal-text').value = '';
-  document.getElementById('f-goal-date').value = '';
-  document.getElementById('f-goal-pct').value = '';
-  showToast('Goal G' + state.goals.length + ' added');
-}
-
-function removeGoal(idx) { state.goals.splice(idx, 1); renderGoals(); }
-
-function autofillStep3() {
-  state.goals = [
-    { text: 'Expand digital delivery capability across all project sites by Q4 2026', date: 'Q4 2026', pct: 42, color: 'var(--blue-lt)' },
-    { text: 'Achieve ISO 45001 & ISO 9001 compliance across all regional offices by Q3 2026', date: 'Q3 2026', pct: 68, color: 'var(--green-lt)' },
-    { text: 'Build internal BIM and smart infrastructure competency to reduce third-party dependency by 40%', date: 'Q4 2026', pct: 35, color: 'var(--purple-lt)' },
-    { text: 'Develop a succession-ready leadership pipeline for 12 critical roles by end of FY2026', date: 'FY2026', pct: 54, color: 'var(--amber-lt)' }
-  ];
-  renderGoals();
-  showToast('4 strategic goals loaded');
-}
-
-function saveStep3() {
-  if (state.goals.length === 0) { showToast('Add at least one strategic goal'); return; }
-  state.completed[3] = true;
-  updateProgress();
-  goToStep(4);
-  showToast('Strategic goals saved');
-}
-
-// ── STEP 4: PRODUCTS & STANDARDS ──
-var productColors = ['var(--blue-lt)','var(--purple-lt)','var(--amber-lt)','var(--green-lt)','var(--red-lt)','var(--gold)'];
-
-function renderProducts() {
-  var html = '';
-  state.products.forEach(function(p, idx) {
-    html += '<div class="product-item"><div class="product-dot" style="background:' + productColors[idx % productColors.length] + '"></div>';
-    html += '<span class="product-name">' + p + '</span>';
-    html += '<span class="remove-chip" onclick="removeProduct(' + idx + ')" style="cursor:pointer;opacity:.4;margin-left:auto;font-size:14px" onmouseover="this.style.opacity=1;this.style.color=\'var(--red-lt)\'" onmouseout="this.style.opacity=.4;this.style.color=\'inherit\'">&times;</span>';
-    html += '</div>';
-  });
-  document.getElementById('productList').innerHTML = html;
-}
-
-function addProduct() {
-  var v = document.getElementById('f-product').value.trim();
-  if (!v) return;
-  state.products.push(v);
-  renderProducts();
-  document.getElementById('f-product').value = '';
-}
-
-function removeProduct(idx) { state.products.splice(idx, 1); renderProducts(); }
-
-function renderStandards() {
-  var html = '';
-  state.standards.forEach(function(s, idx) {
-    var cls = s.status === 'Active' ? 'sb-active' : 'sb-pending';
-    html += '<div class="standard-row"><span class="standard-name">' + s.name + '</span>';
-    html += '<span class="standard-badge ' + cls + '">' + s.status + '</span>';
-    html += '<span class="remove-chip" onclick="removeStandard(' + idx + ')" style="cursor:pointer;opacity:.4;margin-left:8px;font-size:14px" onmouseover="this.style.opacity=1;this.style.color=\'var(--red-lt)\'" onmouseout="this.style.opacity=.4;this.style.color=\'inherit\'">&times;</span>';
-    html += '</div>';
-  });
-  document.getElementById('standardList').innerHTML = html;
-}
-
-function addStandard() {
-  var v = document.getElementById('f-standard').value.trim();
-  if (!v) return;
-  state.standards.push({ name: v, status: document.getElementById('f-standard-status').value });
-  renderStandards();
-  document.getElementById('f-standard').value = '';
-}
-
-function removeStandard(idx) { state.standards.splice(idx, 1); renderStandards(); }
-
-function autofillStep4() {
-  state.products = ['Civil & Structural Engineering','Smart Building Solutions','Infrastructure Asset Management','Environmental & Sustainability Consulting'];
-  state.standards = [
-    { name: 'ISO 45001', status: 'Active' }, { name: 'ISO 9001', status: 'Active' },
-    { name: 'GDPR', status: 'Active' }, { name: 'SOX Compliance', status: 'Pending' }
-  ];
-  renderProducts();
-  renderStandards();
-  showToast('Products & standards loaded');
-}
-
-function saveStep4() {
-  if (state.products.length === 0 && state.standards.length === 0) { showToast('Add at least one product or standard'); return; }
-  state.completed[4] = true;
-  updateProgress();
-  goToStep(5);
-  showToast('Products & standards saved');
-}
-
-// ── STEP 5: TOOLS ──
-function renderTools() {
-  var html = '';
-  state.tools.forEach(function(t, idx) {
-    var cls = t.status === 'Current' ? 'tl-current' : 'tl-eval';
-    html += '<div class="tool-chip">' + t.name + ' <span class="tool-lifecycle ' + cls + '">' + t.status + '</span>';
-    html += '<span class="remove-chip" onclick="removeTool(' + idx + ')" style="cursor:pointer;opacity:.4;font-size:13px" onmouseover="this.style.opacity=1;this.style.color=\'var(--red-lt)\'" onmouseout="this.style.opacity=.4;this.style.color=\'inherit\'">&times;</span>';
-    html += '</div>';
-  });
-  document.getElementById('toolList').innerHTML = html;
-}
-
-function addTool() {
-  var v = document.getElementById('f-tool').value.trim();
-  if (!v) return;
-  state.tools.push({ name: v, status: document.getElementById('f-tool-status').value });
-  renderTools();
-  document.getElementById('f-tool').value = '';
-}
-
-function removeTool(idx) { state.tools.splice(idx, 1); renderTools(); }
-
-function autofillStep5() {
-  state.tools = [
-    { name: 'Workday', status: 'Current' }, { name: 'Cornerstone OnDemand', status: 'Current' },
-    { name: 'Autodesk Revit', status: 'Current' }, { name: 'Navisworks', status: 'Current' },
-    { name: 'AutoCAD', status: 'Current' }, { name: 'Primavera P6', status: 'Current' },
-    { name: 'MS Project', status: 'Current' }, { name: 'Power BI', status: 'Current' },
-    { name: 'SAP', status: 'Evaluating' }, { name: 'Jira', status: 'Evaluating' }
-  ];
-  renderTools();
-  showToast('10 tools loaded');
-}
-
-function saveStep5() {
-  if (state.tools.length === 0) { showToast('Add at least one tool'); return; }
-  state.completed[5] = true;
-  updateProgress();
-  buildReview();
-  goToStep(6);
-  showToast('Tools & criticality saved');
-}
-
-// ── STEP 6: REVIEW ──
-function buildReview() {
-  var o = state.org;
-  var html = '';
-
-  // Org Identity
-  html += '<div class="review-section">';
-  html += '<div class="review-section-title"><div class="review-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Org Identity</div>';
-  html += '<div class="org-grid">';
-  html += '<div class="org-row"><span class="org-key">Company</span><span class="org-val">' + (o.company || '—') + '</span></div>';
-  html += '<div class="org-row"><span class="org-key">Industry</span><span class="org-val">' + (o.industry || '—') + '</span></div>';
-  html += '<div class="org-row"><span class="org-key">Founded</span><span class="org-val mono">' + (o.founded || '—') + '</span></div>';
-  html += '<div class="org-row"><span class="org-key">Headquarters</span><span class="org-val">' + (o.hq || '—') + '</span></div>';
-  html += '<div class="org-row"><span class="org-key">Employees</span><span class="org-val mono">' + (o.employees || '—') + '</span></div>';
-  html += '<div class="org-row"><span class="org-key">Offices</span><span class="org-val">' + (o.offices || '—') + '</span></div>';
-  html += '<div class="org-row"><span class="org-key">Operating Model</span><span class="org-val">' + (o.model || '—') + '</span></div>';
-  html += '<div class="org-row"><span class="org-key">Stage</span><span class="org-val">' + (o.stage || '—') + '</span></div>';
-  if (o.hris) html += '<div class="org-row"><span class="org-key">HRIS</span><span class="connected-badge"><span class="connected-dot"></span>' + o.hris + ' connected</span></div>';
-  if (o.lms) html += '<div class="org-row"><span class="org-key">LMS</span><span class="connected-badge"><span class="connected-dot"></span>' + o.lms + ' connected</span></div>';
-  html += '</div></div>';
-
+// ═══════════════════════════════════════════════════
+// REVIEW
+// ═══════════════════════════════════════════════════
+function buildReview(){
+  var h='';
+  var ck='<div class="rv-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>';
+  // Identity
+  h+='<div class="rv-section"><div class="rv-title">'+ck+'Org Identity — '+countFields(['f-company','f-industry','f-employees'])+' fields</div><div class="rv-grid">';
+  ['f-company','f-industry','f-subsectors','f-sizeband','f-founded','f-hq','f-hqcountry','f-employees','f-offices','f-timezone','f-model','f-stage','f-fiscal','f-residency','f-hris','f-lms'].forEach(function(id){var el=document.getElementById(id);if(el&&el.value)h+='<div class="rv-row"><span class="rv-key">'+id.replace('f-','').replace(/-/g,' ')+'</span><span class="rv-val">'+el.value+'</span></div>'});
+  h+='</div></div>';
   // Hierarchy
-  html += '<div class="review-section">';
-  html += '<div class="review-section-title"><div class="review-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Hierarchy — ' + state.bus.length + ' BUs</div>';
-  state.bus.forEach(function(bu) {
-    html += '<div style="display:flex;align-items:center;gap:8px;padding:4px 0"><span style="font-size:12px;color:var(--paper);font-weight:500">' + bu.name + '</span><span style="font-family:\'DM Mono\',monospace;font-size:11px;color:var(--ink-soft)">' + bu.count + ' employees</span></div>';
-  });
-  html += '</div>';
-
+  h+='<div class="rv-section"><div class="rv-title">'+ck+'Hierarchy — '+D.bus.length+' BUs</div><div class="rv-chips">';
+  D.bus.forEach(function(b){h+='<span class="rv-chip">'+b.name+' ('+b.code+') · '+b.count+'</span>'});
+  h+='</div></div>';
+  // Roles
+  h+='<div class="rv-section"><div class="rv-title">'+ck+'Role Profiles — '+D.roles.length+' roles</div><div class="rv-chips">';
+  D.roles.forEach(function(r){h+='<span class="rv-chip">'+r.title+' · '+r.senior+'</span>'});
+  h+='</div></div>';
   // Goals
-  html += '<div class="review-section">';
-  html += '<div class="review-section-title"><div class="review-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Strategic Goals — ' + state.goals.length + ' goals</div>';
-  state.goals.forEach(function(g, i) {
-    html += '<div style="display:flex;align-items:center;gap:10px;padding:4px 0"><span style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--gold);padding:2px 6px;background:var(--gold-dim);border-radius:4px">G' + (i+1) + '</span><span style="font-size:12px;color:var(--paper-mid);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + g.text + '</span><span style="font-family:\'DM Mono\',monospace;font-size:11px;color:' + g.color + '">' + g.pct + '%</span></div>';
-  });
-  html += '</div>';
-
-  // Products & Standards
-  html += '<div class="review-section">';
-  html += '<div class="review-section-title"><div class="review-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Products & Standards</div>';
-  html += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">';
-  state.products.forEach(function(p) { html += '<span style="padding:4px 10px;border-radius:5px;font-size:11px;color:var(--blue-lt);border:1px solid rgba(58,140,192,0.25);background:var(--blue-dim)">' + p + '</span>'; });
-  html += '</div>';
-  html += '<div style="display:flex;flex-wrap:wrap;gap:6px">';
-  state.standards.forEach(function(s) {
-    var c = s.status === 'Active' ? 'color:var(--green-lt);border-color:rgba(58,184,122,0.3);background:var(--green-dim)' : 'color:var(--amber-lt);border-color:rgba(212,130,10,0.3);background:var(--amber-dim)';
-    html += '<span style="padding:4px 10px;border-radius:5px;font-size:11px;border:1px solid;' + c + '">' + s.name + ' · ' + s.status + '</span>';
-  });
-  html += '</div></div>';
-
+  h+='<div class="rv-section"><div class="rv-title">'+ck+'Goals — '+D.goals.length+' goals</div><div class="rv-chips">';
+  D.goals.forEach(function(g){h+='<span class="rv-chip">'+g.type+': '+g.text.substring(0,40)+'... ('+g.pct+'%)</span>'});
+  h+='</div></div>';
+  // Products + Clients
+  h+='<div class="rv-section"><div class="rv-title">'+ck+'Products ('+D.products.length+') & Clients ('+D.clients.length+')</div><div class="rv-chips">';
+  D.products.forEach(function(p){h+='<span class="rv-chip" style="border-color:rgba(58,140,192,0.25);color:var(--blue-lt)">'+p.name+'</span>'});
+  D.clients.forEach(function(c){h+='<span class="rv-chip" style="border-color:rgba(200,168,75,0.25);color:var(--gold)">'+c.name+' · '+c.geo+'</span>'});
+  h+='</div></div>';
+  // Standards
+  h+='<div class="rv-section"><div class="rv-title">'+ck+'Standards — '+D.standards.length+'</div><div class="rv-chips">';
+  D.standards.forEach(function(s){var c=s.status==='Active'?'border-color:rgba(58,184,122,0.3);color:var(--green-lt)':'border-color:rgba(212,130,10,0.3);color:var(--amber-lt)';h+='<span class="rv-chip" style="'+c+'">'+s.name+' · '+s.status+'</span>'});
+  h+='</div></div>';
   // Tools
-  html += '<div class="review-section">';
-  html += '<div class="review-section-title"><div class="review-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Tools & Technologies — ' + state.tools.length + ' tools</div>';
-  html += '<div class="tools-grid">';
-  state.tools.forEach(function(t) {
-    var cls = t.status === 'Current' ? 'tl-current' : 'tl-eval';
-    html += '<div class="tool-chip">' + t.name + ' <span class="tool-lifecycle ' + cls + '">' + t.status + '</span></div>';
-  });
-  html += '</div></div>';
-
-  // Criticality
-  html += '<div class="review-section">';
-  html += '<div class="review-section-title"><div class="review-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>Skill Criticality Framework — 4-Tier</div>';
-  html += '<div style="display:flex;gap:12px;flex-wrap:wrap">';
-  html += '<span style="padding:3px 10px;border-radius:5px;font-family:\'DM Mono\',monospace;font-size:10px;background:var(--red-dim);color:var(--red-lt)">C1 Critical</span>';
-  html += '<span style="padding:3px 10px;border-radius:5px;font-family:\'DM Mono\',monospace;font-size:10px;background:var(--amber-dim);color:var(--amber-lt)">C2 High</span>';
-  html += '<span style="padding:3px 10px;border-radius:5px;font-family:\'DM Mono\',monospace;font-size:10px;background:var(--blue-dim);color:var(--blue-lt)">C3 Medium</span>';
-  html += '<span style="padding:3px 10px;border-radius:5px;font-family:\'DM Mono\',monospace;font-size:10px;background:rgba(255,255,255,0.05);color:var(--ink-soft)">C4 Low</span>';
-  html += '</div></div>';
-
-  document.getElementById('reviewBody').innerHTML = html;
+  h+='<div class="rv-section"><div class="rv-title">'+ck+'Tools — '+D.tools.length+'</div><div class="rv-chips">';
+  D.tools.forEach(function(t){var c=t.status==='Sunset / Phase-out'?'border-color:rgba(232,112,96,0.3);color:var(--red-lt)':t.status==='Evaluating'?'border-color:rgba(160,112,224,0.3);color:var(--purple-lt)':'border-color:rgba(58,184,122,0.2);color:var(--green-lt)';h+='<span class="rv-chip" style="'+c+'">'+t.name+' · '+t.status+'</span>'});
+  h+='</div></div>';
+  // Skills config
+  h+='<div class="rv-section"><div class="rv-title">'+ck+'Skills & Proficiency Config</div><div class="rv-grid">';
+  ['f-c1-label','f-c1-weight','f-c2-label','f-c2-weight','f-prof-l1','f-prof-l2','f-taxonomy','f-benchmarks'].forEach(function(id){var el=document.getElementById(id);if(el&&el.value)h+='<div class="rv-row"><span class="rv-key">'+id.replace('f-','').replace(/-/g,' ')+'</span><span class="rv-val">'+el.value.substring(0,50)+'</span></div>'});
+  h+='</div></div>';
+  // Competency + Culture + Dials
+  h+='<div class="rv-section"><div class="rv-title">'+ck+'Competency ('+D.comps.length+'), Culture ('+D.cultures.length+'), Dials ('+D.dials.length+')</div><div class="rv-chips">';
+  D.comps.forEach(function(c){h+='<span class="rv-chip">'+c.name+' · '+c.type+'</span>'});
+  D.cultures.forEach(function(c){h+='<span class="rv-chip" style="border-color:rgba(232,112,96,0.25);color:var(--red-lt)">'+c.dim+': '+c.curr+'→'+c.tgt+'</span>'});
+  D.dials.forEach(function(d){h+='<span class="rv-chip" style="border-color:rgba(240,160,48,0.25);color:var(--amber-lt)">'+d.skill+': '+(d.val>0?'+':'')+d.val+'</span>'});
+  h+='</div></div>';
+  document.getElementById('reviewBody').innerHTML=h;
 }
 
-function confirmSetup() {
+function countFields(ids){var c=0;ids.forEach(function(id){var el=document.getElementById(id);if(el&&el.value.trim())c++});return c}
+
+function confirmSetup(){
   document.getElementById('successBanner').classList.add('show');
-  document.getElementById('stepper').style.display = 'none';
-  for (var i = 1; i <= 6; i++) document.getElementById('step' + i).classList.remove('visible');
-  showToast('OrgSetup locked — ready for SkillForge');
-  // Set context meter to full
-  drawGauge(0.91);
-  document.getElementById('gaugePct').textContent = '91%';
-  document.getElementById('gaugePct').style.color = 'var(--green-lt)';
-  document.getElementById('gaugeTitle').textContent = 'Context Completeness: 91%';
-  document.getElementById('segIdentity').textContent = '100%'; document.getElementById('segIdentity').style.color = 'var(--green-lt)';
-  document.getElementById('segStructure').textContent = '100%'; document.getElementById('segStructure').style.color = 'var(--blue-lt)';
-  document.getElementById('segStrategy').textContent = '100%'; document.getElementById('segStrategy').style.color = 'var(--purple-lt)';
-  document.getElementById('segEcosystem').textContent = '86%'; document.getElementById('segEcosystem').style.color = 'var(--amber-lt)';
-  document.getElementById('bannerProgress').style.width = '91%';
-  document.getElementById('bannerPct').textContent = '91% complete';
-  var pill = document.getElementById('levelPill');
-  pill.textContent = 'L3 Active';
-  pill.className = 'tb-pill blue';
+  document.getElementById('stepper').style.display='none';
+  for(var i=1;i<=10;i++){var el=document.getElementById('step'+i);if(el)el.classList.remove('visible')}
+  drawGauge(0.96);
+  document.getElementById('levelPill').textContent='L3 Active';document.getElementById('levelPill').className='tb-pill gold';
+  showToast('OrgSetup locked — 113 fields captured — ready for SkillForge');
 }
 
-// ── RESET ──
-function resetDemo() {
-  state = { currentStep: 1, completed: { 1: false, 2: false, 3: false, 4: false, 5: false }, org: {}, bus: [], goals: [], products: [], standards: [], tools: [] };
-  // Clear all form fields
-  var inputs = document.querySelectorAll('.form-input, .form-select');
-  inputs.forEach(function(el) { if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = ''; });
-  // Clear dynamic lists
-  document.getElementById('buList').innerHTML = '';
-  document.getElementById('goalList').innerHTML = '';
-  document.getElementById('productList').innerHTML = '';
-  document.getElementById('standardList').innerHTML = '';
-  document.getElementById('toolList').innerHTML = '';
-  // Reset stepper
-  document.querySelectorAll('.step-item').forEach(function(el) { el.classList.remove('done','active'); el.querySelector('.step-num').textContent = el.getAttribute('data-step'); });
-  document.querySelectorAll('.step-connector').forEach(function(el) { el.classList.remove('done'); });
-  // Reset UI
+function resetDemo(){
+  state={current:1,completed:{}};for(var i=1;i<=9;i++)state.completed[i]=false;
+  D={bus:[],roles:[],goals:[],products:[],clients:[],standards:[],tools:[],comps:[],cultures:[],dials:[]};
   document.getElementById('successBanner').classList.remove('show');
-  document.getElementById('stepper').style.display = 'flex';
-  drawGauge(0);
-  updateProgress();
-  goToStep(1);
-  showToast('Demo reset — start fresh');
+  document.getElementById('stepper').style.display='flex';
+  renderSteps();renderStepper();renderSegs();drawGauge(0);goToStep(1);
+  showToast('Demo reset');
 }
 
-// ── HIERARCHY TOGGLE ──
-function toggleBU(header) {
-  header.classList.toggle('expanded');
-  var depts = header.nextElementSibling;
-  if (depts) depts.classList.toggle('show');
-}
+// ═══════════════════════════════════════════════════
+// TOAST + INIT
+// ═══════════════════════════════════════════════════
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show')},2400)}
 
-// ── INIT ──
-drawGauge(0);
+document.addEventListener('click',function(e){var a=e.target.closest('a');if(a&&a.getAttribute('href')==='#'){e.preventDefault();showToast((a.textContent||'').trim().substring(0,36)+' — available in full platform')}});
 
-// Toast handler for # links
-document.addEventListener("click", function(e){
-  var a = e.target.closest("a");
-  if(a && a.getAttribute("href") === "#"){
-    e.preventDefault();
-    var label = (a.textContent || "").trim().replace(/\s+/g," ").substring(0,36);
-    showToast(label + " \u2014 available in full platform");
-  }
-});
+// INIT
+renderSteps();renderStepper();renderSegs();drawGauge(0);
 </script>
 </body>
 </html>
