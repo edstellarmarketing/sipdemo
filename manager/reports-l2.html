@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReportGen — L2 Reports · Arcova SIP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#080F18;--ink-panel:#0C1825;--ink-card:#101E2E;--ink-raised:#152438;--ink-border:rgba(255,255,255,0.07);--ink-soft:#4A6A84;--paper:#D8E8F4;--paper-mid:#8AACC4;--gold:#C8A84B;--gold-lt:#E0CC70;--gold-dim:rgba(200,168,75,0.10);--blue:#1A5C8A;--blue-lt:#3A8CC0;--blue-dim:rgba(26,92,138,0.15);--green:#1A7A4A;--green-lt:#3AB87A;--green-dim:rgba(26,122,74,0.12);--amber:#D4820A;--amber-lt:#F0A030;--amber-dim:rgba(212,130,10,0.12);--red:#C0392B;--red-lt:#E87060;--red-dim:rgba(192,57,43,0.12);--purple:#6A3A9A;--purple-lt:#A070E0;--purple-dim:rgba(106,58,154,0.15);--sidebar-w:220px}
+html,body{height:100%;background:var(--ink);color:var(--paper);font-family:'DM Sans',sans-serif;overflow:hidden}
+.app{display:flex;height:100vh}
+.sidebar{width:var(--sidebar-w);background:var(--ink-panel);border-right:1px solid var(--ink-border);display:flex;flex-direction:column;flex-shrink:0}
+a.sidebar-brand{padding:22px 20px 20px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-hex{width:28px;height:28px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);flex-shrink:0}
+.brand-nm{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--paper)}
+.brand-tg{font-size:10px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase}
+.sidebar-nav{flex:1;padding:12px 14px;overflow-y:auto}
+.nav-section-label{font-size:10px;color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase;padding:10px 6px 6px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;font-size:12.5px;color:var(--paper-mid);cursor:pointer;text-decoration:none;transition:background .15s,color .15s;margin-bottom:1px}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.nav-item.active{background:var(--blue-dim);color:var(--paper)}
+.nav-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.sidebar-user{padding:14px 16px;border-top:1px solid var(--ink-border);display:flex;align-items:center;gap:10px}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--paper);flex-shrink:0}
+.user-name{font-size:12px;font-weight:500;color:var(--paper)}
+.user-role{font-size:10px;color:var(--ink-soft)}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:54px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;padding:0 28px;gap:14px;flex-shrink:0;background:var(--ink-panel)}
+.topbar-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--paper);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tb-pill{padding:4px 11px;border-radius:100px;font-size:11px;border:1px solid;white-space:nowrap}
+.tb-pill.gold{border-color:rgba(200,168,75,.3);color:var(--gold)}
+.tb-btn{padding:6px 14px;border-radius:6px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s,color .15s;text-decoration:none;white-space:nowrap}
+.tb-btn:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.content{flex:1;overflow-y:auto;padding:24px 28px;display:flex;flex-direction:column;gap:20px}
+.content>*{flex-shrink:0}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+
+/* REPORT CARDS */
+.report-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media(max-width:960px){.report-grid{grid-template-columns:1fr}}
+.report-card{background:var(--ink-card);border:1px solid var(--ink-border);border-radius:12px;overflow:hidden;transition:border-color .2s,transform .2s}
+.report-card:hover{border-color:rgba(255,255,255,0.14);transform:translateY(-2px)}
+.rc-header{padding:20px;display:flex;align-items:flex-start;gap:14px}
+.rc-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rc-icon svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round}
+.rc-info{flex:1;min-width:0}
+.rc-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--paper);margin-bottom:4px}
+.rc-desc{font-size:11px;color:var(--paper-mid);line-height:1.5}
+.rc-status{padding:4px 10px;border-radius:100px;font-size:10px;font-weight:500;flex-shrink:0}
+.rc-body{padding:0 20px 16px}
+.rc-meta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.rc-meta-item{font-size:10px;color:var(--ink-soft)}
+.rc-meta-item strong{color:var(--paper-mid)}
+.rc-ai{padding:12px 14px;background:rgba(200,168,75,0.06);border:1px solid rgba(200,168,75,0.15);border-radius:8px;font-size:11px;color:var(--paper-mid);line-height:1.6;margin-bottom:12px}
+.rc-ai-label{font-size:9px;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.rc-actions{display:flex;gap:8px;padding:12px 20px;border-top:1px solid var(--ink-border)}
+.rc-btn{padding:6px 14px;border-radius:6px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s}
+.rc-btn:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.rc-btn.primary{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:600}
+.rc-btn.primary:hover{opacity:.88}
+
+/* SECTIONS */
+.rc-section{margin-bottom:10px}
+.rc-section-title{font-size:10px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.rc-kpi{display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.rc-kpi:last-child{border-bottom:none}
+.rc-kpi-name{font-size:11px;color:var(--paper-mid);flex:1}
+.rc-kpi-val{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;flex-shrink:0}
+.rc-kpi-bar{width:60px;height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;flex-shrink:0}
+.rc-kpi-fill{height:100%;border-radius:3px}
+
+/* RECENT HISTORY */
+.history-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.history-row:last-child{border-bottom:none}
+.hist-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink-soft);width:80px;flex-shrink:0}
+.hist-name{font-size:12px;color:var(--paper);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hist-type{padding:2px 8px;border-radius:100px;font-size:9px;font-weight:500;flex-shrink:0}
+.hist-dl{font-size:11px;color:var(--blue-lt);cursor:pointer;flex-shrink:0}
+.hist-dl:hover{text-decoration:underline}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.fade-up{animation:fadeUp .4s ease both}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <a class="sidebar-brand" href="../index.html"><div class="brand-hex"></div><div style="display:flex;flex-direction:column;gap:1px"><span class="brand-nm">Arcova SIP</span><span class="brand-tg">Manager Portal</span></div></a>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Intelligence</div>
+    <a class="nav-item" href="clo-dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>InsightBoard</a>
+    <a class="nav-item" href="skills-matrix.html"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Skills Matrix</a>
+    <div class="nav-section-label">Analysis</div>
+    <a class="nav-item" href="gap-analysis.html"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Gap Analysis</a>
+    <a class="nav-item" href="lna-report.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>LNA / TNA Reports</a>
+    <a class="nav-item" href="lni-brief.html"><svg viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>LNI Brief</a>
+    <a class="nav-item" href="assessment-results.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Assessment Results</a>
+    <a class="nav-item active" href="reports-l2.html"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>ReportGen L2</a>
+    <div class="nav-section-label">Strategy</div>
+    <a class="nav-item" href="succession.html"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Succession Planning</a>
+  </nav>
+  <div class="sidebar-user"><div class="user-avatar">RK</div><div style="display:flex;flex-direction:column;gap:1px"><div class="user-name">Rajiv Kumar</div><div class="user-role">Chief Learning Officer</div></div></div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">ReportGen — L2 Intelligence Reports</div>
+    <a href="../nav-menus.html" class="tb-btn" style="font-size:11px;padding:5px 11px">All screens</a>
+    <div class="tb-pill gold">L2 Reports</div>
+  </div>
+
+  <a href="../level-journey.html" style="display:flex;align-items:center;gap:12px;padding:0 28px;height:36px;background:linear-gradient(90deg,rgba(200,168,75,0.12) 0%,rgba(8,15,24,0) 60%);border-bottom:1px solid rgba(200,168,75,0.2);text-decoration:none;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:#C8A84B;animation:pulse 2s ease-in-out infinite"></div><span style="font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.08em;color:#C8A84B">L2 ACTIVE</span></div>
+    <div style="width:1px;height:14px;background:rgba(200,168,75,0.2)"></div>
+    <div style="font-size:11px;color:#8AACC4">AI-generated reports with executive summaries &amp; persona-adaptive rendering</div>
+    <div style="margin-left:auto;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.06em;color:#C8A84B;text-transform:uppercase">View journey &rarr;</div>
+  </a>
+
+  <div class="content">
+
+    <!-- 4 REPORT CARDS -->
+    <div class="report-grid fade-up">
+
+      <!-- LNA Report -->
+      <div class="report-card">
+        <div class="rc-header">
+          <div class="rc-icon" style="background:var(--blue-dim);color:var(--blue-lt)"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+          <div class="rc-info"><div class="rc-title">LNA Report</div><div class="rc-desc">Learning Needs Analysis — org-wide gap summary with department breakdown, intervention recommendations, and budget projections.</div></div>
+          <div class="rc-status" style="background:var(--green-dim);color:var(--green-lt)">Ready</div>
+        </div>
+        <div class="rc-body">
+          <div class="rc-meta">
+            <div class="rc-meta-item">Period: <strong>Q1 2026</strong></div>
+            <div class="rc-meta-item">Pages: <strong>24</strong></div>
+            <div class="rc-meta-item">Scope: <strong>All BUs</strong></div>
+            <div class="rc-meta-item">Last generated: <strong>26 Mar 2026</strong></div>
+          </div>
+          <div class="rc-ai">
+            <div class="rc-ai-label"><svg style="width:10px;height:10px;stroke:var(--gold);fill:none;stroke-width:2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>AI Executive Summary</div>
+            Arcova's Q1 2026 LNA reveals 142 skill gaps across 812 employees, with <strong>AI Literacy</strong> as the single universal deficit (all 10 departments below target). Engineering & Delivery carries 45% of total gap weight due to digital delivery transformation. Recommended total intervention budget: <strong>SGD 284,000</strong> across 18 programmes. Priority: front-load BIM and Data Analytics training before Q3 compliance deadline.
+          </div>
+          <div class="rc-section">
+            <div class="rc-section-title">Key Metrics</div>
+            <div class="rc-kpi"><span class="rc-kpi-name">Total Gaps</span><div class="rc-kpi-bar"><div class="rc-kpi-fill" style="width:71%;background:var(--red-lt)"></div></div><span class="rc-kpi-val" style="color:var(--red-lt)">142</span></div>
+            <div class="rc-kpi"><span class="rc-kpi-name">Avg Gap Score</span><div class="rc-kpi-bar"><div class="rc-kpi-fill" style="width:40%;background:var(--amber-lt)"></div></div><span class="rc-kpi-val" style="color:var(--amber-lt)">1.2</span></div>
+            <div class="rc-kpi"><span class="rc-kpi-name">Budget Required</span><div class="rc-kpi-bar"><div class="rc-kpi-fill" style="width:56%;background:var(--gold)"></div></div><span class="rc-kpi-val" style="color:var(--gold)">SGD 284K</span></div>
+          </div>
+        </div>
+        <div class="rc-actions">
+          <button class="rc-btn primary" onclick="showToast('Generating LNA Report PDF...')">Download PDF</button>
+          <button class="rc-btn" onclick="showToast('Regenerating with latest data...')">Regenerate</button>
+          <button class="rc-btn" onclick="showToast('Sharing with stakeholders...')">Share</button>
+        </div>
+      </div>
+
+      <!-- TNA Report -->
+      <div class="report-card">
+        <div class="rc-header">
+          <div class="rc-icon" style="background:var(--purple-dim);color:var(--purple-lt)"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+          <div class="rc-info"><div class="rc-title">TNA Report</div><div class="rc-desc">Training Needs Analysis — maps gaps to specific training programmes, vendors, formats, and delivery timelines with cost-per-head calculations.</div></div>
+          <div class="rc-status" style="background:var(--green-dim);color:var(--green-lt)">Ready</div>
+        </div>
+        <div class="rc-body">
+          <div class="rc-meta">
+            <div class="rc-meta-item">Period: <strong>Q1 2026</strong></div>
+            <div class="rc-meta-item">Pages: <strong>18</strong></div>
+            <div class="rc-meta-item">Programmes: <strong>18</strong></div>
+            <div class="rc-meta-item">Last generated: <strong>26 Mar 2026</strong></div>
+          </div>
+          <div class="rc-ai">
+            <div class="rc-ai-label"><svg style="width:10px;height:10px;stroke:var(--gold);fill:none;stroke-width:2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>AI Executive Summary</div>
+            18 training programmes recommended across 4 delivery formats: Instructor-led (8), Self-paced (5), Blended (3), On-the-job (2). Top priority: <strong>BIM Advanced</strong> for 54 employees in Engineering (SGD 48K). AI Literacy enterprise-wide programme recommended for <strong>all 812 employees</strong> via blended format (SGD 96K). Total training hours: 2,840 hrs over 6 months.
+          </div>
+          <div class="rc-section">
+            <div class="rc-section-title">Top 3 Programmes</div>
+            <div class="rc-kpi"><span class="rc-kpi-name">AI Literacy (Enterprise)</span><div class="rc-kpi-bar"><div class="rc-kpi-fill" style="width:80%;background:var(--purple-lt)"></div></div><span class="rc-kpi-val" style="color:var(--purple-lt)">812 ppl</span></div>
+            <div class="rc-kpi"><span class="rc-kpi-name">BIM Advanced (Eng)</span><div class="rc-kpi-bar"><div class="rc-kpi-fill" style="width:45%;background:var(--blue-lt)"></div></div><span class="rc-kpi-val" style="color:var(--blue-lt)">54 ppl</span></div>
+            <div class="rc-kpi"><span class="rc-kpi-name">Data Analytics (Cross-func)</span><div class="rc-kpi-bar"><div class="rc-kpi-fill" style="width:55%;background:var(--amber-lt)"></div></div><span class="rc-kpi-val" style="color:var(--amber-lt)">186 ppl</span></div>
+          </div>
+        </div>
+        <div class="rc-actions">
+          <button class="rc-btn primary" onclick="showToast('Generating TNA Report PDF...')">Download PDF</button>
+          <button class="rc-btn" onclick="showToast('Regenerating...')">Regenerate</button>
+          <button class="rc-btn" onclick="showToast('Sharing...')">Share</button>
+        </div>
+      </div>
+
+      <!-- Skills Matrix Report -->
+      <div class="report-card">
+        <div class="rc-header">
+          <div class="rc-icon" style="background:var(--gold-dim);color:var(--gold)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+          <div class="rc-info"><div class="rc-title">Skills Matrix Report</div><div class="rc-desc">Complete skill × department matrix with gap scores, proficiency distributions, perception gap analysis, and year-over-year trend comparisons.</div></div>
+          <div class="rc-status" style="background:var(--green-dim);color:var(--green-lt)">Ready</div>
+        </div>
+        <div class="rc-body">
+          <div class="rc-meta">
+            <div class="rc-meta-item">Period: <strong>Q1 2026</strong></div>
+            <div class="rc-meta-item">Pages: <strong>32</strong></div>
+            <div class="rc-meta-item">Skills: <strong>48</strong></div>
+            <div class="rc-meta-item">Last generated: <strong>26 Mar 2026</strong></div>
+          </div>
+          <div class="rc-ai">
+            <div class="rc-ai-label"><svg style="width:10px;height:10px;stroke:var(--gold);fill:none;stroke-width:2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>AI Executive Summary</div>
+            48 skills assessed across 10 departments reveal 14 critical gap cells (down from 19 in Q4 2025). <strong>Digital & Technology</strong> shows strongest improvement (+0.6 avg). <strong>Perception gap</strong> averaging 0.6 points — employees consistently over-rate vs managers. Structural Engineering has narrowest perception gap (0.2) indicating strong self-awareness in technical roles.
+          </div>
+          <div class="rc-section">
+            <div class="rc-section-title">Coverage</div>
+            <div class="rc-kpi"><span class="rc-kpi-name">Skills Assessed</span><div class="rc-kpi-bar"><div class="rc-kpi-fill" style="width:100%;background:var(--green-lt)"></div></div><span class="rc-kpi-val" style="color:var(--green-lt)">48/48</span></div>
+            <div class="rc-kpi"><span class="rc-kpi-name">Departments Covered</span><div class="rc-kpi-bar"><div class="rc-kpi-fill" style="width:100%;background:var(--green-lt)"></div></div><span class="rc-kpi-val" style="color:var(--green-lt)">10/10</span></div>
+            <div class="rc-kpi"><span class="rc-kpi-name">Perception Gap</span><div class="rc-kpi-bar"><div class="rc-kpi-fill" style="width:30%;background:var(--amber-lt)"></div></div><span class="rc-kpi-val" style="color:var(--amber-lt)">0.6 avg</span></div>
+          </div>
+        </div>
+        <div class="rc-actions">
+          <button class="rc-btn primary" onclick="showToast('Generating Skills Matrix Report...')">Download PDF</button>
+          <button class="rc-btn" onclick="showToast('Regenerating...')">Regenerate</button>
+          <button class="rc-btn" onclick="showToast('Sharing...')">Share</button>
+        </div>
+      </div>
+
+      <!-- Wellbeing Report -->
+      <div class="report-card">
+        <div class="rc-header">
+          <div class="rc-icon" style="background:var(--green-dim);color:var(--green-lt)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+          <div class="rc-info"><div class="rc-title">Wellbeing Report</div><div class="rc-desc">Employee wellbeing pulse analysis — burnout risk indicators, workload capacity signals, and recommendations for learning pace adjustments.</div></div>
+          <div class="rc-status" style="background:var(--amber-dim);color:var(--amber-lt)">Review</div>
+        </div>
+        <div class="rc-body">
+          <div class="rc-meta">
+            <div class="rc-meta-item">Period: <strong>Q1 2026</strong></div>
+            <div class="rc-meta-item">Pages: <strong>12</strong></div>
+            <div class="rc-meta-item">Response Rate: <strong>78%</strong></div>
+            <div class="rc-meta-item">Last generated: <strong>25 Mar 2026</strong></div>
+          </div>
+          <div class="rc-ai">
+            <div class="rc-ai-label"><svg style="width:10px;height:10px;stroke:var(--gold);fill:none;stroke-width:2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>AI Executive Summary</div>
+            78% pulse response rate (up from 64% in Q4). <strong>12 employees</strong> flagged with elevated burnout risk — 8 in Project Delivery (high-intensity project phase), 4 in EHS during audit season. AI recommends deferring non-critical training for these individuals by 4-6 weeks. Overall workforce capacity: <strong>71%</strong> — adequate for planned learning programmes.
+          </div>
+          <div class="rc-section">
+            <div class="rc-section-title">Wellbeing Indicators</div>
+            <div class="rc-kpi"><span class="rc-kpi-name">Burnout Risk (Elevated)</span><div class="rc-kpi-bar"><div class="rc-kpi-fill" style="width:12%;background:var(--red-lt)"></div></div><span class="rc-kpi-val" style="color:var(--red-lt)">12</span></div>
+            <div class="rc-kpi"><span class="rc-kpi-name">Avg Capacity</span><div class="rc-kpi-bar"><div class="rc-kpi-fill" style="width:71%;background:var(--green-lt)"></div></div><span class="rc-kpi-val" style="color:var(--green-lt)">71%</span></div>
+            <div class="rc-kpi"><span class="rc-kpi-name">Pace Adjustments Needed</span><div class="rc-kpi-bar"><div class="rc-kpi-fill" style="width:15%;background:var(--amber-lt)"></div></div><span class="rc-kpi-val" style="color:var(--amber-lt)">12</span></div>
+          </div>
+        </div>
+        <div class="rc-actions">
+          <button class="rc-btn primary" onclick="showToast('Generating Wellbeing Report...')">Download PDF</button>
+          <button class="rc-btn" onclick="showToast('Regenerating...')">Regenerate</button>
+          <button class="rc-btn" onclick="showToast('Sharing...')">Share</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT GENERATION HISTORY -->
+    <div style="background:var(--ink-card);border:1px solid var(--ink-border);border-radius:12px;overflow:hidden" class="fade-up" style="animation-delay:.12s">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px">
+        <span style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--paper)">Recent Report History</span>
+        <span style="margin-left:auto;font-size:10px;color:var(--ink-soft)">Last 30 days</span>
+      </div>
+      <div style="padding:12px 20px">
+        <div class="history-row"><div class="hist-date">26 Mar</div><div class="hist-name">LNA Report — Q1 2026 Full Org</div><div class="hist-type" style="background:var(--blue-dim);color:var(--blue-lt)">LNA</div><span class="hist-dl" onclick="showToast('Downloading...')">Download</span></div>
+        <div class="history-row"><div class="hist-date">26 Mar</div><div class="hist-name">TNA Report — Q1 2026 Training Plan</div><div class="hist-type" style="background:var(--purple-dim);color:var(--purple-lt)">TNA</div><span class="hist-dl" onclick="showToast('Downloading...')">Download</span></div>
+        <div class="history-row"><div class="hist-date">26 Mar</div><div class="hist-name">Skills Matrix — Q1 2026 Complete</div><div class="hist-type" style="background:var(--gold-dim);color:var(--gold)">Matrix</div><span class="hist-dl" onclick="showToast('Downloading...')">Download</span></div>
+        <div class="history-row"><div class="hist-date">25 Mar</div><div class="hist-name">Wellbeing Report — Q1 2026 Pulse Analysis</div><div class="hist-type" style="background:var(--green-dim);color:var(--green-lt)">Wellbeing</div><span class="hist-dl" onclick="showToast('Downloading...')">Download</span></div>
+        <div class="history-row"><div class="hist-date">20 Mar</div><div class="hist-name">LNI Brief — Priya Menon (EMP-001)</div><div class="hist-type" style="background:var(--amber-dim);color:var(--amber-lt)">LNI</div><span class="hist-dl" onclick="showToast('Downloading...')">Download</span></div>
+        <div class="history-row"><div class="hist-date">15 Mar</div><div class="hist-name">Gap Analysis — Engineering & Delivery Dept</div><div class="hist-type" style="background:var(--red-dim);color:var(--red-lt)">Gap</div><span class="hist-dl" onclick="showToast('Downloading...')">Download</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 28px;background:rgba(200,168,75,0.06);border-top:1px solid rgba(200,168,75,0.15);flex-shrink:0">
+    <svg style="width:13px;height:13px;stroke:#C8A84B;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+    <span style="font-size:11px;color:#C8A84B;font-weight:500;letter-spacing:.03em">AI-generated reports &middot; Persona-adaptive rendering &middot; 4 report types from L2 assessment data</span>
+    <span style="margin-left:auto;font-size:10px;color:#4A6A84;letter-spacing:.06em;text-transform:uppercase">L2 Intelligence</span>
+  </div>
+</div>
+</div>
+<script>
+function showToast(msg){var t=document.getElementById('sip-toast');if(!t){t=document.createElement('div');t.id='sip-toast';t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#152438;border:1px solid rgba(255,255,255,0.1);color:#8AACC4;font-size:12px;font-family:"DM Sans",sans-serif;padding:10px 18px;border-radius:8px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:9999;white-space:nowrap';document.body.appendChild(t)}t.textContent=msg;t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity='0';t.style.transform='translateX(-50%) translateY(8px)'},2400)}
+document.addEventListener('click',function(e){var a=e.target.closest('a');if(a&&a.getAttribute('href')==='#'){e.preventDefault();showToast((a.textContent||'').trim().substring(0,36)+' — available in full platform')}});
+</script>
+</body>
+</html>

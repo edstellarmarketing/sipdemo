@@ -202,12 +202,16 @@ a.sidebar-brand:hover .brand-hex{opacity:.75;transition:opacity .15s}
 <div class="main">
   <div class="topbar">
     <div class="topbar-title">Assessment Results</div>
+    <select id="scopeToggle" onchange="switchScope(this.value)" style="padding:5px 10px;border-radius:6px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper-mid);font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer">
+      <option value="manager">Manager View (My BU)</option>
+      <option value="admin">Admin View (Cross-Department)</option>
+    </select>
     <a href="../nav-menus.html" class="tb-btn" style="font-size:11px;padding:5px 11px">
       <svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
       All screens
     </a>
     <div class="topbar-meta">Arcova Infrastructure &middot; 28 March 2026</div>
-    <div class="tb-pill gold">L2 Assessment</div>
+    <div class="tb-pill gold" id="scopePill">L2 Assessment</div>
   </div>
 
   <!-- level-banner -->
@@ -598,6 +602,22 @@ document.addEventListener('click', function(e){
     showToast(label + ' \u2014 available in full platform');
   }
 });
+
+// ── SCOPE TOGGLE (Manager vs Admin) ──
+function switchScope(scope) {
+  var pill = document.getElementById('scopePill');
+  if (scope === 'admin') {
+    pill.textContent = 'Admin — All Departments';
+    pill.style.borderColor = 'rgba(192,57,43,0.3)';
+    pill.style.color = 'var(--red-lt)';
+    showToast('Admin view — cross-department access enabled. Showing all 812 employees across 10 departments.');
+  } else {
+    pill.textContent = 'L2 Assessment';
+    pill.style.borderColor = 'rgba(200,168,75,0.3)';
+    pill.style.color = 'var(--gold)';
+    showToast('Manager view — scoped to your Business Unit');
+  }
+}
 
 // ── INIT ──
 try { renderTable(employees); } catch(e) { console.error('Table render error:', e); }
