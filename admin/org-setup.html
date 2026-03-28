@@ -282,7 +282,7 @@ var STEPS = [
   { id:10, title:'Review', seg:null, icon:'<path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/>' }
 ];
 
-var state = { current:1, completed:{}, data:{} };
+var state = { current:1, completed:{}, data:{ identity:{}, skills:{}, orgmodel:'', hierlevels:'', teams:'', cohorts:'', transStmt:'' } };
 for (var i=1;i<=9;i++) state.completed[i]=false;
 
 // ═══════════════════════════════════════════════════
@@ -474,6 +474,7 @@ function goToStep(n){
     var el=document.getElementById('step'+s.id);
     if(el){if(s.id===n)el.classList.add('visible');else el.classList.remove('visible')}
   });
+  if(n===10) buildReview();
   document.querySelector('.content').scrollTop=0;
 }
 
@@ -501,13 +502,41 @@ function updateProgress(){
 // ═══════════════════════════════════════════════════
 // SAVE / ADD FUNCTIONS
 // ═══════════════════════════════════════════════════
+function captureFormData(n){
+  if(n===1){
+    state.data.identity={};
+    ['f-company','f-industry','f-subsectors','f-sizeband','f-founded','f-hq','f-hqcountry','f-employees','f-offices','f-timezone','f-model','f-stage','f-fiscal','f-residency','f-logo','f-hris','f-lms'].forEach(function(id){
+      var el=document.getElementById(id);if(el)state.data.identity[id]=el.value;
+    });
+    var bc=document.getElementById('f-brandcolor');if(bc)state.data.identity['f-brandcolor']=bc.value;
+  }
+  if(n===8){
+    state.data.skills={};
+    ['f-c1-label','f-c1-weight','f-c1-desc','f-c2-label','f-c2-weight','f-c2-desc','f-c3-label','f-c3-weight','f-c3-desc','f-c4-label','f-c4-weight','f-c4-desc','f-prof-l1','f-prof-l2','f-prof-l3','f-prof-l4','f-taxonomy','f-skill-types','f-benchmarks'].forEach(function(id){
+      var el=document.getElementById(id);if(el)state.data.skills[id]=el.value;
+    });
+  }
+  if(n===9){
+    var stmt=document.getElementById('f-trans-stmt');
+    state.data.transStmt=stmt?stmt.value:'';
+  }
+  if(n===2){
+    state.data.orgmodel=document.getElementById('f-orgmodel')?document.getElementById('f-orgmodel').value:'';
+    state.data.hierlevels=document.getElementById('f-hierlevels')?document.getElementById('f-hierlevels').value:'';
+    state.data.teams=document.getElementById('f-teams')?document.getElementById('f-teams').value:'';
+    state.data.cohorts=document.getElementById('f-cohorts')?document.getElementById('f-cohorts').value:'';
+  }
+}
+
 function saveStep(n){
   if(n===1&&!document.getElementById('f-company').value.trim()){showToast('Enter company name');return}
   if(n===2&&D.bus.length===0){showToast('Add at least one BU');return}
   if(n===3&&D.roles.length===0){showToast('Add at least one role');return}
   if(n===4&&D.goals.length===0){showToast('Add at least one goal');return}
-  state.completed[n]=true;updateProgress();goToStep(n<10?n+1:10);
-  if(n===9)buildReview();
+  captureFormData(n);
+  state.completed[n]=true;updateProgress();
+  var next=n<10?n+1:10;
+  goToStep(next);
   showToast('Step '+n+' saved');
 }
 
@@ -690,49 +719,84 @@ function autofill(step){
 function buildReview(){
   var h='';
   var ck='<div class="rv-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>';
-  // Identity
-  h+='<div class="rv-section"><div class="rv-title">'+ck+'Org Identity — '+countFields(['f-company','f-industry','f-employees'])+' fields</div><div class="rv-grid">';
-  ['f-company','f-industry','f-subsectors','f-sizeband','f-founded','f-hq','f-hqcountry','f-employees','f-offices','f-timezone','f-model','f-stage','f-fiscal','f-residency','f-hris','f-lms'].forEach(function(id){var el=document.getElementById(id);if(el&&el.value)h+='<div class="rv-row"><span class="rv-key">'+id.replace('f-','').replace(/-/g,' ')+'</span><span class="rv-val">'+el.value+'</span></div>'});
+  var noCheck='<div class="rv-check" style="background:var(--amber-dim);border-color:var(--amber-lt)"><svg viewBox="0 0 24 24" style="display:block;stroke:var(--amber-lt)"><line x1="5" y1="12" x2="19" y2="12"/></svg></div>';
+  var id=state.data.identity||{};
+  var sk=state.data.skills||{};
+
+  // 1. Identity
+  var idFields=0;var idHtml='';
+  var labels={'f-company':'Company','f-industry':'Industry','f-subsectors':'Sub-sectors','f-sizeband':'Size Band','f-founded':'Founded','f-hq':'Headquarters','f-hqcountry':'Country','f-employees':'Employees','f-offices':'Offices','f-timezone':'Timezone','f-model':'Operating Model','f-stage':'Stage','f-fiscal':'Fiscal Year Start','f-residency':'Data Residency','f-hris':'HRIS','f-lms':'LMS','f-brandcolor':'Brand Colour'};
+  for(var k in labels){if(id[k]){idFields++;idHtml+='<div class="rv-row"><span class="rv-key">'+labels[k]+'</span><span class="rv-val">'+id[k]+'</span></div>'}}
+  h+='<div class="rv-section"><div class="rv-title">'+(state.completed[1]?ck:noCheck)+'Org Identity — '+idFields+' fields</div><div class="rv-grid">'+idHtml+'</div></div>';
+
+  // 2. Hierarchy
+  h+='<div class="rv-section"><div class="rv-title">'+(state.completed[2]?ck:noCheck)+'Hierarchy — '+D.bus.length+' BUs</div>';
+  if(state.data.orgmodel)h+='<div style="font-size:11px;color:var(--paper-mid);margin-bottom:6px">Model: '+state.data.orgmodel+(state.data.hierlevels?' · '+state.data.hierlevels:'')+'</div>';
+  if(state.data.teams)h+='<div style="font-size:11px;color:var(--ink-soft);margin-bottom:6px">Teams: '+state.data.teams+'</div>';
+  if(state.data.cohorts)h+='<div style="font-size:11px;color:var(--ink-soft);margin-bottom:6px">Cohorts: '+state.data.cohorts+'</div>';
+  h+='<div class="rv-chips">';
+  D.bus.forEach(function(b){h+='<span class="rv-chip">'+b.name+' ('+b.code+') · '+b.count+' · '+b.depts.length+' depts</span>'});
   h+='</div></div>';
-  // Hierarchy
-  h+='<div class="rv-section"><div class="rv-title">'+ck+'Hierarchy — '+D.bus.length+' BUs</div><div class="rv-chips">';
-  D.bus.forEach(function(b){h+='<span class="rv-chip">'+b.name+' ('+b.code+') · '+b.count+'</span>'});
+
+  // 3. Roles
+  h+='<div class="rv-section"><div class="rv-title">'+(state.completed[3]?ck:noCheck)+'Role Profiles — '+D.roles.length+' roles</div><div class="rv-chips">';
+  D.roles.forEach(function(r){
+    var spofStyle=r.spof==='Single Point of Failure'?'border-color:rgba(232,112,96,0.3);color:var(--red-lt)':r.spof==='Key Person Risk'?'border-color:rgba(240,160,48,0.25);color:var(--amber-lt)':'';
+    h+='<span class="rv-chip" style="'+spofStyle+'">'+r.title+' · '+r.senior+' · '+r.dept+(r.spof?' · '+r.spof:'')+'</span>';
+  });
   h+='</div></div>';
-  // Roles
-  h+='<div class="rv-section"><div class="rv-title">'+ck+'Role Profiles — '+D.roles.length+' roles</div><div class="rv-chips">';
-  D.roles.forEach(function(r){h+='<span class="rv-chip">'+r.title+' · '+r.senior+'</span>'});
+
+  // 4. Goals
+  h+='<div class="rv-section"><div class="rv-title">'+(state.completed[4]?ck:noCheck)+'Goals & OKRs — '+D.goals.length+'</div><div class="rv-chips">';
+  D.goals.forEach(function(g){
+    var pCol=g.priority==='High'?'border-color:rgba(232,112,96,0.25);color:var(--red-lt)':g.priority==='Medium'?'border-color:rgba(240,160,48,0.25);color:var(--amber-lt)':'';
+    h+='<span class="rv-chip" style="'+pCol+'">'+g.type+': '+g.text.substring(0,50)+'... · '+g.pct+'% · '+g.owner+'</span>';
+  });
   h+='</div></div>';
-  // Goals
-  h+='<div class="rv-section"><div class="rv-title">'+ck+'Goals — '+D.goals.length+' goals</div><div class="rv-chips">';
-  D.goals.forEach(function(g){h+='<span class="rv-chip">'+g.type+': '+g.text.substring(0,40)+'... ('+g.pct+'%)</span>'});
+
+  // 5. Products + Clients
+  h+='<div class="rv-section"><div class="rv-title">'+(state.completed[5]?ck:noCheck)+'Products ('+D.products.length+') & Clients ('+D.clients.length+')</div><div class="rv-chips">';
+  D.products.forEach(function(p){h+='<span class="rv-chip" style="border-color:rgba(58,140,192,0.25);color:var(--blue-lt)">'+p.name+' · '+p.cat+' · '+p.life+'</span>'});
+  D.clients.forEach(function(c){h+='<span class="rv-chip" style="border-color:rgba(200,168,75,0.25);color:var(--gold)">'+c.name+' · '+c.industry+' · '+c.geo+'</span>'});
   h+='</div></div>';
-  // Products + Clients
-  h+='<div class="rv-section"><div class="rv-title">'+ck+'Products ('+D.products.length+') & Clients ('+D.clients.length+')</div><div class="rv-chips">';
-  D.products.forEach(function(p){h+='<span class="rv-chip" style="border-color:rgba(58,140,192,0.25);color:var(--blue-lt)">'+p.name+'</span>'});
-  D.clients.forEach(function(c){h+='<span class="rv-chip" style="border-color:rgba(200,168,75,0.25);color:var(--gold)">'+c.name+' · '+c.geo+'</span>'});
+
+  // 6. Standards
+  h+='<div class="rv-section"><div class="rv-title">'+(state.completed[6]?ck:noCheck)+'Standards — '+D.standards.length+'</div><div class="rv-chips">';
+  D.standards.forEach(function(s){var c=s.status==='Active'?'border-color:rgba(58,184,122,0.3);color:var(--green-lt)':'border-color:rgba(212,130,10,0.3);color:var(--amber-lt)';h+='<span class="rv-chip" style="'+c+'">'+s.name+' · '+s.cat+' · '+s.status+(s.deadline?' · Due '+s.deadline:'')+'</span>'});
   h+='</div></div>';
-  // Standards
-  h+='<div class="rv-section"><div class="rv-title">'+ck+'Standards — '+D.standards.length+'</div><div class="rv-chips">';
-  D.standards.forEach(function(s){var c=s.status==='Active'?'border-color:rgba(58,184,122,0.3);color:var(--green-lt)':'border-color:rgba(212,130,10,0.3);color:var(--amber-lt)';h+='<span class="rv-chip" style="'+c+'">'+s.name+' · '+s.status+'</span>'});
+
+  // 7. Tools
+  h+='<div class="rv-section"><div class="rv-title">'+(state.completed[7]?ck:noCheck)+'Tools — '+D.tools.length+'</div><div class="rv-chips">';
+  D.tools.forEach(function(t){var c=t.status==='Sunset / Phase-out'?'border-color:rgba(232,112,96,0.3);color:var(--red-lt)':t.status==='Evaluating'?'border-color:rgba(160,112,224,0.3);color:var(--purple-lt)':'border-color:rgba(58,184,122,0.2);color:var(--green-lt)';h+='<span class="rv-chip" style="'+c+'">'+t.name+' · '+t.cat+' · '+t.status+(t.ver?' v'+t.ver:'')+'</span>'});
   h+='</div></div>';
-  // Tools
-  h+='<div class="rv-section"><div class="rv-title">'+ck+'Tools — '+D.tools.length+'</div><div class="rv-chips">';
-  D.tools.forEach(function(t){var c=t.status==='Sunset / Phase-out'?'border-color:rgba(232,112,96,0.3);color:var(--red-lt)':t.status==='Evaluating'?'border-color:rgba(160,112,224,0.3);color:var(--purple-lt)':'border-color:rgba(58,184,122,0.2);color:var(--green-lt)';h+='<span class="rv-chip" style="'+c+'">'+t.name+' · '+t.status+'</span>'});
+
+  // 8. Skills config
+  h+='<div class="rv-section"><div class="rv-title">'+(state.completed[8]?ck:noCheck)+'Skills & Proficiency Config</div><div class="rv-grid">';
+  var skLabels={'f-c1-label':'C1 Label','f-c1-weight':'C1 Weight','f-c1-desc':'C1 Description','f-c2-label':'C2 Label','f-c2-weight':'C2 Weight','f-c2-desc':'C2 Description','f-c3-label':'C3 Label','f-c3-weight':'C3 Weight','f-c4-label':'C4 Label','f-c4-weight':'C4 Weight','f-prof-l1':'L1 Awareness','f-prof-l2':'L2 Working','f-prof-l3':'L3 Practitioner','f-prof-l4':'L4 Expert','f-taxonomy':'Taxonomy','f-skill-types':'Skill Types','f-benchmarks':'Benchmarks'};
+  for(var sk2 in skLabels){if(sk[sk2])h+='<div class="rv-row"><span class="rv-key">'+skLabels[sk2]+'</span><span class="rv-val">'+sk[sk2].substring(0,60)+'</span></div>'}
   h+='</div></div>';
-  // Skills config
-  h+='<div class="rv-section"><div class="rv-title">'+ck+'Skills & Proficiency Config</div><div class="rv-grid">';
-  ['f-c1-label','f-c1-weight','f-c2-label','f-c2-weight','f-prof-l1','f-prof-l2','f-taxonomy','f-benchmarks'].forEach(function(id){var el=document.getElementById(id);if(el&&el.value)h+='<div class="rv-row"><span class="rv-key">'+id.replace('f-','').replace(/-/g,' ')+'</span><span class="rv-val">'+el.value.substring(0,50)+'</span></div>'});
-  h+='</div></div>';
-  // Competency + Culture + Dials
-  h+='<div class="rv-section"><div class="rv-title">'+ck+'Competency ('+D.comps.length+'), Culture ('+D.cultures.length+'), Dials ('+D.dials.length+')</div><div class="rv-chips">';
-  D.comps.forEach(function(c){h+='<span class="rv-chip">'+c.name+' · '+c.type+'</span>'});
-  D.cultures.forEach(function(c){h+='<span class="rv-chip" style="border-color:rgba(232,112,96,0.25);color:var(--red-lt)">'+c.dim+': '+c.curr+'→'+c.tgt+'</span>'});
-  D.dials.forEach(function(d){h+='<span class="rv-chip" style="border-color:rgba(240,160,48,0.25);color:var(--amber-lt)">'+d.skill+': '+(d.val>0?'+':'')+d.val+'</span>'});
-  h+='</div></div>';
+
+  // 9. Competency + Culture + Dials
+  h+='<div class="rv-section"><div class="rv-title">'+(state.completed[9]?ck:noCheck)+'Competency ('+D.comps.length+'), Culture ('+D.cultures.length+'), Dials ('+D.dials.length+')</div><div class="rv-chips">';
+  D.comps.forEach(function(c){h+='<span class="rv-chip">'+c.name+' · '+c.type+' · linked to: '+c.value+'</span>'});
+  D.cultures.forEach(function(c){h+='<span class="rv-chip" style="border-color:rgba(232,112,96,0.25);color:var(--red-lt)">'+c.dim+': '+c.curr+' → '+c.tgt+'</span>'});
+  D.dials.forEach(function(d){h+='<span class="rv-chip" style="border-color:rgba(240,160,48,0.25);color:var(--amber-lt)">'+d.skill+': '+(d.val>0?'+':'')+d.val+' — '+d.why+'</span>'});
+  h+='</div>';
+  if(state.data.transStmt)h+='<div style="margin-top:8px;padding:10px 14px;background:rgba(255,255,255,0.02);border-radius:8px;border-left:3px solid var(--amber-lt);font-size:11px;color:var(--paper-mid);line-height:1.6"><strong style="color:var(--amber-lt)">Transformation Statement:</strong> '+state.data.transStmt+'</div>';
+  h+='</div>';
+
+  // Summary bar
+  var doneCount=0;for(var i=1;i<=9;i++)if(state.completed[i])doneCount++;
+  var totalItems=D.bus.length+D.roles.length+D.goals.length+D.products.length+D.clients.length+D.standards.length+D.tools.length+D.comps.length+D.cultures.length+D.dials.length;
+  h+='<div style="margin-top:16px;padding:14px 18px;background:linear-gradient(135deg,var(--ink-card) 0%,rgba(200,168,75,0.06) 100%);border:1px solid rgba(200,168,75,0.2);border-radius:10px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">';
+  h+='<div style="font-family:\'Syne\',sans-serif;font-size:13px;font-weight:700;color:var(--paper)">Summary</div>';
+  h+='<div style="font-size:11px;color:var(--paper-mid)">'+doneCount+'/9 sections complete</div>';
+  h+='<div style="font-size:11px;color:var(--paper-mid)">'+totalItems+' items configured</div>';
+  h+='<div style="font-size:11px;color:'+(doneCount>=9?'var(--green-lt)':'var(--amber-lt)')+'">Status: '+(doneCount>=9?'Ready to lock':'Incomplete — complete all sections')+'</div>';
+  h+='</div>';
+
   document.getElementById('reviewBody').innerHTML=h;
 }
-
-function countFields(ids){var c=0;ids.forEach(function(id){var el=document.getElementById(id);if(el&&el.value.trim())c++});return c}
 
 function confirmSetup(){
   document.getElementById('successBanner').classList.add('show');
@@ -744,7 +808,7 @@ function confirmSetup(){
 }
 
 function resetDemo(){
-  state={current:1,completed:{}};for(var i=1;i<=9;i++)state.completed[i]=false;
+  state={current:1,completed:{},data:{identity:{},skills:{},orgmodel:'',hierlevels:'',teams:'',cohorts:'',transStmt:''}};for(var i=1;i<=9;i++)state.completed[i]=false;
   D={bus:[],roles:[],goals:[],products:[],clients:[],standards:[],tools:[],comps:[],cultures:[],dials:[]};
   document.getElementById('successBanner').classList.remove('show');
   document.getElementById('stepper').style.display='flex';
