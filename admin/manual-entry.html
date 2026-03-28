@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataPort — Manual Entry · Arcova SIP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#080F18;--ink-panel:#0C1825;--ink-card:#101E2E;--ink-raised:#152438;--ink-border:rgba(255,255,255,0.07);--ink-soft:#4A6A84;--paper:#D8E8F4;--paper-mid:#8AACC4;--gold:#C8A84B;--gold-lt:#E0CC70;--gold-dim:rgba(200,168,75,0.10);--blue:#1A5C8A;--blue-lt:#3A8CC0;--blue-dim:rgba(26,92,138,0.15);--green:#1A7A4A;--green-lt:#3AB87A;--green-dim:rgba(26,122,74,0.12);--amber:#D4820A;--amber-lt:#F0A030;--amber-dim:rgba(212,130,10,0.12);--red:#C0392B;--red-lt:#E87060;--red-dim:rgba(192,57,43,0.12);--purple:#6A3A9A;--purple-lt:#A070E0;--purple-dim:rgba(106,58,154,0.15);--sidebar-w:220px}
+html,body{height:100%;background:var(--ink);color:var(--paper);font-family:'DM Sans',sans-serif;overflow:hidden}
+.app{display:flex;height:100vh}
+.sidebar{width:var(--sidebar-w);background:var(--ink-panel);border-right:1px solid var(--ink-border);display:flex;flex-direction:column;flex-shrink:0}
+a.sidebar-brand{padding:22px 20px 20px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-hex{width:28px;height:28px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);flex-shrink:0}
+.brand-nm{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--paper)}
+.brand-tg{font-size:10px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase}
+.sidebar-nav{flex:1;padding:12px 14px;overflow-y:auto}
+.nav-section-label{font-size:10px;color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase;padding:10px 6px 6px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;font-size:12.5px;color:var(--paper-mid);cursor:pointer;text-decoration:none;transition:background .15s,color .15s;margin-bottom:1px}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.nav-item.active{background:var(--blue-dim);color:var(--blue-lt)}
+.nav-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.sidebar-user{padding:14px 16px;border-top:1px solid var(--ink-border);display:flex;align-items:center;gap:10px}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--paper);flex-shrink:0}
+.user-name{font-size:12px;font-weight:500;color:var(--paper)}
+.user-role{font-size:10px;color:var(--ink-soft)}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:54px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;padding:0 28px;gap:14px;flex-shrink:0;background:var(--ink-panel)}
+.topbar-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--paper);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-pill{padding:4px 11px;border-radius:100px;font-size:11px;border:1px solid;white-space:nowrap}
+.tb-pill.blue{border-color:rgba(58,140,192,.35);color:var(--blue-lt)}
+.tb-btn{padding:6px 14px;border-radius:6px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s,color .15s;text-decoration:none;white-space:nowrap}
+.tb-btn:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.content{flex:1;overflow-y:auto;padding:24px 28px;display:flex;flex-direction:column;gap:20px}
+.content>*{flex-shrink:0}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+.panel{background:var(--ink-card);border:1px solid var(--ink-border);border-radius:12px;overflow:hidden}
+.panel-head{padding:14px 20px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.panel-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--paper);flex:1;min-width:120px}
+.panel-badge{padding:2px 8px;border-radius:100px;font-size:10px;font-weight:500}
+.panel-body{padding:18px 20px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:960px){.two-col{grid-template-columns:1fr}}
+
+/* TABS */
+.tab-bar{display:flex;gap:2px;padding:4px;background:var(--ink-card);border:1px solid var(--ink-border);border-radius:10px;align-self:flex-start}
+.tab-btn{padding:7px 16px;border-radius:7px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--paper-mid);cursor:pointer;transition:background .15s,color .15s;white-space:nowrap}
+.tab-btn.active{background:var(--ink-raised);color:var(--paper);font-weight:500}
+.tab-btn:hover:not(.active){color:var(--paper)}
+
+/* CONTEXT METER */
+.ctx-meter{display:flex;align-items:center;gap:16px;padding:14px 20px;background:linear-gradient(135deg,var(--ink-card) 0%,rgba(26,122,74,0.08) 100%);border:1px solid rgba(58,184,122,0.2);border-radius:12px}
+.ctx-ring{position:relative;width:50px;height:50px;flex-shrink:0}
+.ctx-ring canvas{width:100%;height:100%}
+.ctx-ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--green-lt)}
+.ctx-info{flex:1;min-width:0}
+.ctx-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--paper);margin-bottom:2px}
+.ctx-sub{font-size:11px;color:var(--paper-mid)}
+
+/* FORM */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:10px;color:var(--ink-soft);letter-spacing:.04em;margin-bottom:5px;text-transform:uppercase}
+.form-input,.form-select{width:100%;padding:9px 12px;border-radius:7px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper);font-family:'DM Sans',sans-serif;font-size:12.5px;outline:none;transition:border-color .2s}
+.form-input:focus,.form-select:focus{border-color:var(--blue-lt)}
+.form-input::placeholder{color:var(--ink-soft)}
+.form-select option{background:var(--ink-raised);color:var(--paper)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:700px){.form-row,.form-row-3{grid-template-columns:1fr}}
+.btn{padding:9px 20px;border-radius:7px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:12.5px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .15s}
+.btn:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.btn-gold{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:600}
+.btn-gold:hover{opacity:.88;background:var(--gold);color:var(--ink)}
+.btn-blue{background:var(--blue);border-color:var(--blue);color:var(--paper)}
+.btn-blue:hover{opacity:.88}
+.btn-sm{padding:5px 12px;font-size:11px}
+
+/* DUPLICATE WARNING */
+.dup-warning{display:none;padding:12px 16px;background:rgba(212,130,10,0.08);border:1px solid rgba(212,130,10,0.25);border-radius:8px;margin-bottom:14px;align-items:flex-start;gap:10px}
+.dup-warning.show{display:flex;animation:fadeUp .3s ease}
+.dup-icon{width:28px;height:28px;border-radius:7px;background:var(--amber-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dup-icon svg{width:14px;height:14px;stroke:var(--amber-lt);fill:none;stroke-width:2;stroke-linecap:round}
+.dup-text{flex:1;font-size:12px;color:var(--amber-lt);line-height:1.5}
+.dup-actions{display:flex;gap:8px;margin-top:6px}
+
+/* EMPLOYEE TABLE */
+.emp-tbl{width:100%;border-collapse:collapse;min-width:700px}
+.emp-tbl th{font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em;text-align:left;padding:8px 10px;border-bottom:1px solid var(--ink-border);font-weight:500;white-space:nowrap}
+.emp-tbl td{font-size:12px;padding:9px 10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--paper-mid);white-space:nowrap}
+.emp-tbl tr:hover td{background:rgba(255,255,255,0.02)}
+.emp-name{color:var(--paper);font-weight:500}
+.emp-new{background:rgba(26,122,74,0.06)}
+.emp-new td{color:var(--paper)}
+.edit-btn{padding:3px 10px;border-radius:5px;font-size:10px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.edit-btn:hover{border-color:var(--blue-lt);color:var(--blue-lt)}
+
+/* CERT ROW */
+.cert-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
+.cert-row:last-child{border-bottom:none}
+.cert-name{font-size:12px;color:var(--paper);flex:1;min-width:0}
+.cert-issuer{font-size:10px;color:var(--ink-soft);flex-shrink:0}
+.cert-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink-soft);flex-shrink:0}
+.cert-badge{padding:2px 8px;border-radius:100px;font-size:9px;font-weight:500;flex-shrink:0}
+
+/* SUCCESS FLASH */
+.success-flash{display:none;padding:14px 18px;background:rgba(26,122,74,0.1);border:1px solid rgba(58,184,122,0.3);border-radius:10px;align-items:center;gap:12px;margin-bottom:14px}
+.success-flash.show{display:flex;animation:fadeUp .35s ease}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.fade-up{animation:fadeUp .4s ease both}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <a class="sidebar-brand" href="../index.html"><div class="brand-hex"></div><div style="display:flex;flex-direction:column;gap:1px"><span class="brand-nm">Arcova SIP</span><span class="brand-tg">Admin Portal</span></div></a>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Setup</div>
+    <a class="nav-item" href="org-setup.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>OrgSetup</a>
+    <a class="nav-item" href="dataport.html"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>DataPort</a>
+    <a class="nav-item active" href="manual-entry.html"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>Manual Entry</a>
+    <div class="nav-section-label">AI Pipeline</div>
+    <a class="nav-item" href="skillforge.html"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>SkillForge</a>
+    <a class="nav-item" href="approvalhub.html"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>ApprovalHub</a>
+    <div class="nav-section-label">Assessment</div>
+    <a class="nav-item" href="assess-engine.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>AssessEngine</a>
+    <a class="nav-item" href="knowledge-tests.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>Knowledge Tests</a>
+    <a class="nav-item" href="survey-builder.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Survey Builder</a>
+    <a class="nav-item" href="discovery-sessions.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Discovery Sessions</a>
+  </nav>
+  <div class="sidebar-user"><div class="user-avatar">KR</div><div style="display:flex;flex-direction:column;gap:1px"><div class="user-name">Kavitha Ramachandran</div><div class="user-role">L&amp;D Manager</div></div></div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">DataPort — Manual Entry & Inline Editing</div>
+    <a href="../nav-menus.html" class="tb-btn" style="font-size:11px;padding:5px 11px">All screens</a>
+    <div style="font-size:11px;color:var(--ink-soft);white-space:nowrap">28 Mar 2026</div>
+    <div class="tb-pill blue">L1 DataPort</div>
+  </div>
+
+  <a href="../level-journey.html" style="display:flex;align-items:center;gap:12px;padding:0 28px;height:36px;background:linear-gradient(90deg,rgba(200,168,75,0.12) 0%,rgba(8,15,24,0) 60%);border-bottom:1px solid rgba(200,168,75,0.2);text-decoration:none;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:#C8A84B;animation:pulse 2s ease-in-out infinite"></div><span style="font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.08em;color:#C8A84B">L1 SETUP</span></div>
+    <div style="width:1px;height:14px;background:rgba(200,168,75,0.2)"></div>
+    <div style="font-size:11px;color:#8AACC4">Add or edit individual employee records without file upload</div>
+    <div style="margin-left:auto;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.06em;color:#C8A84B;text-transform:uppercase">View journey &rarr;</div>
+  </a>
+
+  <div class="content">
+
+    <!-- CONTEXT METER -->
+    <div class="ctx-meter fade-up">
+      <div class="ctx-ring"><canvas id="ctxCanvas" width="100" height="100"></canvas><div class="ctx-ring-label" id="ctxPct">91%</div></div>
+      <div class="ctx-info">
+        <div class="ctx-title">Data Context Meter: <span id="ctxCount">812</span> employees</div>
+        <div class="ctx-sub">Add employees manually to increase coverage. Meter updates in real-time.</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <a href="dataport.html" class="btn btn-sm">Excel Import</a>
+        <span class="btn btn-sm" style="border-color:rgba(58,184,122,0.3);color:var(--green-lt);cursor:default">HRIS Synced</span>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tab-bar fade-up" style="animation-delay:.06s">
+      <button class="tab-btn active" onclick="showTab('add')">Add Employee</button>
+      <button class="tab-btn" onclick="showTab('records')">Employee Records (812)</button>
+      <button class="tab-btn" onclick="showTab('certs')">Add Certifications</button>
+    </div>
+
+    <!-- TAB: ADD EMPLOYEE -->
+    <div id="tabAdd">
+      <!-- SUCCESS FLASH -->
+      <div class="success-flash" id="successFlash">
+        <svg style="width:20px;height:20px;stroke:var(--green-lt);fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div><div style="font-size:13px;color:var(--green-lt);font-weight:500" id="successMsg">Employee added successfully</div><div style="font-size:11px;color:var(--paper-mid)" id="successDetail">Context Meter updated: 813 employees</div></div>
+      </div>
+
+      <!-- DUPLICATE WARNING -->
+      <div class="dup-warning" id="dupWarning">
+        <div class="dup-icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div>
+          <div class="dup-text"><strong>Possible duplicate detected:</strong> An employee named <span id="dupName">"Priya Menon"</span> already exists in Structural Engineering (EMP-001). Are you adding a different person?</div>
+          <div class="dup-actions">
+            <button class="btn btn-sm" onclick="dismissDup();showToast('Proceeding — confirmed as different person')">Yes, different person</button>
+            <button class="btn btn-sm" onclick="dismissDup();document.getElementById('f-emp-name').value='';showToast('Cancelled — please check existing record')">Cancel, view existing</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel fade-up" style="animation-delay:.12s">
+        <div class="panel-head">
+          <svg style="width:14px;height:14px;stroke:var(--blue-lt);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+          <div class="panel-title">Add Single Employee</div>
+          <button class="btn btn-sm btn-gold" onclick="autoFillEmployee()">Auto-fill Demo</button>
+        </div>
+        <div class="panel-body">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Full Name *</label><input class="form-input" id="f-emp-name" placeholder="e.g. Arjun Nair" oninput="checkDuplicate(this.value)"></div>
+            <div class="form-group"><label class="form-label">Employee ID</label><input class="form-input" id="f-emp-id" placeholder="Auto-generated: EMP-813" style="color:var(--ink-soft)"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Email *</label><input class="form-input" id="f-emp-email" type="email" placeholder="arjun.n@arcova.sg"></div>
+            <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="f-emp-phone" placeholder="+65 9XXX XXXX"></div>
+          </div>
+          <div class="form-row-3">
+            <div class="form-group"><label class="form-label">Business Unit *</label><select class="form-select" id="f-emp-bu"><option value="">Select...</option><option>Engineering & Delivery</option><option>Digital & Technology</option><option>Corporate Functions</option><option>Sustainability & EHS</option></select></div>
+            <div class="form-group"><label class="form-label">Department *</label><select class="form-select" id="f-emp-dept"><option value="">Select...</option><option>Structural Engineering</option><option>Civil & Geotechnical</option><option>Project Delivery</option><option>BIM & Digital Delivery</option><option>IT Infrastructure</option><option>Finance & Procurement</option><option>Human Resources</option><option>Legal & Compliance</option><option>EHS & Risk</option><option>Sustainability Advisory</option></select></div>
+            <div class="form-group"><label class="form-label">Job Title *</label><input class="form-input" id="f-emp-title" placeholder="e.g. Structural Engineer"></div>
+          </div>
+          <div class="form-row-3">
+            <div class="form-group"><label class="form-label">Manager</label><input class="form-input" id="f-emp-mgr" placeholder="e.g. Arun Krishnan"></div>
+            <div class="form-group"><label class="form-label">Location</label><select class="form-select" id="f-emp-loc"><option>Singapore</option><option>Mumbai</option><option>Dubai</option><option>Kuala Lumpur</option></select></div>
+            <div class="form-group"><label class="form-label">Employment Type</label><select class="form-select" id="f-emp-type"><option>Full-Time</option><option>Contract</option><option>Part-Time</option><option>Intern</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Start Date</label><input class="form-input" id="f-emp-start" type="date" value="2026-03-28"></div>
+            <div class="form-group"><label class="form-label">Seniority Band</label><select class="form-select" id="f-emp-band"><option>L1 — Entry</option><option>L2 — Associate</option><option selected>L3 — Mid-Level</option><option>L4 — Senior</option><option>L5 — Lead / Principal</option></select></div>
+          </div>
+
+          <div style="border-top:1px solid var(--ink-border);padding-top:14px;margin-top:8px">
+            <div style="font-size:11px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">Initial Certifications (Optional)</div>
+            <div class="form-row-3">
+              <div class="form-group"><label class="form-label">Certification Name</label><input class="form-input" id="f-emp-cert" placeholder="e.g. PE (Professional Engineer)"></div>
+              <div class="form-group"><label class="form-label">Issuing Body</label><input class="form-input" id="f-emp-cert-issuer" placeholder="e.g. Board of Engineers SG"></div>
+              <div class="form-group"><label class="form-label">Expiry Date</label><input class="form-input" id="f-emp-cert-exp" type="date"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:18px">
+            <button class="btn" onclick="clearForm()">Clear Form</button>
+            <button class="btn btn-gold" onclick="addEmployee()">Add Employee & Update Context Meter</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: RECORDS -->
+    <div id="tabRecords" style="display:none">
+      <div class="panel fade-up">
+        <div class="panel-head">
+          <div class="panel-title">Employee Records</div>
+          <div class="panel-badge" style="background:var(--green-dim);color:var(--green-lt)" id="recordCount">812 records</div>
+          <input class="form-input" id="searchInput" placeholder="Search by name, ID, or department..." style="max-width:280px;padding:6px 12px;font-size:11px" oninput="filterRecords()">
+        </div>
+        <div style="overflow-x:auto">
+          <table class="emp-tbl">
+            <thead><tr><th>ID</th><th>Name</th><th>Department</th><th>Job Title</th><th>Location</th><th>Start Date</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="recordsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: CERTS -->
+    <div id="tabCerts" style="display:none">
+      <div class="two-col">
+        <div class="panel fade-up">
+          <div class="panel-head">
+            <div class="panel-title">Add Certification to Existing Employee</div>
+          </div>
+          <div class="panel-body">
+            <div class="form-group"><label class="form-label">Employee *</label><select class="form-select" id="f-cert-emp"><option value="">Select employee...</option><option>EMP-001 — Priya Menon</option><option>EMP-002 — Arun Krishnan</option><option>EMP-003 — Deepa Nair</option><option>EMP-004 — Rahul Sharma</option><option>EMP-005 — Kavitha Ramachandran</option></select></div>
+            <div class="form-group"><label class="form-label">Certification Name *</label><input class="form-input" id="f-cert-name" placeholder="e.g. Autodesk Revit Professional"></div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Issuing Body</label><input class="form-input" id="f-cert-issuer" placeholder="e.g. Autodesk"></div>
+              <div class="form-group"><label class="form-label">Date Earned</label><input class="form-input" id="f-cert-date" type="date"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Expiry Date</label><input class="form-input" id="f-cert-exp" type="date"></div>
+              <div class="form-group"><label class="form-label">Credential ID</label><input class="form-input" id="f-cert-id" placeholder="e.g. ARP-2026-4521"></div>
+            </div>
+            <div style="display:flex;justify-content:flex-end;margin-top:12px">
+              <button class="btn btn-gold" onclick="addCert()">Add Certification</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel fade-up" style="animation-delay:.06s">
+          <div class="panel-head">
+            <div class="panel-title">Recent Certifications Added</div>
+            <div class="panel-badge" style="background:var(--gold-dim);color:var(--gold)">Last 7 days</div>
+          </div>
+          <div class="panel-body" id="recentCerts">
+            <div class="cert-row"><span class="cert-name">ISO 45001 Lead Auditor</span><span class="cert-issuer">BSI Group</span><span class="cert-date">26 Mar</span><span class="cert-badge" style="background:var(--green-dim);color:var(--green-lt)">Active</span></div>
+            <div class="cert-row"><span class="cert-name">PMP Renewal</span><span class="cert-issuer">PMI</span><span class="cert-date">24 Mar</span><span class="cert-badge" style="background:var(--green-dim);color:var(--green-lt)">Active</span></div>
+            <div class="cert-row"><span class="cert-name">Power BI Fundamentals</span><span class="cert-issuer">Microsoft</span><span class="cert-date">22 Mar</span><span class="cert-badge" style="background:var(--green-dim);color:var(--green-lt)">Active</span></div>
+            <div class="cert-row"><span class="cert-name">Autodesk Revit Intermediate</span><span class="cert-issuer">Autodesk</span><span class="cert-date">20 Mar</span><span class="cert-badge" style="background:var(--green-dim);color:var(--green-lt)">Active</span></div>
+            <div class="cert-row"><span class="cert-name">NEBOSH General Certificate</span><span class="cert-issuer">NEBOSH</span><span class="cert-date">18 Mar</span><span class="cert-badge" style="background:var(--amber-dim);color:var(--amber-lt)">Expiring</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 28px;background:rgba(200,168,75,0.06);border-top:1px solid rgba(200,168,75,0.15);flex-shrink:0">
+    <svg style="width:13px;height:13px;stroke:#C8A84B;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+    <span style="font-size:11px;color:#C8A84B;font-weight:500;letter-spacing:.03em">Manual entry with duplicate detection &middot; Real-time Context Meter &middot; Feeds into SkillForge AI pipeline</span>
+    <span style="margin-left:auto;font-size:10px;color:#4A6A84;letter-spacing:.06em;text-transform:uppercase">L1 DataPort</span>
+  </div>
+</div>
+</div>
+
+<script>
+var empCount = 812;
+var addedEmps = [];
+
+// TABS
+function showTab(tab){
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+  event.target.classList.add('active');
+  document.getElementById('tabAdd').style.display = tab==='add' ? 'block' : 'none';
+  document.getElementById('tabRecords').style.display = tab==='records' ? 'block' : 'none';
+  document.getElementById('tabCerts').style.display = tab==='certs' ? 'block' : 'none';
+  if(tab==='records') renderRecords();
+}
+
+// CONTEXT METER
+function drawCtx(pct){
+  var c=document.getElementById('ctxCanvas');if(!c)return;
+  var ctx=c.getContext('2d'),w=c.width,h=c.height,cx=w/2,cy=h/2,r=40;
+  ctx.clearRect(0,0,w,h);
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=6;ctx.stroke();
+  if(pct>0){ctx.beginPath();ctx.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*pct);var g=ctx.createLinearGradient(0,0,w,h);g.addColorStop(0,'#3AB87A');g.addColorStop(1,'#1A7A4A');ctx.strokeStyle=g;ctx.lineWidth=6;ctx.lineCap='round';ctx.stroke()}
+}
+
+function updateMeter(){
+  document.getElementById('ctxCount').textContent = empCount;
+  document.getElementById('ctxPct').textContent = Math.min(Math.round(empCount/900*100),99)+'%';
+  drawCtx(Math.min(empCount/900,0.99));
+  document.getElementById('recordCount').textContent = empCount+' records';
+}
+
+// DUPLICATE CHECK
+function checkDuplicate(name){
+  var n = name.trim().toLowerCase();
+  var existing = ['priya menon','arun krishnan','deepa nair','rahul sharma','kavitha ramachandran','vikram patel','meera sundaram','karthik subramanian'];
+  if(n.length>4 && existing.some(function(e){return e.indexOf(n)>-1 || n.indexOf(e)>-1})){
+    document.getElementById('dupName').textContent = '"'+name+'"';
+    document.getElementById('dupWarning').classList.add('show');
+  } else {
+    document.getElementById('dupWarning').classList.remove('show');
+  }
+}
+function dismissDup(){document.getElementById('dupWarning').classList.remove('show')}
+
+// AUTO FILL
+function autoFillEmployee(){
+  document.getElementById('f-emp-name').value='Arjun Nair';
+  document.getElementById('f-emp-id').value='EMP-813';
+  document.getElementById('f-emp-email').value='arjun.n@arcova.sg';
+  document.getElementById('f-emp-phone').value='+65 9182 4567';
+  document.getElementById('f-emp-bu').value='Engineering & Delivery';
+  document.getElementById('f-emp-dept').value='Structural Engineering';
+  document.getElementById('f-emp-title').value='Structural Engineer';
+  document.getElementById('f-emp-mgr').value='Arun Krishnan';
+  document.getElementById('f-emp-loc').value='Singapore';
+  document.getElementById('f-emp-type').value='Full-Time';
+  document.getElementById('f-emp-band').value='L3 — Mid-Level';
+  document.getElementById('f-emp-cert').value='BE Civil Engineering';
+  document.getElementById('f-emp-cert-issuer').value='NUS Singapore';
+  showToast('Demo data loaded — Arjun Nair');
+}
+
+// ADD EMPLOYEE
+function addEmployee(){
+  var name = document.getElementById('f-emp-name').value.trim();
+  if(!name){showToast('Enter employee name');return}
+  var dept = document.getElementById('f-emp-dept').value;
+  var title = document.getElementById('f-emp-title').value.trim();
+  if(!dept||!title){showToast('Fill in department and job title');return}
+
+  empCount++;
+  addedEmps.unshift({
+    id:'EMP-'+empCount,name:name,email:document.getElementById('f-emp-email').value,
+    dept:dept,title:title,loc:document.getElementById('f-emp-loc').value,
+    start:document.getElementById('f-emp-start').value,type:document.getElementById('f-emp-type').value
+  });
+
+  updateMeter();
+
+  var sf = document.getElementById('successFlash');
+  document.getElementById('successMsg').textContent = name+' added as EMP-'+empCount;
+  document.getElementById('successDetail').textContent = 'Context Meter updated: '+empCount+' employees · '+dept;
+  sf.classList.add('show');
+  setTimeout(function(){sf.classList.remove('show')},4000);
+  showToast(name+' added — EMP-'+empCount);
+}
+
+function clearForm(){
+  ['f-emp-name','f-emp-id','f-emp-email','f-emp-phone','f-emp-title','f-emp-mgr','f-emp-cert','f-emp-cert-issuer'].forEach(function(id){document.getElementById(id).value=''});
+  dismissDup();
+}
+
+// RECORDS TABLE
+var baseRecords=[
+  {id:'EMP-001',name:'Priya Menon',dept:'Structural Engineering',title:'Sr. Structural Engineer',loc:'Singapore',start:'2023-11-15',status:'Active'},
+  {id:'EMP-002',name:'Arun Krishnan',dept:'Civil & Geotechnical',title:'Geotechnical Lead',loc:'Singapore',start:'2018-04-01',status:'Active'},
+  {id:'EMP-003',name:'Deepa Nair',dept:'BIM & Digital Delivery',title:'BIM Coordinator',loc:'Singapore',start:'2021-06-15',status:'Active'},
+  {id:'EMP-004',name:'Rahul Sharma',dept:'Project Delivery',title:'Project Manager',loc:'Mumbai',start:'2019-01-10',status:'Active'},
+  {id:'EMP-005',name:'Kavitha Ramachandran',dept:'Human Resources',title:'L&D Manager',loc:'Singapore',start:'2020-03-01',status:'Active'},
+  {id:'EMP-006',name:'Vikram Patel',dept:'IT Infrastructure',title:'Cloud Architect',loc:'Singapore',start:'2022-08-15',status:'Active'},
+  {id:'EMP-007',name:'Meera Sundaram',dept:'EHS & Risk',title:'Safety Manager',loc:'Dubai',start:'2019-07-01',status:'Active'},
+  {id:'EMP-008',name:'Suresh Iyer',dept:'Finance & Procurement',title:'Finance Controller',loc:'Singapore',start:'2017-02-15',status:'Active'},
+  {id:'EMP-009',name:'Anita Desai',dept:'Sustainability Advisory',title:'ESG Analyst',loc:'Mumbai',start:'2023-01-10',status:'Active'},
+  {id:'EMP-010',name:'Karthik Subramanian',dept:'Structural Engineering',title:'Design Engineer',loc:'Singapore',start:'2024-06-01',status:'Active'}
+];
+
+function renderRecords(){
+  var all = addedEmps.map(function(e){return{id:e.id,name:e.name,dept:e.dept,title:e.title,loc:e.loc,start:e.start,status:'Active',isNew:true}}).concat(baseRecords);
+  var search = (document.getElementById('searchInput').value||'').toLowerCase();
+  if(search) all = all.filter(function(r){return (r.name+r.id+r.dept).toLowerCase().indexOf(search)>-1});
+  var h='';
+  all.forEach(function(r){
+    h+='<tr class="'+(r.isNew?'emp-new':'')+'">';
+    h+='<td><span style="font-family:\'DM Mono\',monospace;font-size:10px;color:var(--ink-soft)">'+r.id+'</span></td>';
+    h+='<td class="emp-name">'+r.name+(r.isNew?' <span style="padding:1px 6px;border-radius:100px;font-size:8px;background:var(--green-dim);color:var(--green-lt)">NEW</span>':'')+'</td>';
+    h+='<td>'+r.dept+'</td><td>'+r.title+'</td><td>'+r.loc+'</td><td style="font-family:\'DM Mono\',monospace;font-size:10px">'+r.start+'</td>';
+    h+='<td><span style="padding:2px 8px;border-radius:100px;font-size:9px;background:var(--green-dim);color:var(--green-lt)">'+r.status+'</span></td>';
+    h+='<td><button class="edit-btn" onclick="showToast(\'Editing '+r.name+'...\')">Edit</button></td>';
+    h+='</tr>';
+  });
+  if(!h) h='<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--ink-soft)">No matching records</td></tr>';
+  document.getElementById('recordsBody').innerHTML=h;
+}
+
+function filterRecords(){renderRecords()}
+
+// ADD CERT
+function addCert(){
+  var emp=document.getElementById('f-cert-emp').value;
+  var name=document.getElementById('f-cert-name').value.trim();
+  if(!emp||!name){showToast('Select employee and enter certification name');return}
+  var h='<div class="cert-row" style="animation:fadeUp .3s ease"><span class="cert-name">'+name+'</span><span class="cert-issuer">'+(document.getElementById('f-cert-issuer').value||'—')+'</span><span class="cert-date">Just now</span><span class="cert-badge" style="background:var(--green-dim);color:var(--green-lt)">Active</span></div>';
+  document.getElementById('recentCerts').insertAdjacentHTML('afterbegin',h);
+  showToast(name+' added to '+emp.split('—')[1].trim());
+  document.getElementById('f-cert-name').value='';document.getElementById('f-cert-issuer').value='';
+}
+
+// TOAST
+function showToast(msg){var t=document.getElementById('sip-toast');if(!t){t=document.createElement('div');t.id='sip-toast';t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#152438;border:1px solid rgba(255,255,255,0.1);color:#8AACC4;font-size:12px;font-family:"DM Sans",sans-serif;padding:10px 18px;border-radius:8px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:9999;white-space:nowrap';document.body.appendChild(t)}t.textContent=msg;t.style.opacity='1';t.style.transform='translateX(-50%) translateY(0)';clearTimeout(t._t);t._t=setTimeout(function(){t.style.opacity='0';t.style.transform='translateX(-50%) translateY(8px)'},2400)}
+
+document.addEventListener('click',function(e){var a=e.target.closest('a');if(a&&a.getAttribute('href')==='#'){e.preventDefault();showToast((a.textContent||'').trim().substring(0,36)+' — available in full platform')}});
+
+// INIT
+drawCtx(0.91);
+</script>
+</body>
+</html>
