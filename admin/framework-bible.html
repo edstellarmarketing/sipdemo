@@ -310,18 +310,52 @@ function renderTaxonomy(){
     h+='<svg class="tax-chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
     h+='<span class="tax-domain-name">'+d.name+'</span>';
     h+='<span class="tax-domain-count">'+d.skills.length+' skills</span>';
+    if(editMode) h+='<span style="margin-left:8px;padding:2px 8px;border-radius:5px;font-size:9px;background:var(--amber-dim);color:var(--amber-lt);cursor:pointer" onclick="event.stopPropagation();addSkill('+di+')">+ Add Skill</span>';
     h+='</div>';
     h+='<div class="tax-skills'+show+'">';
-    d.skills.forEach(function(s){
-      h+='<div class="tax-skill" onclick="showToast(\''+s.name+' — '+s.crit+' criticality, proficiency '+s.levels+'\')">';
-      h+='<span class="tax-skill-name">'+s.name+'</span>';
-      h+='<span class="tax-skill-crit" style="'+critClass(s.crit)+'">'+s.crit+'</span>';
-      h+='<span class="tax-skill-levels">'+s.levels+'</span>';
-      h+='</div>';
+    d.skills.forEach(function(s,si){
+      if(editMode){
+        h+='<div class="tax-skill" style="gap:6px">';
+        h+='<input class="form-input" value="'+s.name+'" onchange="domains['+di+'].skills['+si+'].name=this.value;showToast(\'Renamed to: \'+this.value)" style="flex:1;padding:5px 8px;font-size:11px">';
+        h+='<select onchange="domains['+di+'].skills['+si+'].crit=this.value;renderTaxonomy();showToast(\'Criticality changed to \'+this.value)" style="padding:4px 6px;border-radius:5px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper-mid);font-size:10px;font-family:\'DM Sans\',sans-serif;width:60px">';
+        ['C1','C2','C3','C4'].forEach(function(c){h+='<option'+(s.crit===c?' selected':'')+'>'+c+'</option>'});
+        h+='</select>';
+        h+='<span style="padding:2px 6px;border-radius:4px;font-size:9px;background:var(--red-dim);color:var(--red-lt);cursor:pointer" onclick="domains['+di+'].skills.splice('+si+',1);renderTaxonomy();updateStats();showToast(\'Skill removed\')">&times;</span>';
+        h+='</div>';
+      } else {
+        h+='<div class="tax-skill" onclick="showToast(\''+s.name.replace(/'/g,"\\'")+' — '+s.crit+' criticality, proficiency '+s.levels+'\')">';
+        h+='<span class="tax-skill-name">'+s.name+'</span>';
+        h+='<span class="tax-skill-crit" style="'+critClass(s.crit)+'">'+s.crit+'</span>';
+        h+='<span class="tax-skill-levels">'+s.levels+'</span>';
+        h+='</div>';
+      }
     });
     h+='</div></div>';
   });
+  if(editMode){
+    h+='<div style="border:1px dashed var(--ink-border);border-radius:10px;padding:14px 18px;margin-top:12px">';
+    h+='<div style="font-size:12px;font-weight:500;color:var(--paper);margin-bottom:8px">Add New Domain</div>';
+    h+='<div style="display:flex;gap:8px"><input class="form-input" id="newDomainName" placeholder="e.g. Emerging Technologies" style="flex:1;padding:6px 10px;font-size:11px"><button class="btn btn-sm btn-gold" onclick="addDomain()">+ Add Domain</button></div>';
+    h+='</div>';
+  }
   document.getElementById('taxonomyTree').innerHTML=h;
+}
+
+function addSkill(di){
+  var name=prompt('Enter new skill name:');
+  if(!name)return;
+  domains[di].skills.push({name:name,crit:'C3',levels:'L1-L4'});
+  renderTaxonomy();updateStats();
+  showToast(name+' added to '+domains[di].name);
+}
+
+function addDomain(){
+  var name=document.getElementById('newDomainName').value.trim();
+  if(!name){showToast('Enter domain name');return}
+  var colors=['var(--teal-lt)','var(--purple-lt)','var(--amber-lt)','var(--blue-lt)'];
+  domains.push({name:name,color:colors[domains.length%colors.length],bd:'rgba(255,255,255,0.1)',skills:[]});
+  renderTaxonomy();updateStats();
+  showToast('Domain "'+name+'" added — now add skills to it');
 }
 
 function toggleDomain(el){
@@ -344,9 +378,30 @@ var comps=[
 
 function renderComps(){
   var h='';
-  comps.forEach(function(c){
-    h+='<div class="comp-card"><div class="comp-head"><span class="comp-type" style="'+c.typeColor+'">'+c.type+'</span><span class="comp-name">'+c.name+'</span></div><div class="comp-desc">'+c.desc+'</div></div>';
+  comps.forEach(function(c,ci){
+    if(editMode){
+      h+='<div class="comp-card" style="border-color:rgba(212,130,10,0.2)">';
+      h+='<div class="comp-head">';
+      h+='<select onchange="comps['+ci+'].type=this.value;renderComps();showToast(\'Type changed\')" style="padding:3px 6px;border-radius:5px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper-mid);font-size:10px;font-family:\'DM Sans\',sans-serif">';
+      ['Core','Technical','Leadership'].forEach(function(t){h+='<option'+(c.type===t?' selected':'')+'>'+t+'</option>'});
+      h+='</select>';
+      h+='<input class="form-input" value="'+c.name+'" onchange="comps['+ci+'].name=this.value;showToast(\'Renamed\')" style="flex:1;padding:4px 8px;font-size:12px;font-weight:500">';
+      h+='<span style="padding:2px 6px;border-radius:4px;font-size:9px;background:var(--red-dim);color:var(--red-lt);cursor:pointer" onclick="comps.splice('+ci+',1);renderComps();updateStats();showToast(\'Competency removed\')">&times;</span>';
+      h+='</div>';
+      h+='<textarea onchange="comps['+ci+'].desc=this.value;showToast(\'Description updated\')" style="width:100%;padding:6px 10px;border-radius:6px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper-mid);font-family:\'DM Sans\',sans-serif;font-size:11px;resize:vertical;min-height:40px;outline:none">'+c.desc+'</textarea>';
+      h+='</div>';
+    } else {
+      h+='<div class="comp-card"><div class="comp-head"><span class="comp-type" style="'+c.typeColor+'">'+c.type+'</span><span class="comp-name">'+c.name+'</span></div><div class="comp-desc">'+c.desc+'</div></div>';
+    }
   });
+  if(editMode){
+    h+='<div style="border:1px dashed var(--ink-border);border-radius:8px;padding:12px 14px;margin-top:8px">';
+    h+='<div style="display:flex;gap:8px;align-items:flex-end">';
+    h+='<div style="flex:1"><div style="font-size:10px;color:var(--ink-soft);margin-bottom:4px">Competency Name</div><input class="form-input" id="newCompName" placeholder="e.g. Agile Mindset" style="padding:6px 10px;font-size:11px"></div>';
+    h+='<div style="width:110px"><div style="font-size:10px;color:var(--ink-soft);margin-bottom:4px">Type</div><select class="form-select" id="newCompType" style="padding:6px;font-size:10px"><option>Core</option><option>Technical</option><option>Leadership</option></select></div>';
+    h+='<button class="btn btn-sm btn-gold" onclick="addComp()">+ Add</button>';
+    h+='</div></div>';
+  }
   document.getElementById('compList').innerHTML=h;
 }
 
@@ -369,6 +424,24 @@ function renderVersions(){
   document.getElementById('versionHistory').innerHTML=h;
 }
 
+function addComp(){
+  var name=document.getElementById('newCompName').value.trim();
+  if(!name){showToast('Enter competency name');return}
+  var type=document.getElementById('newCompType').value;
+  var typeColors={Core:'background:var(--green-dim);color:var(--green-lt)',Technical:'background:var(--blue-dim);color:var(--blue-lt)',Leadership:'background:var(--gold-dim);color:var(--gold)'};
+  comps.push({name:name,type:type,typeColor:typeColors[type],desc:'Define behavioural descriptors for this competency.'});
+  renderComps();updateStats();
+  showToast(name+' competency added');
+}
+
+function updateStats(){
+  var totalSkills=0;
+  domains.forEach(function(d){totalSkills+=d.skills.length});
+  var statCards=document.querySelectorAll('.stat-card .stat-val');
+  if(statCards[0])statCards[0].textContent=totalSkills;
+  if(statCards[1])statCards[1].textContent=comps.length;
+}
+
 // EDIT MODE
 var editMode=false;
 function toggleEditMode(){
@@ -376,11 +449,13 @@ function toggleEditMode(){
   var w=document.getElementById('editWarning');
   if(editMode){
     w.classList.add('show');
-    showToast('Edit mode — changes require 3-tier re-approval');
+    showToast('Edit mode ON — click skill names, criticality, or descriptions to edit. Add new skills and competencies.');
   } else {
     w.classList.remove('show');
-    showToast('Edit mode cancelled — framework remains at v1.2');
+    showToast('Edit mode OFF — framework remains at v1.2');
   }
+  renderTaxonomy();
+  renderComps();
 }
 
 // TOAST
