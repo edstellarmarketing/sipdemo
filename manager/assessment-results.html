@@ -103,8 +103,8 @@ a.sidebar-brand:hover .brand-hex{opacity:.75;transition:opacity .15s}
 .cycle-btn:hover:not(.active){color:var(--paper)}
 
 /* TABLE */
-.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tbl{width:100%;border-collapse:collapse;min-width:900px}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.tbl{width:100%;border-collapse:collapse;min-width:900px;table-layout:auto}
 .tbl th{font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em;text-align:left;padding:8px 10px;border-bottom:1px solid var(--ink-border);font-weight:500;white-space:nowrap}
 .tbl td{font-size:12px;padding:10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--paper-mid);white-space:nowrap}
 .tbl tr:last-child td{border-bottom:none}
@@ -383,8 +383,8 @@ a.sidebar-brand:hover .brand-hex{opacity:.75;transition:opacity .15s}
         <div class="panel-title">Skill Category Heatmap</div>
         <div class="panel-badge" style="background:var(--purple-dim);color:var(--purple-lt)">6 categories</div>
       </div>
-      <div class="panel-body" style="overflow-x:auto">
-        <table class="tbl" id="heatmapTable">
+      <div class="tbl-wrap">
+        <table class="tbl" id="heatmapTable" style="min-width:600px">
           <thead>
             <tr>
               <th>Skill Category</th>
@@ -499,6 +499,7 @@ function renderHeatmap() {
 
 // ── SCORE CHART ──
 function renderScoreChart() {
+  if (typeof Chart === 'undefined') { console.warn('Chart.js not loaded'); return; }
   var ctx = document.getElementById('scoreChart').getContext('2d');
   new Chart(ctx, {
     type: 'bar',
@@ -598,9 +599,9 @@ document.addEventListener('click', function(e){
 });
 
 // ── INIT ──
-renderTable(employees);
-renderHeatmap();
-renderScoreChart();
+try { renderTable(employees); } catch(e) { console.error('Table render error:', e); }
+try { renderHeatmap(); } catch(e) { console.error('Heatmap render error:', e); }
+try { renderScoreChart(); } catch(e) { console.error('Chart render error:', e); }
 </script>
 </body>
 </html>
