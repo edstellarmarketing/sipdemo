@@ -2,8 +2,8 @@
 
 ## Complete build plan for demonstrating the Skills Intelligence Platform
 
-**Last updated:** 27 March 2026
-**Current state:** 17 pages built (10 unique HTML files + 7 shared pages)
+**Last updated:** 28 March 2026
+**Current state:** 22 pages built — Sprint 1A complete (5 new assessment & development screens)
 **Target:** Full demo-ready prototype covering L1–L5, 3 portals, marketplace, and SaaS admin
 
 ---
@@ -29,6 +29,11 @@
 | 15 | Skill Passport | Employee | `employee/skill-passport.html` | L1+ |
 | 16 | Learning Path | Employee | `employee/learning-path.html` | L2+ |
 | 17 | Certificates | Employee | `employee/certificates.html` | L3 |
+| 18 | **Assessment Results** | Manager | `manager/assessment-results.html` | L2 |
+| 19 | **Skills & Competency Assessment** | Employee | `employee/skill-assessment.html` | L2 |
+| 20 | **My Assessments** | Employee | `employee/my-assessments.html` | L2 |
+| 21 | **My IDP** | Employee | `employee/my-idp.html` | L2 |
+| 22 | **My Training** | Employee | `employee/my-training.html` | L3 |
 
 ---
 
@@ -38,17 +43,17 @@
 **Goal:** Zero dead-end links in L1–L2 flow. Complete assessment-to-analysis pipeline.
 **Demo story unlocked:** "The full assessment lifecycle — from setup to results to gap analysis"
 
-#### Sprint 1A: Assessment Experience (5 screens)
+#### Sprint 1A: Assessment Experience (5 screens) ✅ COMPLETE — 28 March 2026
 
-| # | Screen | File | What it shows | Data dependency |
-|---|--------|------|---------------|-----------------|
-| 18 | **Assessment Results** | `manager/assessment-results.html` | Cycle-level results: completion rates, score distributions, validated proficiency outcomes, per-employee drill-down | Reads from AssessEngine cycle data |
-| 19 | **Skills & Competency Assessment** | `employee/skill-assessment.html` | The actual assessment-taking UI — self-rating + manager dual-rating side by side, behavioural descriptors, proficiency selectors | Extends AssessEngine. Feeds Skills Matrix |
-| 20 | **My Assessments** | `employee/my-assessments.html` | Employee's view: assigned assessments, in-progress, completed, result summaries | Reads from AssessEngine cycles |
-| 21 | **My IDP** | `employee/my-idp.html` | Individual Development Plan — goals, milestones, manager sign-off, review dates, linked to learning outcomes | Reads from Learning Path + LNA data |
-| 22 | **My Training** | `employee/my-training.html` | Enrolled programmes, calendar view, session details, pre-work, completion tracking | Reads from Learning Path programme data |
+| # | Screen | File | What it shows | Status |
+|---|--------|------|---------------|--------|
+| 18 | **Assessment Results** | `manager/assessment-results.html` | Cycle selector (Q1/Q4/Q3), score distribution chart, BU completion bars, per-employee drill-down with filters, skill category heatmap | ✅ Built |
+| 19 | **Skills & Competency Assessment** | `employee/skill-assessment.html` | Interactive 8-skill dual-rating UI, self-rating pills, manager ratings, live progress ring, final score calculation | ✅ Built |
+| 20 | **My Assessments** | `employee/my-assessments.html` | 6 assessment cards (active/completed/upcoming tabs), skill breakdowns, score summaries, continue/download actions | ✅ Built |
+| 21 | **My IDP** | `employee/my-idp.html` | 3 development goals with clickable milestone tracking, progress ring, review schedule, manager sign-offs, linked outcomes | ✅ Built |
+| 22 | **My Training** | `employee/my-training.html` | 3 enrolled programmes, session schedules, calendar view, pre-work checklists with toggle completion | ✅ Built |
 
-**After Sprint 1A:** Complete employee assessment + development experience.
+**Sprint 1A complete.** Full employee assessment + development experience is clickable end-to-end.
 
 #### Sprint 1B: Analysis & Reporting (4 screens)
 
@@ -207,8 +212,8 @@
 
 | Phase | Screens | Running Total | What it Unlocks |
 |-------|---------|---------------|-----------------|
-| **Done** | 17 | 17 | Core end-to-end flow: setup → AI → assess → intelligence → employee |
-| **Phase 1** | 12 | 29 | L2 complete + L3 training lifecycle |
+| **Done** | 22 | 22 | Core flow + Sprint 1A: assessment experience + development loop |
+| **Phase 1** | 7 remaining | 29 | L2 complete + L3 training lifecycle |
 | **Phase 2** | 8 | 37 | Rich employee portal |
 | **Phase 3** | 8 | 45 | All 5 persona dashboards + full reporting |
 | **Phase 4** | 10 | 55 | L4/L5 predictive + strategic intelligence |
