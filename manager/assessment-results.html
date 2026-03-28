@@ -83,10 +83,11 @@ a.sidebar-brand:hover .brand-hex{opacity:.75;transition:opacity .15s}
 /* STATS ROW */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 @media(max-width:960px){.stats-row{grid-template-columns:repeat(2,1fr)}}
-.stat-card{background:var(--ink-card);border:1px solid var(--ink-border);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:6px}
-.stat-label{font-size:11px;color:var(--ink-soft);letter-spacing:.04em}
-.stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;line-height:1}
-.stat-sub{font-size:11px;display:flex;align-items:center;gap:5px}
+@media(max-width:600px){.stats-row{grid-template-columns:1fr}}
+.stat-card{background:var(--ink-card);border:1px solid var(--ink-border);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:6px;min-width:0;overflow:hidden}
+.stat-label{font-size:11px;color:var(--ink-soft);letter-spacing:.04em;white-space:nowrap}
+.stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;line-height:1;white-space:nowrap}
+.stat-sub{font-size:11px;display:flex;align-items:center;gap:5px;white-space:nowrap}
 .stat-up{color:var(--green-lt)}
 .stat-down{color:var(--red-lt)}
 .stat-neutral{color:var(--ink-soft)}
@@ -102,30 +103,32 @@ a.sidebar-brand:hover .brand-hex{opacity:.75;transition:opacity .15s}
 .cycle-btn:hover:not(.active){color:var(--paper)}
 
 /* TABLE */
-.tbl{width:100%;border-collapse:collapse}
-.tbl th{font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em;text-align:left;padding:8px 10px;border-bottom:1px solid var(--ink-border);font-weight:500}
-.tbl td{font-size:12px;padding:10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--paper-mid)}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tbl{width:100%;border-collapse:collapse;min-width:900px}
+.tbl th{font-size:10px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.08em;text-align:left;padding:8px 10px;border-bottom:1px solid var(--ink-border);font-weight:500;white-space:nowrap}
+.tbl td{font-size:12px;padding:10px;border-bottom:1px solid rgba(255,255,255,0.04);color:var(--paper-mid);white-space:nowrap}
 .tbl tr:last-child td{border-bottom:none}
 .tbl tr:hover td{background:rgba(255,255,255,0.02)}
-.tbl .emp-name{color:var(--paper);font-weight:500}
+.tbl .emp-name{color:var(--paper);font-weight:500;min-width:140px}
 .tbl .score-badge{padding:3px 10px;border-radius:5px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;display:inline-block}
 .sb-high{background:var(--green-dim);color:var(--green-lt)}
 .sb-mid{background:var(--blue-dim);color:var(--blue-lt)}
 .sb-low{background:var(--amber-dim);color:var(--amber-lt)}
 .sb-crit{background:var(--red-dim);color:var(--red-lt)}
-.prof-bar{width:80px;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:6px}
+.prof-cell{display:flex;align-items:center;gap:6px;min-width:160px}
+.prof-bar{width:60px;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;flex-shrink:0}
 .prof-fill{height:100%;border-radius:3px}
-.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px}
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px;flex-shrink:0}
 
 /* DISTRIBUTION BAR */
 .dist-row{display:flex;align-items:center;gap:10px;padding:6px 0}
-.dist-label{font-size:11px;color:var(--paper-mid);width:100px;flex-shrink:0}
-.dist-bar{flex:1;height:22px;background:rgba(255,255,255,0.04);border-radius:5px;overflow:hidden;display:flex}
-.dist-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;transition:width .6s ease}
-.dist-count{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-soft);width:36px;text-align:right;flex-shrink:0}
+.dist-label{font-size:11px;color:var(--paper-mid);width:110px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dist-bar{flex:1;height:22px;background:rgba(255,255,255,0.04);border-radius:5px;overflow:hidden;display:flex;min-width:120px}
+.dist-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;transition:width .6s ease;overflow:hidden;white-space:nowrap;min-width:0}
+.dist-count{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-soft);width:56px;text-align:right;flex-shrink:0}
 
 /* CHART WRAP */
-.chart-wrap{position:relative;height:220px}
+.chart-wrap{position:relative;height:220px;width:100%;min-width:0}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
@@ -337,23 +340,23 @@ a.sidebar-brand:hover .brand-hex{opacity:.75;transition:opacity .15s}
         <svg style="width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <div class="panel-title">Per-Employee Results</div>
         <div class="panel-badge" style="background:var(--gold-dim);color:var(--gold)">Top 15 shown</div>
-        <div style="display:flex;gap:6px;margin-left:auto">
-          <select id="filterBU" onchange="filterTable()" style="padding:4px 10px;border-radius:6px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper-mid);font-size:11px;font-family:'DM Sans',sans-serif">
-            <option value="all">All BUs</option>
-            <option value="Engineering & Delivery">Engineering</option>
-            <option value="Digital & Technology">Digital & Tech</option>
-            <option value="Corporate Functions">Corporate</option>
-            <option value="Sustainability & EHS">Sustainability</option>
-          </select>
-          <select id="filterStatus" onchange="filterTable()" style="padding:4px 10px;border-radius:6px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper-mid);font-size:11px;font-family:'DM Sans',sans-serif">
-            <option value="all">All Statuses</option>
-            <option value="Completed">Completed</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Not Started">Not Started</option>
-          </select>
-        </div>
       </div>
-      <div class="panel-body" style="padding:0;overflow-x:auto">
+      <div style="display:flex;gap:6px;padding:10px 20px;border-bottom:1px solid var(--ink-border);flex-wrap:wrap">
+        <select id="filterBU" onchange="filterTable()" style="padding:5px 10px;border-radius:6px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper-mid);font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer">
+          <option value="all">All BUs</option>
+          <option value="Engineering & Delivery">Engineering</option>
+          <option value="Digital & Technology">Digital & Tech</option>
+          <option value="Corporate Functions">Corporate</option>
+          <option value="Sustainability & EHS">Sustainability</option>
+        </select>
+        <select id="filterStatus" onchange="filterTable()" style="padding:5px 10px;border-radius:6px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper-mid);font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer">
+          <option value="all">All Statuses</option>
+          <option value="Completed">Completed</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Not Started">Not Started</option>
+        </select>
+      </div>
+      <div class="tbl-wrap" style="padding:0">
         <table class="tbl">
           <thead>
             <tr>
@@ -446,7 +449,7 @@ function renderTable(data) {
     html += '<td>' + (e.self > 0 ? e.self.toFixed(1) : '—') + '</td>';
     html += '<td>' + (e.mgr > 0 ? e.mgr.toFixed(1) : '—') + '</td>';
     html += '<td>' + (e.final > 0 ? '<span class="score-badge ' + scoreClass + '">' + e.final.toFixed(1) + '</span>' : '—') + '</td>';
-    html += '<td><div class="prof-bar"><div class="prof-fill" style="width:' + barWidth + ';background:' + barColor + '"></div></div><span style="font-size:11px;color:' + profColor + '">' + e.prof + '</span></td>';
+    html += '<td><div class="prof-cell"><div class="prof-bar"><div class="prof-fill" style="width:' + barWidth + ';background:' + barColor + '"></div></div><span style="font-size:11px;color:' + profColor + '">' + e.prof + '</span></div></td>';
     html += '<td>' + (e.gaps > 0 ? '<span style="color:var(--red-lt);font-weight:500">' + e.gaps + '</span>' : '<span style="color:var(--green-lt)">0</span>') + '</td>';
     html += '</tr>';
   });
