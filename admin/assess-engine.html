@@ -595,7 +595,7 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
       </div>
 
       <!-- SAMPLE ASSESSMENT SHOWCASE -->
-      <div class="sample-showcase">
+      <div class="sample-showcase" id="sampleShowcase">
         <div style="padding:14px 18px 0;display:flex;align-items:center;justify-content:space-between">
           <div>
             <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--paper)">Sample Assessment Previews</div>
@@ -1485,16 +1485,24 @@ Chart.defaults.font.size = 11;
   tabs.forEach(function(tab){
     tab.addEventListener('click', function(){ activateTab(tab.dataset.tab); });
   });
-  // Category cards click → scroll to showcase + activate tab
+  // Category cards click → activate tab + scroll showcase into view
   document.querySelectorAll('.cat-card[data-target]').forEach(function(card){
-    card.addEventListener('click', function(){
+    card.addEventListener('click', function(e){
+      e.stopPropagation();
       var target = card.dataset.target;
       activateTab(target);
+      // Add a brief flash to the showcase to confirm the action
       var showcase = document.querySelector('.sample-showcase');
-      var scrollContainer = document.querySelector('.content');
-      if(showcase && scrollContainer){
-        var offset = showcase.offsetTop - scrollContainer.offsetTop - 20;
-        scrollContainer.scrollTo({top: offset, behavior: 'smooth'});
+      if(showcase){
+        showcase.style.outline = '2px solid rgba(34,192,180,0.5)';
+        showcase.style.outlineOffset = '2px';
+        setTimeout(function(){ showcase.style.outline='none'; }, 1500);
+        // Scroll — try multiple approaches for browser compat
+        try {
+          showcase.scrollIntoView({behavior:'smooth', block:'nearest'});
+        } catch(err) {
+          showcase.scrollIntoView(false);
+        }
       }
     });
   });
