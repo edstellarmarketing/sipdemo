@@ -419,29 +419,6 @@ select.brief-input option { background: var(--ink-card); color: var(--paper); }
         <div class="kpi-card"><div class="kpi-label">AI Builder Confidence</div><div class="kpi-value gold">88%</div><div class="kpi-sub">Auto-publish eligible</div></div>
       </div>
 
-      <!-- 6 ASSESSMENT CATEGORIES — ACCORDION -->
-      <div class="cat-grid" id="catGrid"></div>
-
-      <!-- PUBLISHING WORKFLOW -->
-      <div class="panel pub-panel">
-        <div class="panel-head">
-          <div><div class="panel-title">Assessment Publishing Workflow</div><div class="panel-sub">Every assessment follows a 5-state lifecycle · Cannot skip states</div></div>
-          <div class="panel-tag teal">State Machine</div>
-        </div>
-        <div class="pub-flow">
-          <div class="pub-step done"><div class="pub-dot done">&#10003;</div><div class="pub-label">Draft</div></div>
-          <div class="pub-line done"></div>
-          <div class="pub-step done"><div class="pub-dot done">&#10003;</div><div class="pub-label">Pilot</div></div>
-          <div class="pub-line active"></div>
-          <div class="pub-step active"><div class="pub-dot active">3</div><div class="pub-label">Review</div></div>
-          <div class="pub-line pending"></div>
-          <div class="pub-step"><div class="pub-dot pending">4</div><div class="pub-label">Published</div></div>
-          <div class="pub-line pending"></div>
-          <div class="pub-step"><div class="pub-dot pending">5</div><div class="pub-label">Archived</div></div>
-        </div>
-        <div class="pub-desc"><strong style="color:var(--paper)">Current:</strong> BIM Advanced Competency Assessment is in <strong style="color:var(--teal-lt)">Review</strong> state. Pilot completed with 8 participants — avg completion 12 min, 0 abandons. Pending HR Admin review before org-wide publish. Published state locks question content; edits create a new version.</div>
-      </div>
-
       <!-- ACTIVE CYCLES TABLE -->
       <div class="panel" id="cyclesPanel">
         <div class="panel-head">
@@ -481,6 +458,29 @@ select.brief-input option { background: var(--ink-card); color: var(--paper); }
             <div class="dist-status"><div class="dist-count" style="color:var(--ink-soft)">0</div><div class="dist-label">Expired</div></div>
           </div>
         </div>
+      </div>
+
+      <!-- 6 ASSESSMENT CATEGORIES — ACCORDION -->
+      <div class="cat-grid" id="catGrid"></div>
+
+      <!-- PUBLISHING WORKFLOW -->
+      <div class="panel pub-panel">
+        <div class="panel-head">
+          <div><div class="panel-title">Assessment Publishing Workflow</div><div class="panel-sub">Every assessment follows a 5-state lifecycle · Cannot skip states</div></div>
+          <div class="panel-tag teal">State Machine</div>
+        </div>
+        <div class="pub-flow">
+          <div class="pub-step done"><div class="pub-dot done">&#10003;</div><div class="pub-label">Draft</div></div>
+          <div class="pub-line done"></div>
+          <div class="pub-step done"><div class="pub-dot done">&#10003;</div><div class="pub-label">Pilot</div></div>
+          <div class="pub-line active"></div>
+          <div class="pub-step active"><div class="pub-dot active">3</div><div class="pub-label">Review</div></div>
+          <div class="pub-line pending"></div>
+          <div class="pub-step"><div class="pub-dot pending">4</div><div class="pub-label">Published</div></div>
+          <div class="pub-line pending"></div>
+          <div class="pub-step"><div class="pub-dot pending">5</div><div class="pub-label">Archived</div></div>
+        </div>
+        <div class="pub-desc"><strong style="color:var(--paper)">Current:</strong> BIM Advanced Competency Assessment is in <strong style="color:var(--teal-lt)">Review</strong> state. Pilot completed with 8 participants — avg completion 12 min, 0 abandons. Pending HR Admin review before org-wide publish. Published state locks question content; edits create a new version.</div>
       </div>
 
     </div><!-- /content -->
