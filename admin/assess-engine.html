@@ -284,6 +284,122 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 .mult-val { font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 800; color: var(--teal-lt); }
 .mult-range { font-size: 9px; color: var(--ink-soft); font-family: 'DM Mono',monospace; }
 
+/* ── SAMPLE ASSESSMENT SHOWCASE ── */
+.sample-showcase {
+  background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: 14px;
+  overflow: hidden; animation: fadeUp .5s ease .12s both;
+}
+.sample-tabs {
+  display: flex; border-bottom: 1px solid var(--ink-border); overflow-x: auto;
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+.sample-tabs::-webkit-scrollbar { display: none; }
+.sample-tab {
+  padding: 12px 18px; font-size: 11.5px; font-weight: 500; color: var(--ink-soft);
+  cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap;
+  transition: color .2s, border-color .2s, background .2s; flex-shrink: 0;
+  display: flex; align-items: center; gap: 7px;
+}
+.sample-tab:hover { color: var(--paper-mid); background: rgba(255,255,255,.02); }
+.sample-tab.active { color: var(--paper); border-bottom-color: var(--teal-lt); background: rgba(13,138,138,.05); }
+.sample-tab .tab-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+.sample-content { display: none; }
+.sample-content.active { display: flex; }
+
+/* Sample panels layout */
+.sample-body { display: flex; gap: 0; flex: 1; min-height: 0; }
+.sample-left { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 14px; border-right: 1px solid var(--ink-border); }
+.sample-right { width: 300px; padding: 20px; display: flex; flex-direction: column; gap: 14px; flex-shrink: 0; }
+
+.sample-section-label {
+  font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+}
+.sample-section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--ink-border);
+}
+
+/* Question preview cards */
+.q-card {
+  background: var(--ink-raised); border: 1px solid var(--ink-border); border-radius: 10px;
+  padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
+  transition: border-color .2s;
+}
+.q-card:hover { border-color: rgba(255,255,255,.12); }
+.q-header { display: flex; align-items: flex-start; gap: 10px; }
+.q-num {
+  width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono',monospace; font-size: 11px; font-weight: 600; flex-shrink: 0;
+}
+.q-text { font-size: 12.5px; color: var(--paper); line-height: 1.55; flex: 1; }
+.q-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+.q-tag {
+  padding: 2px 8px; border-radius: 100px; font-size: 9px; font-weight: 500;
+  letter-spacing: .04em; border: 1px solid;
+}
+
+/* Answer options */
+.q-options { display: flex; flex-direction: column; gap: 5px; padding-left: 34px; }
+.q-opt {
+  display: flex; align-items: center; gap: 8px; padding: 6px 10px;
+  border-radius: 6px; font-size: 11.5px; color: var(--paper-mid);
+  background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.04);
+  transition: background .15s;
+}
+.q-opt.correct { background: rgba(58,184,122,.08); border-color: rgba(58,184,122,.2); color: var(--green-lt); }
+.q-radio {
+  width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--ink-soft);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+}
+.q-opt.correct .q-radio { border-color: var(--green-lt); }
+.q-opt.correct .q-radio::after { content:''; width:6px; height:6px; border-radius:50%; background:var(--green-lt); }
+.q-check {
+  width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid var(--ink-soft);
+  flex-shrink: 0;
+}
+
+/* Rating scale preview */
+.rating-scale { display: flex; gap: 4px; padding-left: 34px; }
+.rating-pill {
+  flex: 1; padding: 8px 4px; border-radius: 6px; text-align: center; font-size: 10px;
+  border: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02);
+  color: var(--ink-soft); cursor: pointer; transition: all .15s;
+}
+.rating-pill.selected { border-color: rgba(58,140,192,.4); background: rgba(58,140,192,.12); color: #3A8CC0; }
+.rating-pill .r-num { font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 700; display: block; }
+
+/* Likert scale */
+.likert-row { display: flex; gap: 3px; padding-left: 34px; }
+.likert-opt {
+  flex: 1; padding: 7px 4px; border-radius: 5px; text-align: center; font-size: 9px;
+  border: 1px solid rgba(255,255,255,.05); background: rgba(255,255,255,.02); color: var(--ink-soft);
+  line-height: 1.3; cursor: pointer; transition: all .15s;
+}
+.likert-opt.selected { border-color: rgba(58,184,122,.3); background: rgba(58,184,122,.1); color: var(--green-lt); }
+
+/* Assign preview */
+.assign-card {
+  background: var(--ink-raised); border: 1px solid var(--ink-border); border-radius: 8px;
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;
+}
+.assign-row { display: flex; align-items: center; justify-content: space-between; }
+.assign-key { font-size: 11px; color: var(--ink-soft); }
+.assign-val { font-size: 11.5px; color: var(--paper); font-weight: 500; }
+.assign-val.highlight { color: var(--teal-lt); }
+
+.config-tag {
+  display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px;
+  border-radius: 100px; font-size: 10px; font-weight: 500; letter-spacing: .03em;
+}
+
+/* Scenario block */
+.scenario-block {
+  background: rgba(200,168,75,.05); border: 1px solid rgba(200,168,75,.15);
+  border-radius: 8px; padding: 12px 14px; font-size: 11.5px; color: var(--paper-mid);
+  line-height: 1.6; font-style: italic;
+}
+
 /* ── ANIMATIONS ── */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
@@ -471,6 +587,495 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
         </div>
 
       </div>
+
+      <!-- SAMPLE ASSESSMENT SHOWCASE -->
+      <div class="sample-showcase">
+        <div style="padding:14px 18px 0;display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--paper)">Sample Assessment Previews</div>
+            <div style="font-size:10px;color:var(--ink-soft);margin-top:2px">Click each category to see sample questions, creation method, and assignment rules</div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <span class="config-tag" style="background:var(--teal-dim);color:var(--teal-lt);border:1px solid rgba(34,192,180,.3)">6 Categories</span>
+            <span class="config-tag" style="background:var(--gold-dim);color:var(--gold);border:1px solid rgba(200,168,75,.3)">Interactive Preview</span>
+          </div>
+        </div>
+        <div class="sample-tabs">
+          <div class="sample-tab active" data-tab="catA"><span class="tab-dot" style="background:#3A8CC0"></span>Skill & Competency</div>
+          <div class="sample-tab" data-tab="catB"><span class="tab-dot" style="background:#A070E0"></span>Psychometric</div>
+          <div class="sample-tab" data-tab="catC"><span class="tab-dot" style="background:#22C0B4"></span>Knowledge Test</div>
+          <div class="sample-tab" data-tab="catD"><span class="tab-dot" style="background:#F0A030"></span>360° Feedback</div>
+          <div class="sample-tab" data-tab="catE"><span class="tab-dot" style="background:#3AB87A"></span>Org Surveys</div>
+          <div class="sample-tab" data-tab="catF"><span class="tab-dot" style="background:#E87060"></span>L&D Discovery</div>
+        </div>
+
+        <!-- ═══ CAT A: SKILL & COMPETENCY ═══ -->
+        <div class="sample-content active" data-panel="catA">
+          <div class="sample-body">
+            <div class="sample-left">
+              <div class="sample-section-label" style="color:#3A8CC0">Sample Dual-Rating Questions</div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(58,140,192,.12);color:#3A8CC0;border:1px solid rgba(58,140,192,.3)">1</div>
+                  <div class="q-text">Rate proficiency in <strong>BIM Coordination & Clash Detection</strong> — ability to manage multi-discipline models, run clash detection, and resolve coordination issues.</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(58,140,192,.1);border-color:rgba(58,140,192,.3);color:#3A8CC0">Skill Rating</span>
+                  <span class="q-tag" style="background:var(--gold-dim);border-color:rgba(200,168,75,.3);color:var(--gold)">Critical · C1</span>
+                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Dual-Rated</span>
+                </div>
+                <div class="rating-scale">
+                  <div class="rating-pill"><span class="r-num">1</span>Novice</div>
+                  <div class="rating-pill"><span class="r-num">2</span>Basic</div>
+                  <div class="rating-pill selected"><span class="r-num">3</span>Competent</div>
+                  <div class="rating-pill"><span class="r-num">4</span>Advanced</div>
+                  <div class="rating-pill"><span class="r-num">5</span>Expert</div>
+                </div>
+                <div style="padding-left:34px;display:flex;gap:12px;font-size:10px">
+                  <span style="color:#3A8CC0">Self-rating: <strong>3</strong></span>
+                  <span style="color:var(--green-lt)">Manager-rating: <strong>2</strong></span>
+                  <span style="color:var(--amber)">Gap: <strong>1.0</strong></span>
+                  <span style="color:var(--ink-soft)">AI Baseline: <strong>2.5</strong></span>
+                </div>
+              </div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(58,140,192,.12);color:#3A8CC0;border:1px solid rgba(58,140,192,.3)">2</div>
+                  <div class="q-text">Rate proficiency in <strong>Stakeholder Communication</strong> — managing client expectations, presenting project status, and facilitating cross-functional meetings.</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(160,112,224,.1);border-color:rgba(160,112,224,.3);color:var(--purple-lt)">Competency Rating</span>
+                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Behavioural</span>
+                </div>
+                <div class="rating-scale">
+                  <div class="rating-pill"><span class="r-num">1</span>Novice</div>
+                  <div class="rating-pill"><span class="r-num">2</span>Basic</div>
+                  <div class="rating-pill"><span class="r-num">3</span>Competent</div>
+                  <div class="rating-pill selected"><span class="r-num">4</span>Advanced</div>
+                  <div class="rating-pill"><span class="r-num">5</span>Expert</div>
+                </div>
+                <div style="padding-left:34px;font-size:10.5px;color:var(--ink-soft);line-height:1.5">
+                  <strong style="color:var(--paper-mid)">Manager observation:</strong> "Priya consistently leads stakeholder meetings with clarity. Recommend L4 — she coaches others on this skill."
+                </div>
+              </div>
+            </div>
+
+            <div class="sample-right">
+              <div class="sample-section-label" style="color:#3A8CC0">Creation & Assignment</div>
+              <div class="assign-card">
+                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">How it's created</div>
+                <div class="assign-row"><span class="assign-key">Method</span><span class="assign-val highlight">AI-generated from FrameworkBible</span></div>
+                <div class="assign-row"><span class="assign-key">Skills sourced</span><span class="assign-val">48 skills across 6 domains</span></div>
+                <div class="assign-row"><span class="assign-key">Per employee</span><span class="assign-val">8-12 role-relevant skills</span></div>
+                <div class="assign-row"><span class="assign-key">Rating model</span><span class="assign-val">1-5 proficiency scale</span></div>
+                <div class="assign-row"><span class="assign-key">Dual rating</span><span class="assign-val highlight">Self + Manager simultaneous</span></div>
+              </div>
+              <div class="assign-card">
+                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">Who gets assigned</div>
+                <div class="assign-row"><span class="assign-key">Population</span><span class="assign-val">780 in-scope employees</span></div>
+                <div class="assign-row"><span class="assign-key">Filtered by</span><span class="assign-val">Role, department, scope rules</span></div>
+                <div class="assign-row"><span class="assign-key">Duration</span><span class="assign-val">15-25 min per employee</span></div>
+                <div class="assign-row"><span class="assign-key">Deadline</span><span class="assign-val">14 days from dispatch</span></div>
+                <div class="assign-row"><span class="assign-key">Reminders</span><span class="assign-val">Day 7, Day 12, Day 14</span></div>
+              </div>
+              <div class="assign-card" style="background:rgba(58,140,192,.06);border-color:rgba(58,140,192,.15)">
+                <div style="font-size:11px;font-weight:600;color:#3A8CC0;margin-bottom:2px">Data feeds into</div>
+                <div style="font-size:11px;color:var(--paper-mid);line-height:1.5">Skills Matrix → Gap Analysis → Weighted LNA → Individual Learning Briefs</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ CAT B: PSYCHOMETRIC ═══ -->
+        <div class="sample-content" data-panel="catB">
+          <div class="sample-body">
+            <div class="sample-left">
+              <div class="sample-section-label" style="color:#A070E0">Sample Psychometric Items</div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(160,112,224,.12);color:#A070E0;border:1px solid rgba(160,112,224,.3)">1</div>
+                  <div class="q-text"><strong>Big Five — Openness:</strong> "I enjoy exploring new ideas and unconventional approaches to solving problems."</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(160,112,224,.1);border-color:rgba(160,112,224,.3);color:#A070E0">Personality Trait</span>
+                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Big Five</span>
+                </div>
+                <div class="likert-row">
+                  <div class="likert-opt">Strongly Disagree</div>
+                  <div class="likert-opt">Disagree</div>
+                  <div class="likert-opt">Neutral</div>
+                  <div class="likert-opt selected">Agree</div>
+                  <div class="likert-opt">Strongly Agree</div>
+                </div>
+              </div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(160,112,224,.12);color:#A070E0;border:1px solid rgba(160,112,224,.3)">2</div>
+                  <div class="q-text"><strong>DISC — Dominance:</strong> "When facing a disagreement in a team meeting, I tend to..."</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(240,160,48,.1);border-color:rgba(240,160,48,.3);color:#F0A030">DISC Profile</span>
+                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Forced Choice</span>
+                </div>
+                <div class="q-options">
+                  <div class="q-opt"><div class="q-radio"></div>State my position firmly and expect others to align</div>
+                  <div class="q-opt correct"><div class="q-radio"></div>Listen to all sides, then propose a compromise</div>
+                  <div class="q-opt"><div class="q-radio"></div>Avoid the conflict and wait for it to resolve</div>
+                  <div class="q-opt"><div class="q-radio"></div>Analyse the data and present facts to settle it</div>
+                </div>
+                <div style="padding-left:34px;font-size:10px;color:var(--ink-soft);margin-top:4px">No right/wrong — maps to behavioural profile. Selected = Influence-dominant response.</div>
+              </div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(160,112,224,.12);color:#A070E0;border:1px solid rgba(160,112,224,.3)">3</div>
+                  <div class="q-text"><strong>Cognitive Ability:</strong> If all Zibbs are Wockets, and some Wockets are Plonks, which must be true?</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(58,140,192,.1);border-color:rgba(58,140,192,.3);color:#3A8CC0">Cognitive</span>
+                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Logical Reasoning</span>
+                </div>
+                <div class="q-options">
+                  <div class="q-opt"><div class="q-radio"></div>All Zibbs are Plonks</div>
+                  <div class="q-opt correct"><div class="q-radio"></div>Some Zibbs might be Plonks</div>
+                  <div class="q-opt"><div class="q-radio"></div>No Zibbs are Plonks</div>
+                  <div class="q-opt"><div class="q-radio"></div>All Plonks are Zibbs</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sample-right">
+              <div class="sample-section-label" style="color:#A070E0">Creation & Assignment</div>
+              <div class="assign-card">
+                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">How it's created</div>
+                <div class="assign-row"><span class="assign-key">Method</span><span class="assign-val highlight">Standardised instrument library</span></div>
+                <div class="assign-row"><span class="assign-key">Instruments</span><span class="assign-val">Big Five, DISC, MBTI, Cognitive</span></div>
+                <div class="assign-row"><span class="assign-key">Questions</span><span class="assign-val">60-80 items per instrument</span></div>
+                <div class="assign-row"><span class="assign-key">Scoring</span><span class="assign-val">Normed percentiles</span></div>
+                <div class="assign-row"><span class="assign-key">Validity</span><span class="assign-val highlight">Social desirability checks</span></div>
+              </div>
+              <div class="assign-card">
+                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">Who gets assigned</div>
+                <div class="assign-row"><span class="assign-key">Population</span><span class="assign-val">Managers + high-potentials</span></div>
+                <div class="assign-row"><span class="assign-key">Typical count</span><span class="assign-val">142 employees</span></div>
+                <div class="assign-row"><span class="assign-key">Duration</span><span class="assign-val">35-45 min (untimed)</span></div>
+                <div class="assign-row"><span class="assign-key">Proctoring</span><span class="assign-val">Secure browser session</span></div>
+                <div class="assign-row"><span class="assign-key">Privacy</span><span class="assign-val highlight">Results to Skill Passport only</span></div>
+              </div>
+              <div class="assign-card" style="background:rgba(160,112,224,.06);border-color:rgba(160,112,224,.15)">
+                <div style="font-size:11px;font-weight:600;color:#A070E0;margin-bottom:2px">Data feeds into</div>
+                <div style="font-size:11px;color:var(--paper-mid);line-height:1.5">Skill Passport Profile → IDP (learning style) → Succession Planning → Team Composition</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ CAT C: KNOWLEDGE TEST ═══ -->
+        <div class="sample-content" data-panel="catC">
+          <div class="sample-body">
+            <div class="sample-left">
+              <div class="sample-section-label" style="color:#22C0B4">Sample Knowledge Questions</div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(34,192,180,.12);color:#22C0B4;border:1px solid rgba(34,192,180,.3)">1</div>
+                  <div class="q-text">In a BIM execution plan (BEP), which of the following defines the Level of Development (LOD) for structural elements at the Design Development phase?</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(34,192,180,.1);border-color:rgba(34,192,180,.3);color:#22C0B4">MCQ</span>
+                  <span class="q-tag" style="background:var(--gold-dim);border-color:rgba(200,168,75,.3);color:var(--gold)">L2-L3 Proficiency</span>
+                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">2 pts</span>
+                </div>
+                <div class="q-options">
+                  <div class="q-opt"><div class="q-radio"></div>LOD 100 — Conceptual massing</div>
+                  <div class="q-opt"><div class="q-radio"></div>LOD 200 — Generic placeholder</div>
+                  <div class="q-opt correct"><div class="q-radio"></div>LOD 300 — Accurate geometry with specifications</div>
+                  <div class="q-opt"><div class="q-radio"></div>LOD 400 — Fabrication-ready detail</div>
+                </div>
+              </div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(34,192,180,.12);color:#22C0B4;border:1px solid rgba(34,192,180,.3)">2</div>
+                  <div class="q-text"><strong>Scenario:</strong> A project team discovers 47 clash detection issues between MEP and structural models 2 weeks before construction. The BIM coordinator must prioritise. Which approach is most effective?</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(232,112,96,.1);border-color:rgba(232,112,96,.3);color:#E87060">Scenario-Based</span>
+                  <span class="q-tag" style="background:var(--gold-dim);border-color:rgba(200,168,75,.3);color:var(--gold)">L3-L4 Proficiency</span>
+                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">5 pts</span>
+                </div>
+                <div class="q-options">
+                  <div class="q-opt"><div class="q-radio"></div>Resolve all 47 clashes before proceeding — zero-clash policy</div>
+                  <div class="q-opt correct"><div class="q-radio"></div>Categorise by severity (hard/soft/pseudo), resolve critical first, defer cosmetic</div>
+                  <div class="q-opt"><div class="q-radio"></div>Escalate to the project manager and pause construction start</div>
+                  <div class="q-opt"><div class="q-radio"></div>Document all clashes in a report and let the site team resolve</div>
+                </div>
+                <div style="padding-left:34px;font-size:10px;color:var(--green-lt);margin-top:2px">Correct — tests practical judgment, not just knowledge recall.</div>
+              </div>
+            </div>
+
+            <div class="sample-right">
+              <div class="sample-section-label" style="color:#22C0B4">Creation & Assignment</div>
+              <div class="assign-card">
+                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">How it's created</div>
+                <div class="assign-row"><span class="assign-key">Method</span><span class="assign-val highlight">AI-generated from skill brief</span></div>
+                <div class="assign-row"><span class="assign-key">Question bank</span><span class="assign-val">246 across 8 tests</span></div>
+                <div class="assign-row"><span class="assign-key">Formats</span><span class="assign-val">MCQ, scenario, case study</span></div>
+                <div class="assign-row"><span class="assign-key">Difficulty</span><span class="assign-val">Mapped to L1-L4 proficiency</span></div>
+                <div class="assign-row"><span class="assign-key">Scheduling</span><span class="assign-val highlight">Pre / Post / 90-day retention</span></div>
+              </div>
+              <div class="assign-card">
+                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">Who gets assigned</div>
+                <div class="assign-row"><span class="assign-key">Population</span><span class="assign-val">Training cohort participants</span></div>
+                <div class="assign-row"><span class="assign-key">Typical count</span><span class="assign-val">40-120 per test</span></div>
+                <div class="assign-row"><span class="assign-key">Duration</span><span class="assign-val">30-45 min (timed)</span></div>
+                <div class="assign-row"><span class="assign-key">Passing score</span><span class="assign-val">70% minimum</span></div>
+                <div class="assign-row"><span class="assign-key">Retakes</span><span class="assign-val">Max 2 with new questions</span></div>
+              </div>
+              <div class="assign-card" style="background:rgba(34,192,180,.06);border-color:rgba(34,192,180,.15)">
+                <div style="font-size:11px;font-weight:600;color:#22C0B4;margin-bottom:2px">Data feeds into</div>
+                <div style="font-size:11px;color:var(--paper-mid);line-height:1.5">Training Effectiveness (Kirkpatrick L2) → Pre/Post Delta → Certificate Eligibility → Retention Tracking</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ CAT D: 360° FEEDBACK ═══ -->
+        <div class="sample-content" data-panel="catD">
+          <div class="sample-body">
+            <div class="sample-left">
+              <div class="sample-section-label" style="color:#F0A030">Sample 360° Feedback Items</div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(240,160,48,.12);color:#F0A030;border:1px solid rgba(240,160,48,.3)">1</div>
+                  <div class="q-text">How effectively does <strong>Priya Menon</strong> communicate project risks to senior stakeholders in a timely manner?</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(240,160,48,.1);border-color:rgba(240,160,48,.3);color:#F0A030">Multi-Rater</span>
+                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Leadership Competency</span>
+                </div>
+                <div class="likert-row">
+                  <div class="likert-opt">Never</div>
+                  <div class="likert-opt">Rarely</div>
+                  <div class="likert-opt">Sometimes</div>
+                  <div class="likert-opt selected">Often</div>
+                  <div class="likert-opt">Always</div>
+                </div>
+                <div style="padding-left:34px;display:flex;gap:16px;font-size:10px;margin-top:6px">
+                  <span style="color:#3A8CC0">Self: <strong>Often</strong></span>
+                  <span style="color:var(--green-lt)">Manager: <strong>Always</strong></span>
+                  <span style="color:var(--purple-lt)">Peers avg: <strong>Often</strong></span>
+                  <span style="color:var(--amber)">Gap: <strong>0.3</strong></span>
+                </div>
+              </div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(240,160,48,.12);color:#F0A030;border:1px solid rgba(240,160,48,.3)">2</div>
+                  <div class="q-text">Provide one specific example of how <strong>Priya</strong> has demonstrated <em>coaching and developing others</em> in the past 6 months.</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(240,160,48,.1);border-color:rgba(240,160,48,.3);color:#F0A030">Open-Ended</span>
+                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Qualitative</span>
+                  <span class="q-tag" style="background:rgba(58,184,122,.08);border-color:rgba(58,184,122,.25);color:var(--green-lt)">Anonymous</span>
+                </div>
+                <div class="scenario-block" style="margin-left:34px">
+                  "Priya paired junior PMs with experienced leads during the Marina Bay project. She ran weekly debrief sessions where juniors presented their coordination challenges and received structured feedback. Two of the three juniors are now running sub-projects independently."
+                  <div style="font-style:normal;font-size:9px;color:var(--ink-soft);margin-top:6px">— Peer rater · Anonymous · Submitted 18 Mar 2026</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sample-right">
+              <div class="sample-section-label" style="color:#F0A030">Creation & Assignment</div>
+              <div class="assign-card">
+                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">How it's created</div>
+                <div class="assign-row"><span class="assign-key">Method</span><span class="assign-val highlight">Template + AI customisation</span></div>
+                <div class="assign-row"><span class="assign-key">Competencies</span><span class="assign-val">Mapped from FrameworkBible</span></div>
+                <div class="assign-row"><span class="assign-key">Items per rater</span><span class="assign-val">12-16 rating + 3 open-ended</span></div>
+                <div class="assign-row"><span class="assign-key">Anonymity</span><span class="assign-val highlight">3+ raters per group required</span></div>
+                <div class="assign-row"><span class="assign-key">External access</span><span class="assign-val">Tokenised link (no login)</span></div>
+              </div>
+              <div class="assign-card">
+                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">Who gets assigned</div>
+                <div class="assign-row"><span class="assign-key">Ratees</span><span class="assign-val">28 senior managers</span></div>
+                <div class="assign-row"><span class="assign-key">Raters per person</span><span class="assign-val">8-12 across 5 groups</span></div>
+                <div class="assign-row"><span class="assign-key">Rater groups</span><span class="assign-val">Manager, Peers, Reports, Cross-func, External</span></div>
+                <div class="assign-row"><span class="assign-key">Duration</span><span class="assign-val">15-20 min per rater</span></div>
+                <div class="assign-row"><span class="assign-key">Deadline</span><span class="assign-val">21 days collection window</span></div>
+              </div>
+              <div class="assign-card" style="background:rgba(240,160,48,.06);border-color:rgba(240,160,48,.15)">
+                <div style="font-size:11px;font-weight:600;color:#F0A030;margin-bottom:2px">Data feeds into</div>
+                <div style="font-size:11px;color:var(--paper-mid);line-height:1.5">Perception Gap Analysis → Leadership Development → Succession Pipeline → IDP Goals</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ CAT E: ORG SURVEYS ═══ -->
+        <div class="sample-content" data-panel="catE">
+          <div class="sample-body">
+            <div class="sample-left">
+              <div class="sample-section-label" style="color:#3AB87A">Sample Survey Questions</div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(58,184,122,.12);color:#3AB87A;border:1px solid rgba(58,184,122,.3)">1</div>
+                  <div class="q-text"><strong>Engagement Pulse:</strong> "I feel motivated and energised by the work I do in my current role."</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(58,184,122,.1);border-color:rgba(58,184,122,.3);color:#3AB87A">Engagement</span>
+                  <span class="q-tag" style="background:rgba(58,184,122,.08);border-color:rgba(58,184,122,.25);color:var(--green-lt)">Anonymous</span>
+                </div>
+                <div class="likert-row">
+                  <div class="likert-opt">Strongly Disagree</div>
+                  <div class="likert-opt">Disagree</div>
+                  <div class="likert-opt">Neutral</div>
+                  <div class="likert-opt selected">Agree</div>
+                  <div class="likert-opt">Strongly Agree</div>
+                </div>
+              </div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(58,184,122,.12);color:#3AB87A;border:1px solid rgba(58,184,122,.3)">2</div>
+                  <div class="q-text"><strong>Change Readiness:</strong> "I understand why the organisation is investing in digital transformation and I support the direction."</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(34,192,180,.1);border-color:rgba(34,192,180,.3);color:#22C0B4">Change Readiness</span>
+                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Transformation Dial</span>
+                </div>
+                <div class="likert-row">
+                  <div class="likert-opt">Strongly Disagree</div>
+                  <div class="likert-opt">Disagree</div>
+                  <div class="likert-opt">Neutral</div>
+                  <div class="likert-opt">Agree</div>
+                  <div class="likert-opt selected">Strongly Agree</div>
+                </div>
+              </div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(58,184,122,.12);color:#3AB87A;border:1px solid rgba(58,184,122,.3)">3</div>
+                  <div class="q-text"><strong>Wellbeing Pulse:</strong> "Over the past 2 weeks, how would you rate your overall energy level at work?"</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(232,112,96,.1);border-color:rgba(232,112,96,.3);color:#E87060">Wellbeing</span>
+                  <span class="q-tag" style="background:rgba(58,184,122,.08);border-color:rgba(58,184,122,.25);color:var(--green-lt)">Anonymous</span>
+                </div>
+                <div class="rating-scale">
+                  <div class="rating-pill"><span class="r-num">1</span>Very Low</div>
+                  <div class="rating-pill"><span class="r-num">2</span>Low</div>
+                  <div class="rating-pill selected"><span class="r-num">3</span>Moderate</div>
+                  <div class="rating-pill"><span class="r-num">4</span>High</div>
+                  <div class="rating-pill"><span class="r-num">5</span>Very High</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sample-right">
+              <div class="sample-section-label" style="color:#3AB87A">Creation & Assignment</div>
+              <div class="assign-card">
+                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">How it's created</div>
+                <div class="assign-row"><span class="assign-key">Method</span><span class="assign-val highlight">Template library + AI generation</span></div>
+                <div class="assign-row"><span class="assign-key">Survey types</span><span class="assign-val">Engagement, Change, Culture, Wellbeing, L&D Sat</span></div>
+                <div class="assign-row"><span class="assign-key">Questions</span><span class="assign-val">12-25 per survey</span></div>
+                <div class="assign-row"><span class="assign-key">Format</span><span class="assign-val">Likert, NPS, rating, open-text</span></div>
+                <div class="assign-row"><span class="assign-key">Frequency</span><span class="assign-val highlight">Quarterly or pulse (monthly)</span></div>
+              </div>
+              <div class="assign-card">
+                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">Who gets assigned</div>
+                <div class="assign-row"><span class="assign-key">Population</span><span class="assign-val">All 812 employees (org-wide)</span></div>
+                <div class="assign-row"><span class="assign-key">Anonymity</span><span class="assign-val highlight">Fully anonymous — team-level only</span></div>
+                <div class="assign-row"><span class="assign-key">Duration</span><span class="assign-val">5-10 min</span></div>
+                <div class="assign-row"><span class="assign-key">Response target</span><span class="assign-val">75%+ for statistical validity</span></div>
+                <div class="assign-row"><span class="assign-key">Channels</span><span class="assign-val">Email, in-app, Slack, MS Teams</span></div>
+              </div>
+              <div class="assign-card" style="background:rgba(58,184,122,.06);border-color:rgba(58,184,122,.15)">
+                <div style="font-size:11px;font-weight:600;color:#3AB87A;margin-bottom:2px">Data feeds into</div>
+                <div style="font-size:11px;color:var(--paper-mid);line-height:1.5">Wellbeing Dashboard → Burnout Risk Score → Timeline Adjustment → InsightBoard (Engagement widgets)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══ CAT F: L&D DISCOVERY ═══ -->
+        <div class="sample-content" data-panel="catF">
+          <div class="sample-body">
+            <div class="sample-left">
+              <div class="sample-section-label" style="color:#E87060">Sample Discovery Session Capture</div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(232,112,96,.12);color:#E87060;border:1px solid rgba(232,112,96,.3)">1</div>
+                  <div class="q-text"><strong>1:1 Interview — Structured Prompt:</strong> "What skill do you most wish you had right now to perform better in your current role? Why?"</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(232,112,96,.1);border-color:rgba(232,112,96,.3);color:#E87060">1:1 Interview</span>
+                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Employee-Declared Need</span>
+                </div>
+                <div class="scenario-block" style="margin-left:34px;border-color:rgba(232,112,96,.15);background:rgba(232,112,96,.04)">
+                  "I need better data analysis skills. We're using Power BI now for project reporting but I'm still exporting to Excel because I don't know how to build dashboards. My manager expects automated reports but I haven't had any training on it."
+                  <div style="font-style:normal;font-size:9px;color:var(--ink-soft);margin-top:6px">— EMP-234 · Sr Site Engineer · Project Delivery · Recorded 12 Mar 2026</div>
+                </div>
+                <div style="padding-left:34px;margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">
+                  <span class="q-tag" style="background:rgba(200,168,75,.1);border-color:rgba(200,168,75,.3);color:var(--gold)">AI Theme: Data Literacy</span>
+                  <span class="q-tag" style="background:rgba(200,168,75,.1);border-color:rgba(200,168,75,.3);color:var(--gold)">AI Theme: Tool Proficiency</span>
+                  <span class="q-tag" style="background:rgba(232,112,96,.1);border-color:rgba(232,112,96,.3);color:#E87060">LNA Multiplier: ×1.3</span>
+                </div>
+              </div>
+
+              <div class="q-card">
+                <div class="q-header">
+                  <div class="q-num" style="background:rgba(232,112,96,.12);color:#E87060;border:1px solid rgba(232,112,96,.3)">2</div>
+                  <div class="q-text"><strong>Focus Group — Theme Extraction:</strong> "What barriers prevent your team from adopting new digital tools?"</div>
+                </div>
+                <div class="q-meta">
+                  <span class="q-tag" style="background:rgba(160,112,224,.1);border-color:rgba(160,112,224,.3);color:#A070E0">Focus Group</span>
+                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">6 participants</span>
+                </div>
+                <div class="scenario-block" style="margin-left:34px;border-color:rgba(232,112,96,.15);background:rgba(232,112,96,.04)">
+                  <strong style="font-style:normal;color:var(--paper)">AI-Extracted Themes:</strong><br>
+                  1. <strong>Training timing</strong> — sessions scheduled during peak project delivery (4/6 mentioned)<br>
+                  2. <strong>Tool overload</strong> — 3 new tools in 6 months, no consolidation (5/6 mentioned)<br>
+                  3. <strong>Manager support</strong> — no protected learning time allocated (3/6 mentioned)
+                  <div style="font-style:normal;font-size:9px;color:var(--ink-soft);margin-top:6px">— Focus Group #7 · EHS & Risk Dept · Facilitated by L&D Manager · 15 Mar 2026</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sample-right">
+              <div class="sample-section-label" style="color:#E87060">Creation & Assignment</div>
+              <div class="assign-card">
+                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">How it's created</div>
+                <div class="assign-row"><span class="assign-key">Method</span><span class="assign-val highlight">Structured templates + free capture</span></div>
+                <div class="assign-row"><span class="assign-key">Session types</span><span class="assign-val">1:1, Focus Group, Dept Review</span></div>
+                <div class="assign-row"><span class="assign-key">AI processing</span><span class="assign-val">Theme extraction + sentiment</span></div>
+                <div class="assign-row"><span class="assign-key">Prompts</span><span class="assign-val">12 structured + open capture</span></div>
+                <div class="assign-row"><span class="assign-key">Output</span><span class="assign-val highlight">Declared needs + LNA multiplier</span></div>
+              </div>
+              <div class="assign-card">
+                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">Who participates</div>
+                <div class="assign-row"><span class="assign-key">1:1 interviews</span><span class="assign-val">High-potential + flagged employees</span></div>
+                <div class="assign-row"><span class="assign-key">Focus groups</span><span class="assign-val">6-8 per group, per department</span></div>
+                <div class="assign-row"><span class="assign-key">Dept reviews</span><span class="assign-val">Department heads + L&D</span></div>
+                <div class="assign-row"><span class="assign-key">Facilitator</span><span class="assign-val">L&D Manager or HRBP</span></div>
+                <div class="assign-row"><span class="assign-key">Duration</span><span class="assign-val">30 min (1:1) / 60 min (group)</span></div>
+              </div>
+              <div class="assign-card" style="background:rgba(232,112,96,.06);border-color:rgba(232,112,96,.15)">
+                <div style="font-size:11px;font-weight:600;color:#E87060;margin-bottom:2px">Data feeds into</div>
+                <div style="font-size:11px;color:var(--paper-mid);line-height:1.5">Employee-Declared Needs → LNA Multiplier (Discovery ×1.1-1.5) → Gap Weighting → Wellbeing Signals</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /sample-showcase -->
 
       <!-- ACTIVE CYCLES TABLE -->
       <div class="panel" style="animation: fadeUp .5s ease .15s both">
@@ -856,6 +1461,21 @@ Chart.defaults.font.size = 11;
         y: { grid: { display: false }, border: { display: false } }
       }
     }
+  });
+})();
+
+// Sample Assessment Tabs
+(function(){
+  var tabs = document.querySelectorAll('.sample-tab');
+  var panels = document.querySelectorAll('.sample-content');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      tab.classList.add('active');
+      var panel = document.querySelector('[data-panel="'+tab.dataset.tab+'"]');
+      if(panel) panel.classList.add('active');
+    });
   });
 })();
 
