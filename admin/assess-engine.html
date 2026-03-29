@@ -183,6 +183,36 @@ select.brief-input option { background: var(--ink-card); color: var(--paper); }
 .gen-panel { padding: 16px; display: flex; flex-direction: column; gap: 10px; border-right: 1px solid var(--ink-border); overflow-y: auto; max-height: 420px; }
 .gen-panel::-webkit-scrollbar { width: 3px; }
 .gen-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 2px; }
+
+/* Generation states */
+.gen-panel .gen-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 40px 16px; text-align: center; flex: 1; }
+.gen-panel .gen-placeholder svg { width: 32px; height: 32px; stroke: var(--ink-soft); fill: none; stroke-width: 1.2; opacity: .5; }
+.gen-panel .gen-placeholder-text { font-size: 11.5px; color: var(--ink-soft); line-height: 1.5; }
+.gen-panel.generated .gen-placeholder { display: none; }
+.gen-panel:not(.generated) .q-card,
+.gen-panel:not(.generated) .gen-actions { display: none; }
+
+/* Pipeline animation */
+.gen-pipeline { display: none; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.gen-panel.running .gen-pipeline { display: flex; }
+.gen-panel.running .gen-placeholder { display: none; }
+.gen-panel.running .q-card, .gen-panel.running .gen-actions { display: none; }
+.pipe-step { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 6px; font-size: 10.5px; color: var(--ink-soft); }
+.pipe-step.done { color: var(--green-lt); }
+.pipe-step.active { color: var(--teal-lt); background: rgba(13,138,138,.06); }
+.pipe-dot { width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 9px; }
+.pipe-step.done .pipe-dot { background: var(--green-dim); border: 1px solid rgba(58,184,122,.3); color: var(--green-lt); }
+.pipe-step.active .pipe-dot { background: var(--teal-dim); border: 1px solid rgba(34,192,180,.4); color: var(--teal-lt); animation: blink 1s infinite; }
+.pipe-step.pending .pipe-dot { background: rgba(255,255,255,.03); border: 1px solid var(--ink-border); color: var(--ink-soft); }
+.pipe-progress { margin-top: 4px; height: 3px; background: rgba(255,255,255,.05); border-radius: 2px; overflow: hidden; }
+.pipe-progress-fill { height: 100%; background: var(--teal-lt); border-radius: 2px; transition: width .4s ease; width: 0%; }
+
+/* Q card fade-in */
+@keyframes qFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.gen-panel.generated .q-card { animation: qFadeIn .4s ease both; }
+.gen-panel.generated .q-card:nth-child(3) { animation-delay: .1s; }
+.gen-panel.generated .q-card:nth-child(4) { animation-delay: .25s; }
+.gen-panel.generated .q-card:nth-child(5) { animation-delay: .4s; }
 .gen-title { font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
 .gen-title .gt-count { padding: 2px 7px; border-radius: 100px; font-size: 9px; font-weight: 600; background: var(--teal-dim); color: var(--teal-lt); }
 
@@ -672,8 +702,19 @@ function renderCats(){
     h += '</div>';
 
     // B. GENERATED QUESTIONS
-    h += '<div class="gen-panel">';
+    h += '<div class="gen-panel" data-gen="'+c.id+'">';
     h += '<div class="gen-title" style="color:var(--cc)">AI-Generated Questions <span class="gt-count">'+c.questions.length+' shown</span></div>';
+    // Placeholder (shown before generation)
+    h += '<div class="gen-placeholder"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><div class="gen-placeholder-text">Click <strong style="color:var(--teal-lt)">Generate Assessment</strong> to see the AI build questions from your brief in real time.</div></div>';
+    // Pipeline animation (shown during generation)
+    h += '<div class="gen-pipeline">';
+    h += '<div class="pipe-step pending" data-pipe="1"><div class="pipe-dot">1</div>Reading brief & org context...</div>';
+    h += '<div class="pipe-step pending" data-pipe="2"><div class="pipe-dot">2</div>Analysing FrameworkBible skills...</div>';
+    h += '<div class="pipe-step pending" data-pipe="3"><div class="pipe-dot">3</div>Generating questions ('+c.brief.type+')...</div>';
+    h += '<div class="pipe-step pending" data-pipe="4"><div class="pipe-dot">4</div>Calibrating difficulty & scoring...</div>';
+    h += '<div class="pipe-step pending" data-pipe="5"><div class="pipe-dot">5</div>Mapping AI explanations...</div>';
+    h += '<div class="pipe-progress"><div class="pipe-progress-fill"></div></div>';
+    h += '</div>';
     c.questions.forEach(function(q){
       h += '<div class="q-card">';
       h += '<div class="q-header"><div class="q-num" style="background:var(--cc-dim);color:var(--cc);border:1px solid rgba(255,255,255,.1)">'+q.num+'</div><div class="q-text">'+q.text+'</div></div>';
@@ -706,7 +747,7 @@ function renderCats(){
       h += '<div class="q-actions"><span class="q-act accept">Accept</span><span class="q-act reject">Reject</span><span class="q-act edit">Edit</span></div>';
       h += '</div>'; // q-card
     });
-    h += '<div style="display:flex;gap:6px;margin-top:4px">';
+    h += '<div class="gen-actions" style="display:flex;gap:6px;margin-top:4px">';
     h += '<button class="tb-btn" style="font-size:10px;padding:5px 10px"><svg viewBox="0 0 24 24" style="width:11px;height:11px"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>Regenerate</button>';
     h += '<button class="tb-btn" style="font-size:10px;padding:5px 10px">Strengthen</button>';
     h += '<button class="tb-btn" style="font-size:10px;padding:5px 10px">Shorten</button>';
@@ -763,6 +804,37 @@ document.getElementById('catGrid').addEventListener('click', function(e){
   card.classList.toggle('open');
 });
 
+// ── GENERATION PIPELINE ANIMATION ──
+function runGeneration(panel){
+  panel.classList.add('running');
+  var steps = panel.querySelectorAll('.pipe-step');
+  var bar = panel.querySelector('.pipe-progress-fill');
+  var total = steps.length;
+  var i = 0;
+
+  function nextStep(){
+    if(i > 0){
+      steps[i-1].classList.remove('active');
+      steps[i-1].classList.add('done');
+      steps[i-1].querySelector('.pipe-dot').innerHTML = '&#10003;';
+    }
+    if(i < total){
+      steps[i].classList.remove('pending');
+      steps[i].classList.add('active');
+      bar.style.width = Math.round(((i+1)/total)*100) + '%';
+      i++;
+      setTimeout(nextStep, 600 + Math.random()*400);
+    } else {
+      // Done — show generated questions
+      setTimeout(function(){
+        panel.classList.remove('running');
+        panel.classList.add('generated');
+      }, 300);
+    }
+  }
+  nextStep();
+}
+
 // ── TOAST ──
 (function(){
   var toast = document.createElement("div");
@@ -784,7 +856,17 @@ document.getElementById('catGrid').addEventListener('click', function(e){
       return;
     }
     var gen = e.target.closest('.brief-generate');
-    if(gen){ showToast('AI generating assessment... (demo — already generated below)'); return; }
+    if(gen){
+      var card = gen.closest('.cat-card');
+      var catId = card ? card.dataset.cat : null;
+      var panel = catId ? document.querySelector('[data-gen="'+catId+'"]') : null;
+      if(panel && !panel.classList.contains('generated') && !panel.classList.contains('running')){
+        runGeneration(panel);
+      } else if(panel && panel.classList.contains('generated')){
+        showToast('Assessment already generated — use Regenerate to rebuild');
+      }
+      return;
+    }
     var btn = e.target.closest('.tb-btn');
     if(btn){ var t = (btn.textContent||'').trim().substring(0,40); showToast(t+' — available in full platform'); }
   });
