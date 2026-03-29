@@ -128,11 +128,11 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; animation: fadeUp .5s ease .1s both; }
 .cat-card {
   background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: 12px;
-  padding: 18px 16px; display: flex; flex-direction: column; gap: 10px;
-  cursor: pointer; transition: border-color .2s, transform .2s; position: relative; overflow: hidden;
+  padding: 18px 16px 32px; display: flex; flex-direction: column; gap: 10px;
+  cursor: pointer; transition: border-color .2s, transform .2s; position: relative; overflow: visible;
 }
 .cat-card:hover { border-color: rgba(255,255,255,.14); transform: translateY(-2px); }
-.cat-card::before { content: ''; position: absolute; inset: 0; border-radius: 12px; opacity: 0; transition: opacity .2s; }
+.cat-card::before { content: ''; position: absolute; inset: 0; border-radius: 12px; opacity: 0; transition: opacity .2s; pointer-events: none; }
 .cat-card:hover::before { opacity: 1; }
 
 .cat-icon {
@@ -166,11 +166,11 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 .cat-card .cat-stat-val { color: var(--cc); }
 .cat-card::before { background: var(--cc-dim); }
 .cat-card::after {
-  content: 'Click to preview ↓'; position: absolute; bottom: 12px; right: 14px;
+  content: 'Click to preview ↓'; position: absolute; bottom: 10px; left: 16px;
   font-size: 9px; color: var(--cc); opacity: 0; transition: opacity .2s;
-  letter-spacing: .04em; font-weight: 500; z-index: 1;
+  letter-spacing: .04em; font-weight: 500; z-index: 2; pointer-events: none;
 }
-.cat-card:hover::after { opacity: .7; }
+.cat-card:hover::after { opacity: .6; }
 
 /* ── ACTIVE CYCLES TABLE ── */
 .cycle-table { width: 100%; border-collapse: collapse; }
