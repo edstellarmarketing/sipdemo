@@ -53,7 +53,8 @@ html, body { height: 100%; background: var(--ink); color: var(--paper); font-fam
 .emp-btn { width: 100%; padding: 7px 10px; border-radius: 6px; border: none; background: transparent; color: var(--paper-mid); font-family: 'DM Sans', sans-serif; font-size: 12px; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background .15s, color .15s; margin-bottom: 2px; }
 .emp-btn:hover { background: rgba(255,255,255,0.05); color: var(--paper); }
 .emp-btn.active { background: var(--blue-dim); color: var(--paper); }
-.emp-av { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne',sans-serif; font-size: 8px; font-weight: 700; flex-shrink: 0; }
+.emp-av { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne',sans-serif; font-size: 8px; font-weight: 700; flex-shrink: 0; object-fit: cover; overflow: hidden; }
+.emp-av img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .emp-meta { display: flex; flex-direction: column; gap: 1px; }
 .emp-nm { font-size: 11.5px; color: inherit; }
 .emp-rl { font-size: 9.5px; color: var(--ink-soft); }
@@ -67,7 +68,8 @@ html, body { height: 100%; background: var(--ink); color: var(--paper); font-fam
 .nav-item.active svg { opacity: 1; }
 
 .sidebar-user { padding: 14px 16px; border-top: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; }
-.user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; color: var(--paper); flex-shrink: 0; }
+.user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; color: var(--paper); flex-shrink: 0; overflow: hidden; }
+.user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .user-name { font-size: 12px; font-weight: 500; color: var(--paper); }
 .user-role { font-size: 10px; color: var(--ink-soft); }
 
@@ -119,7 +121,9 @@ html, body { height: 100%; background: var(--ink); color: var(--paper); font-fam
   background: linear-gradient(135deg, var(--blue) 0%, #0E3A5A 100%);
   display: flex; align-items: center; justify-content: center;
   font-family: 'Syne',sans-serif; font-size: 22px; font-weight: 800; color: var(--paper);
+  overflow: hidden;
 }
+.avatar-inner img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 .verified-badge {
   position: absolute; bottom: 0; right: 0;
   width: 20px; height: 20px; border-radius: 50%;
@@ -357,19 +361,19 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
   <div class="emp-switcher">
     <div class="sw-label">Employees</div>
     <button class="emp-btn active">
-      <div class="emp-av" style="background:var(--blue)">PM</div>
+      <div class="emp-av"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Priya Menon"></div>
       <div class="emp-meta"><div class="emp-nm">Priya Menon</div><div class="emp-rl">Sr Project Manager</div></div>
     </button>
     <button class="emp-btn">
-      <div class="emp-av" style="background:#0E7C72">TA</div>
+      <div class="emp-av"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Tariq Al-Rashidi"></div>
       <div class="emp-meta"><div class="emp-nm">Tariq Al-Rashidi</div><div class="emp-rl">BIM Manager</div></div>
     </button>
     <button class="emp-btn">
-      <div class="emp-av" style="background:#1A5C3A">AK</div>
+      <div class="emp-av"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Ananya Krishnaswamy"></div>
       <div class="emp-meta"><div class="emp-nm">Ananya Krishnaswamy</div><div class="emp-rl">EHS Auditor</div></div>
     </button>
     <button class="emp-btn">
-      <div class="emp-av" style="background:#5A3A8A">AH</div>
+      <div class="emp-av"><img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Amir Hassan"></div>
       <div class="emp-meta"><div class="emp-nm">Amir Hassan</div><div class="emp-rl">Sr Structural Eng</div></div>
     </button>
   </div>
@@ -390,7 +394,7 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
   </nav>
 
   <div class="sidebar-user">
-    <div class="user-avatar">PM</div>
+    <div class="user-avatar"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Priya Menon"></div>
     <div style="display:flex;flex-direction:column;gap:1px">
       <div class="user-name">Priya Menon</div>
       <div class="user-role">Viewing own passport</div>
@@ -432,7 +436,7 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
       <div class="id-card">
         <div class="id-card-top">
           <div class="avatar-ring">
-            <div class="avatar-inner">PM</div>
+            <div class="avatar-inner"><img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Priya Menon"></div>
             <div class="verified-badge"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
           </div>
           <div class="id-name">Priya Menon</div>
