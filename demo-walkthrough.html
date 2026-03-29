@@ -70,8 +70,23 @@ body{background:var(--ink);color:var(--paper);font-family:'DM Sans',sans-serif;m
 .step-cta:hover{opacity:.88;transform:translateX(2px)}
 .step-cta svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
 
+/* moved to enhanced flow arrow section above */
+
+/* CONTEXT / WHY BLOCK */
+.step-context{padding:0 24px;border-bottom:1px solid var(--ink-border)}
+.ctx-inner{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:8px;background:rgba(200,168,75,0.04);border:1px solid rgba(200,168,75,0.1);margin:0 0 14px}
+.ctx-icon{width:20px;height:20px;flex-shrink:0;margin-top:1px;color:var(--gold);opacity:.7}
+.ctx-icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.ctx-text{font-size:11.5px;color:var(--paper-mid);line-height:1.55}
+.ctx-text strong{color:var(--gold);font-weight:600}
+.ctx-connect{font-size:10px;color:var(--ink-soft);margin-top:4px;display:flex;align-items:center;gap:5px}
+.ctx-connect::before{content:'';width:14px;height:1px;background:var(--gold);opacity:.4}
+
+/* ENHANCED FLOW ARROW */
 .flow-arrow{display:flex;flex-direction:column;align-items:center;margin:-4px 0 -4px;position:relative;z-index:1}
+.flow-arrow-line{width:2px;height:18px;background:linear-gradient(180deg,rgba(200,168,75,0.5),rgba(200,168,75,0.2))}
 .flow-arrow-label{font-size:9px;font-family:'DM Mono',monospace;color:var(--ink-soft);background:var(--ink);padding:3px 10px;border-radius:100px;border:1px solid var(--ink-border);white-space:nowrap}
+.flow-arrow-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:.5;margin:2px 0}
 
 .portal-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:100px;font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border:1px solid;flex-shrink:0}
 .portal-tag.admin{background:rgba(26,92,138,0.1);border-color:rgba(26,92,138,0.3);color:var(--blue-lt)}
@@ -134,68 +149,132 @@ var C = {
 var flows = [
   // L1 — Context Setting (1-14)
   {n:1,t:'Authentication & Portal Routing',sub:'Sign-up, login, MFA, SSO, role-based portal dispatch to Admin / Manager / Employee portals.',lvl:'L1 · All Portals · Multi-tenant',c:'blue',tag:'admin',href:'login.html',arrow:'Portal routes to OrgSetup',
+   why:'<strong>Starting point.</strong> Every platform interaction begins with identity. Authentication determines <em>who</em> you are and <em>which portal</em> you see — Admin, Manager, or Employee. This role-based routing ensures each user only accesses features relevant to their responsibility.',
+   conn:'Entry gate — all subsequent steps require an authenticated session.',
    sees:[{v:'3',t:'<strong>Portal cards</strong> — Admin, Manager, Employee with role-based access',c:'var(--blue-lt)'},{v:'SSO',t:'<strong>Single sign-on</strong> with Workday integration',c:'var(--paper)'},{v:'MFA',t:'<strong>Multi-factor auth</strong> enforced for admin roles',c:'var(--amber)'}]},
   {n:2,t:'Organisation Onboarding & Context Setup',sub:'113 fields across 10 steps: org identity, hierarchy, roles, goals, products, clients, standards, tools, skills config, competency & culture.',lvl:'L1 · Admin · M1: OrgSetup',c:'blue',tag:'admin',href:'admin/org-setup.html',arrow:'Context feeds DataPort + AI',
+   why:'<strong>Why before data import?</strong> The AI needs organisational context — hierarchy, goals, industry standards, culture — <em>before</em> it can intelligently process employee data. Without this context, SkillForge would generate generic skills instead of org-specific ones.',
+   conn:'From Step 1 (Auth) → Admin enters org DNA that shapes every AI decision downstream.',
    sees:[{v:'113',t:'<strong>Fields configured</strong> across 10 interactive steps with auto-fill demo',c:'var(--blue-lt)'},{v:'91%',t:'<strong>Context completeness</strong> meter updates live as steps complete',c:'var(--green-lt)'},{v:'10',t:'<strong>Steps</strong> from identity to transformation dial',c:'var(--gold)'}]},
   {n:3,t:'DataPort — Excel Import & Validation',sub:'Upload, client-side parse, sheet-by-sheet preview, row-level error highlighting, skip-or-fix, Data Context Meter.',lvl:'L1 · Admin · M2: DataPort',c:'blue',tag:'admin',href:'admin/dataport.html',arrow:'812 employees imported',
+   why:'<strong>Why bulk import first?</strong> With org context set (Step 2), the system can now validate employee data against the configured hierarchy and roles. Bulk import handles the 90% case — getting hundreds of employees in quickly with quality checks.',
+   conn:'From Step 2 (OrgSetup) → Org hierarchy and roles inform field validation and data quality scoring.',
    sees:[{v:'812',t:'<strong>Employees imported</strong> from Workday HRIS across 4 regions',c:'var(--blue-lt)'},{v:'4',t:'<strong>Step wizard</strong> — Upload → Validate → Reconcile → Import',c:'var(--gold)'},{v:'91%',t:'<strong>Data Quality Score</strong> from day one',c:'var(--green-lt)'}]},
   {n:4,t:'DataPort — Manual Entry & Inline Editing',sub:'Add single employee, edit fields, add certifications, duplicate detection, real-time Context Meter update.',lvl:'L1 · Admin · DataPort Manual',c:'blue',tag:'admin',href:'admin/manual-entry.html',arrow:'Data feeds AI pipeline',
+   why:'<strong>Why after bulk import?</strong> Bulk import (Step 3) covers most employees, but there are always exceptions — new hires, contractors, corrections. Manual entry fills the gaps with duplicate detection to prevent conflicts with already-imported records.',
+   conn:'From Step 3 (Excel Import) → Supplements bulk data with individual adds, edits, and certifications.',
    sees:[{v:'+1',t:'<strong>Add employee</strong> with auto-fill demo — Context Meter updates live',c:'var(--green-lt)'},{v:'Dup',t:'<strong>Duplicate detection</strong> — warns when name matches existing record',c:'var(--amber)'},{v:'Certs',t:'<strong>Add certifications</strong> to existing employees with expiry tracking',c:'var(--gold)'}]},
-  {n:5,t:'DataPort — HRIS Sync & Delta Review',sub:'Connect Workday/BambooHR/SAP, map fields, run sync, review delta (new/changed/removed), commit or reject.',lvl:'L1 · Admin · HRIS Sync',c:'blue',tag:'admin',href:'admin/dataport.html',arrow:'Workforce data complete'},
+  {n:5,t:'DataPort — HRIS Sync & Delta Review',sub:'Connect Workday/BambooHR/SAP, map fields, run sync, review delta (new/changed/removed), commit or reject.',lvl:'L1 · Admin · HRIS Sync',c:'blue',tag:'admin',href:'admin/dataport.html',arrow:'Workforce data complete',
+   why:'<strong>Why after manual entry?</strong> With baseline data established (Steps 3-4), HRIS sync creates an ongoing connection to the source system. Delta review shows what changed since last import, ensuring the platform stays current without re-importing everything.',
+   conn:'From Steps 3-4 (Data Import) → Keeps workforce data synchronized with live HR systems.'},
   {n:6,t:'SkillForge — AI Pipeline',sub:'7-prompt Claude AI pipeline: Context Extraction → Role Analysis → Skill Generation → Competency Mapping → Employee Baselines. Under 3 minutes.',lvl:'L1 · Admin · M3: SkillForge',c:'purple',tag:'admin',href:'admin/skillforge.html',arrow:'48 skills + 8 competencies generated',
+   why:'<strong>Why now?</strong> This is the intelligence engine. It needs <em>both</em> org context (Step 2) and employee data (Steps 3-5) to generate a meaningful skill framework. The 7-prompt AI pipeline reads the org DNA and workforce composition to produce tailored skills, competencies, and baselines.',
+   conn:'From Step 2 (OrgSetup) + Steps 3-5 (DataPort) → AI synthesises org context + workforce data into a skill framework.',
    sees:[{v:'7',t:'<strong>AI prompts</strong> run sequentially — watch the pipeline progress',c:'var(--purple-lt)'},{v:'48',t:'<strong>Skills generated</strong> across 6 domains with 4-level descriptors',c:'var(--gold)'},{v:'8',t:'<strong>Competencies</strong> — Behavioural, Functional, Leadership',c:'var(--teal-lt)'}]},
-  {n:7,t:'ApprovalHub — Tier 1 Admin Review',sub:'Review AI output, inline editing, flag items for Tier 2, partial approval, audit trail per edit.',lvl:'L1 · Admin · Tier 1',c:'amber',tag:'admin',href:'admin/approvalhub.html',arrow:'Flagged items to Tier 2'},
-  {n:8,t:'ApprovalHub — Tier 2 Department Head',sub:'Department-scoped view, review flagged items, approve or edit within remit, resolve Tier 1 flags.',lvl:'L1 · Admin · Tier 2',c:'amber',tag:'admin',href:'admin/approvalhub.html',arrow:'Approved items to Tier 3'},
-  {n:9,t:'ApprovalHub — Tier 3 HR Head Publish',sub:'Org-wide rollup, department approval status, Approve & Publish All, FrameworkBible auto-generated at v1.0.',lvl:'L1 · Admin · Tier 3',c:'amber',tag:'admin',href:'admin/approvalhub.html',arrow:'Framework published → L2 unlocked'},
+  {n:7,t:'ApprovalHub — Tier 1 Admin Review',sub:'Review AI output, inline editing, flag items for Tier 2, partial approval, audit trail per edit.',lvl:'L1 · Admin · Tier 1',c:'amber',tag:'admin',href:'admin/approvalhub.html',arrow:'Flagged items to Tier 2',
+   why:'<strong>Why 3-tier approval?</strong> AI-generated output must be validated by humans before it becomes the org standard. Tier 1 is the admin closest to the data — they catch obvious errors, edit descriptions, and flag uncertain items for domain expert review.',
+   conn:'From Step 6 (SkillForge) → AI output flows directly to admin for first-pass human validation.'},
+  {n:8,t:'ApprovalHub — Tier 2 Department Head',sub:'Department-scoped view, review flagged items, approve or edit within remit, resolve Tier 1 flags.',lvl:'L1 · Admin · Tier 2',c:'amber',tag:'admin',href:'admin/approvalhub.html',arrow:'Approved items to Tier 3',
+   why:'<strong>Why department heads?</strong> Items flagged in Tier 1 need domain expertise. Department heads validate that skills and competencies accurately reflect what their teams actually do — a technical review that admins alone cannot provide.',
+   conn:'From Step 7 (Tier 1) → Flagged and uncertain items escalate to department-level subject matter experts.'},
+  {n:9,t:'ApprovalHub — Tier 3 HR Head Publish',sub:'Org-wide rollup, department approval status, Approve & Publish All, FrameworkBible auto-generated at v1.0.',lvl:'L1 · Admin · Tier 3',c:'amber',tag:'admin',href:'admin/approvalhub.html',arrow:'Framework published → L2 unlocked',
+   why:'<strong>Why HR Head final approval?</strong> The HR Head sees the full org-wide rollup. Their "Publish All" action is the gateway — it generates the FrameworkBible at v1.0 and <em>unlocks L2 assessments</em>. Nothing proceeds to assessment without this sign-off.',
+   conn:'From Step 8 (Tier 2) → Department-approved items aggregate for final org-wide publish decision.'},
   {n:10,t:'FrameworkBible — Published Dictionary',sub:'Read-only published framework with taxonomy, version history, Super Admin edit with re-approval trigger, branded PDF export.',lvl:'L1 · All Roles · M5',c:'gold',tag:'admin',href:'admin/framework-bible.html',arrow:'Framework feeds all portals',
+   why:'<strong>Why a published "Bible"?</strong> After 3 tiers of approval, the framework becomes the single source of truth. Every assessment, dashboard, and report references this dictionary. Edits trigger re-approval to maintain integrity. This is what makes the entire platform consistent.',
+   conn:'From Step 9 (Tier 3 Publish) → Approved framework crystallises into the org-wide skill dictionary.',
    sees:[{v:'48',t:'<strong>Skills</strong> across 6 domains — browse the full taxonomy tree with criticality tags',c:'var(--blue-lt)'},{v:'8',t:'<strong>Competencies</strong> — Core, Technical, Leadership with behavioural descriptors',c:'var(--purple-lt)'},{v:'v1.2',t:'<strong>Version history</strong> — 3 revisions, edit triggers 3-tier re-approval',c:'var(--gold)'}]},
   {n:11,t:'InsightBoard — L1 Persona Dashboards',sub:'All 5 persona views (CHRO, CLO, HR Manager, L&D Manager, HRBP) with AI-estimated data, 56 charts, global filters.',lvl:'L1 · Manager · InsightBoard',c:'gold',tag:'manager',href:'manager/chro-dashboard.html',arrow:'Intelligence reaches employees',
+   why:'<strong>Why dashboards at L1?</strong> With the framework published, the platform can now show <em>AI-estimated</em> workforce intelligence. Even before assessments, leaders get early visibility into skill distribution, readiness, and risk — creating urgency to proceed to L2 validation.',
+   conn:'From Step 10 (FrameworkBible) → Published skills + AI baselines power persona-specific dashboard views.',
    sees:[{v:'5',t:'<strong>Persona dashboards</strong> — CHRO, CLO, HR Manager, L&D, HRBP',c:'var(--gold)'},{v:'61%',t:'<strong>Org Readiness</strong> on CHRO view',c:'var(--green-lt)'},{v:'4',t:'<strong>Persona switcher</strong> — same data, different views',c:'var(--blue-lt)'}],
    extraCtas:[{text:'CLO Dashboard',href:'manager/clo-dashboard.html',c:'purple'},{text:'HR Manager',href:'manager/hr-dashboard.html',c:'gold'},{text:'HRBP',href:'manager/hrbp-dashboard.html',c:'green'}]},
   {n:12,t:'ReportGen — L1 Completion Report',sub:'Auto-generated branded PDF on FrameworkBible publish: executive summary, org DNA, risk/opportunity matrix, next steps.',lvl:'L1 · Admin · ReportGen',c:'gold',tag:'admin',href:'admin/report-l1.html',arrow:'Report shared with stakeholders',
+   why:'<strong>Why a report here?</strong> L1 is a natural checkpoint. The completion report summarises what the AI discovered — org DNA, risk/opportunity matrix, key gaps — and makes the business case to proceed to L2 assessment. This is the artefact stakeholders and investors review.',
+   conn:'From Steps 10-11 (Framework + Dashboards) → Captures the L1 intelligence snapshot as a shareable document.',
    sees:[{v:'24',t:'<strong>Page branded PDF</strong> auto-generated on framework publish',c:'var(--gold)'},{v:'AI',t:'<strong>Executive summary</strong> — key findings and recommendation to proceed to L2',c:'var(--purple-lt)'},{v:'4+4',t:'<strong>Risk & opportunity matrix</strong> — AI Literacy universal deficit, BIM gap, talent mobility signals',c:'var(--red-lt)'}]},
   {n:13,t:'Employee Scope Management',sub:'Scope Status rules by employment type/department, individual overrides with mandatory reason, audit trail.',lvl:'L1 · Admin · Scope Status',c:'blue',tag:'admin',href:'admin/scope-management.html',arrow:'Scoped employees ready for assessment',
+   why:'<strong>Why scope before assessment?</strong> Not every employee should be assessed — interns, those on leave, or short-term contractors may be excluded. Scoping <em>before</em> L2 prevents wasted assessments and ensures only eligible employees enter the assessment pipeline.',
+   conn:'From Steps 3-5 (DataPort) → Uses imported employee data to apply inclusion/exclusion rules before L2.',
    sees:[{v:'780',t:'<strong>In scope</strong> of 812 — preview updates live as rules toggle on/off',c:'var(--green-lt)'},{v:'5',t:'<strong>Scope rules</strong> — full-time, contract >6mo, probation exclusion, intern exclusion, leave deferral. Toggle each.',c:'var(--blue-lt)'},{v:'8',t:'<strong>Individual overrides</strong> — each with mandatory reason. Add/remove with full audit trail.',c:'var(--amber)'}]},
   {n:14,t:'Skill Passport — L1 State (Admin View)',sub:'Employee record with AI-estimated baselines, certifications, training history, QR export, credential management.',lvl:'L1 · Employee · SkillPassport',c:'green',tag:'employee',href:'employee/skill-passport.html',arrow:'L1 complete → L2 assessment begins',
+   why:'<strong>Why passports at L1?</strong> Each in-scope employee gets a Skill Passport populated with AI-estimated baselines from SkillForge. This is the "before" snapshot — the starting point that L2 assessments will validate, correct, and enrich with real data.',
+   conn:'From Steps 6+13 (SkillForge + Scope) → AI baselines + scope status generate individual employee passports.',
    sees:[{v:'748',t:'<strong>Active passports</strong> with AI-estimated profiles',c:'var(--green-lt)'},{v:'QR',t:'<strong>Export with verification</strong> — portable credential',c:'var(--teal-lt)'}]},
 
   // L2 — Assessment & Analysis (15-32)
   {n:15,t:'Assessment Distribution Engine',sub:'Create cycle, configure population filters, exclusion rules, schedule, preview headcount, dispatch, 8-status tracking, reminders.',lvl:'L2 · Admin · AssessEngine',c:'teal',tag:'admin',href:'admin/assess-engine.html',arrow:'Assessments dispatched to 812 employees',
+   why:'<strong>L2 begins here.</strong> With L1 complete — framework published, employees scoped, passports created — the admin can now configure and dispatch assessments. The engine uses scope rules (Step 13) and framework definitions (Step 10) to build targeted assessment cycles.',
+   conn:'From Steps 10+13+14 (Framework + Scope + Passports) → Everything needed to launch assessments is now in place.',
    sees:[{v:'6',t:'<strong>Assessment categories</strong> — Skills, Psychometric, Knowledge, 360, Surveys, Discovery',c:'var(--teal-lt)'},{v:'812',t:'<strong>Population targeting</strong> with hierarchy/role/scope filters',c:'var(--paper)'},{v:'88%',t:'<strong>AI Builder confidence</strong> — generates assessments from a brief',c:'var(--gold)'}]},
   {n:16,t:'Skills & Competency Assessment (Dual-Rating)',sub:'Self + manager simultaneous rating, AI baseline reference, per-skill proficiency slider, observation notes, auto-save.',lvl:'L2 · Employee · Category A',c:'teal',tag:'employee',href:'employee/skill-assessment.html',arrow:'Dual ratings captured',
+   why:'<strong>Why dual-rating first?</strong> Skills assessment is the primary data collection method — self-rating + manager-rating against the FrameworkBible definitions. The AI baseline from Step 6 serves as a reference anchor, reducing rating bias.',
+   conn:'From Step 15 (Engine) + Step 10 (FrameworkBible) → Dispatched assessments use published skill definitions for rating.',
    sees:[{v:'8',t:'<strong>Skills to rate</strong> — click 1-5 pills, progress ring updates live',c:'var(--blue-lt)'},{v:'2',t:'<strong>Dual rating</strong> — Self (blue) + Manager (green) side by side',c:'var(--green-lt)'},{v:'4.0',t:'<strong>Final score</strong> — average of self + manager',c:'var(--gold)'}]},
   {n:17,t:'Psychometric & Behavioural Assessment',sub:'Big Five, DISC, MBTI, cognitive ability — secure session, results to Skill Passport, profile generation.',lvl:'L2 · Employee · Category B',c:'purple',tag:'employee',href:'employee/psychometric.html',arrow:'Personality profile generated',
+   why:'<strong>Why psychometrics after skills?</strong> Skill ratings tell you <em>what</em> someone can do. Psychometrics reveal <em>how</em> they work — personality traits, cognitive style, behavioural tendencies. Together, they create a holistic employee profile for development planning.',
+   conn:'From Step 16 (Skills Assessment) → Adds personality and cognitive dimensions to the skill-based profile.',
    sees:[{v:'5',t:'<strong>Big Five traits</strong> with percentile bars',c:'var(--purple-lt)'},{v:'DC',t:'<strong>DISC profile</strong> — Dominant-Conscientious type',c:'var(--gold)'},{v:'78th',t:'<strong>Cognitive ability</strong> percentile with breakdown',c:'var(--blue-lt)'}]},
   {n:18,t:'Knowledge Test Builder & Delivery',sub:'AI-built question bank, MCQ/scenario-based, pre/post/retention scheduling, automatic scoring, delta calculation.',lvl:'L2 · Admin · Category C',c:'teal',tag:'admin',href:'admin/knowledge-tests.html',arrow:'Pre/post scores feed gap analysis',
+   why:'<strong>Why knowledge tests?</strong> Self and manager ratings are subjective. Knowledge tests provide <em>objective evidence</em> — can the employee actually answer domain questions correctly? Pre/post delta tracking also measures training effectiveness later.',
+   conn:'From Steps 16-17 (Ratings + Psychometrics) → Adds objective evidence to validate subjective skill ratings.',
    sees:[{v:'246',t:'<strong>Questions in bank</strong> across 8 knowledge tests',c:'var(--teal-lt)'},{v:'+18%',t:'<strong>Avg pre-post delta</strong> improvement across tests',c:'var(--green-lt)'},{v:'AI',t:'<strong>Test generator</strong> creates MCQs from a skill brief',c:'var(--gold)'}]},
   {n:19,t:'360-Degree Feedback',sub:'Rater assignment per ratee, tokenised external access, anonymity enforcement, perception gap aggregation.',lvl:'L2 · Employee · Category D',c:'teal',tag:'employee',href:'employee/360-feedback.html',arrow:'Multi-rater data aggregated',
+   why:'<strong>Why 360 feedback?</strong> So far, data comes from self, manager, and tests. 360 adds perspectives from peers, direct reports, cross-functional colleagues, and external stakeholders — revealing <em>perception gaps</em> that no single rater can see.',
+   conn:'From Steps 16-18 (Assessments) → Adds multi-rater validation layer to existing self + manager data.',
    sees:[{v:'5',t:'<strong>Rater groups</strong> — Manager, Peers, Reports, Cross-func, External',c:'var(--teal-lt)'},{v:'0.4',t:'<strong>Perception gap</strong> — self vs others average',c:'var(--amber)'},{v:'3+',t:'<strong>Anonymity threshold</strong> enforced per group',c:'var(--green-lt)'}]},
   {n:20,t:'Org Survey Builder & Distribution',sub:'Engagement, change readiness, culture pulse, strategy alignment — anonymous collection, trend tracking.',lvl:'L2 · Admin · Category E',c:'teal',tag:'admin',href:'admin/survey-builder.html',arrow:'Survey insights feed wellbeing',
+   why:'<strong>Why surveys?</strong> Individual assessments capture skills; surveys capture <em>organisational climate</em> — engagement, change readiness, culture. These signals affect whether employees can actually absorb development. A disengaged workforce won\'t benefit from training.',
+   conn:'From Steps 16-19 (Individual Assessments) → Adds org-level sentiment and readiness data to the intelligence picture.',
    sees:[{v:'5',t:'<strong>Survey types</strong> with question builder + AI generation',c:'var(--teal-lt)'},{v:'76%',t:'<strong>Avg response rate</strong> across active surveys',c:'var(--green-lt)'},{v:'4Q',t:'<strong>Trend dashboard</strong> tracking engagement over time',c:'var(--gold)'}]},
   {n:21,t:'L&D Discovery Session Capture',sub:'Structured 1:1 notes, focus group capture, AI theme extraction, employee-declared needs feed LNA multiplier.',lvl:'L2 · Admin · Category F',c:'teal',tag:'admin',href:'admin/discovery-sessions.html',arrow:'Themes feed gap weighting',
+   why:'<strong>Why discovery sessions?</strong> Assessments and surveys capture structured data. Discovery sessions capture the <em>unstructured</em> — what employees say in 1:1s and focus groups that no questionnaire can reach. AI extracts themes that feed into gap weighting.',
+   conn:'From Steps 16-20 (All Assessments) → Adds qualitative human insights that quantitative tools miss.',
    sees:[{v:'14',t:'<strong>Sessions logged</strong> — 1:1, Focus Groups, Dept Reviews',c:'var(--teal-lt)'},{v:'23',t:'<strong>AI-extracted themes</strong> across all sessions',c:'var(--gold)'},{v:'34',t:'<strong>Employee-declared needs</strong> with LNA multiplier',c:'var(--amber)'}]},
   {n:22,t:'Skills Matrix — Heatmap & Perception Gap',sub:'Employee × skill grid, current vs required, gap severity heatmap, perception gap flags, team/dept/org drill-down.',lvl:'L2 · Manager · Skills Matrix',c:'gold',tag:'manager',href:'manager/skills-matrix.html',arrow:'Gaps ranked and intervention-typed',
+   why:'<strong>Why a matrix now?</strong> With all 6 assessment categories complete (Steps 16-21), the Skills Matrix aggregates everything into a visual employee × skill heatmap. Current vs required proficiency reveals where gaps exist and how severe they are — the first analytical view.',
+   conn:'From Steps 16-21 (All Assessment Data) → Aggregates multi-source assessment data into a single visual heatmap.',
    sees:[{v:'14',t:'<strong>Critical gaps</strong> in red cells — click to drill down',c:'var(--red-lt)'},{v:'0.6',t:'<strong>Perception gap</strong> — employees over-rate by 0.6 avg',c:'var(--amber)'},{v:'4',t:'<strong>Filter modes</strong> — Gap Score, Proficiency, Target, Perception',c:'var(--blue-lt)'}]},
   {n:23,t:'Task Evaluation Layer',sub:'Task × employee grid, frequency (Daily/Weekly/Monthly/Rarely), confidence (Never/Guided/Independent/Coaches Others), criticality flags.',lvl:'L2 · Manager · Task Evaluation',c:'gold',tag:'manager',href:'manager/task-evaluation.html',arrow:'Task data enriches gap analysis',
+   why:'<strong>Why task evaluation?</strong> Skills Matrix shows <em>skill</em> gaps, but not all gaps are equal. Task evaluation maps skills to actual <em>job tasks</em> — a skill gap on a daily critical task is far more urgent than one on a rarely-performed task.',
+   conn:'From Step 22 (Skills Matrix) → Adds task-level context (frequency, criticality) that determines gap urgency.',
    sees:[{v:'84',t:'<strong>Tasks mapped</strong> across 6 roles with skill linkage',c:'var(--gold)'},{v:'18',t:'<strong>Critical tasks</strong> flagged with severity',c:'var(--red-lt)'},{v:'3.2',t:'<strong>Avg confidence</strong> — Independent level across org',c:'var(--blue-lt)'}]},
   {n:24,t:'Gap Analysis — 4 Views',sub:'Individual, role, department, org-wide heatmaps. Strategic risk flagging. Talent mobility signals.',lvl:'L2 · Manager · Gap Analysis',c:'red',tag:'manager',href:'manager/gap-analysis.html',arrow:'Gaps drive LNA/TNA engine',
+   why:'<strong>Why 4 views?</strong> Gap Analysis synthesises the matrix (Step 22) and task data (Step 23) into actionable views: individual (who needs help), role (which positions are weak), department (team-level patterns), and org-wide (strategic risk). Each view serves a different decision-maker.',
+   conn:'From Steps 22-23 (Matrix + Tasks) → Synthesises skill gaps + task criticality into multi-level gap views.',
    sees:[{v:'142',t:'<strong>Total gaps</strong> with 4-view drill-down',c:'var(--red-lt)'},{v:'23',t:'<strong>Critical C1 gaps</strong> requiring immediate intervention',c:'var(--red-lt)'},{v:'38',t:'<strong>Talent mobility</strong> candidates with transferable skills',c:'var(--green-lt)'}]},
   {n:25,t:'Weighted LNA/TNA Engine',sub:'5-multiplier weighted gap score, AI intervention classification (7 types), TNA filtered brief, content commissioning.',lvl:'L2 · Manager · LNA Engine',c:'gold',tag:'manager',href:'manager/lna-report.html',arrow:'Weighted gaps feed individual briefs',
+   why:'<strong>Why weighted scoring?</strong> Raw gaps from Step 24 need business context. The LNA engine applies 5 multipliers — Criticality, Transformation Alignment, Timeline, Performance Impact, Discovery Insights — to prioritise which gaps matter most to the organisation\'s strategy.',
+   conn:'From Step 24 (Gap Analysis) + Step 21 (Discovery) → Applies business multipliers to raw gaps, producing a prioritised training needs analysis.',
    sees:[{v:'5x',t:'<strong>Multiplier weights</strong> — Criticality × Transformation × Timeline × Performance × Discovery',c:'var(--gold)'},{v:'SGD 93K',t:'<strong>Total intervention cost</strong> mapped to programmes',c:'var(--paper)'},{v:'1.4',t:'<strong>Avg gap BIM & Digital</strong> — skill velocity problem',c:'var(--red-lt)'}]},
   {n:26,t:'LNI — Individual Learning Needs Brief',sub:'8-component personalised brief: weighted gaps, interventions, timeline, budget, wellbeing adjustment, ROI.',lvl:'L2 · Manager · LNI',c:'gold',tag:'manager',href:'manager/lni-brief.html',arrow:'Brief drives IDP + training enrolment',
+   why:'<strong>Why individual briefs?</strong> The LNA/TNA engine (Step 25) produces org-level priorities. The LNI translates those into <em>personalised</em> 8-component briefs per employee — specific interventions, timelines, budget, and projected ROI. This is the prescription that drives action.',
+   conn:'From Step 25 (LNA Engine) → Translates org-level weighted priorities into individual employee learning prescriptions.',
    sees:[{v:'8',t:'<strong>Components</strong> — gaps, interventions, timeline, budget, wellbeing, ROI',c:'var(--gold)'},{v:'SGD 3.5K',t:'<strong>Budget for Priya</strong> — 4 interventions over 6 months',c:'var(--paper)'},{v:'SGD 28K',t:'<strong>Annual ROI</strong> from reduced consultant costs',c:'var(--green-lt)'}]},
   {n:27,t:'LearnPath — AI Learning Path & IDP',sub:'AI learning path with wellbeing-adjusted timeline, IDP with aspiration vs role blend, milestone tracking.',lvl:'L2 · Employee · LearnPath',c:'green',tag:'employee',href:'employee/my-idp.html',arrow:'IDP milestones tracked',
+   why:'<strong>Why learning paths now?</strong> The LNI brief (Step 26) defined <em>what</em> each employee needs. LearnPath converts that into a <em>how</em> — a sequenced learning journey with wellbeing-adjusted timelines, so development doesn\'t lead to burnout.',
+   conn:'From Step 26 (LNI Brief) → Converts learning prescriptions into actionable, sequenced development paths.',
    sees:[{v:'3',t:'<strong>IDP goals</strong> — clickable milestones update progress ring live',c:'var(--gold)'},{v:'58%',t:'<strong>Overall IDP progress</strong> — manager-approved',c:'var(--blue-lt)'}],
    extraCtas:[{text:'Learning Path',href:'employee/learning-path.html',c:'green'},{text:'My Training',href:'employee/my-training.html',c:'blue'}]},
   {n:28,t:'Succession Planning',sub:'Critical role designation, candidate pipeline, Ready Now/12M/24M banding, AI risk alerts, what-if modelling.',lvl:'L2 · Manager · Succession',c:'red',tag:'manager',href:'manager/succession.html',arrow:'Risk alerts inform CHRO',
+   why:'<strong>Why succession here?</strong> With validated profiles (L2 assessments), gap analysis, and development paths in place, the platform can now identify who is <em>ready</em> for critical roles. AI risk alerts flag single-points-of-failure and concentration risks before they become crises.',
+   conn:'From Steps 22-27 (Analysis + Development) → Uses validated skill profiles and gap data to model succession readiness.',
    sees:[{v:'5',t:'<strong>Critical roles</strong> — Principal Eng VACANT',c:'var(--red-lt)'},{v:'86%',t:'<strong>Amir Hassan readiness</strong> for Principal Eng',c:'var(--gold)'},{v:'3',t:'<strong>AI risk alerts</strong> — SPOF, concentration, positive signal',c:'var(--amber)'}]},
   {n:29,t:'Wellbeing Intelligence',sub:'Anonymous pulse survey, AI Burnout Risk Score (Low/Moderate/Elevated/High), manager conversation prompts, timeline adjustment.',lvl:'L2 · Manager · Wellbeing',c:'green',tag:'manager',href:'manager/wellbeing-dashboard.html',arrow:'Wellbeing adjusts dev timelines',
+   why:'<strong>Why wellbeing monitoring?</strong> Development plans are only effective if employees have the <em>capacity</em> to learn. Wellbeing Intelligence detects burnout risk and automatically adjusts development timelines (from Step 27) — ensuring the platform helps people, not overwhelms them.',
+   conn:'From Steps 20+27 (Surveys + LearnPath) → Survey sentiment + learning load data feed burnout risk scoring and timeline adjustment.',
    sees:[{v:'78%',t:'<strong>Pulse response rate</strong> — 634 of 812',c:'var(--green-lt)'},{v:'12',t:'<strong>Elevated burnout</strong> — 8 Project Delivery, 4 EHS',c:'var(--red-lt)'},{v:'71%',t:'<strong>Avg capacity</strong> — adequate for learning programmes',c:'var(--blue-lt)'}]},
   {n:30,t:'InsightBoard — L2 Transition',sub:'All 5 persona dashboards update from AI-estimated to validated proficiencies, data provenance labels change, new L2 widgets.',lvl:'L2 · Manager · InsightBoard L2',c:'gold',tag:'manager',href:'manager/chro-dashboard.html',arrow:'Validated data flows to reports',
+   why:'<strong>Why revisit dashboards?</strong> The same dashboards from L1 (Step 11) now show <em>validated</em> data instead of AI-estimates. Data provenance labels change from "AI-estimated" to "Validated" — this is a key moment where the platform transitions from intelligent guesses to verified truth.',
+   conn:'From Step 11 (L1 Dashboards) + Steps 16-21 (Assessments) → Same dashboards, now powered by real assessment data instead of AI estimates.',
    sees:[{v:'5',t:'<strong>Persona dashboards</strong> now showing validated data',c:'var(--gold)'},{v:'L2',t:'<strong>Provenance labels</strong> change from "AI-estimated" to "Validated"',c:'var(--green-lt)'}]},
   {n:31,t:'ReportGen — L2 Reports',sub:'LNA, TNA, Skills Matrix, Wellbeing reports — all with AI executive summary, persona-adaptive rendering, PDF/PPT export.',lvl:'L2 · Manager · ReportGen',c:'gold',tag:'manager',href:'manager/reports-l2.html',arrow:'Reports shared with stakeholders',
+   why:'<strong>Why reports at L2?</strong> Like the L1 report (Step 12), L2 reports capture validated intelligence as shareable artefacts — LNA, TNA, Skills Matrix, Wellbeing. These are the documents that drive budget allocation, board presentations, and training vendor selection.',
+   conn:'From Steps 22-29 (All L2 Analysis) → Packages validated analysis into stakeholder-ready reports with AI executive summaries.',
    sees:[{v:'4',t:'<strong>Report types</strong> — LNA, TNA, Skills Matrix, Wellbeing',c:'var(--gold)'},{v:'AI',t:'<strong>Executive summaries</strong> generated per report',c:'var(--purple-lt)'},{v:'PDF',t:'<strong>Download, regenerate, share</strong> actions on each',c:'var(--blue-lt)'}]},
   {n:32,t:'Skill Passport — L2 Validated State',sub:'Employee portal with validated proficiencies, IDP, learning path, certifications, badges, career timeline, QR export.',lvl:'L2 · Employee · SkillPassport L2',c:'green',tag:'employee',href:'employee/skill-passport.html',arrow:'L2 complete → L3 training execution',
+   why:'<strong>Full circle.</strong> The Skill Passport from L1 (Step 14) is now enriched with <em>validated</em> proficiencies, linked IDP, active learning path, and earned badges. The employee\'s journey from "AI-estimated guess" to "verified professional profile" is complete.',
+   conn:'From Step 14 (L1 Passport) → Same passport, now showing validated scores, active IDP, and earned credentials from L2.',
    sees:[{v:'Validated',t:'<strong>Proficiency scores</strong> now dual-rated and verified',c:'var(--green-lt)'},{v:'IDP',t:'<strong>Linked development plan</strong> with milestone tracking',c:'var(--gold)'}],
    extraCtas:[{text:'My Assessments',href:'employee/my-assessments.html',c:'green'},{text:'360 Feedback',href:'employee/360-feedback.html',c:'teal'},{text:'Psychometric',href:'employee/psychometric.html',c:'purple'}]}
 ];
@@ -226,6 +305,15 @@ function renderAll(){
     h+='<span class="portal-tag '+f.tag+'">'+f.tag+'</span>';
     h+='</div>'; // step-header
 
+    // Context / Why block
+    if(f.why){
+      h+='<div class="step-context"><div class="ctx-inner">';
+      h+='<div class="ctx-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>';
+      h+='<div><div class="ctx-text">'+f.why+'</div>';
+      if(f.conn){h+='<div class="ctx-connect">'+f.conn+'</div>';}
+      h+='</div></div></div>';
+    }
+
     // Body with sees + CTA
     if(f.sees || f.href!=='#'){
       h+='<div class="step-body">';
@@ -251,9 +339,15 @@ function renderAll(){
 
     h+='</div></div>'; // step-card, step
 
-    // Arrow
+    // Arrow with connecting lines
     if(f.arrow && i<flows.length-1){
-      h+='<div class="flow-arrow"><div class="flow-arrow-label">'+f.arrow+'</div></div>';
+      h+='<div class="flow-arrow">';
+      h+='<div class="flow-arrow-line"></div>';
+      h+='<div class="flow-arrow-dot"></div>';
+      h+='<div class="flow-arrow-label">'+f.arrow+'</div>';
+      h+='<div class="flow-arrow-dot"></div>';
+      h+='<div class="flow-arrow-line"></div>';
+      h+='</div>';
     }
   });
 
