@@ -213,6 +213,36 @@ select.brief-input option { background: var(--ink-card); color: var(--paper); }
 .gen-panel.generated .q-card:nth-child(3) { animation-delay: .1s; }
 .gen-panel.generated .q-card:nth-child(4) { animation-delay: .25s; }
 .gen-panel.generated .q-card:nth-child(5) { animation-delay: .4s; }
+
+/* Post-generation action bar */
+.post-gen { display: none; margin-top: 8px; padding: 12px; border-radius: 8px; background: linear-gradient(135deg, rgba(13,138,138,.08), rgba(13,138,138,.02)); border: 1px solid rgba(34,192,180,.2); flex-direction: column; gap: 10px; }
+.gen-panel.generated .post-gen { display: flex; }
+.post-gen-title { font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; color: var(--teal-lt); }
+.post-gen-text { font-size: 10.5px; color: var(--paper-mid); line-height: 1.5; }
+.post-gen-btn { padding: 8px 16px; border-radius: 6px; border: none; font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: opacity .15s; }
+.post-gen-btn:hover { opacity: .85; }
+.post-gen-btn.pilot { background: var(--teal); color: #fff; }
+.post-gen-btn.publish { background: var(--green); color: #fff; }
+.post-gen-btn.distribute { background: var(--gold); color: var(--ink); }
+
+/* Pilot results mini-card */
+.pilot-results { display: none; margin-top: 6px; padding: 10px 12px; border-radius: 7px; background: var(--ink-raised); border: 1px solid var(--ink-border); }
+.pilot-results.show { display: block; animation: qFadeIn .4s ease both; }
+.pilot-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 6px; }
+.pilot-stat { text-align: center; }
+.pilot-stat-val { font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 800; color: var(--green-lt); }
+.pilot-stat-key { font-size: 8.5px; color: var(--ink-soft); letter-spacing: .05em; text-transform: uppercase; }
+
+/* Distribution config */
+.dist-config { display: none; margin-top: 6px; padding: 10px 12px; border-radius: 7px; background: var(--ink-raised); border: 1px solid rgba(200,168,75,.15); }
+.dist-config.show { display: block; animation: qFadeIn .4s ease both; }
+.dist-config-row { display: flex; align-items: center; justify-content: space-between; padding: 4px 0; }
+.dist-config-key { font-size: 10px; color: var(--ink-soft); }
+.dist-config-val { font-size: 10.5px; color: var(--paper); font-weight: 500; }
+
+/* Published state banner */
+.published-banner { display: none; margin-top: 8px; padding: 10px 14px; border-radius: 8px; background: rgba(58,184,122,.08); border: 1px solid rgba(58,184,122,.2); text-align: center; }
+.published-banner.show { display: block; animation: qFadeIn .4s ease both; }
 .gen-title { font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
 .gen-title .gt-count { padding: 2px 7px; border-radius: 100px; font-size: 9px; font-weight: 600; background: var(--teal-dim); color: var(--teal-lt); }
 
@@ -752,6 +782,44 @@ function renderCats(){
     h += '<button class="tb-btn" style="font-size:10px;padding:5px 10px">Strengthen</button>';
     h += '<button class="tb-btn" style="font-size:10px;padding:5px 10px">Shorten</button>';
     h += '</div>';
+
+    // Post-generation workflow
+    h += '<div class="post-gen" data-postgen="'+c.id+'">';
+    h += '<div class="post-gen-title">Next: Review &amp; Approve</div>';
+    h += '<div class="post-gen-text">'+c.questions.length+' questions generated with '+c.brief.type+' format. Review the questions above, then approve to send to a pilot group for testing.</div>';
+    h += '<button class="post-gen-btn pilot" data-action="pilot">Approve &amp; Send to Pilot &#8594;</button>';
+
+    // Pilot results (hidden until pilot clicked)
+    h += '<div class="pilot-results" data-pilot="'+c.id+'">';
+    h += '<div style="font-size:10px;font-weight:600;color:var(--green-lt);margin-bottom:4px">Pilot Complete — 8 participants</div>';
+    h += '<div class="pilot-stats">';
+    h += '<div class="pilot-stat"><div class="pilot-stat-val">12m</div><div class="pilot-stat-key">Avg Time</div></div>';
+    h += '<div class="pilot-stat"><div class="pilot-stat-val">0</div><div class="pilot-stat-key">Abandons</div></div>';
+    h += '<div class="pilot-stat"><div class="pilot-stat-val">4.2</div><div class="pilot-stat-key">Clarity /5</div></div>';
+    h += '<div class="pilot-stat"><div class="pilot-stat-val">0</div><div class="pilot-stat-key">Bias Flags</div></div>';
+    h += '</div>';
+    h += '<div style="font-size:9.5px;color:var(--ink-soft);margin-top:6px">No questions flagged. All participants completed within time limit. Ready to publish.</div>';
+    h += '<button class="post-gen-btn publish" data-action="publish" style="margin-top:8px">Publish Assessment &#8594;</button>';
+    h += '</div>';
+
+    // Distribution config (hidden until publish clicked)
+    h += '<div class="dist-config" data-distcfg="'+c.id+'">';
+    h += '<div style="font-size:10px;font-weight:600;color:var(--gold);margin-bottom:6px">Configure Distribution</div>';
+    h += '<div class="dist-config-row"><span class="dist-config-key">Target</span><span class="dist-config-val">'+c.brief.pop+'</span></div>';
+    h += '<div class="dist-config-row"><span class="dist-config-key">Dispatch</span><span class="dist-config-val" style="color:var(--teal-lt)">Immediate</span></div>';
+    h += '<div class="dist-config-row"><span class="dist-config-key">Deadline</span><span class="dist-config-val">14 days from dispatch</span></div>';
+    h += '<div class="dist-config-row"><span class="dist-config-key">Reminders</span><span class="dist-config-val">Day 7, 12, 14</span></div>';
+    h += '<div class="dist-config-row"><span class="dist-config-key">Channels</span><span class="dist-config-val">Email + in-app notification</span></div>';
+    h += '<button class="post-gen-btn distribute" data-action="distribute" style="margin-top:8px;width:100%">Dispatch to '+c.brief.pop.split('·')[1].trim()+' &#8594;</button>';
+    h += '</div>';
+
+    // Published confirmation banner
+    h += '<div class="published-banner" data-published="'+c.id+'">';
+    h += '<div style="font-size:11px;font-weight:700;color:var(--green-lt)">&#10003; Assessment Published &amp; Dispatched</div>';
+    h += '<div style="font-size:10px;color:var(--paper-mid);margin-top:4px">Assessment is now live. Questions are locked. Track progress in the Active Cycles table below.</div>';
+    h += '</div>';
+
+    h += '</div>'; // post-gen
     h += '</div>';
 
     // C. CONFIG
@@ -835,6 +903,45 @@ function runGeneration(panel){
   nextStep();
 }
 
+// ── PUBLISHING WORKFLOW ANIMATION ──
+function advancePubWorkflow(stage){
+  var steps = document.querySelectorAll('.pub-flow .pub-step');
+  var lines = document.querySelectorAll('.pub-flow .pub-line');
+  var desc = document.querySelector('.pub-desc');
+  // Steps: 0=Draft, 1=Pilot, 2=Review, 3=Published, 4=Archived
+  // Lines: 0=Draft-Pilot, 1=Pilot-Review, 2=Review-Published, 3=Published-Archived
+  if(stage === 'pilot'){
+    // Review becomes active (was already active), just update description
+    if(desc) desc.innerHTML = '<strong style="color:var(--paper)">In progress:</strong> Pilot test running with 8 selected participants. Monitoring completion time, abandonment rate, and participant feedback...';
+  } else if(stage === 'review-done'){
+    // Review done, Published becomes active
+    steps[2].classList.remove('active');
+    steps[2].classList.add('done');
+    steps[2].querySelector('.pub-dot').classList.remove('active');
+    steps[2].querySelector('.pub-dot').classList.add('done');
+    steps[2].querySelector('.pub-dot').innerHTML = '&#10003;';
+    lines[2].classList.remove('pending');
+    lines[2].classList.add('active');
+    steps[3].classList.add('active');
+    steps[3].querySelector('.pub-dot').classList.remove('pending');
+    steps[3].querySelector('.pub-dot').classList.add('active');
+    steps[3].querySelector('.pub-dot').textContent = '4';
+    if(desc) desc.innerHTML = '<strong style="color:var(--paper)">Pilot complete:</strong> Avg completion 12 min, 0 abandons, 4.2/5 clarity score, 0 bias flags. Ready to <strong style="color:var(--teal-lt)">Publish</strong> — this will lock question content and make the assessment available for distribution.';
+  } else if(stage === 'published'){
+    steps[3].classList.remove('active');
+    steps[3].classList.add('done');
+    steps[3].querySelector('.pub-dot').classList.remove('active');
+    steps[3].querySelector('.pub-dot').classList.add('done');
+    steps[3].querySelector('.pub-dot').innerHTML = '&#10003;';
+    lines[3].classList.remove('pending');
+    lines[3].classList.add('done');
+    if(desc) desc.innerHTML = '<strong style="color:var(--green-lt)">Published.</strong> Questions are now locked. Any edits will create a new version. Configure distribution to dispatch to the target population.';
+  }
+  // Scroll workflow into view
+  var pubPanel = document.querySelector('.pub-panel');
+  if(pubPanel) pubPanel.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
 // ── TOAST ──
 (function(){
   var toast = document.createElement("div");
@@ -864,6 +971,59 @@ function runGeneration(panel){
         runGeneration(panel);
       } else if(panel && panel.classList.contains('generated')){
         showToast('Assessment already generated — use Regenerate to rebuild');
+      }
+      return;
+    }
+    // Post-gen workflow buttons
+    var pgBtn = e.target.closest('.post-gen-btn');
+    if(pgBtn){
+      var action = pgBtn.dataset.action;
+      var card = pgBtn.closest('.cat-card');
+      var catId = card ? card.dataset.cat : null;
+      if(action === 'pilot' && catId){
+        pgBtn.disabled = true;
+        pgBtn.textContent = 'Sending to pilot...';
+        pgBtn.style.opacity = '.6';
+        // Advance publishing workflow: Review becomes done, Published becomes active
+        advancePubWorkflow('pilot');
+        setTimeout(function(){
+          pgBtn.textContent = 'Pilot complete';
+          pgBtn.style.background = 'var(--green-dim)';
+          pgBtn.style.color = 'var(--green-lt)';
+          pgBtn.style.border = '1px solid rgba(58,184,122,.3)';
+          pgBtn.style.opacity = '1';
+          var pilot = document.querySelector('[data-pilot="'+catId+'"]');
+          if(pilot) pilot.classList.add('show');
+          advancePubWorkflow('review-done');
+        }, 1800);
+      } else if(action === 'publish' && catId){
+        pgBtn.disabled = true;
+        pgBtn.textContent = 'Publishing...';
+        pgBtn.style.opacity = '.6';
+        setTimeout(function(){
+          pgBtn.textContent = 'Published';
+          pgBtn.style.background = 'var(--green-dim)';
+          pgBtn.style.color = 'var(--green-lt)';
+          pgBtn.style.border = '1px solid rgba(58,184,122,.3)';
+          pgBtn.style.opacity = '1';
+          var dist = document.querySelector('[data-distcfg="'+catId+'"]');
+          if(dist) dist.classList.add('show');
+          advancePubWorkflow('published');
+        }, 1200);
+      } else if(action === 'distribute' && catId){
+        pgBtn.disabled = true;
+        pgBtn.textContent = 'Dispatching...';
+        pgBtn.style.opacity = '.6';
+        setTimeout(function(){
+          pgBtn.textContent = 'Dispatched';
+          pgBtn.style.background = 'var(--green-dim)';
+          pgBtn.style.color = 'var(--green-lt)';
+          pgBtn.style.border = '1px solid rgba(58,184,122,.3)';
+          pgBtn.style.opacity = '1';
+          var banner = document.querySelector('[data-published="'+catId+'"]');
+          if(banner) banner.classList.add('show');
+          showToast('Assessment dispatched — track in Active Cycles below');
+        }, 1500);
       }
       return;
     }
