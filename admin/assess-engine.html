@@ -165,6 +165,12 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 .cat-card .cat-label { color: var(--cc); }
 .cat-card .cat-stat-val { color: var(--cc); }
 .cat-card::before { background: var(--cc-dim); }
+.cat-card::after {
+  content: 'Click to preview ↓'; position: absolute; bottom: 12px; right: 14px;
+  font-size: 9px; color: var(--cc); opacity: 0; transition: opacity .2s;
+  letter-spacing: .04em; font-weight: 500; z-index: 1;
+}
+.cat-card:hover::after { opacity: .7; }
 
 /* ── ACTIVE CYCLES TABLE ── */
 .cycle-table { width: 100%; border-collapse: collapse; }
@@ -503,7 +509,7 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
       <div class="cat-grid">
 
         <!-- Cat A: Skill & Competency -->
-        <div class="cat-card cat-a">
+        <div class="cat-card cat-a" data-target="catA">
           <div class="cat-badge" style="background:var(--blue-dim);color:#3A8CC0;border:1px solid rgba(58,140,192,.3)">Active</div>
           <div class="cat-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
           <div class="cat-label">Category A</div>
@@ -517,7 +523,7 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
         </div>
 
         <!-- Cat B: Psychometric -->
-        <div class="cat-card cat-b">
+        <div class="cat-card cat-b" data-target="catB">
           <div class="cat-badge" style="background:var(--purple-dim);color:var(--purple-lt);border:1px solid rgba(160,112,224,.3)">Active</div>
           <div class="cat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
           <div class="cat-label">Category B</div>
@@ -531,7 +537,7 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
         </div>
 
         <!-- Cat C: Knowledge -->
-        <div class="cat-card cat-c">
+        <div class="cat-card cat-c" data-target="catC">
           <div class="cat-badge" style="background:var(--green-dim);color:var(--green-lt);border:1px solid rgba(58,184,122,.3)">Complete</div>
           <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
           <div class="cat-label">Category C</div>
@@ -545,7 +551,7 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
         </div>
 
         <!-- Cat D: 360 Feedback -->
-        <div class="cat-card cat-d">
+        <div class="cat-card cat-d" data-target="catD">
           <div class="cat-badge" style="background:var(--gold-dim);color:var(--gold);border:1px solid rgba(200,168,75,.3)">Upcoming</div>
           <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></div>
           <div class="cat-label">Category D</div>
@@ -559,7 +565,7 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
         </div>
 
         <!-- Cat E: Org Surveys -->
-        <div class="cat-card cat-e">
+        <div class="cat-card cat-e" data-target="catE">
           <div class="cat-badge" style="background:var(--green-dim);color:var(--green-lt);border:1px solid rgba(58,184,122,.3)">Complete</div>
           <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
           <div class="cat-label">Category E</div>
@@ -573,7 +579,7 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
         </div>
 
         <!-- Cat F: L&D Needs Discovery -->
-        <div class="cat-card cat-f">
+        <div class="cat-card cat-f" data-target="catF">
           <div class="cat-badge" style="background:var(--amber-dim);color:var(--amber-lt);border:1px solid rgba(212,130,10,.3)">Scheduled</div>
           <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
           <div class="cat-label">Category F</div>
@@ -1468,13 +1474,23 @@ Chart.defaults.font.size = 11;
 (function(){
   var tabs = document.querySelectorAll('.sample-tab');
   var panels = document.querySelectorAll('.sample-content');
+  function activateTab(tabId){
+    tabs.forEach(function(t){ t.classList.remove('active'); });
+    panels.forEach(function(p){ p.classList.remove('active'); });
+    var matchTab = document.querySelector('.sample-tab[data-tab="'+tabId+'"]');
+    var matchPanel = document.querySelector('[data-panel="'+tabId+'"]');
+    if(matchTab) matchTab.classList.add('active');
+    if(matchPanel) matchPanel.classList.add('active');
+  }
   tabs.forEach(function(tab){
-    tab.addEventListener('click', function(){
-      tabs.forEach(function(t){ t.classList.remove('active'); });
-      panels.forEach(function(p){ p.classList.remove('active'); });
-      tab.classList.add('active');
-      var panel = document.querySelector('[data-panel="'+tab.dataset.tab+'"]');
-      if(panel) panel.classList.add('active');
+    tab.addEventListener('click', function(){ activateTab(tab.dataset.tab); });
+  });
+  // Category cards click → scroll to showcase + activate tab
+  document.querySelectorAll('.cat-card[data-target]').forEach(function(card){
+    card.addEventListener('click', function(){
+      var target = card.dataset.target;
+      activateTab(target);
+      document.querySelector('.sample-showcase').scrollIntoView({behavior:'smooth',block:'start'});
     });
   });
 })();
