@@ -6,7 +6,6 @@
 <title>AssessEngine — Assessment Intelligence · Arcova SIP</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -46,14 +45,13 @@
 html, body { height: 100%; background: var(--ink); color: var(--paper); font-family: 'DM Sans', sans-serif; overflow: hidden; }
 .app { display: flex; height: 100vh; }
 
-/* ── SIDEBAR ── */
+/* SIDEBAR */
 .sidebar { width: var(--sidebar-w); background: var(--ink-panel); border-right: 1px solid var(--ink-border); display: flex; flex-direction: column; flex-shrink: 0; }
 a.sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 22px 20px 20px; border-bottom: 1px solid var(--ink-border); text-decoration: none; }
 a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 .brand-hex { width: 28px; height: 28px; background: var(--gold); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); flex-shrink: 0; }
 .brand-nm { font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--paper); }
 .brand-tg { font-size: 10px; color: var(--ink-soft); letter-spacing: 0.06em; text-transform: uppercase; }
-
 .sidebar-nav { flex: 1; padding: 12px 14px; overflow-y: auto; }
 .nav-section-label { font-size: 10px; color: var(--ink-soft); letter-spacing: .1em; text-transform: uppercase; padding: 10px 6px 6px; }
 .nav-item { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 6px; font-size: 12.5px; color: var(--paper-mid); cursor: pointer; text-decoration: none; transition: background .15s, color .15s; margin-bottom: 1px; }
@@ -61,45 +59,33 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 .nav-item.active { background: var(--teal-dim); color: var(--teal-lt); }
 .nav-item svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; opacity: .7; }
 .nav-item.active svg { opacity: 1; }
-.nav-badge { margin-left: auto; padding: 1px 6px; border-radius: 100px; font-size: 10px; font-weight: 500; }
-.nb-gold  { background: var(--gold-dim); color: var(--gold); }
-.nb-green { background: var(--green-dim); color: var(--green-lt); }
-.nb-teal  { background: var(--teal-dim); color: var(--teal-lt); }
-.nb-red   { background: var(--red-dim); color: var(--red-lt); }
-
 .sidebar-user { padding: 14px 16px; border-top: 1px solid var(--ink-border); display: flex; align-items: center; gap: 10px; }
 .user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; color: var(--paper); flex-shrink: 0; }
 .user-name { font-size: 12px; font-weight: 500; color: var(--paper); }
 .user-role { font-size: 10px; color: var(--ink-soft); }
 
-/* ── MAIN ── */
+/* MAIN */
 .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 .topbar { height: 54px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; padding: 0 28px; gap: 14px; flex-shrink: 0; background: var(--ink-panel); }
 .topbar-title { font-family: 'Syne',sans-serif; font-size: 15px; font-weight: 700; color: var(--paper); flex: 1; }
 .topbar-meta { font-size: 11px; color: var(--ink-soft); }
 .tb-pill { padding: 4px 11px; border-radius: 100px; font-size: 11px; border: 1px solid; white-space: nowrap; display: flex; align-items: center; gap: 5px; }
-.tb-pill.gold { border-color: rgba(200,168,75,.35); color: var(--gold); }
 .tb-pill.teal { border-color: rgba(34,192,180,.35); color: var(--teal-lt); background: var(--teal-dim); }
+.tb-pill.gold { border-color: rgba(200,168,75,.35); color: var(--gold); }
 .tb-btn { padding: 7px 14px; border-radius: 6px; border: 1px solid var(--ink-border); background: transparent; color: var(--paper-mid); font-family: 'DM Sans',sans-serif; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; transition: background .15s, color .15s; }
 .tb-btn:hover { background: rgba(255,255,255,0.05); color: var(--paper); }
 .tb-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; }
 .tb-btn.primary { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 600; }
 .tb-btn.primary:hover { opacity: .88; }
 
-/* ── CONTENT ── */
+/* CONTENT */
 .content { flex: 1; overflow-y: auto; padding: 24px 28px; display: flex; flex-direction: column; gap: 18px; }
 .content::-webkit-scrollbar { width: 4px; }
 .content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
 
-/* ── KPI STRIP ── */
-.kpi-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; animation: fadeUp .4s ease both; }
+/* KPI STRIP */
+.kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; animation: fadeUp .4s ease both; }
 .kpi-card { background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
-.kpi-card:nth-child(1) { animation-delay: 0.05s; }
-.kpi-card:nth-child(2) { animation-delay: 0.10s; }
-.kpi-card:nth-child(3) { animation-delay: 0.15s; }
-.kpi-card:nth-child(4) { animation-delay: 0.20s; }
-.kpi-card:nth-child(5) { animation-delay: 0.25s; }
-.kpi-card:nth-child(6) { animation-delay: 0.30s; }
 .kpi-label { font-size: 10px; color: var(--ink-soft); letter-spacing: 0.08em; text-transform: uppercase; }
 .kpi-value { font-family: 'Syne',sans-serif; font-size: 22px; font-weight: 800; color: var(--paper); line-height: 1; }
 .kpi-value.gold  { color: var(--gold); }
@@ -107,10 +93,9 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 .kpi-value.red   { color: var(--red-lt); }
 .kpi-value.teal  { color: var(--teal-lt); }
 .kpi-sub { font-size: 10px; display: flex; align-items: center; gap: 4px; color: var(--ink-soft); }
-.kpi-up   { color: var(--green-lt); }
-.kpi-down { color: var(--red-lt); }
+.kpi-up { color: var(--green-lt); }
 
-/* ── PANELS ── */
+/* PANELS */
 .panel { background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: 14px; display: flex; flex-direction: column; overflow: hidden; }
 .panel-head { padding: 14px 18px 12px; border-bottom: 1px solid var(--ink-border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
 .panel-title { font-family: 'Syne',sans-serif; font-size: 13px; font-weight: 700; color: var(--paper); }
@@ -124,16 +109,19 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 .panel-body { flex: 1; padding: 14px 18px; }
 .panel-body.no-pad { padding: 0; }
 
-/* ── 6-CATEGORY CARDS ── */
-.cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; animation: fadeUp .5s ease .1s both; }
+/* CATEGORY ACCORDION CARDS */
+.cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .cat-card {
   background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: 12px;
-  padding: 18px 16px 32px; display: flex; flex-direction: column; gap: 10px;
-  cursor: pointer; transition: border-color .2s, transform .2s; position: relative; overflow: visible;
+  padding: 18px 16px; display: flex; flex-direction: column; gap: 10px;
+  cursor: pointer; transition: border-color .2s, transform .15s; position: relative;
 }
 .cat-card:hover { border-color: rgba(255,255,255,.14); transform: translateY(-2px); }
-.cat-card::before { content: ''; position: absolute; inset: 0; border-radius: 12px; opacity: 0; transition: opacity .2s; pointer-events: none; }
-.cat-card:hover::before { opacity: 1; }
+.cat-card.open { grid-column: 1 / -1; transform: none; border-color: rgba(255,255,255,.14); cursor: default; }
+.cat-card.open .cat-summary { display: grid; grid-template-columns: 40px 1fr auto; gap: 12px; align-items: center; }
+.cat-card.open .cat-desc, .cat-card.open .cat-stats { display: none; }
+.cat-card.open .cat-label { display: none; }
+.cat-card.open .cat-badge { position: static; }
 
 .cat-icon {
   width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
@@ -151,262 +139,166 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
   position: absolute; top: 14px; right: 14px;
   padding: 2px 8px; border-radius: 100px; font-size: 9px; font-weight: 600; letter-spacing: .04em; z-index: 1;
 }
-
-/* Category colors */
 .cat-a { --cc: #3A8CC0; --cc-dim: rgba(58,140,192,.12); }
 .cat-b { --cc: #A070E0; --cc-dim: rgba(160,112,224,.12); }
 .cat-c { --cc: #22C0B4; --cc-dim: rgba(34,192,180,.12); }
 .cat-d { --cc: #F0A030; --cc-dim: rgba(240,160,48,.12); }
 .cat-e { --cc: #3AB87A; --cc-dim: rgba(58,184,122,.12); }
 .cat-f { --cc: #E87060; --cc-dim: rgba(232,112,96,.12); }
-
 .cat-card .cat-icon { background: var(--cc-dim); border: 1px solid rgba(255,255,255,.06); }
 .cat-card .cat-icon svg { stroke: var(--cc); }
 .cat-card .cat-label { color: var(--cc); }
 .cat-card .cat-stat-val { color: var(--cc); }
-.cat-card::before { background: var(--cc-dim); }
-.cat-card::after {
-  content: 'Click to preview ↓'; position: absolute; bottom: 10px; left: 16px;
-  font-size: 9px; color: var(--cc); opacity: 0; transition: opacity .2s;
-  letter-spacing: .04em; font-weight: 500; z-index: 2; pointer-events: none;
-}
-.cat-card:hover::after { opacity: .6; }
 
-/* ── ACTIVE CYCLES TABLE ── */
-.cycle-table { width: 100%; border-collapse: collapse; }
-.cycle-table th {
-  font-size: 10px; color: var(--ink-soft); letter-spacing: .08em; text-transform: uppercase;
-  text-align: left; padding: 0 12px 10px; font-weight: 400;
+/* EXPAND PANEL */
+.cat-expand { display: none; margin-top: 14px; border-top: 1px solid var(--ink-border); padding-top: 16px; }
+.cat-card.open .cat-expand { display: block; }
+
+.expand-grid { display: grid; grid-template-columns: 280px 1fr 260px; gap: 0; border: 1px solid var(--ink-border); border-radius: 10px; overflow: hidden; }
+
+/* A. BRIEF FORM */
+.brief-panel { background: linear-gradient(180deg, rgba(13,138,138,.06) 0%, transparent 100%); padding: 16px; display: flex; flex-direction: column; gap: 10px; border-right: 1px solid var(--ink-border); }
+.brief-title { font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.brief-field { display: flex; flex-direction: column; gap: 3px; }
+.brief-label { font-size: 9px; color: var(--ink-soft); letter-spacing: .08em; text-transform: uppercase; }
+.brief-input {
+  padding: 6px 10px; border-radius: 5px; border: 1px solid var(--ink-border);
+  background: rgba(255,255,255,.03); color: var(--paper); font-family: 'DM Sans',sans-serif;
+  font-size: 11px; line-height: 1.4; resize: none; outline: none;
+  transition: border-color .15s;
 }
+.brief-input:focus { border-color: rgba(34,192,180,.4); }
+select.brief-input { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234A6A84'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; padding-right: 24px; }
+select.brief-input option { background: var(--ink-card); color: var(--paper); }
+.brief-generate {
+  margin-top: auto; padding: 8px 14px; border-radius: 6px; border: none;
+  background: var(--teal); color: #fff; font-family: 'Syne',sans-serif;
+  font-size: 11px; font-weight: 700; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; gap: 6px; transition: opacity .15s;
+}
+.brief-generate:hover { opacity: .85; }
+.brief-generate svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+/* B. GENERATED QUESTIONS */
+.gen-panel { padding: 16px; display: flex; flex-direction: column; gap: 10px; border-right: 1px solid var(--ink-border); overflow-y: auto; max-height: 420px; }
+.gen-panel::-webkit-scrollbar { width: 3px; }
+.gen-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 2px; }
+.gen-title { font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; display: flex; align-items: center; gap: 6px; margin-bottom: 2px; }
+.gen-title .gt-count { padding: 2px 7px; border-radius: 100px; font-size: 9px; font-weight: 600; background: var(--teal-dim); color: var(--teal-lt); }
+
+.q-card {
+  background: var(--ink-raised); border: 1px solid var(--ink-border); border-radius: 8px;
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;
+}
+.q-header { display: flex; align-items: flex-start; gap: 8px; }
+.q-num {
+  width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono',monospace; font-size: 10px; font-weight: 600; flex-shrink: 0;
+}
+.q-text { font-size: 11.5px; color: var(--paper); line-height: 1.5; flex: 1; }
+.q-meta { display: flex; gap: 5px; flex-wrap: wrap; }
+.q-tag { padding: 2px 7px; border-radius: 100px; font-size: 8.5px; font-weight: 500; letter-spacing: .03em; border: 1px solid; }
+
+/* Question formats */
+.q-options { display: flex; flex-direction: column; gap: 4px; margin-left: 30px; }
+.q-opt { display: flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 5px; font-size: 10.5px; color: var(--paper-mid); background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.04); }
+.q-opt.correct { background: rgba(58,184,122,.08); border-color: rgba(58,184,122,.2); color: var(--green-lt); }
+.q-radio { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--ink-soft); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.q-opt.correct .q-radio { border-color: var(--green-lt); }
+.q-opt.correct .q-radio::after { content:''; width:5px; height:5px; border-radius:50%; background:var(--green-lt); }
+
+.rating-row { display: flex; gap: 3px; margin-left: 30px; }
+.r-pill { flex: 1; padding: 5px 2px; border-radius: 4px; text-align: center; font-size: 9px; border: 1px solid rgba(255,255,255,.05); background: rgba(255,255,255,.02); color: var(--ink-soft); line-height: 1.3; }
+.r-pill.sel { border-color: rgba(58,140,192,.4); background: rgba(58,140,192,.12); color: #3A8CC0; }
+.r-pill .rn { font-family: 'Syne',sans-serif; font-size: 12px; font-weight: 700; display: block; }
+
+.likert-row { display: flex; gap: 3px; margin-left: 30px; }
+.l-pill { flex: 1; padding: 5px 2px; border-radius: 4px; text-align: center; font-size: 8.5px; border: 1px solid rgba(255,255,255,.05); background: rgba(255,255,255,.02); color: var(--ink-soft); line-height: 1.3; }
+.l-pill.sel { border-color: rgba(58,184,122,.3); background: rgba(58,184,122,.1); color: var(--green-lt); }
+
+/* AI explanation */
+.ai-why { margin-left: 30px; padding: 6px 10px; border-radius: 5px; background: rgba(13,138,138,.06); border: 1px solid rgba(34,192,180,.12); font-size: 10px; color: var(--teal-lt); line-height: 1.5; display: flex; gap: 6px; }
+.ai-why svg { width: 12px; height: 12px; stroke: var(--teal-lt); fill: none; stroke-width: 1.5; flex-shrink: 0; margin-top: 1px; }
+
+/* Question actions */
+.q-actions { display: flex; gap: 4px; margin-left: 30px; }
+.q-act { padding: 3px 10px; border-radius: 4px; font-size: 9px; font-weight: 600; cursor: pointer; border: 1px solid; transition: opacity .15s; }
+.q-act:hover { opacity: .8; }
+.q-act.accept { background: var(--green-dim); border-color: rgba(58,184,122,.3); color: var(--green-lt); }
+.q-act.reject { background: var(--red-dim); border-color: rgba(192,57,43,.3); color: var(--red-lt); }
+.q-act.edit { background: rgba(255,255,255,.03); border-color: var(--ink-border); color: var(--paper-mid); }
+
+/* Scenario block */
+.scenario-block { margin-left: 30px; padding: 8px 10px; border-radius: 5px; background: rgba(200,168,75,.04); border: 1px solid rgba(200,168,75,.12); font-size: 10.5px; color: var(--paper-mid); line-height: 1.5; font-style: italic; }
+
+/* C. CONFIG & ASSIGNMENT */
+.config-panel { padding: 16px; display: flex; flex-direction: column; gap: 10px; background: rgba(255,255,255,.01); }
+.config-title { font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 2px; }
+.cfg-card { background: var(--ink-raised); border: 1px solid var(--ink-border); border-radius: 7px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.cfg-card-title { font-size: 10px; font-weight: 600; color: var(--paper); }
+.cfg-row { display: flex; align-items: center; justify-content: space-between; }
+.cfg-key { font-size: 10px; color: var(--ink-soft); }
+.cfg-val { font-size: 10.5px; color: var(--paper); font-weight: 500; }
+.cfg-val.hl { color: var(--teal-lt); }
+.cfg-flow { padding: 8px 10px; border-radius: 6px; font-size: 10px; line-height: 1.5; }
+
+/* Close button */
+.cat-close {
+  display: none; position: absolute; top: 14px; right: 14px; width: 28px; height: 28px;
+  border-radius: 6px; border: 1px solid var(--ink-border); background: var(--ink-raised);
+  color: var(--ink-soft); cursor: pointer; align-items: center; justify-content: center;
+  font-size: 14px; transition: color .15s, border-color .15s; z-index: 2;
+}
+.cat-close:hover { color: var(--paper); border-color: rgba(255,255,255,.2); }
+.cat-card.open .cat-close { display: flex; }
+.cat-card.open .cat-badge { display: none; }
+
+/* PUBLISHING WORKFLOW */
+.pub-panel { animation: fadeUp .5s ease .15s both; }
+.pub-flow { display: flex; align-items: center; padding: 18px 24px; gap: 0; }
+.pub-step { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; position: relative; }
+.pub-dot {
+  width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne',sans-serif; font-size: 11px; font-weight: 700; border: 2px solid;
+}
+.pub-dot.done { background: var(--green-dim); border-color: rgba(58,184,122,.4); color: var(--green-lt); }
+.pub-dot.active { background: var(--teal-dim); border-color: rgba(34,192,180,.5); color: var(--teal-lt); animation: blink 1.5s infinite; }
+.pub-dot.pending { background: rgba(255,255,255,.03); border-color: var(--ink-border); color: var(--ink-soft); }
+.pub-label { font-size: 10px; color: var(--ink-soft); font-weight: 500; }
+.pub-step.active .pub-label { color: var(--teal-lt); }
+.pub-step.done .pub-label { color: var(--green-lt); }
+.pub-line { flex: 1; height: 2px; margin: 0 -1px; position: relative; top: -12px; }
+.pub-line.done { background: var(--green-lt); opacity: .4; }
+.pub-line.active { background: linear-gradient(90deg, rgba(58,184,122,.4), rgba(34,192,180,.4)); }
+.pub-line.pending { background: var(--ink-border); }
+.pub-desc { padding: 0 24px 14px; font-size: 11px; color: var(--ink-soft); line-height: 1.6; }
+
+/* CYCLE TABLE */
+.cycle-table { width: 100%; border-collapse: collapse; }
+.cycle-table th { font-size: 10px; color: var(--ink-soft); letter-spacing: .08em; text-transform: uppercase; text-align: left; padding: 0 12px 10px; font-weight: 400; }
 .cycle-table th:nth-child(n+3) { text-align: center; }
 .cycle-table tr { border-bottom: 1px solid var(--ink-border); }
 .cycle-table tr:last-child { border-bottom: none; }
 .cycle-table td { padding: 10px 12px; font-size: 12px; color: var(--paper-mid); }
 .cycle-table td:first-child { color: var(--paper); font-weight: 500; }
 .cycle-table td:nth-child(n+3) { text-align: center; }
-
-.status-chip {
-  display: inline-flex; align-items: center; gap: 4px;
-  padding: 3px 9px; border-radius: 100px; font-size: 10px; font-weight: 500;
-}
+.status-chip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 100px; font-size: 10px; font-weight: 500; }
 .status-chip.active   { background: var(--teal-dim); color: var(--teal-lt); }
 .status-chip.complete { background: var(--green-dim); color: var(--green-lt); }
 .status-chip.upcoming { background: var(--gold-dim); color: var(--gold); }
-.status-chip.overdue  { background: var(--red-dim); color: var(--red-lt); }
 .status-dot { width: 5px; height: 5px; border-radius: 50%; }
 .status-chip.active .status-dot   { background: var(--teal-lt); animation: blink 1.5s infinite; }
 .status-chip.complete .status-dot { background: var(--green-lt); }
 .status-chip.upcoming .status-dot { background: var(--gold); }
-.status-chip.overdue .status-dot  { background: var(--red-lt); animation: blink 1s infinite; }
-
 .completion-bar { width: 70px; height: 5px; background: rgba(255,255,255,.07); border-radius: 3px; display: inline-block; vertical-align: middle; }
 .completion-fill { height: 100%; border-radius: 3px; }
 
-/* ── DISTRIBUTION STATUS ── */
+/* DISTRIBUTION STATUS */
 .dist-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.dist-status {
-  background: var(--ink-raised); border: 1px solid var(--ink-border); border-radius: 8px;
-  padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; text-align: center;
-}
+.dist-status { background: var(--ink-raised); border: 1px solid var(--ink-border); border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; text-align: center; }
 .dist-count { font-family: 'Syne',sans-serif; font-size: 18px; font-weight: 800; }
 .dist-label { font-size: 9px; color: var(--ink-soft); letter-spacing: .06em; text-transform: uppercase; }
 
-/* ── AI SUGGESTION ── */
-.ai-suggestion {
-  background: linear-gradient(135deg, rgba(13,138,138,.08) 0%, rgba(13,138,138,.02) 100%);
-  border: 1px solid rgba(34,192,180,.25); border-radius: 12px;
-  padding: 16px 18px; display: flex; gap: 14px; align-items: flex-start;
-}
-.ai-sug-icon {
-  width: 36px; height: 36px; border-radius: 8px; background: var(--teal-dim);
-  border: 1px solid rgba(34,192,180,.3); display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.ai-sug-icon svg { width: 18px; height: 18px; stroke: var(--teal-lt); fill: none; stroke-width: 1.5; stroke-linecap: round; }
-.ai-sug-body { flex: 1; }
-.ai-sug-title { font-family: 'Syne',sans-serif; font-size: 12px; font-weight: 700; color: var(--teal-lt); margin-bottom: 4px; }
-.ai-sug-text { font-size: 11.5px; color: var(--paper-mid); line-height: 1.6; }
-.ai-sug-text strong { color: var(--paper); font-weight: 500; }
-.ai-sug-actions { display: flex; gap: 8px; margin-top: 10px; }
-.ai-sug-btn {
-  padding: 6px 14px; border-radius: 6px; font-size: 11px; font-family: 'DM Sans',sans-serif;
-  cursor: pointer; transition: opacity .15s; border: none; font-weight: 600;
-}
-.ai-sug-btn.primary { background: var(--teal); color: #fff; }
-.ai-sug-btn.primary:hover { opacity: .85; }
-.ai-sug-btn.secondary { background: transparent; border: 1px solid rgba(34,192,180,.3); color: var(--teal-lt); }
-.ai-sug-btn.secondary:hover { background: var(--teal-dim); }
-
-/* ── AI BUILDER PREVIEW ── */
-.builder-preview {
-  display: grid; grid-template-columns: 280px 1fr; gap: 0;
-  border: 1px solid rgba(34,192,180,.2); border-radius: 12px; overflow: hidden;
-  animation: fadeUp .5s ease .3s both;
-}
-.builder-sidebar {
-  background: linear-gradient(180deg, rgba(13,138,138,.1) 0%, rgba(13,138,138,.03) 100%);
-  border-right: 1px solid rgba(34,192,180,.15); padding: 18px 16px; display: flex; flex-direction: column; gap: 14px;
-}
-.builder-step {
-  display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px;
-  transition: background .15s; cursor: pointer;
-}
-.builder-step:hover { background: rgba(34,192,180,.08); }
-.builder-step.active { background: rgba(34,192,180,.12); }
-.step-num {
-  width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
-  font-family: 'DM Mono',monospace; font-size: 11px; font-weight: 600; flex-shrink: 0;
-}
-.step-num.done { background: var(--green-dim); color: var(--green-lt); border: 1px solid rgba(58,184,122,.3); }
-.step-num.active { background: var(--teal-dim); color: var(--teal-lt); border: 1px solid rgba(34,192,180,.4); }
-.step-num.pending { background: rgba(255,255,255,.04); color: var(--ink-soft); border: 1px solid var(--ink-border); }
-.step-text { font-size: 11.5px; }
-.step-text.done { color: var(--green-lt); }
-.step-text.active { color: var(--teal-lt); font-weight: 500; }
-.step-text.pending { color: var(--ink-soft); }
-
-.builder-main { background: var(--ink-card); padding: 20px; display: flex; flex-direction: column; gap: 14px; }
-.builder-header { font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 700; color: var(--paper); }
-.builder-desc { font-size: 11.5px; color: var(--ink-soft); line-height: 1.6; }
-
-.gen-item {
-  background: var(--ink-raised); border: 1px solid var(--ink-border); border-radius: 8px;
-  padding: 10px 14px; display: flex; align-items: center; gap: 10px;
-}
-.gen-item-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.gen-item-text { font-size: 12px; color: var(--paper-mid); flex: 1; }
-.gen-item-meta { font-size: 10px; color: var(--ink-soft); font-family: 'DM Mono',monospace; }
-
-/* ── WEIGHTED GAP ── */
-.gap-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; animation: fadeUp .5s ease .35s both; }
-
-.multiplier-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-.mult-card {
-  background: var(--ink-raised); border: 1px solid var(--ink-border); border-radius: 8px;
-  padding: 12px 10px; text-align: center; display: flex; flex-direction: column; gap: 6px;
-}
-.mult-icon { font-size: 18px; }
-.mult-name { font-size: 10px; color: var(--paper-mid); line-height: 1.3; }
-.mult-val { font-family: 'Syne',sans-serif; font-size: 16px; font-weight: 800; color: var(--teal-lt); }
-.mult-range { font-size: 9px; color: var(--ink-soft); font-family: 'DM Mono',monospace; }
-
-/* ── SAMPLE ASSESSMENT SHOWCASE ── */
-.sample-showcase {
-  background: var(--ink-card); border: 1px solid var(--ink-border); border-radius: 14px;
-  overflow: hidden; animation: fadeUp .5s ease .12s both;
-}
-.sample-tabs {
-  display: flex; border-bottom: 1px solid var(--ink-border); overflow-x: auto;
-  scrollbar-width: none; -ms-overflow-style: none;
-}
-.sample-tabs::-webkit-scrollbar { display: none; }
-.sample-tab {
-  padding: 12px 18px; font-size: 11.5px; font-weight: 500; color: var(--ink-soft);
-  cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap;
-  transition: color .2s, border-color .2s, background .2s; flex-shrink: 0;
-  display: flex; align-items: center; gap: 7px;
-}
-.sample-tab:hover { color: var(--paper-mid); background: rgba(255,255,255,.02); }
-.sample-tab.active { color: var(--paper); border-bottom-color: var(--teal-lt); background: rgba(13,138,138,.05); }
-.sample-tab .tab-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-
-.sample-content { display: none; }
-.sample-content.active { display: flex; }
-
-/* Sample panels layout */
-.sample-body { display: flex; gap: 0; flex: 1; min-height: 0; }
-.sample-left { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 14px; border-right: 1px solid var(--ink-border); }
-.sample-right { width: 300px; padding: 20px; display: flex; flex-direction: column; gap: 14px; flex-shrink: 0; }
-
-.sample-section-label {
-  font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600;
-  display: flex; align-items: center; gap: 6px;
-}
-.sample-section-label::after {
-  content: ''; flex: 1; height: 1px; background: var(--ink-border);
-}
-
-/* Question preview cards */
-.q-card {
-  background: var(--ink-raised); border: 1px solid var(--ink-border); border-radius: 10px;
-  padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;
-  transition: border-color .2s;
-}
-.q-card:hover { border-color: rgba(255,255,255,.12); }
-.q-header { display: flex; align-items: flex-start; gap: 10px; }
-.q-num {
-  width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
-  font-family: 'DM Mono',monospace; font-size: 11px; font-weight: 600; flex-shrink: 0;
-}
-.q-text { font-size: 12.5px; color: var(--paper); line-height: 1.55; flex: 1; }
-.q-meta { display: flex; gap: 6px; flex-wrap: wrap; }
-.q-tag {
-  padding: 2px 8px; border-radius: 100px; font-size: 9px; font-weight: 500;
-  letter-spacing: .04em; border: 1px solid;
-}
-
-/* Answer options */
-.q-options { display: flex; flex-direction: column; gap: 5px; padding-left: 34px; }
-.q-opt {
-  display: flex; align-items: center; gap: 8px; padding: 6px 10px;
-  border-radius: 6px; font-size: 11.5px; color: var(--paper-mid);
-  background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.04);
-  transition: background .15s;
-}
-.q-opt.correct { background: rgba(58,184,122,.08); border-color: rgba(58,184,122,.2); color: var(--green-lt); }
-.q-radio {
-  width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--ink-soft);
-  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-}
-.q-opt.correct .q-radio { border-color: var(--green-lt); }
-.q-opt.correct .q-radio::after { content:''; width:6px; height:6px; border-radius:50%; background:var(--green-lt); }
-.q-check {
-  width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid var(--ink-soft);
-  flex-shrink: 0;
-}
-
-/* Rating scale preview */
-.rating-scale { display: flex; gap: 4px; padding-left: 34px; }
-.rating-pill {
-  flex: 1; padding: 8px 4px; border-radius: 6px; text-align: center; font-size: 10px;
-  border: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.02);
-  color: var(--ink-soft); cursor: pointer; transition: all .15s;
-}
-.rating-pill.selected { border-color: rgba(58,140,192,.4); background: rgba(58,140,192,.12); color: #3A8CC0; }
-.rating-pill .r-num { font-family: 'Syne',sans-serif; font-size: 14px; font-weight: 700; display: block; }
-
-/* Likert scale */
-.likert-row { display: flex; gap: 3px; padding-left: 34px; }
-.likert-opt {
-  flex: 1; padding: 7px 4px; border-radius: 5px; text-align: center; font-size: 9px;
-  border: 1px solid rgba(255,255,255,.05); background: rgba(255,255,255,.02); color: var(--ink-soft);
-  line-height: 1.3; cursor: pointer; transition: all .15s;
-}
-.likert-opt.selected { border-color: rgba(58,184,122,.3); background: rgba(58,184,122,.1); color: var(--green-lt); }
-
-/* Assign preview */
-.assign-card {
-  background: var(--ink-raised); border: 1px solid var(--ink-border); border-radius: 8px;
-  padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;
-}
-.assign-row { display: flex; align-items: center; justify-content: space-between; }
-.assign-key { font-size: 11px; color: var(--ink-soft); }
-.assign-val { font-size: 11.5px; color: var(--paper); font-weight: 500; }
-.assign-val.highlight { color: var(--teal-lt); }
-
-.config-tag {
-  display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px;
-  border-radius: 100px; font-size: 10px; font-weight: 500; letter-spacing: .03em;
-}
-
-/* Scenario block */
-.scenario-block {
-  background: rgba(200,168,75,.05); border: 1px solid rgba(200,168,75,.15);
-  border-radius: 8px; padding: 12px 14px; font-size: 11.5px; color: var(--paper-mid);
-  line-height: 1.6; font-style: italic;
-}
-
-/* ── ANIMATIONS ── */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(1.3); } }
@@ -424,7 +316,6 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
         <span class="brand-tg">Admin Portal</span>
       </div>
     </a>
-
     <nav class="sidebar-nav">
     <div class="nav-section-label">Setup</div>
     <a class="nav-item" href="org-setup.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>OrgSetup</a>
@@ -438,7 +329,6 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
     <a class="nav-item" href="survey-builder.html"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Survey Builder</a>
     <a class="nav-item" href="discovery-sessions.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Discovery Sessions</a>
   </nav>
-
     <div class="sidebar-user">
       <div class="user-avatar">KR</div>
       <div style="display:flex;flex-direction:column;gap:1px;min-width:0">
@@ -450,742 +340,74 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
 
   <!-- MAIN -->
   <div class="main">
-
-    <!-- TOPBAR -->
     <div class="topbar">
       <div class="topbar-title">AssessEngine</div>
       <a href="../level-journey.html" style="display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;background:#C8A84B;border:none;font-size:11px;font-family:'Syne',sans-serif;font-weight:700;color:#0C1B2E;text-decoration:none;letter-spacing:0.05em;white-space:nowrap;transition:opacity .15s" onmouseover="this.style.opacity='0.86'" onmouseout="this.style.opacity='1'"><svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>L3 · See Journey</a>
-      <a href="../nav-menus.html" style="display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;border:1px solid var(--ink-border);font-size:11px;color:var(--ink-soft);text-decoration:none;transition:background .15s,color .15s" onmouseover="this.style.background='rgba(255,255,255,0.05)';this.style.color='var(--paper)'" onmouseout="this.style.background='transparent';this.style.color='var(--ink-soft)'">
-        <svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-        All screens
-      </a>
+      <a href="../nav-menus.html" style="display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;border:1px solid var(--ink-border);font-size:11px;color:var(--ink-soft);text-decoration:none;transition:background .15s,color .15s" onmouseover="this.style.background='rgba(255,255,255,0.05)';this.style.color='var(--paper)'" onmouseout="this.style.background='transparent';this.style.color='var(--ink-soft)'"><svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>All screens</a>
       <div class="topbar-meta">Arcova Infrastructure &nbsp;·&nbsp; 25 March 2026</div>
       <div class="tb-pill teal"><div style="width:5px;height:5px;border-radius:50%;background:var(--teal-lt);animation:blink 1.5s infinite"></div>2 Active Cycles</div>
       <div class="tb-pill gold"><div style="width:5px;height:5px;border-radius:50%;background:var(--gold)"></div>L3 Active</div>
-      <button class="tb-btn primary" onclick="var el=document.getElementById('builderSection'),sc=document.querySelector('.content');sc.scrollTo({top:el.offsetTop-sc.offsetTop-20,behavior:'smooth'})">
-        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-        AI Build Assessment
-      </button>
     </div>
 
-    <!-- SCROLLABLE CONTENT -->
     <div class="content">
 
       <!-- KPI STRIP -->
       <div class="kpi-strip">
-        <div class="kpi-card">
-          <div class="kpi-label">Assessment Cycles</div>
-          <div class="kpi-value">9</div>
-          <div class="kpi-sub">2 completed · 2 active · 5 upcoming</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Employees Assessed</div>
-          <div class="kpi-value teal">681</div>
-          <div class="kpi-sub kpi-up">↑ 84% coverage</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Avg Completion Rate</div>
-          <div class="kpi-value green">87%</div>
-          <div class="kpi-sub kpi-up">↑ 12pts vs L2 start</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Avg Score</div>
-          <div class="kpi-value">68%</div>
-          <div class="kpi-sub">Across all categories</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Overdue Responses</div>
-          <div class="kpi-value red">23</div>
-          <div class="kpi-sub kpi-down">3 departments flagged</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">AI Suggestions</div>
-          <div class="kpi-value gold">4</div>
-          <div class="kpi-sub">Pending review</div>
-        </div>
+        <div class="kpi-card"><div class="kpi-label">Assessment Cycles</div><div class="kpi-value">9</div><div class="kpi-sub">2 active · 5 upcoming · 2 complete</div></div>
+        <div class="kpi-card"><div class="kpi-label">Employees Assessed</div><div class="kpi-value teal">681</div><div class="kpi-sub kpi-up">↑ 84% of 812 in scope</div></div>
+        <div class="kpi-card"><div class="kpi-label">Avg Completion</div><div class="kpi-value green">87%</div><div class="kpi-sub kpi-up">↑ 12pts vs cycle start</div></div>
+        <div class="kpi-card"><div class="kpi-label">AI Builder Confidence</div><div class="kpi-value gold">88%</div><div class="kpi-sub">Auto-publish eligible</div></div>
       </div>
 
-      <!-- 6 ASSESSMENT CATEGORIES -->
-      <div class="cat-grid">
+      <!-- 6 ASSESSMENT CATEGORIES — ACCORDION -->
+      <div class="cat-grid" id="catGrid"></div>
 
-        <!-- Cat A: Skill & Competency -->
-        <div class="cat-card cat-a" data-target="catA">
-          <div class="cat-badge" style="background:var(--blue-dim);color:#3A8CC0;border:1px solid rgba(58,140,192,.3)">Active</div>
-          <div class="cat-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-          <div class="cat-label">Category A</div>
-          <div class="cat-name">Skill & Competency</div>
-          <div class="cat-desc">Self + Manager dual-rating against role skill requirements. Feeds Skills Matrix and weighted gap engine.</div>
-          <div class="cat-stats">
-            <div class="cat-stat"><div class="cat-stat-val">681</div><div class="cat-stat-key">Assessed</div></div>
-            <div class="cat-stat"><div class="cat-stat-val">92%</div><div class="cat-stat-key">Complete</div></div>
-            <div class="cat-stat"><div class="cat-stat-val">2</div><div class="cat-stat-key">Cycles</div></div>
-          </div>
+      <!-- PUBLISHING WORKFLOW -->
+      <div class="panel pub-panel">
+        <div class="panel-head">
+          <div><div class="panel-title">Assessment Publishing Workflow</div><div class="panel-sub">Every assessment follows a 5-state lifecycle · Cannot skip states</div></div>
+          <div class="panel-tag teal">State Machine</div>
         </div>
-
-        <!-- Cat B: Psychometric -->
-        <div class="cat-card cat-b" data-target="catB">
-          <div class="cat-badge" style="background:var(--purple-dim);color:var(--purple-lt);border:1px solid rgba(160,112,224,.3)">Active</div>
-          <div class="cat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
-          <div class="cat-label">Category B</div>
-          <div class="cat-name">Psychometric & Behavioural</div>
-          <div class="cat-desc">Leadership style, behavioural tendencies, and personality-based assessment. Feeds IDP and succession planning.</div>
-          <div class="cat-stats">
-            <div class="cat-stat"><div class="cat-stat-val">142</div><div class="cat-stat-key">Assessed</div></div>
-            <div class="cat-stat"><div class="cat-stat-val">78%</div><div class="cat-stat-key">Complete</div></div>
-            <div class="cat-stat"><div class="cat-stat-val">1</div><div class="cat-stat-key">Cycles</div></div>
-          </div>
+        <div class="pub-flow">
+          <div class="pub-step done"><div class="pub-dot done">&#10003;</div><div class="pub-label">Draft</div></div>
+          <div class="pub-line done"></div>
+          <div class="pub-step done"><div class="pub-dot done">&#10003;</div><div class="pub-label">Pilot</div></div>
+          <div class="pub-line active"></div>
+          <div class="pub-step active"><div class="pub-dot active">3</div><div class="pub-label">Review</div></div>
+          <div class="pub-line pending"></div>
+          <div class="pub-step"><div class="pub-dot pending">4</div><div class="pub-label">Published</div></div>
+          <div class="pub-line pending"></div>
+          <div class="pub-step"><div class="pub-dot pending">5</div><div class="pub-label">Archived</div></div>
         </div>
-
-        <!-- Cat C: Knowledge -->
-        <div class="cat-card cat-c" data-target="catC">
-          <div class="cat-badge" style="background:var(--green-dim);color:var(--green-lt);border:1px solid rgba(58,184,122,.3)">Complete</div>
-          <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-          <div class="cat-label">Category C</div>
-          <div class="cat-name">Knowledge Assessments</div>
-          <div class="cat-desc">Pre-training, post-training, and 90-day retention tests. Kirkpatrick L2 measurement. Feeds training effectiveness.</div>
-          <div class="cat-stats">
-            <div class="cat-stat"><div class="cat-stat-val">284</div><div class="cat-stat-key">Assessed</div></div>
-            <div class="cat-stat"><div class="cat-stat-val">94%</div><div class="cat-stat-key">Complete</div></div>
-            <div class="cat-stat"><div class="cat-stat-val">3</div><div class="cat-stat-key">Cycles</div></div>
-          </div>
-        </div>
-
-        <!-- Cat D: 360 Feedback -->
-        <div class="cat-card cat-d" data-target="catD">
-          <div class="cat-badge" style="background:var(--gold-dim);color:var(--gold);border:1px solid rgba(200,168,75,.3)">Upcoming</div>
-          <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></div>
-          <div class="cat-label">Category D</div>
-          <div class="cat-name">360° Feedback</div>
-          <div class="cat-desc">Multi-rater feedback from peers, direct reports, managers, and external stakeholders. Feeds leadership development.</div>
-          <div class="cat-stats">
-            <div class="cat-stat"><div class="cat-stat-val">68</div><div class="cat-stat-key">Assessed</div></div>
-            <div class="cat-stat"><div class="cat-stat-val">—</div><div class="cat-stat-key">Complete</div></div>
-            <div class="cat-stat"><div class="cat-stat-val">1</div><div class="cat-stat-key">Cycles</div></div>
-          </div>
-        </div>
-
-        <!-- Cat E: Org Surveys -->
-        <div class="cat-card cat-e" data-target="catE">
-          <div class="cat-badge" style="background:var(--green-dim);color:var(--green-lt);border:1px solid rgba(58,184,122,.3)">Complete</div>
-          <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-          <div class="cat-label">Category E</div>
-          <div class="cat-name">Organisation Surveys</div>
-          <div class="cat-desc">Culture, engagement, wellbeing pulse, and L&D satisfaction surveys. Anonymous submission with team-level aggregation.</div>
-          <div class="cat-stats">
-            <div class="cat-stat"><div class="cat-stat-val">634</div><div class="cat-stat-key">Responses</div></div>
-            <div class="cat-stat"><div class="cat-stat-val">89%</div><div class="cat-stat-key">Complete</div></div>
-            <div class="cat-stat"><div class="cat-stat-val">2</div><div class="cat-stat-key">Cycles</div></div>
-          </div>
-        </div>
-
-        <!-- Cat F: L&D Needs Discovery -->
-        <div class="cat-card cat-f" data-target="catF">
-          <div class="cat-badge" style="background:var(--amber-dim);color:var(--amber-lt);border:1px solid rgba(212,130,10,.3)">Scheduled</div>
-          <div class="cat-icon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
-          <div class="cat-label">Category F</div>
-          <div class="cat-name">L&D Needs Discovery</div>
-          <div class="cat-desc">1:1 interviews and focus group structured capture. Qualitative skill need signals that feed into AI gap weighting.</div>
-          <div class="cat-stats">
-            <div class="cat-stat"><div class="cat-stat-val">—</div><div class="cat-stat-key">Captured</div></div>
-            <div class="cat-stat"><div class="cat-stat-val">Apr</div><div class="cat-stat-key">Scheduled</div></div>
-            <div class="cat-stat"><div class="cat-stat-val">0</div><div class="cat-stat-key">Cycles</div></div>
-          </div>
-        </div>
-
+        <div class="pub-desc"><strong style="color:var(--paper)">Current:</strong> BIM Advanced Competency Assessment is in <strong style="color:var(--teal-lt)">Review</strong> state. Pilot completed with 8 participants — avg completion 12 min, 0 abandons. Pending HR Admin review before org-wide publish. Published state locks question content; edits create a new version.</div>
       </div>
-
-      <!-- SAMPLE ASSESSMENT SHOWCASE -->
-      <div class="sample-showcase" id="sampleShowcase">
-        <div style="padding:14px 18px 0;display:flex;align-items:center;justify-content:space-between">
-          <div>
-            <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--paper)">Sample Assessment Previews</div>
-            <div style="font-size:10px;color:var(--ink-soft);margin-top:2px">Click each category to see sample questions, creation method, and assignment rules</div>
-          </div>
-          <div style="display:flex;gap:6px">
-            <span class="config-tag" style="background:var(--teal-dim);color:var(--teal-lt);border:1px solid rgba(34,192,180,.3)">6 Categories</span>
-            <span class="config-tag" style="background:var(--gold-dim);color:var(--gold);border:1px solid rgba(200,168,75,.3)">Interactive Preview</span>
-          </div>
-        </div>
-        <div class="sample-tabs">
-          <div class="sample-tab active" data-tab="catA"><span class="tab-dot" style="background:#3A8CC0"></span>Skill & Competency</div>
-          <div class="sample-tab" data-tab="catB"><span class="tab-dot" style="background:#A070E0"></span>Psychometric</div>
-          <div class="sample-tab" data-tab="catC"><span class="tab-dot" style="background:#22C0B4"></span>Knowledge Test</div>
-          <div class="sample-tab" data-tab="catD"><span class="tab-dot" style="background:#F0A030"></span>360° Feedback</div>
-          <div class="sample-tab" data-tab="catE"><span class="tab-dot" style="background:#3AB87A"></span>Org Surveys</div>
-          <div class="sample-tab" data-tab="catF"><span class="tab-dot" style="background:#E87060"></span>L&D Discovery</div>
-        </div>
-
-        <!-- ═══ CAT A: SKILL & COMPETENCY ═══ -->
-        <div class="sample-content active" data-panel="catA">
-          <div class="sample-body">
-            <div class="sample-left">
-              <div class="sample-section-label" style="color:#3A8CC0">Sample Dual-Rating Questions</div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(58,140,192,.12);color:#3A8CC0;border:1px solid rgba(58,140,192,.3)">1</div>
-                  <div class="q-text">Rate proficiency in <strong>BIM Coordination & Clash Detection</strong> — ability to manage multi-discipline models, run clash detection, and resolve coordination issues.</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(58,140,192,.1);border-color:rgba(58,140,192,.3);color:#3A8CC0">Skill Rating</span>
-                  <span class="q-tag" style="background:var(--gold-dim);border-color:rgba(200,168,75,.3);color:var(--gold)">Critical · C1</span>
-                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Dual-Rated</span>
-                </div>
-                <div class="rating-scale">
-                  <div class="rating-pill"><span class="r-num">1</span>Novice</div>
-                  <div class="rating-pill"><span class="r-num">2</span>Basic</div>
-                  <div class="rating-pill selected"><span class="r-num">3</span>Competent</div>
-                  <div class="rating-pill"><span class="r-num">4</span>Advanced</div>
-                  <div class="rating-pill"><span class="r-num">5</span>Expert</div>
-                </div>
-                <div style="padding-left:34px;display:flex;gap:12px;font-size:10px">
-                  <span style="color:#3A8CC0">Self-rating: <strong>3</strong></span>
-                  <span style="color:var(--green-lt)">Manager-rating: <strong>2</strong></span>
-                  <span style="color:var(--amber)">Gap: <strong>1.0</strong></span>
-                  <span style="color:var(--ink-soft)">AI Baseline: <strong>2.5</strong></span>
-                </div>
-              </div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(58,140,192,.12);color:#3A8CC0;border:1px solid rgba(58,140,192,.3)">2</div>
-                  <div class="q-text">Rate proficiency in <strong>Stakeholder Communication</strong> — managing client expectations, presenting project status, and facilitating cross-functional meetings.</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(160,112,224,.1);border-color:rgba(160,112,224,.3);color:var(--purple-lt)">Competency Rating</span>
-                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Behavioural</span>
-                </div>
-                <div class="rating-scale">
-                  <div class="rating-pill"><span class="r-num">1</span>Novice</div>
-                  <div class="rating-pill"><span class="r-num">2</span>Basic</div>
-                  <div class="rating-pill"><span class="r-num">3</span>Competent</div>
-                  <div class="rating-pill selected"><span class="r-num">4</span>Advanced</div>
-                  <div class="rating-pill"><span class="r-num">5</span>Expert</div>
-                </div>
-                <div style="padding-left:34px;font-size:10.5px;color:var(--ink-soft);line-height:1.5">
-                  <strong style="color:var(--paper-mid)">Manager observation:</strong> "Priya consistently leads stakeholder meetings with clarity. Recommend L4 — she coaches others on this skill."
-                </div>
-              </div>
-            </div>
-
-            <div class="sample-right">
-              <div class="sample-section-label" style="color:#3A8CC0">Creation & Assignment</div>
-              <div class="assign-card">
-                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">How it's created</div>
-                <div class="assign-row"><span class="assign-key">Method</span><span class="assign-val highlight">AI-generated from FrameworkBible</span></div>
-                <div class="assign-row"><span class="assign-key">Skills sourced</span><span class="assign-val">48 skills across 6 domains</span></div>
-                <div class="assign-row"><span class="assign-key">Per employee</span><span class="assign-val">8-12 role-relevant skills</span></div>
-                <div class="assign-row"><span class="assign-key">Rating model</span><span class="assign-val">1-5 proficiency scale</span></div>
-                <div class="assign-row"><span class="assign-key">Dual rating</span><span class="assign-val highlight">Self + Manager simultaneous</span></div>
-              </div>
-              <div class="assign-card">
-                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">Who gets assigned</div>
-                <div class="assign-row"><span class="assign-key">Population</span><span class="assign-val">780 in-scope employees</span></div>
-                <div class="assign-row"><span class="assign-key">Filtered by</span><span class="assign-val">Role, department, scope rules</span></div>
-                <div class="assign-row"><span class="assign-key">Duration</span><span class="assign-val">15-25 min per employee</span></div>
-                <div class="assign-row"><span class="assign-key">Deadline</span><span class="assign-val">14 days from dispatch</span></div>
-                <div class="assign-row"><span class="assign-key">Reminders</span><span class="assign-val">Day 7, Day 12, Day 14</span></div>
-              </div>
-              <div class="assign-card" style="background:rgba(58,140,192,.06);border-color:rgba(58,140,192,.15)">
-                <div style="font-size:11px;font-weight:600;color:#3A8CC0;margin-bottom:2px">Data feeds into</div>
-                <div style="font-size:11px;color:var(--paper-mid);line-height:1.5">Skills Matrix → Gap Analysis → Weighted LNA → Individual Learning Briefs</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══ CAT B: PSYCHOMETRIC ═══ -->
-        <div class="sample-content" data-panel="catB">
-          <div class="sample-body">
-            <div class="sample-left">
-              <div class="sample-section-label" style="color:#A070E0">Sample Psychometric Items</div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(160,112,224,.12);color:#A070E0;border:1px solid rgba(160,112,224,.3)">1</div>
-                  <div class="q-text"><strong>Big Five — Openness:</strong> "I enjoy exploring new ideas and unconventional approaches to solving problems."</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(160,112,224,.1);border-color:rgba(160,112,224,.3);color:#A070E0">Personality Trait</span>
-                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Big Five</span>
-                </div>
-                <div class="likert-row">
-                  <div class="likert-opt">Strongly Disagree</div>
-                  <div class="likert-opt">Disagree</div>
-                  <div class="likert-opt">Neutral</div>
-                  <div class="likert-opt selected">Agree</div>
-                  <div class="likert-opt">Strongly Agree</div>
-                </div>
-              </div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(160,112,224,.12);color:#A070E0;border:1px solid rgba(160,112,224,.3)">2</div>
-                  <div class="q-text"><strong>DISC — Dominance:</strong> "When facing a disagreement in a team meeting, I tend to..."</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(240,160,48,.1);border-color:rgba(240,160,48,.3);color:#F0A030">DISC Profile</span>
-                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Forced Choice</span>
-                </div>
-                <div class="q-options">
-                  <div class="q-opt"><div class="q-radio"></div>State my position firmly and expect others to align</div>
-                  <div class="q-opt correct"><div class="q-radio"></div>Listen to all sides, then propose a compromise</div>
-                  <div class="q-opt"><div class="q-radio"></div>Avoid the conflict and wait for it to resolve</div>
-                  <div class="q-opt"><div class="q-radio"></div>Analyse the data and present facts to settle it</div>
-                </div>
-                <div style="padding-left:34px;font-size:10px;color:var(--ink-soft);margin-top:4px">No right/wrong — maps to behavioural profile. Selected = Influence-dominant response.</div>
-              </div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(160,112,224,.12);color:#A070E0;border:1px solid rgba(160,112,224,.3)">3</div>
-                  <div class="q-text"><strong>Cognitive Ability:</strong> If all Zibbs are Wockets, and some Wockets are Plonks, which must be true?</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(58,140,192,.1);border-color:rgba(58,140,192,.3);color:#3A8CC0">Cognitive</span>
-                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Logical Reasoning</span>
-                </div>
-                <div class="q-options">
-                  <div class="q-opt"><div class="q-radio"></div>All Zibbs are Plonks</div>
-                  <div class="q-opt correct"><div class="q-radio"></div>Some Zibbs might be Plonks</div>
-                  <div class="q-opt"><div class="q-radio"></div>No Zibbs are Plonks</div>
-                  <div class="q-opt"><div class="q-radio"></div>All Plonks are Zibbs</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="sample-right">
-              <div class="sample-section-label" style="color:#A070E0">Creation & Assignment</div>
-              <div class="assign-card">
-                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">How it's created</div>
-                <div class="assign-row"><span class="assign-key">Method</span><span class="assign-val highlight">Standardised instrument library</span></div>
-                <div class="assign-row"><span class="assign-key">Instruments</span><span class="assign-val">Big Five, DISC, MBTI, Cognitive</span></div>
-                <div class="assign-row"><span class="assign-key">Questions</span><span class="assign-val">60-80 items per instrument</span></div>
-                <div class="assign-row"><span class="assign-key">Scoring</span><span class="assign-val">Normed percentiles</span></div>
-                <div class="assign-row"><span class="assign-key">Validity</span><span class="assign-val highlight">Social desirability checks</span></div>
-              </div>
-              <div class="assign-card">
-                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">Who gets assigned</div>
-                <div class="assign-row"><span class="assign-key">Population</span><span class="assign-val">Managers + high-potentials</span></div>
-                <div class="assign-row"><span class="assign-key">Typical count</span><span class="assign-val">142 employees</span></div>
-                <div class="assign-row"><span class="assign-key">Duration</span><span class="assign-val">35-45 min (untimed)</span></div>
-                <div class="assign-row"><span class="assign-key">Proctoring</span><span class="assign-val">Secure browser session</span></div>
-                <div class="assign-row"><span class="assign-key">Privacy</span><span class="assign-val highlight">Results to Skill Passport only</span></div>
-              </div>
-              <div class="assign-card" style="background:rgba(160,112,224,.06);border-color:rgba(160,112,224,.15)">
-                <div style="font-size:11px;font-weight:600;color:#A070E0;margin-bottom:2px">Data feeds into</div>
-                <div style="font-size:11px;color:var(--paper-mid);line-height:1.5">Skill Passport Profile → IDP (learning style) → Succession Planning → Team Composition</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══ CAT C: KNOWLEDGE TEST ═══ -->
-        <div class="sample-content" data-panel="catC">
-          <div class="sample-body">
-            <div class="sample-left">
-              <div class="sample-section-label" style="color:#22C0B4">Sample Knowledge Questions</div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(34,192,180,.12);color:#22C0B4;border:1px solid rgba(34,192,180,.3)">1</div>
-                  <div class="q-text">In a BIM execution plan (BEP), which of the following defines the Level of Development (LOD) for structural elements at the Design Development phase?</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(34,192,180,.1);border-color:rgba(34,192,180,.3);color:#22C0B4">MCQ</span>
-                  <span class="q-tag" style="background:var(--gold-dim);border-color:rgba(200,168,75,.3);color:var(--gold)">L2-L3 Proficiency</span>
-                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">2 pts</span>
-                </div>
-                <div class="q-options">
-                  <div class="q-opt"><div class="q-radio"></div>LOD 100 — Conceptual massing</div>
-                  <div class="q-opt"><div class="q-radio"></div>LOD 200 — Generic placeholder</div>
-                  <div class="q-opt correct"><div class="q-radio"></div>LOD 300 — Accurate geometry with specifications</div>
-                  <div class="q-opt"><div class="q-radio"></div>LOD 400 — Fabrication-ready detail</div>
-                </div>
-              </div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(34,192,180,.12);color:#22C0B4;border:1px solid rgba(34,192,180,.3)">2</div>
-                  <div class="q-text"><strong>Scenario:</strong> A project team discovers 47 clash detection issues between MEP and structural models 2 weeks before construction. The BIM coordinator must prioritise. Which approach is most effective?</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(232,112,96,.1);border-color:rgba(232,112,96,.3);color:#E87060">Scenario-Based</span>
-                  <span class="q-tag" style="background:var(--gold-dim);border-color:rgba(200,168,75,.3);color:var(--gold)">L3-L4 Proficiency</span>
-                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">5 pts</span>
-                </div>
-                <div class="q-options">
-                  <div class="q-opt"><div class="q-radio"></div>Resolve all 47 clashes before proceeding — zero-clash policy</div>
-                  <div class="q-opt correct"><div class="q-radio"></div>Categorise by severity (hard/soft/pseudo), resolve critical first, defer cosmetic</div>
-                  <div class="q-opt"><div class="q-radio"></div>Escalate to the project manager and pause construction start</div>
-                  <div class="q-opt"><div class="q-radio"></div>Document all clashes in a report and let the site team resolve</div>
-                </div>
-                <div style="padding-left:34px;font-size:10px;color:var(--green-lt);margin-top:2px">Correct — tests practical judgment, not just knowledge recall.</div>
-              </div>
-            </div>
-
-            <div class="sample-right">
-              <div class="sample-section-label" style="color:#22C0B4">Creation & Assignment</div>
-              <div class="assign-card">
-                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">How it's created</div>
-                <div class="assign-row"><span class="assign-key">Method</span><span class="assign-val highlight">AI-generated from skill brief</span></div>
-                <div class="assign-row"><span class="assign-key">Question bank</span><span class="assign-val">246 across 8 tests</span></div>
-                <div class="assign-row"><span class="assign-key">Formats</span><span class="assign-val">MCQ, scenario, case study</span></div>
-                <div class="assign-row"><span class="assign-key">Difficulty</span><span class="assign-val">Mapped to L1-L4 proficiency</span></div>
-                <div class="assign-row"><span class="assign-key">Scheduling</span><span class="assign-val highlight">Pre / Post / 90-day retention</span></div>
-              </div>
-              <div class="assign-card">
-                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">Who gets assigned</div>
-                <div class="assign-row"><span class="assign-key">Population</span><span class="assign-val">Training cohort participants</span></div>
-                <div class="assign-row"><span class="assign-key">Typical count</span><span class="assign-val">40-120 per test</span></div>
-                <div class="assign-row"><span class="assign-key">Duration</span><span class="assign-val">30-45 min (timed)</span></div>
-                <div class="assign-row"><span class="assign-key">Passing score</span><span class="assign-val">70% minimum</span></div>
-                <div class="assign-row"><span class="assign-key">Retakes</span><span class="assign-val">Max 2 with new questions</span></div>
-              </div>
-              <div class="assign-card" style="background:rgba(34,192,180,.06);border-color:rgba(34,192,180,.15)">
-                <div style="font-size:11px;font-weight:600;color:#22C0B4;margin-bottom:2px">Data feeds into</div>
-                <div style="font-size:11px;color:var(--paper-mid);line-height:1.5">Training Effectiveness (Kirkpatrick L2) → Pre/Post Delta → Certificate Eligibility → Retention Tracking</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══ CAT D: 360° FEEDBACK ═══ -->
-        <div class="sample-content" data-panel="catD">
-          <div class="sample-body">
-            <div class="sample-left">
-              <div class="sample-section-label" style="color:#F0A030">Sample 360° Feedback Items</div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(240,160,48,.12);color:#F0A030;border:1px solid rgba(240,160,48,.3)">1</div>
-                  <div class="q-text">How effectively does <strong>Priya Menon</strong> communicate project risks to senior stakeholders in a timely manner?</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(240,160,48,.1);border-color:rgba(240,160,48,.3);color:#F0A030">Multi-Rater</span>
-                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Leadership Competency</span>
-                </div>
-                <div class="likert-row">
-                  <div class="likert-opt">Never</div>
-                  <div class="likert-opt">Rarely</div>
-                  <div class="likert-opt">Sometimes</div>
-                  <div class="likert-opt selected">Often</div>
-                  <div class="likert-opt">Always</div>
-                </div>
-                <div style="padding-left:34px;display:flex;gap:16px;font-size:10px;margin-top:6px">
-                  <span style="color:#3A8CC0">Self: <strong>Often</strong></span>
-                  <span style="color:var(--green-lt)">Manager: <strong>Always</strong></span>
-                  <span style="color:var(--purple-lt)">Peers avg: <strong>Often</strong></span>
-                  <span style="color:var(--amber)">Gap: <strong>0.3</strong></span>
-                </div>
-              </div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(240,160,48,.12);color:#F0A030;border:1px solid rgba(240,160,48,.3)">2</div>
-                  <div class="q-text">Provide one specific example of how <strong>Priya</strong> has demonstrated <em>coaching and developing others</em> in the past 6 months.</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(240,160,48,.1);border-color:rgba(240,160,48,.3);color:#F0A030">Open-Ended</span>
-                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Qualitative</span>
-                  <span class="q-tag" style="background:rgba(58,184,122,.08);border-color:rgba(58,184,122,.25);color:var(--green-lt)">Anonymous</span>
-                </div>
-                <div class="scenario-block" style="margin-left:34px">
-                  "Priya paired junior PMs with experienced leads during the Marina Bay project. She ran weekly debrief sessions where juniors presented their coordination challenges and received structured feedback. Two of the three juniors are now running sub-projects independently."
-                  <div style="font-style:normal;font-size:9px;color:var(--ink-soft);margin-top:6px">— Peer rater · Anonymous · Submitted 18 Mar 2026</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="sample-right">
-              <div class="sample-section-label" style="color:#F0A030">Creation & Assignment</div>
-              <div class="assign-card">
-                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">How it's created</div>
-                <div class="assign-row"><span class="assign-key">Method</span><span class="assign-val highlight">Template + AI customisation</span></div>
-                <div class="assign-row"><span class="assign-key">Competencies</span><span class="assign-val">Mapped from FrameworkBible</span></div>
-                <div class="assign-row"><span class="assign-key">Items per rater</span><span class="assign-val">12-16 rating + 3 open-ended</span></div>
-                <div class="assign-row"><span class="assign-key">Anonymity</span><span class="assign-val highlight">3+ raters per group required</span></div>
-                <div class="assign-row"><span class="assign-key">External access</span><span class="assign-val">Tokenised link (no login)</span></div>
-              </div>
-              <div class="assign-card">
-                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">Who gets assigned</div>
-                <div class="assign-row"><span class="assign-key">Ratees</span><span class="assign-val">28 senior managers</span></div>
-                <div class="assign-row"><span class="assign-key">Raters per person</span><span class="assign-val">8-12 across 5 groups</span></div>
-                <div class="assign-row"><span class="assign-key">Rater groups</span><span class="assign-val">Manager, Peers, Reports, Cross-func, External</span></div>
-                <div class="assign-row"><span class="assign-key">Duration</span><span class="assign-val">15-20 min per rater</span></div>
-                <div class="assign-row"><span class="assign-key">Deadline</span><span class="assign-val">21 days collection window</span></div>
-              </div>
-              <div class="assign-card" style="background:rgba(240,160,48,.06);border-color:rgba(240,160,48,.15)">
-                <div style="font-size:11px;font-weight:600;color:#F0A030;margin-bottom:2px">Data feeds into</div>
-                <div style="font-size:11px;color:var(--paper-mid);line-height:1.5">Perception Gap Analysis → Leadership Development → Succession Pipeline → IDP Goals</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══ CAT E: ORG SURVEYS ═══ -->
-        <div class="sample-content" data-panel="catE">
-          <div class="sample-body">
-            <div class="sample-left">
-              <div class="sample-section-label" style="color:#3AB87A">Sample Survey Questions</div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(58,184,122,.12);color:#3AB87A;border:1px solid rgba(58,184,122,.3)">1</div>
-                  <div class="q-text"><strong>Engagement Pulse:</strong> "I feel motivated and energised by the work I do in my current role."</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(58,184,122,.1);border-color:rgba(58,184,122,.3);color:#3AB87A">Engagement</span>
-                  <span class="q-tag" style="background:rgba(58,184,122,.08);border-color:rgba(58,184,122,.25);color:var(--green-lt)">Anonymous</span>
-                </div>
-                <div class="likert-row">
-                  <div class="likert-opt">Strongly Disagree</div>
-                  <div class="likert-opt">Disagree</div>
-                  <div class="likert-opt">Neutral</div>
-                  <div class="likert-opt selected">Agree</div>
-                  <div class="likert-opt">Strongly Agree</div>
-                </div>
-              </div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(58,184,122,.12);color:#3AB87A;border:1px solid rgba(58,184,122,.3)">2</div>
-                  <div class="q-text"><strong>Change Readiness:</strong> "I understand why the organisation is investing in digital transformation and I support the direction."</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(34,192,180,.1);border-color:rgba(34,192,180,.3);color:#22C0B4">Change Readiness</span>
-                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Transformation Dial</span>
-                </div>
-                <div class="likert-row">
-                  <div class="likert-opt">Strongly Disagree</div>
-                  <div class="likert-opt">Disagree</div>
-                  <div class="likert-opt">Neutral</div>
-                  <div class="likert-opt">Agree</div>
-                  <div class="likert-opt selected">Strongly Agree</div>
-                </div>
-              </div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(58,184,122,.12);color:#3AB87A;border:1px solid rgba(58,184,122,.3)">3</div>
-                  <div class="q-text"><strong>Wellbeing Pulse:</strong> "Over the past 2 weeks, how would you rate your overall energy level at work?"</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(232,112,96,.1);border-color:rgba(232,112,96,.3);color:#E87060">Wellbeing</span>
-                  <span class="q-tag" style="background:rgba(58,184,122,.08);border-color:rgba(58,184,122,.25);color:var(--green-lt)">Anonymous</span>
-                </div>
-                <div class="rating-scale">
-                  <div class="rating-pill"><span class="r-num">1</span>Very Low</div>
-                  <div class="rating-pill"><span class="r-num">2</span>Low</div>
-                  <div class="rating-pill selected"><span class="r-num">3</span>Moderate</div>
-                  <div class="rating-pill"><span class="r-num">4</span>High</div>
-                  <div class="rating-pill"><span class="r-num">5</span>Very High</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="sample-right">
-              <div class="sample-section-label" style="color:#3AB87A">Creation & Assignment</div>
-              <div class="assign-card">
-                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">How it's created</div>
-                <div class="assign-row"><span class="assign-key">Method</span><span class="assign-val highlight">Template library + AI generation</span></div>
-                <div class="assign-row"><span class="assign-key">Survey types</span><span class="assign-val">Engagement, Change, Culture, Wellbeing, L&D Sat</span></div>
-                <div class="assign-row"><span class="assign-key">Questions</span><span class="assign-val">12-25 per survey</span></div>
-                <div class="assign-row"><span class="assign-key">Format</span><span class="assign-val">Likert, NPS, rating, open-text</span></div>
-                <div class="assign-row"><span class="assign-key">Frequency</span><span class="assign-val highlight">Quarterly or pulse (monthly)</span></div>
-              </div>
-              <div class="assign-card">
-                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">Who gets assigned</div>
-                <div class="assign-row"><span class="assign-key">Population</span><span class="assign-val">All 812 employees (org-wide)</span></div>
-                <div class="assign-row"><span class="assign-key">Anonymity</span><span class="assign-val highlight">Fully anonymous — team-level only</span></div>
-                <div class="assign-row"><span class="assign-key">Duration</span><span class="assign-val">5-10 min</span></div>
-                <div class="assign-row"><span class="assign-key">Response target</span><span class="assign-val">75%+ for statistical validity</span></div>
-                <div class="assign-row"><span class="assign-key">Channels</span><span class="assign-val">Email, in-app, Slack, MS Teams</span></div>
-              </div>
-              <div class="assign-card" style="background:rgba(58,184,122,.06);border-color:rgba(58,184,122,.15)">
-                <div style="font-size:11px;font-weight:600;color:#3AB87A;margin-bottom:2px">Data feeds into</div>
-                <div style="font-size:11px;color:var(--paper-mid);line-height:1.5">Wellbeing Dashboard → Burnout Risk Score → Timeline Adjustment → InsightBoard (Engagement widgets)</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ═══ CAT F: L&D DISCOVERY ═══ -->
-        <div class="sample-content" data-panel="catF">
-          <div class="sample-body">
-            <div class="sample-left">
-              <div class="sample-section-label" style="color:#E87060">Sample Discovery Session Capture</div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(232,112,96,.12);color:#E87060;border:1px solid rgba(232,112,96,.3)">1</div>
-                  <div class="q-text"><strong>1:1 Interview — Structured Prompt:</strong> "What skill do you most wish you had right now to perform better in your current role? Why?"</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(232,112,96,.1);border-color:rgba(232,112,96,.3);color:#E87060">1:1 Interview</span>
-                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">Employee-Declared Need</span>
-                </div>
-                <div class="scenario-block" style="margin-left:34px;border-color:rgba(232,112,96,.15);background:rgba(232,112,96,.04)">
-                  "I need better data analysis skills. We're using Power BI now for project reporting but I'm still exporting to Excel because I don't know how to build dashboards. My manager expects automated reports but I haven't had any training on it."
-                  <div style="font-style:normal;font-size:9px;color:var(--ink-soft);margin-top:6px">— EMP-234 · Sr Site Engineer · Project Delivery · Recorded 12 Mar 2026</div>
-                </div>
-                <div style="padding-left:34px;margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">
-                  <span class="q-tag" style="background:rgba(200,168,75,.1);border-color:rgba(200,168,75,.3);color:var(--gold)">AI Theme: Data Literacy</span>
-                  <span class="q-tag" style="background:rgba(200,168,75,.1);border-color:rgba(200,168,75,.3);color:var(--gold)">AI Theme: Tool Proficiency</span>
-                  <span class="q-tag" style="background:rgba(232,112,96,.1);border-color:rgba(232,112,96,.3);color:#E87060">LNA Multiplier: ×1.3</span>
-                </div>
-              </div>
-
-              <div class="q-card">
-                <div class="q-header">
-                  <div class="q-num" style="background:rgba(232,112,96,.12);color:#E87060;border:1px solid rgba(232,112,96,.3)">2</div>
-                  <div class="q-text"><strong>Focus Group — Theme Extraction:</strong> "What barriers prevent your team from adopting new digital tools?"</div>
-                </div>
-                <div class="q-meta">
-                  <span class="q-tag" style="background:rgba(160,112,224,.1);border-color:rgba(160,112,224,.3);color:#A070E0">Focus Group</span>
-                  <span class="q-tag" style="background:rgba(255,255,255,.03);border-color:var(--ink-border);color:var(--ink-soft)">6 participants</span>
-                </div>
-                <div class="scenario-block" style="margin-left:34px;border-color:rgba(232,112,96,.15);background:rgba(232,112,96,.04)">
-                  <strong style="font-style:normal;color:var(--paper)">AI-Extracted Themes:</strong><br>
-                  1. <strong>Training timing</strong> — sessions scheduled during peak project delivery (4/6 mentioned)<br>
-                  2. <strong>Tool overload</strong> — 3 new tools in 6 months, no consolidation (5/6 mentioned)<br>
-                  3. <strong>Manager support</strong> — no protected learning time allocated (3/6 mentioned)
-                  <div style="font-style:normal;font-size:9px;color:var(--ink-soft);margin-top:6px">— Focus Group #7 · EHS & Risk Dept · Facilitated by L&D Manager · 15 Mar 2026</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="sample-right">
-              <div class="sample-section-label" style="color:#E87060">Creation & Assignment</div>
-              <div class="assign-card">
-                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">How it's created</div>
-                <div class="assign-row"><span class="assign-key">Method</span><span class="assign-val highlight">Structured templates + free capture</span></div>
-                <div class="assign-row"><span class="assign-key">Session types</span><span class="assign-val">1:1, Focus Group, Dept Review</span></div>
-                <div class="assign-row"><span class="assign-key">AI processing</span><span class="assign-val">Theme extraction + sentiment</span></div>
-                <div class="assign-row"><span class="assign-key">Prompts</span><span class="assign-val">12 structured + open capture</span></div>
-                <div class="assign-row"><span class="assign-key">Output</span><span class="assign-val highlight">Declared needs + LNA multiplier</span></div>
-              </div>
-              <div class="assign-card">
-                <div style="font-size:11px;font-weight:600;color:var(--paper);margin-bottom:2px">Who participates</div>
-                <div class="assign-row"><span class="assign-key">1:1 interviews</span><span class="assign-val">High-potential + flagged employees</span></div>
-                <div class="assign-row"><span class="assign-key">Focus groups</span><span class="assign-val">6-8 per group, per department</span></div>
-                <div class="assign-row"><span class="assign-key">Dept reviews</span><span class="assign-val">Department heads + L&D</span></div>
-                <div class="assign-row"><span class="assign-key">Facilitator</span><span class="assign-val">L&D Manager or HRBP</span></div>
-                <div class="assign-row"><span class="assign-key">Duration</span><span class="assign-val">30 min (1:1) / 60 min (group)</span></div>
-              </div>
-              <div class="assign-card" style="background:rgba(232,112,96,.06);border-color:rgba(232,112,96,.15)">
-                <div style="font-size:11px;font-weight:600;color:#E87060;margin-bottom:2px">Data feeds into</div>
-                <div style="font-size:11px;color:var(--paper-mid);line-height:1.5">Employee-Declared Needs → LNA Multiplier (Discovery ×1.1-1.5) → Gap Weighting → Wellbeing Signals</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- /sample-showcase -->
 
       <!-- ACTIVE CYCLES TABLE -->
-      <div class="panel" style="animation: fadeUp .5s ease .15s both">
+      <div class="panel" style="animation:fadeUp .5s ease .2s both">
         <div class="panel-head">
-          <div>
-            <div class="panel-title">Assessment Cycles</div>
-            <div class="panel-sub">All active and recent cycles · Distribution status tracking</div>
-          </div>
-          <div style="display:flex;gap:8px">
-            <div class="panel-tag teal">2 Active</div>
-            <div class="panel-tag red">23 Overdue</div>
-          </div>
+          <div><div class="panel-title">Assessment Cycles</div><div class="panel-sub">All active and recent cycles · Distribution status tracking</div></div>
+          <div style="display:flex;gap:8px"><div class="panel-tag teal">2 Active</div><div class="panel-tag red">23 Overdue</div></div>
         </div>
         <div class="panel-body no-pad" style="overflow-x:auto">
           <table class="cycle-table">
-            <thead>
-              <tr>
-                <th>Cycle Name</th>
-                <th>Category</th>
-                <th>Population</th>
-                <th>Status</th>
-                <th>Completion</th>
-                <th>Avg Score</th>
-                <th>Overdue</th>
-                <th>Closes</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Cycle Name</th><th>Category</th><th>Population</th><th>Status</th><th>Completion</th><th>Avg Score</th><th>Overdue</th><th>Closes</th></tr></thead>
             <tbody>
-              <tr>
-                <td>L2 Skills — Engineering Track</td>
-                <td style="color:#3A8CC0">Cat A</td>
-                <td>324</td>
-                <td><span class="status-chip complete"><span class="status-dot"></span>Complete</span></td>
-                <td><div style="display:flex;align-items:center;gap:6px;justify-content:center"><span class="completion-bar"><span class="completion-fill" style="width:94%;background:var(--green-lt)"></span></span><span style="font-size:11px;color:var(--green-lt)">94%</span></div></td>
-                <td>72%</td>
-                <td>—</td>
-                <td style="color:var(--ink-soft)">Nov 2025</td>
-              </tr>
-              <tr>
-                <td>L2 Skills — Digital & Tech Track</td>
-                <td style="color:#3A8CC0">Cat A</td>
-                <td>118</td>
-                <td><span class="status-chip complete"><span class="status-dot"></span>Complete</span></td>
-                <td><div style="display:flex;align-items:center;gap:6px;justify-content:center"><span class="completion-bar"><span class="completion-fill" style="width:89%;background:var(--green-lt)"></span></span><span style="font-size:11px;color:var(--green-lt)">89%</span></div></td>
-                <td>61%</td>
-                <td>—</td>
-                <td style="color:var(--ink-soft)">Nov 2025</td>
-              </tr>
-              <tr>
-                <td>AI & Data Literacy — Post-Training</td>
-                <td style="color:#22C0B4">Cat C</td>
-                <td>72</td>
-                <td><span class="status-chip active"><span class="status-dot"></span>Active</span></td>
-                <td><div style="display:flex;align-items:center;gap:6px;justify-content:center"><span class="completion-bar"><span class="completion-fill" style="width:57%;background:var(--teal-lt)"></span></span><span style="font-size:11px;color:var(--teal-lt)">57%</span></div></td>
-                <td>68%</td>
-                <td style="color:var(--red-lt);font-weight:600">14</td>
-                <td style="color:var(--amber-lt)">Apr 2026</td>
-              </tr>
-              <tr>
-                <td>Leadership 360° — Senior Managers</td>
-                <td style="color:#F0A030">Cat D</td>
-                <td>28</td>
-                <td><span class="status-chip active"><span class="status-dot"></span>Active</span></td>
-                <td><div style="display:flex;align-items:center;gap:6px;justify-content:center"><span class="completion-bar"><span class="completion-fill" style="width:42%;background:var(--teal-lt)"></span></span><span style="font-size:11px;color:var(--teal-lt)">42%</span></div></td>
-                <td>—</td>
-                <td style="color:var(--red-lt);font-weight:600">9</td>
-                <td style="color:var(--amber-lt)">Apr 2026</td>
-              </tr>
-              <tr>
-                <td>ISO 45001 — Competency Validation</td>
-                <td style="color:#3A8CC0">Cat A</td>
-                <td>96</td>
-                <td><span class="status-chip upcoming"><span class="status-dot"></span>Upcoming</span></td>
-                <td><div style="display:flex;align-items:center;gap:6px;justify-content:center"><span class="completion-bar"><span class="completion-fill" style="width:0%;background:var(--ink-soft)"></span></span><span style="font-size:11px;color:var(--ink-soft)">0%</span></div></td>
-                <td>—</td>
-                <td>—</td>
-                <td style="color:var(--ink-soft)">May 2026</td>
-              </tr>
-              <tr>
-                <td>Wellbeing Pulse Survey — Q1 2026</td>
-                <td style="color:#3AB87A">Cat E</td>
-                <td>812</td>
-                <td><span class="status-chip complete"><span class="status-dot"></span>Complete</span></td>
-                <td><div style="display:flex;align-items:center;gap:6px;justify-content:center"><span class="completion-bar"><span class="completion-fill" style="width:89%;background:var(--green-lt)"></span></span><span style="font-size:11px;color:var(--green-lt)">89%</span></div></td>
-                <td>—</td>
-                <td>—</td>
-                <td style="color:var(--ink-soft)">Jan 2026</td>
-              </tr>
+              <tr><td>L2 Skills — Engineering Track</td><td style="color:#3A8CC0">Cat A</td><td>324</td><td><span class="status-chip complete"><span class="status-dot"></span>Complete</span></td><td><div style="display:flex;align-items:center;gap:6px;justify-content:center"><span class="completion-bar"><span class="completion-fill" style="width:94%;background:var(--green-lt)"></span></span><span style="font-size:11px;color:var(--green-lt)">94%</span></div></td><td>72%</td><td>—</td><td style="color:var(--ink-soft)">Nov 2025</td></tr>
+              <tr><td>L2 Skills — Digital & Tech Track</td><td style="color:#3A8CC0">Cat A</td><td>118</td><td><span class="status-chip complete"><span class="status-dot"></span>Complete</span></td><td><div style="display:flex;align-items:center;gap:6px;justify-content:center"><span class="completion-bar"><span class="completion-fill" style="width:89%;background:var(--green-lt)"></span></span><span style="font-size:11px;color:var(--green-lt)">89%</span></div></td><td>61%</td><td>—</td><td style="color:var(--ink-soft)">Nov 2025</td></tr>
+              <tr><td>AI & Data Literacy — Post-Training</td><td style="color:#22C0B4">Cat C</td><td>72</td><td><span class="status-chip active"><span class="status-dot"></span>Active</span></td><td><div style="display:flex;align-items:center;gap:6px;justify-content:center"><span class="completion-bar"><span class="completion-fill" style="width:57%;background:var(--teal-lt)"></span></span><span style="font-size:11px;color:var(--teal-lt)">57%</span></div></td><td>68%</td><td style="color:var(--red-lt);font-weight:600">14</td><td style="color:var(--amber-lt)">Apr 2026</td></tr>
+              <tr><td>Leadership 360° — Senior Managers</td><td style="color:#F0A030">Cat D</td><td>28</td><td><span class="status-chip active"><span class="status-dot"></span>Active</span></td><td><div style="display:flex;align-items:center;gap:6px;justify-content:center"><span class="completion-bar"><span class="completion-fill" style="width:42%;background:var(--teal-lt)"></span></span><span style="font-size:11px;color:var(--teal-lt)">42%</span></div></td><td>—</td><td style="color:var(--red-lt);font-weight:600">9</td><td style="color:var(--amber-lt)">Apr 2026</td></tr>
+              <tr><td>ISO 45001 — Competency Validation</td><td style="color:#3A8CC0">Cat A</td><td>96</td><td><span class="status-chip upcoming"><span class="status-dot"></span>Upcoming</span></td><td><div style="display:flex;align-items:center;gap:6px;justify-content:center"><span class="completion-bar"><span class="completion-fill" style="width:0%"></span></span><span style="font-size:11px;color:var(--ink-soft)">0%</span></div></td><td>—</td><td>—</td><td style="color:var(--ink-soft)">May 2026</td></tr>
+              <tr><td>Wellbeing Pulse Survey — Q1 2026</td><td style="color:#3AB87A">Cat E</td><td>812</td><td><span class="status-chip complete"><span class="status-dot"></span>Complete</span></td><td><div style="display:flex;align-items:center;gap:6px;justify-content:center"><span class="completion-bar"><span class="completion-fill" style="width:89%;background:var(--green-lt)"></span></span><span style="font-size:11px;color:var(--green-lt)">89%</span></div></td><td>—</td><td>—</td><td style="color:var(--ink-soft)">Jan 2026</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- DISTRIBUTION STATUS — Active Cycle Breakdown -->
-      <div class="panel" style="animation: fadeUp .5s ease .2s both">
+      <!-- DISTRIBUTION STATUS -->
+      <div class="panel" style="animation:fadeUp .5s ease .25s both">
         <div class="panel-head">
-          <div>
-            <div class="panel-title">Distribution Status — AI & Data Literacy Post-Training</div>
-            <div class="panel-sub">8-status tracking · 72 employees · Closes April 2026</div>
-          </div>
-          <div style="display:flex;gap:8px">
-            <div class="panel-tag teal">Active</div>
-            <button class="tb-btn" style="padding:5px 10px;font-size:11px">Send Reminder</button>
-          </div>
+          <div><div class="panel-title">Distribution Status — AI & Data Literacy Post-Training</div><div class="panel-sub">8-status tracking · 72 employees · Closes April 2026</div></div>
+          <div style="display:flex;gap:8px"><div class="panel-tag teal">Active</div><button class="tb-btn" style="padding:5px 10px;font-size:11px">Send Reminder</button></div>
         </div>
         <div class="panel-body">
           <div class="dist-grid">
@@ -1201,314 +423,347 @@ a.sidebar-brand:hover .brand-hex { opacity: 0.75; transition: opacity .15s; }
         </div>
       </div>
 
-      <!-- AI SUGGESTION ENGINE -->
-      <div style="display:flex;flex-direction:column;gap:12px;animation:fadeUp .5s ease .25s both">
+    </div><!-- /content -->
 
-        <div class="ai-suggestion">
-          <div class="ai-sug-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div>
-          <div class="ai-sug-body">
-            <div class="ai-sug-title">AI Recommendation — High Priority</div>
-            <div class="ai-sug-text"><strong>BIM & Digital Delivery</strong> has not been assessed in 148 days. This department carries 4 of 14 critical skill gaps and has 54 employees. The last assessment cycle closed Nov 2025. Recommend launching a <strong>Category A Skill Assessment</strong> targeting BIM Advanced, IoT, and Digital Delivery skills — aligned to the current L3 training cycle. Estimated completion: 14 days at 87% participation rate.</div>
-            <div class="ai-sug-actions">
-              <button class="ai-sug-btn primary">Launch Cycle →</button>
-              <button class="ai-sug-btn secondary">View Department</button>
-              <button class="ai-sug-btn secondary">Dismiss</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="ai-suggestion" style="border-color:rgba(200,168,75,.25);background:linear-gradient(135deg, rgba(200,168,75,.06) 0%, rgba(200,168,75,.02) 100%)">
-          <div class="ai-sug-icon" style="background:var(--gold-dim);border-color:rgba(200,168,75,.3)"><svg viewBox="0 0 24 24" style="stroke:var(--gold)"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-          <div class="ai-sug-body">
-            <div class="ai-sug-title" style="color:var(--gold)">AI Recommendation — Certificate Expiry</div>
-            <div class="ai-sug-text"><strong>12 ISO 45001 certifications</strong> expire within 60 days across EHS & Risk department. Recommend scheduling a <strong>Category C Knowledge Assessment</strong> (retention test) before renewal to validate continued competency. 8 of 12 employees have proficiency at L3 — a retention test would confirm whether re-training is needed or certification renewal alone is sufficient.</div>
-            <div class="ai-sug-actions">
-              <button class="ai-sug-btn primary" style="background:var(--gold);color:var(--ink)">Schedule Assessment →</button>
-              <button class="ai-sug-btn secondary" style="border-color:rgba(200,168,75,.3);color:var(--gold)">View Certificates</button>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- AI ASSESSMENT BUILDER -->
-      <div class="panel" id="builderSection" style="animation: fadeUp .5s ease .3s both">
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">AI Assessment Builder</div>
-            <div class="panel-sub">Generate a complete assessment from a brief · Claude-powered · 6 categories supported</div>
-          </div>
-          <div class="panel-tag teal">AI Engine</div>
-        </div>
-        <div class="panel-body no-pad">
-          <div class="builder-preview">
-            <div class="builder-sidebar">
-              <div style="font-size:10px;color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">Generation Pipeline</div>
-              <div class="builder-step active">
-                <div class="step-num done">✓</div>
-                <div class="step-text done">Brief & Context</div>
-              </div>
-              <div class="builder-step active">
-                <div class="step-num done">✓</div>
-                <div class="step-text done">Question Generation</div>
-              </div>
-              <div class="builder-step active">
-                <div class="step-num done">✓</div>
-                <div class="step-text done">Scoring Model</div>
-              </div>
-              <div class="builder-step active">
-                <div class="step-num active">4</div>
-                <div class="step-text active">Review & Calibrate</div>
-              </div>
-              <div class="builder-step">
-                <div class="step-num pending">5</div>
-                <div class="step-text pending">Pilot Test</div>
-              </div>
-              <div class="builder-step">
-                <div class="step-num pending">6</div>
-                <div class="step-text pending">Publish & Distribute</div>
-              </div>
-
-              <div style="margin-top:auto;padding:12px;background:var(--ink-card);border-radius:8px;border:1px solid var(--ink-border)">
-                <div style="font-size:10px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px">AI Confidence</div>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <div style="flex:1;height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden"><div style="width:88%;height:100%;background:var(--teal-lt);border-radius:3px"></div></div>
-                  <span style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--teal-lt)">88%</span>
-                </div>
-                <div style="font-size:10px;color:var(--ink-soft);margin-top:4px">High confidence — auto-publish eligible</div>
-              </div>
-            </div>
-
-            <div class="builder-main">
-              <div class="builder-header">AI-Generated: BIM Advanced Competency Assessment</div>
-              <div class="builder-desc">Generated from brief: "Assess BIM Advanced skills for BIM & Digital Delivery department — 54 employees — focus on Revit, Navisworks, and coordination workflows." Category A · 45 minutes · 32 questions · Mixed format.</div>
-
-              <div style="display:flex;flex-direction:column;gap:8px">
-                <div class="gen-item">
-                  <div class="gen-item-dot" style="background:#3A8CC0"></div>
-                  <div class="gen-item-text">Section 1: BIM Fundamentals — 8 MCQs (L1–L2 proficiency)</div>
-                  <div class="gen-item-meta">8 Qs · 10 min</div>
-                </div>
-                <div class="gen-item">
-                  <div class="gen-item-dot" style="background:var(--teal-lt)"></div>
-                  <div class="gen-item-text">Section 2: Revit Application — 6 scenario-based (L2–L3 proficiency)</div>
-                  <div class="gen-item-meta">6 Qs · 12 min</div>
-                </div>
-                <div class="gen-item">
-                  <div class="gen-item-dot" style="background:var(--amber-lt)"></div>
-                  <div class="gen-item-text">Section 3: Coordination & Clash Detection — 8 practical (L2–L3)</div>
-                  <div class="gen-item-meta">8 Qs · 12 min</div>
-                </div>
-                <div class="gen-item">
-                  <div class="gen-item-dot" style="background:var(--purple-lt)"></div>
-                  <div class="gen-item-text">Section 4: Advanced BIM Management — 6 case study (L3–L4)</div>
-                  <div class="gen-item-meta">6 Qs · 8 min</div>
-                </div>
-                <div class="gen-item">
-                  <div class="gen-item-dot" style="background:var(--gold)"></div>
-                  <div class="gen-item-text">Section 5: Self-Assessment & Manager Dual-Rating — 4 scales</div>
-                  <div class="gen-item-meta">4 Qs · 3 min</div>
-                </div>
-              </div>
-
-              <div style="display:flex;gap:10px;margin-top:6px">
-                <button class="tb-btn primary" style="background:var(--teal);border-color:var(--teal)">Approve & Send to Pilot →</button>
-                <button class="tb-btn">Edit Questions</button>
-                <button class="tb-btn">Regenerate</button>
-                <button class="tb-btn">Export PDF</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- WEIGHTED GAP ENGINE -->
-      <div class="gap-row">
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <div class="panel-title">Weighted Gap Score Engine</div>
-              <div class="panel-sub">5 multipliers · Raw gap × weights = intervention-ready LNA</div>
-            </div>
-            <div class="panel-tag gold">Core L2</div>
-          </div>
-          <div class="panel-body">
-            <div class="multiplier-grid">
-              <div class="mult-card">
-                <div class="mult-icon">⚡</div>
-                <div class="mult-name">Skill Criticality</div>
-                <div class="mult-val">×2.5</div>
-                <div class="mult-range">C1 Critical</div>
-              </div>
-              <div class="mult-card">
-                <div class="mult-icon">🎯</div>
-                <div class="mult-name">Transformation Dial</div>
-                <div class="mult-val">×1.8</div>
-                <div class="mult-range">-5 to +5</div>
-              </div>
-              <div class="mult-card">
-                <div class="mult-icon">⏱</div>
-                <div class="mult-name">Project Timeline</div>
-                <div class="mult-val">×1.4</div>
-                <div class="mult-range">Urgency factor</div>
-              </div>
-              <div class="mult-card">
-                <div class="mult-icon">📊</div>
-                <div class="mult-name">Performance Corr.</div>
-                <div class="mult-val">×1.2</div>
-                <div class="mult-range">HRIS signal</div>
-              </div>
-              <div class="mult-card">
-                <div class="mult-icon">💬</div>
-                <div class="mult-name">Employee Discovery</div>
-                <div class="mult-val">×1.1</div>
-                <div class="mult-range">Cat F input</div>
-              </div>
-            </div>
-            <div style="margin-top:14px;padding:12px 14px;border-radius:10px;background:rgba(26,92,138,.1);border:1px solid rgba(26,92,138,.2);font-size:11.5px;color:var(--paper-mid);line-height:1.6">
-              <strong style="color:var(--paper)">Example:</strong> BIM Advanced for Tariq Al-Rashidi — Raw gap: 2.0 × Criticality (2.5) × Transformation (+3 → 1.6) × Timeline (1.4) × Performance (1.0) × Discovery (1.0) = <strong style="color:var(--red-lt)">Weighted Score: 11.2</strong> → Intervention: Certification Track (Immediate)
-            </div>
-          </div>
-        </div>
-
-        <!-- Intervention Breakdown Chart -->
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <div class="panel-title">Intervention Type Distribution</div>
-              <div class="panel-sub">AI-classified from weighted gap scores · 7 types</div>
-            </div>
-            <div class="panel-tag blue">AI Classified</div>
-          </div>
-          <div class="panel-body">
-            <div style="height:220px;position:relative">
-              <canvas id="interventionChart"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- LEVEL BANNER STRIP -->
+    <!-- LEVEL BANNER -->
     <a href="../level-journey.html" style="display:flex;align-items:center;gap:12px;padding:0 28px;height:36px;background:linear-gradient(90deg,rgba(200,168,75,0.12) 0%,rgba(8,15,24,0) 60%);border-bottom:1px solid rgba(200,168,75,0.2);text-decoration:none;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='linear-gradient(90deg,rgba(200,168,75,0.18) 0%,rgba(8,15,24,0) 70%)'" onmouseout="this.style.background='linear-gradient(90deg,rgba(200,168,75,0.12) 0%,rgba(8,15,24,0) 60%)'">
       <div style="display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:#C8A84B;animation:pulse 2s ease-in-out infinite"></div><span style="font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.08em;color:#C8A84B">L3 ACTIVE</span></div>
       <div style="width:1px;height:14px;background:rgba(200,168,75,0.2)"></div>
       <div style="font-size:11px;color:#8AACC4">Training Execution &amp; Delivery</div>
       <div style="width:80px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden"><div style="width:63%;height:100%;background:#C8A84B;border-radius:2px"></div></div>
       <div style="font-size:11px;color:#C8A84B;font-weight:500">63% complete</div>
-      <div style="width:1px;height:14px;background:rgba(200,168,75,0.2)"></div>
-      <div style="font-size:11px;color:#8AACC4">2 actions to unlock L4 →</div>
-      <div style="margin-left:auto;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.06em;color:#C8A84B;text-transform:uppercase">View full journey →</div>
+      <div style="margin-left:auto;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.06em;color:#C8A84B;text-transform:uppercase">View full journey &#8594;</div>
     </a>
 
     <!-- CONFIDENCE STATEMENT -->
     <div style="display:flex;align-items:center;gap:10px;padding:10px 28px;background:rgba(200,168,75,0.06);border-top:1px solid rgba(200,168,75,0.15);flex-shrink:0">
       <svg style="width:13px;height:13px;stroke:#C8A84B;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-      <span style="font-size:11px;color:#C8A84B;font-weight:500;letter-spacing:0.03em">AssessEngine &nbsp;·&nbsp; 9 cycles run · 681 employees assessed · AI builder confidence: 88% · Data feeds LNA automatically</span>
+      <span style="font-size:11px;color:#C8A84B;font-weight:500;letter-spacing:0.03em">AssessEngine &nbsp;·&nbsp; 9 cycles · 681 assessed · 6 categories · AI builder 88% confidence · Click any category above to see the full AI-built path</span>
       <span style="margin-left:auto;font-size:10px;color:#4A6A84;letter-spacing:0.06em;text-transform:uppercase">Assessment Intelligence</span>
     </div>
-
-  </div><!-- /main -->
-</div><!-- /app -->
+  </div>
+</div>
 
 <script>
-// Chart defaults
-Chart.defaults.color = "#4A6A84";
-Chart.defaults.font.family = "'DM Sans', sans-serif";
-Chart.defaults.font.size = 11;
+// ── CATEGORY DATA ──
+var CATS = [
+  {id:'catA', cls:'cat-a', badge:'Active', badgeBg:'var(--blue-dim)', badgeC:'#3A8CC0', badgeBd:'rgba(58,140,192,.3)',
+   icon:'<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+   label:'Category A', name:'Skill & Competency Assessment',
+   desc:'Self + Manager dual-rating against role skill requirements from FrameworkBible. Feeds Skills Matrix and weighted gap engine.',
+   stats:[{v:'681',k:'Assessed'},{v:'92%',k:'Complete'},{v:'2',k:'Cycles'}],
+   brief:{
+     type:'Skill & Competency',
+     pop:'Engineering & Delivery BU · 324 employees',
+     obj:'Validate BIM coordination, project management, and stakeholder communication skills at Practitioner level for the engineering track.',
+     length:'Standard (15-25 questions, 20 min)',
+     diff:'Mixed — AI determines per role',
+     tone:'Professional, role-specific language. Show AI baseline to managers.'
+   },
+   questions:[
+     {num:1, text:'Rate proficiency in <strong>BIM Coordination & Clash Detection</strong> — ability to manage multi-discipline models, run clash detection, and resolve coordination issues.', tags:[{t:'Skill Rating',bg:'rgba(58,140,192,.1)',bd:'rgba(58,140,192,.3)',c:'#3A8CC0'},{t:'Critical · C1',bg:'var(--gold-dim)',bd:'rgba(200,168,75,.3)',c:'var(--gold)'},{t:'Dual-Rated',bg:'rgba(255,255,255,.03)',bd:'var(--ink-border)',c:'var(--ink-soft)'}],
+      format:'rating', labels:['Novice','Basic','Competent','Advanced','Expert'], selected:2,
+      why:'Maps to BIM Advanced skill in FrameworkBible (C1 criticality). 87% confidence — strong role-skill match.',
+      extra:'<div style="display:flex;gap:12px;font-size:9.5px;margin-left:30px"><span style="color:#3A8CC0">Self: <strong>3</strong></span><span style="color:var(--green-lt)">Manager: <strong>2</strong></span><span style="color:var(--amber)">Gap: <strong>1.0</strong></span><span style="color:var(--ink-soft)">AI Baseline: <strong>2.5</strong></span></div>'},
+     {num:2, text:'Rate proficiency in <strong>Stakeholder Communication</strong> — managing client expectations, presenting project status, and facilitating cross-functional meetings.', tags:[{t:'Competency',bg:'rgba(160,112,224,.1)',bd:'rgba(160,112,224,.3)',c:'var(--purple-lt)'},{t:'Behavioural',bg:'rgba(255,255,255,.03)',bd:'var(--ink-border)',c:'var(--ink-soft)'}],
+      format:'rating', labels:['Novice','Basic','Competent','Advanced','Expert'], selected:3,
+      why:'Leadership competency from FrameworkBible. 92% confidence — core to Sr Project Manager role.',
+      extra:'<div style="margin-left:30px;font-size:10px;color:var(--ink-soft);line-height:1.4"><strong style="color:var(--paper-mid)">Per-skill note field:</strong> "Priya consistently leads stakeholder meetings with clarity. Recommend L4."</div>'}
+   ],
+   config:{
+     title:'Category-Specific Config',
+     rows:[{k:'Rating model',v:'1-5 Proficiency (from FrameworkBible)'},{k:'Dual rating',v:'Self + Manager simultaneous',hl:true},{k:'Weight split',v:'Manager 40% / Self 30% / Test 30%'},{k:'Reference display',v:'Show AI baseline to managers (on)'},{k:'Note field',v:'Recommended per skill'}],
+     assign:[{k:'Population',v:'780 in-scope employees'},{k:'Filtered by',v:'Role-skill matrix from FrameworkBible'},{k:'Per employee',v:'8-12 role-relevant skills'},{k:'Duration',v:'15-25 min'},{k:'Deadline',v:'14 days · Reminders Day 7, 12, 14'}],
+     flow:'Skills Matrix &#8594; Gap Analysis &#8594; Weighted LNA &#8594; Individual Learning Briefs', flowBg:'rgba(58,140,192,.08)', flowBd:'rgba(58,140,192,.15)', flowC:'#3A8CC0'
+   }},
 
-// Intervention Type Chart
-(function() {
-  const ctx = document.getElementById("interventionChart").getContext("2d");
-  new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: ["Training\nProgramme", "Certification\nTrack", "Coaching", "On-the-Job\nLearning", "Mentoring", "Self-Study", "OD\nProgramme"],
-      datasets: [{
-        data: [186, 72, 48, 124, 36, 98, 24],
-        backgroundColor: [
-          "rgba(58,140,192,0.5)",
-          "rgba(34,192,180,0.5)",
-          "rgba(160,112,224,0.5)",
-          "rgba(200,168,75,0.5)",
-          "rgba(58,184,122,0.5)",
-          "rgba(138,172,196,0.3)",
-          "rgba(232,112,96,0.5)"
-        ],
-        borderColor: [
-          "#3A8CC0",
-          "#22C0B4",
-          "#A070E0",
-          "#C8A84B",
-          "#3AB87A",
-          "#8AACC4",
-          "#E87060"
-        ],
-        borderWidth: 1,
-        borderRadius: 4
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      indexAxis: "y",
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: "#152438",
-          borderColor: "rgba(255,255,255,0.1)",
-          borderWidth: 1,
-          callbacks: { label: ctx => " " + ctx.raw + " employees" }
-        }
-      },
-      scales: {
-        x: { grid: { color: "rgba(255,255,255,0.04)" }, border: { display: false },
-             ticks: { callback: v => v } },
-        y: { grid: { display: false }, border: { display: false } }
-      }
-    }
-  });
-})();
+  {id:'catB', cls:'cat-b', badge:'Active', badgeBg:'var(--purple-dim)', badgeC:'var(--purple-lt)', badgeBd:'rgba(160,112,224,.3)',
+   icon:'<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>',
+   label:'Category B', name:'Psychometric & Behavioural',
+   desc:'Big Five, DISC, MBTI, cognitive ability — personality and behavioural profiling. Feeds IDP learning style and succession planning.',
+   stats:[{v:'142',k:'Assessed'},{v:'78%',k:'Complete'},{v:'1',k:'Cycles'}],
+   brief:{
+     type:'Psychometric & Personality',
+     pop:'Senior Managers + High-Potentials · 142 employees',
+     obj:'Profile leadership team personality traits and behavioural tendencies for succession planning and team composition analysis.',
+     length:'Comprehensive (60-80 items, 40 min)',
+     diff:'N/A — no right/wrong answers',
+     tone:'Neutral, non-judgmental. Emphasise that results inform development, not evaluation.'
+   },
+   questions:[
+     {num:1, text:'<strong>Big Five — Openness:</strong> "I enjoy exploring new ideas and unconventional approaches to solving problems."', tags:[{t:'Personality Trait',bg:'rgba(160,112,224,.1)',bd:'rgba(160,112,224,.3)',c:'#A070E0'},{t:'Big Five',bg:'rgba(255,255,255,.03)',bd:'var(--ink-border)',c:'var(--ink-soft)'}],
+      format:'likert', labels:['Strongly Disagree','Disagree','Neutral','Agree','Strongly Agree'], selected:3,
+      why:'Big Five Openness dimension. Maps to innovation readiness. 95% confidence — validated instrument.',
+      extra:'<div style="margin-left:30px;font-size:9.5px;color:var(--ink-soft)">No right/wrong — scored to Openness percentile. Social desirability check active.</div>'},
+     {num:2, text:'<strong>DISC — Dominance:</strong> "When facing a disagreement in a team meeting, I tend to..."', tags:[{t:'DISC Profile',bg:'rgba(240,160,48,.1)',bd:'rgba(240,160,48,.3)',c:'#F0A030'},{t:'Forced Choice',bg:'rgba(255,255,255,.03)',bd:'var(--ink-border)',c:'var(--ink-soft)'}],
+      format:'options', opts:['State my position firmly and expect others to align','Listen to all sides, then propose a compromise','Avoid the conflict and wait for it to resolve','Analyse the data and present facts to settle it'], correct:1,
+      why:'DISC forced-choice ipsative item. Measures Dominance vs Influence. 91% confidence.',
+      extra:'<div style="margin-left:30px;font-size:9.5px;color:var(--ink-soft)">Selected = Influence-dominant response. Scored to 4-dimension DISC profile.</div>'},
+     {num:3, text:'<strong>Cognitive:</strong> If all Zibbs are Wockets, and some Wockets are Plonks, which must be true?', tags:[{t:'Cognitive',bg:'rgba(58,140,192,.1)',bd:'rgba(58,140,192,.3)',c:'#3A8CC0'},{t:'Logical Reasoning',bg:'rgba(255,255,255,.03)',bd:'var(--ink-border)',c:'var(--ink-soft)'}],
+      format:'options', opts:['All Zibbs are Plonks','Some Zibbs might be Plonks','No Zibbs are Plonks','All Plonks are Zibbs'], correct:1,
+      why:'Abstract reasoning — tests logical deduction without domain knowledge. 89% confidence.',
+      extra:''}
+   ],
+   config:{
+     title:'Category-Specific Config',
+     rows:[{k:'Instruments',v:'Big Five, DISC, MBTI, Cognitive',hl:true},{k:'Scoring',v:'Normed percentiles per dimension'},{k:'Validity checks',v:'Social desirability detection',hl:true},{k:'Re-assessment lockout',v:'12 months default'},{k:'Proctoring',v:'Secure browser session'}],
+     assign:[{k:'Population',v:'Managers + high-potentials'},{k:'Duration',v:'35-45 min (untimed)'},{k:'Privacy',v:'Results to Skill Passport only',hl:true},{k:'Debrief',v:'Manager-facing report auto-generated'},{k:'Deadline',v:'21 days · 2 reminders'}],
+     flow:'Skill Passport Profile &#8594; IDP Learning Style &#8594; Succession Planning &#8594; Team Composition', flowBg:'rgba(160,112,224,.06)', flowBd:'rgba(160,112,224,.15)', flowC:'#A070E0'
+   }},
 
-// Sample Assessment Tabs
-(function(){
-  var tabs = document.querySelectorAll('.sample-tab');
-  var panels = document.querySelectorAll('.sample-content');
-  function activateTab(tabId){
-    tabs.forEach(function(t){ t.classList.remove('active'); });
-    panels.forEach(function(p){ p.classList.remove('active'); });
-    var matchTab = document.querySelector('.sample-tab[data-tab="'+tabId+'"]');
-    var matchPanel = document.querySelector('[data-panel="'+tabId+'"]');
-    if(matchTab) matchTab.classList.add('active');
-    if(matchPanel) matchPanel.classList.add('active');
-  }
-  tabs.forEach(function(tab){
-    tab.addEventListener('click', function(){ activateTab(tab.dataset.tab); });
-  });
-  // Category cards click → activate tab + scroll showcase into view
-  document.querySelectorAll('.cat-card[data-target]').forEach(function(card){
-    card.addEventListener('click', function(e){
-      e.stopPropagation();
-      var target = card.dataset.target;
-      activateTab(target);
-      // Add a brief flash to the showcase to confirm the action
-      var showcase = document.querySelector('.sample-showcase');
-      if(showcase){
-        showcase.style.outline = '2px solid rgba(34,192,180,0.5)';
-        showcase.style.outlineOffset = '2px';
-        setTimeout(function(){ showcase.style.outline='none'; }, 1500);
-        // Scroll — try multiple approaches for browser compat
-        try {
-          showcase.scrollIntoView({behavior:'smooth', block:'nearest'});
-        } catch(err) {
-          showcase.scrollIntoView(false);
-        }
+  {id:'catC', cls:'cat-c', badge:'Complete', badgeBg:'var(--green-dim)', badgeC:'var(--green-lt)', badgeBd:'rgba(58,184,122,.3)',
+   icon:'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+   label:'Category C', name:'Knowledge Assessments',
+   desc:'Pre/post/retention tests with MCQ and scenario questions. Kirkpatrick L2 measurement. AI generates from skill brief.',
+   stats:[{v:'284',k:'Assessed'},{v:'94%',k:'Complete'},{v:'3',k:'Cycles'}],
+   brief:{
+     type:'Pre/Post Knowledge Test',
+     pop:'AI & Data Literacy cohort · 72 employees',
+     obj:'Pre-training knowledge baseline for AI & Data Literacy programme — validate current understanding of data analysis, Power BI, and ML fundamentals before workshop.',
+     length:'Standard (25 questions, 30 min)',
+     diff:'Mixed — Entry to Advanced',
+     tone:'Technical but accessible. Scenario-based where possible.'
+   },
+   questions:[
+     {num:1, text:'In a BIM execution plan (BEP), which of the following defines the Level of Development (LOD) for structural elements at the Design Development phase?', tags:[{t:'MCQ',bg:'rgba(34,192,180,.1)',bd:'rgba(34,192,180,.3)',c:'#22C0B4'},{t:'L2-L3',bg:'var(--gold-dim)',bd:'rgba(200,168,75,.3)',c:'var(--gold)'},{t:'2 pts',bg:'rgba(255,255,255,.03)',bd:'var(--ink-border)',c:'var(--ink-soft)'}],
+      format:'options', opts:['LOD 100 — Conceptual massing','LOD 200 — Generic placeholder','LOD 300 — Accurate geometry with specifications','LOD 400 — Fabrication-ready detail'], correct:2,
+      why:'Tests BIM knowledge at Practitioner level. Mapped to "BIM Standards" skill. 93% confidence.',
+      extra:''},
+     {num:2, text:'<strong>Scenario:</strong> A project team discovers 47 clash detection issues between MEP and structural models 2 weeks before construction. The BIM coordinator must prioritise. Which approach is most effective?', tags:[{t:'Scenario-Based',bg:'rgba(232,112,96,.1)',bd:'rgba(232,112,96,.3)',c:'#E87060'},{t:'L3-L4',bg:'var(--gold-dim)',bd:'rgba(200,168,75,.3)',c:'var(--gold)'},{t:'5 pts',bg:'rgba(255,255,255,.03)',bd:'var(--ink-border)',c:'var(--ink-soft)'}],
+      format:'options', opts:['Resolve all 47 clashes before proceeding — zero-clash policy','Categorise by severity (hard/soft/pseudo), resolve critical first, defer cosmetic','Escalate to the project manager and pause construction start','Document all clashes in a report and let the site team resolve'], correct:1,
+      why:'Tests practical judgment, not recall. Mapped to "BIM Coordination" skill (C1). 88% confidence.',
+      extra:'<div style="margin-left:30px;font-size:9.5px;color:var(--green-lt)">Correct — distractor rationale: Option A is too rigid, C delays unnecessarily, D abdicates responsibility.</div>'}
+   ],
+   config:{
+     title:'Category-Specific Config',
+     rows:[{k:'Test linking',v:'Pre &#8594; Post &#8594; 90-day retention',hl:true},{k:'Scoring',v:'Raw threshold — 70% pass'},{k:'Equivalent forms',v:'Parallel questions prevent answer memory'},{k:'Difficulty calibration',v:'Auto after 30+ responses'},{k:'Retakes',v:'Max 2 with new question set'}],
+     assign:[{k:'Population',v:'Training cohort participants'},{k:'Duration',v:'30 min (timed)'},{k:'Scheduling',v:'Pre: day before workshop',hl:true},{k:'Post',v:'Day after · auto-calculates gain %'},{k:'Retention',v:'Auto-scheduled at 30/60/90 days'}],
+     flow:'Training Effectiveness (Kirkpatrick L2) &#8594; Pre/Post Delta &#8594; Certificate Eligibility &#8594; Retention Tracking', flowBg:'rgba(34,192,180,.06)', flowBd:'rgba(34,192,180,.15)', flowC:'#22C0B4'
+   }},
+
+  {id:'catD', cls:'cat-d', badge:'Upcoming', badgeBg:'var(--gold-dim)', badgeC:'var(--gold)', badgeBd:'rgba(200,168,75,.3)',
+   icon:'<path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/>',
+   label:'Category D', name:'360° Feedback',
+   desc:'Multi-rater feedback from 5 groups with anonymity enforcement. Competency-grouped questionnaire with perception gap analysis.',
+   stats:[{v:'68',k:'Assessed'},{v:'—',k:'Complete'},{v:'1',k:'Cycles'}],
+   brief:{
+     type:'360-Degree Feedback',
+     pop:'Senior Managers · 28 ratees · 8-12 raters each',
+     obj:'Leadership competency feedback for senior managers — assess communication, coaching, strategic thinking, and decision-making from multiple perspectives.',
+     length:'Standard (16 rating + 3 open-ended per rater)',
+     diff:'N/A',
+     tone:'Constructive and development-focused. Emphasise anonymity in rater instructions.'
+   },
+   questions:[
+     {num:1, text:'How effectively does <strong>Priya Menon</strong> communicate project risks to senior stakeholders in a timely manner?', tags:[{t:'Multi-Rater',bg:'rgba(240,160,48,.1)',bd:'rgba(240,160,48,.3)',c:'#F0A030'},{t:'Leadership',bg:'rgba(255,255,255,.03)',bd:'var(--ink-border)',c:'var(--ink-soft)'}],
+      format:'likert', labels:['Never','Rarely','Sometimes','Often','Always'], selected:3,
+      why:'Leadership competency from FrameworkBible. Matrix/grid format — 5 behaviours rated on same scale. 94% confidence.',
+      extra:'<div style="display:flex;gap:12px;font-size:9.5px;margin-left:30px"><span style="color:#3A8CC0">Self: <strong>Often</strong></span><span style="color:var(--green-lt)">Manager: <strong>Always</strong></span><span style="color:var(--purple-lt)">Peers: <strong>Often</strong></span><span style="color:var(--amber)">Gap: <strong>0.3</strong></span></div>'},
+     {num:2, text:'Provide one specific example of how <strong>Priya</strong> has demonstrated <em>coaching and developing others</em> in the past 6 months.', tags:[{t:'Open-Ended',bg:'rgba(240,160,48,.1)',bd:'rgba(240,160,48,.3)',c:'#F0A030'},{t:'Qualitative',bg:'rgba(255,255,255,.03)',bd:'var(--ink-border)',c:'var(--ink-soft)'},{t:'Anonymous',bg:'rgba(58,184,122,.08)',bd:'rgba(58,184,122,.25)',c:'var(--green-lt)'}],
+      format:'scenario',
+      scenario:'"Priya paired junior PMs with experienced leads during the Marina Bay project. She ran weekly debrief sessions where juniors presented their coordination challenges and received structured feedback. Two of the three juniors are now running sub-projects independently."<div style="font-style:normal;font-size:9px;color:var(--ink-soft);margin-top:4px">— Peer rater · Anonymous · 18 Mar 2026</div>',
+      why:'Open text captures evidence that rating scales cannot. AI theme-tags responses automatically. 90% confidence.',
+      extra:''}
+   ],
+   config:{
+     title:'Category-Specific Config',
+     rows:[{k:'Rater groups',v:'Manager, Peers, Reports, Cross-func, External'},{k:'Min per group',v:'3 raters (below = results suppressed)',hl:true},{k:'Anonymity',v:'Anonymous default · Named optional'},{k:'External access',v:'Tokenised link — no login needed'},{k:'Self-reflection',v:'Parallel self-rating enabled'}],
+     assign:[{k:'Ratees',v:'28 senior managers'},{k:'Raters per person',v:'8-12 across 5 groups'},{k:'Duration',v:'15-20 min per rater'},{k:'Collection window',v:'21 days'},{k:'Reminders',v:'Day 7, 14, 19'}],
+     flow:'Perception Gap Analysis &#8594; Blind Spot / Hidden Strength &#8594; Leadership IDP &#8594; Succession Pipeline', flowBg:'rgba(240,160,48,.06)', flowBd:'rgba(240,160,48,.15)', flowC:'#F0A030'
+   }},
+
+  {id:'catE', cls:'cat-e', badge:'Complete', badgeBg:'var(--green-dim)', badgeC:'var(--green-lt)', badgeBd:'rgba(58,184,122,.3)',
+   icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+   label:'Category E', name:'Organisation Surveys',
+   desc:'Engagement, change readiness, culture pulse, strategy alignment. Anonymous collection with longitudinal trend tracking.',
+   stats:[{v:'634',k:'Responses'},{v:'89%',k:'Complete'},{v:'2',k:'Cycles'}],
+   brief:{
+     type:'Employee Engagement Survey',
+     pop:'All employees · 812 org-wide',
+     obj:'Q2 2026 engagement pulse — track sentiment following digital transformation rollout and recent restructure. Compare against Q1 baseline.',
+     length:'Quick Pulse (10 questions, 5 min)',
+     diff:'N/A',
+     tone:'Neutral, non-threatening. This follows a major restructure — keep language supportive.'
+   },
+   questions:[
+     {num:1, text:'<strong>Engagement:</strong> "I feel motivated and energised by the work I do in my current role."', tags:[{t:'Engagement',bg:'rgba(58,184,122,.1)',bd:'rgba(58,184,122,.3)',c:'#3AB87A'},{t:'Anonymous',bg:'rgba(58,184,122,.08)',bd:'rgba(58,184,122,.25)',c:'var(--green-lt)'}],
+      format:'likert', labels:['Strongly Disagree','Disagree','Neutral','Agree','Strongly Agree'], selected:3,
+      why:'Core engagement item — held constant across cycles for longitudinal benchmarking. 96% confidence.',
+      extra:'<div style="margin-left:30px;font-size:9.5px;color:var(--ink-soft)">Benchmark question — will not rotate. Q1 baseline: 3.6 avg.</div>'},
+     {num:2, text:'<strong>Change Readiness:</strong> "I understand why the organisation is investing in digital transformation and I support the direction."', tags:[{t:'Change Readiness',bg:'rgba(34,192,180,.1)',bd:'rgba(34,192,180,.3)',c:'#22C0B4'},{t:'Transformation Dial',bg:'rgba(255,255,255,.03)',bd:'var(--ink-border)',c:'var(--ink-soft)'}],
+      format:'likert', labels:['Strongly Disagree','Disagree','Neutral','Agree','Strongly Agree'], selected:4,
+      why:'Directly feeds Transformation Dial score. Measures change adoption vs resistance. 94% confidence.',
+      extra:''},
+     {num:3, text:'<strong>Wellbeing:</strong> "Over the past 2 weeks, how would you rate your overall energy level at work?"', tags:[{t:'Wellbeing',bg:'rgba(232,112,96,.1)',bd:'rgba(232,112,96,.3)',c:'#E87060'},{t:'Anonymous',bg:'rgba(58,184,122,.08)',bd:'rgba(58,184,122,.25)',c:'var(--green-lt)'}],
+      format:'rating', labels:['Very Low','Low','Moderate','High','Very High'], selected:2,
+      why:'Feeds Burnout Risk Score algorithm. Low energy = elevated risk flag for timeline adjustment. 91% confidence.',
+      extra:''}
+   ],
+   config:{
+     title:'Category-Specific Config',
+     rows:[{k:'Templates',v:'4 pre-built: Engagement, Change, Culture, Strategy',hl:true},{k:'Pulse mode',v:'Max 10 questions · weekly/fortnightly'},{k:'Benchmark Qs',v:'Held constant for longitudinal tracking'},{k:'Question rotation',v:'Core every cycle + rotational pool'},{k:'Formats',v:'Likert, NPS, rating, ranking, open-text'}],
+     assign:[{k:'Population',v:'All 812 employees (org-wide)'},{k:'Anonymity',v:'Fully anonymous — team-level aggregation only',hl:true},{k:'Duration',v:'5-10 min'},{k:'Response target',v:'75%+ for statistical validity'},{k:'Channels',v:'Email, in-app, Slack, MS Teams'}],
+     flow:'Wellbeing Dashboard &#8594; Burnout Risk Score &#8594; Timeline Adjustment &#8594; InsightBoard Engagement Widgets', flowBg:'rgba(58,184,122,.06)', flowBd:'rgba(58,184,122,.15)', flowC:'#3AB87A'
+   }},
+
+  {id:'catF', cls:'cat-f', badge:'Scheduled', badgeBg:'var(--amber-dim)', badgeC:'var(--amber-lt)', badgeBd:'rgba(212,130,10,.3)',
+   icon:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
+   label:'Category F', name:'L&D Needs Discovery',
+   desc:'1:1 interviews and focus group structured capture. Qualitative need signals with AI theme extraction feeding LNA multiplier.',
+   stats:[{v:'—',k:'Captured'},{v:'Apr',k:'Scheduled'},{v:'0',k:'Cycles'}],
+   brief:{
+     type:'L&D Discovery Sessions',
+     pop:'EHS & Risk Department · 6-8 per focus group',
+     obj:'Capture learning needs from EHS team — identify barriers to digital tool adoption, skill confidence gaps, and manager-reported development priorities.',
+     length:'Structured (12 prompts + open capture)',
+     diff:'N/A',
+     tone:'Conversational, safe space. Encourage honest input — results are not attributed individually.'
+   },
+   questions:[
+     {num:1, text:'<strong>1:1 Prompt:</strong> "What skill do you most wish you had right now to perform better in your current role? Why?"', tags:[{t:'1:1 Interview',bg:'rgba(232,112,96,.1)',bd:'rgba(232,112,96,.3)',c:'#E87060'},{t:'Employee-Declared Need',bg:'rgba(255,255,255,.03)',bd:'var(--ink-border)',c:'var(--ink-soft)'}],
+      format:'scenario',
+      scenario:'"I need better data analysis skills. We\'re using Power BI now for project reporting but I\'m still exporting to Excel because I don\'t know how to build dashboards. My manager expects automated reports but I haven\'t had any training on it."<div style="font-style:normal;font-size:9px;color:var(--ink-soft);margin-top:4px">— EMP-234 · Sr Site Engineer · Project Delivery · 12 Mar 2026</div>',
+      why:'Captures employee-declared need. AI extracts themes: Data Literacy, Tool Proficiency. Adds LNA multiplier x1.3.',
+      extra:'<div style="margin-left:30px;display:flex;gap:4px;flex-wrap:wrap"><span style="padding:2px 7px;border-radius:100px;font-size:8.5px;background:rgba(200,168,75,.1);border:1px solid rgba(200,168,75,.3);color:var(--gold)">AI Theme: Data Literacy</span><span style="padding:2px 7px;border-radius:100px;font-size:8.5px;background:rgba(232,112,96,.1);border:1px solid rgba(232,112,96,.3);color:#E87060">LNA Multiplier: x1.3</span></div>'},
+     {num:2, text:'<strong>Focus Group:</strong> "What barriers prevent your team from adopting new digital tools?"', tags:[{t:'Focus Group',bg:'rgba(160,112,224,.1)',bd:'rgba(160,112,224,.3)',c:'#A070E0'},{t:'6 participants',bg:'rgba(255,255,255,.03)',bd:'var(--ink-border)',c:'var(--ink-soft)'}],
+      format:'scenario',
+      scenario:'<strong style="font-style:normal;color:var(--paper)">AI-Extracted Themes:</strong><br>1. <strong>Training timing</strong> — sessions during peak delivery (4/6 mentioned)<br>2. <strong>Tool overload</strong> — 3 new tools in 6 months (5/6 mentioned)<br>3. <strong>Manager support</strong> — no protected learning time (3/6 mentioned)<div style="font-style:normal;font-size:9px;color:var(--ink-soft);margin-top:4px">— Focus Group #7 · EHS & Risk · Facilitated by L&D Manager · 15 Mar 2026</div>',
+      why:'Focus group themes weighted by mention frequency. AI sentiment: Frustration (moderate). Feeds gap weighting.',
+      extra:''}
+   ],
+   config:{
+     title:'Category-Specific Config',
+     rows:[{k:'Session types',v:'1:1, Focus Group, Dept Review'},{k:'AI processing',v:'Theme extraction + sentiment analysis',hl:true},{k:'Structured prompts',v:'12 per session type'},{k:'LNA multiplier',v:'x1.1 to x1.5 based on frequency',hl:true},{k:'Output',v:'Declared needs + themes + sentiment'}],
+     assign:[{k:'1:1 interviews',v:'High-potential + flagged employees'},{k:'Focus groups',v:'6-8 per group, per department'},{k:'Dept reviews',v:'Department heads + L&D'},{k:'Facilitator',v:'L&D Manager or HRBP'},{k:'Duration',v:'30 min (1:1) / 60 min (group)'}],
+     flow:'Employee-Declared Needs &#8594; LNA Multiplier (Discovery x1.1-1.5) &#8594; Gap Weighting &#8594; Wellbeing Signals', flowBg:'rgba(232,112,96,.06)', flowBd:'rgba(232,112,96,.15)', flowC:'#E87060'
+   }}
+];
+
+// ── RENDER CATEGORY CARDS ──
+function renderCats(){
+  var g = document.getElementById('catGrid');
+  var h = '';
+  CATS.forEach(function(c){
+    h += '<div class="cat-card '+c.cls+'" data-cat="'+c.id+'">';
+    h += '<button class="cat-close" title="Close">&times;</button>';
+    h += '<div class="cat-badge" style="background:'+c.badgeBg+';color:'+c.badgeC+';border:1px solid '+c.badgeBd+'">'+c.badge+'</div>';
+    h += '<div class="cat-summary">';
+    h += '<div class="cat-icon"><svg viewBox="0 0 24 24">'+c.icon+'</svg></div>';
+    h += '<div><div class="cat-label">'+c.label+'</div><div class="cat-name">'+c.name+'</div></div>';
+    h += '</div>';
+    h += '<div class="cat-desc">'+c.desc+'</div>';
+    h += '<div class="cat-stats">';
+    c.stats.forEach(function(s){ h += '<div class="cat-stat"><div class="cat-stat-val">'+s.v+'</div><div class="cat-stat-key">'+s.k+'</div></div>'; });
+    h += '</div>';
+
+    // EXPAND PANEL
+    h += '<div class="cat-expand"><div class="expand-grid">';
+
+    // A. BRIEF
+    h += '<div class="brief-panel">';
+    h += '<div class="brief-title" style="color:var(--cc)"><svg style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.5" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> AI Assessment Brief</div>';
+    h += bf('Assessment Type', c.brief.type, 'select');
+    h += bf('Target Population', c.brief.pop);
+    h += bf('Objective', c.brief.obj, 'textarea');
+    h += bf('Length', c.brief.length, 'select');
+    h += bf('Difficulty', c.brief.diff, 'select');
+    h += bf('Tone & Context', c.brief.tone, 'textarea');
+    h += '<button class="brief-generate"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Generate Assessment</button>';
+    h += '</div>';
+
+    // B. GENERATED QUESTIONS
+    h += '<div class="gen-panel">';
+    h += '<div class="gen-title" style="color:var(--cc)">AI-Generated Questions <span class="gt-count">'+c.questions.length+' shown</span></div>';
+    c.questions.forEach(function(q){
+      h += '<div class="q-card">';
+      h += '<div class="q-header"><div class="q-num" style="background:var(--cc-dim);color:var(--cc);border:1px solid rgba(255,255,255,.1)">'+q.num+'</div><div class="q-text">'+q.text+'</div></div>';
+      h += '<div class="q-meta">';
+      q.tags.forEach(function(t){ h += '<span class="q-tag" style="background:'+t.bg+';border-color:'+t.bd+';color:'+t.c+'">'+t.t+'</span>'; });
+      h += '</div>';
+
+      // Format
+      if(q.format==='rating'){
+        h += '<div class="rating-row">';
+        q.labels.forEach(function(l,i){ h += '<div class="r-pill'+(i===q.selected?' sel':'')+'"><span class="rn">'+(i+1)+'</span>'+l+'</div>'; });
+        h += '</div>';
+      } else if(q.format==='likert'){
+        h += '<div class="likert-row">';
+        q.labels.forEach(function(l,i){ h += '<div class="l-pill'+(i===q.selected?' sel':'')+'">'+l+'</div>'; });
+        h += '</div>';
+      } else if(q.format==='options'){
+        h += '<div class="q-options">';
+        q.opts.forEach(function(o,i){ h += '<div class="q-opt'+(i===q.correct?' correct':'')+'"><div class="q-radio"></div>'+o+'</div>'; });
+        h += '</div>';
+      } else if(q.format==='scenario'){
+        h += '<div class="scenario-block" style="margin-left:30px">'+q.scenario+'</div>';
       }
+
+      if(q.extra) h += q.extra;
+
+      // AI explanation
+      h += '<div class="ai-why"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><span>'+q.why+'</span></div>';
+      // Actions
+      h += '<div class="q-actions"><span class="q-act accept">Accept</span><span class="q-act reject">Reject</span><span class="q-act edit">Edit</span></div>';
+      h += '</div>'; // q-card
     });
-  });
-})();
+    h += '<div style="display:flex;gap:6px;margin-top:4px">';
+    h += '<button class="tb-btn" style="font-size:10px;padding:5px 10px"><svg viewBox="0 0 24 24" style="width:11px;height:11px"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>Regenerate</button>';
+    h += '<button class="tb-btn" style="font-size:10px;padding:5px 10px">Strengthen</button>';
+    h += '<button class="tb-btn" style="font-size:10px;padding:5px 10px">Shorten</button>';
+    h += '</div>';
+    h += '</div>';
 
-// Toast for placeholder links
+    // C. CONFIG
+    h += '<div class="config-panel">';
+    h += '<div class="config-title" style="color:var(--cc)">'+c.config.title+'</div>';
+    h += '<div class="cfg-card"><div class="cfg-card-title">Assessment Settings</div>';
+    c.config.rows.forEach(function(r){ h += '<div class="cfg-row"><span class="cfg-key">'+r.k+'</span><span class="cfg-val'+(r.hl?' hl':'')+'">'+r.v+'</span></div>'; });
+    h += '</div>';
+    h += '<div class="cfg-card"><div class="cfg-card-title">Assignment Rules</div>';
+    c.config.assign.forEach(function(r){ h += '<div class="cfg-row"><span class="cfg-key">'+r.k+'</span><span class="cfg-val'+(r.hl?' hl':'')+'">'+r.v+'</span></div>'; });
+    h += '</div>';
+    h += '<div class="cfg-flow" style="background:'+c.config.flowBg+';border:1px solid '+c.config.flowBd+';color:'+c.config.flowC+'"><strong style="color:var(--paper);font-size:9px;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:3px">Data flows into</strong>'+c.config.flow+'</div>';
+    h += '</div>';
+
+    h += '</div></div>'; // expand-grid, cat-expand
+    h += '</div>'; // cat-card
+  });
+  g.innerHTML = h;
+}
+
+function bf(label, value, type){
+  var h = '<div class="brief-field"><div class="brief-label">'+label+'</div>';
+  if(type==='textarea') h += '<textarea class="brief-input" rows="2">'+value+'</textarea>';
+  else if(type==='select') h += '<select class="brief-input"><option>'+value+'</option></select>';
+  else h += '<input class="brief-input" value="'+value+'">';
+  h += '</div>';
+  return h;
+}
+
+renderCats();
+
+// ── ACCORDION LOGIC ──
+document.getElementById('catGrid').addEventListener('click', function(e){
+  var card = e.target.closest('.cat-card');
+  if(!card) return;
+
+  // Close button
+  if(e.target.closest('.cat-close')){
+    card.classList.remove('open');
+    return;
+  }
+  // Don't toggle if clicking inside the expand panel
+  if(e.target.closest('.cat-expand')) return;
+
+  // Close all others
+  document.querySelectorAll('.cat-card.open').forEach(function(c){
+    if(c !== card) c.classList.remove('open');
+  });
+  // Toggle this one
+  card.classList.toggle('open');
+});
+
+// ── TOAST ──
 (function(){
   var toast = document.createElement("div");
   toast.id = "sip-toast";
@@ -1519,23 +774,19 @@ Chart.defaults.font.size = 11;
     toast.style.opacity = "1";
     toast.style.transform = "translateX(-50%) translateY(0)";
     clearTimeout(toast._t);
-    toast._t = setTimeout(function(){
-      toast.style.opacity="0";
-      toast.style.transform="translateX(-50%) translateY(8px)";
-    }, 2400);
+    toast._t = setTimeout(function(){ toast.style.opacity="0"; toast.style.transform="translateX(-50%) translateY(8px)"; }, 2400);
   }
   document.addEventListener("click", function(e){
-    var a = e.target.closest("a");
-    if(a && a.getAttribute("href") === "#"){
-      e.preventDefault();
-      var label = (a.textContent || "").trim().replace(/\s+/g," ").substring(0,36);
-      showToast(label + " — available in full platform");
+    var act = e.target.closest('.q-act');
+    if(act){
+      var label = act.classList.contains('accept') ? 'Question accepted' : act.classList.contains('reject') ? 'Question rejected — AI will generate replacement' : 'Edit mode — available in full platform';
+      showToast(label);
+      return;
     }
-    var btn = e.target.closest(".ai-sug-btn, .tb-btn:not(.primary)");
-    if(btn && !btn.closest("a")) {
-      var label = (btn.textContent || "").trim().substring(0,40);
-      showToast(label + " — available in full platform");
-    }
+    var gen = e.target.closest('.brief-generate');
+    if(gen){ showToast('AI generating assessment... (demo — already generated below)'); return; }
+    var btn = e.target.closest('.tb-btn');
+    if(btn){ var t = (btn.textContent||'').trim().substring(0,40); showToast(t+' — available in full platform'); }
   });
 })();
 </script>
