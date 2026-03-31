@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OrgSetup V2 — AI-Guided Onboarding · Arcova SIP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink:#080F18;--ink-panel:#0C1825;--ink-card:#101E2E;--ink-raised:#152438;--ink-border:rgba(255,255,255,0.07);--ink-soft:#4A6A84;
+  --paper:#D8E8F4;--paper-mid:#8AACC4;
+  --gold:#C8A84B;--gold-lt:#E0CC70;--gold-dim:rgba(200,168,75,0.10);
+  --blue:#1A5C8A;--blue-lt:#3A8CC0;--blue-dim:rgba(26,92,138,0.15);
+  --green:#1A7A4A;--green-lt:#3AB87A;--green-dim:rgba(26,122,74,0.12);
+  --amber:#D4820A;--amber-lt:#F0A030;--amber-dim:rgba(212,130,10,0.12);
+  --red:#C0392B;--red-lt:#E87060;--red-dim:rgba(192,57,43,0.12);
+  --purple:#6A3A9A;--purple-lt:#A070E0;--purple-dim:rgba(106,58,154,0.15);
+  --sidebar-w:220px;--ai-panel-w:310px;
+}
+html,body{height:100%;background:var(--ink);color:var(--paper);font-family:'DM Sans',sans-serif;overflow:hidden}
+.app{display:flex;height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar-w);background:var(--ink-panel);border-right:1px solid var(--ink-border);display:flex;flex-direction:column;flex-shrink:0}
+a.sidebar-brand{padding:22px 20px 20px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px;text-decoration:none}
+a.sidebar-brand:hover .brand-hex{opacity:.75;transition:opacity .15s}
+.brand-hex{width:28px;height:28px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);flex-shrink:0}
+.brand-nm{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--paper)}
+.brand-tg{font-size:10px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase}
+.sidebar-nav{flex:1;padding:12px 14px;overflow-y:auto}
+.nav-section-label{font-size:10px;color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase;padding:10px 6px 6px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;font-size:12.5px;color:var(--paper-mid);cursor:pointer;text-decoration:none;transition:background .15s,color .15s;margin-bottom:1px}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.nav-item.active{background:var(--purple-dim);color:var(--purple-lt)}
+.nav-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.nav-badge{margin-left:auto;padding:1px 6px;border-radius:100px;font-size:10px;font-weight:500;background:var(--amber-dim);color:var(--amber-lt)}
+.sidebar-user{padding:14px 16px;border-top:1px solid var(--ink-border);display:flex;align-items:center;gap:10px}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--paper);flex-shrink:0}
+.user-name{font-size:12px;font-weight:500;color:var(--paper)}
+.user-role{font-size:10px;color:var(--ink-soft)}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:50px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;padding:0 24px;gap:12px;flex-shrink:0;background:var(--ink-panel)}
+.topbar-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--paper);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tb-pill{padding:3px 10px;border-radius:100px;font-size:10px;border:1px solid;white-space:nowrap}
+.tb-pill.purple{border-color:rgba(160,112,224,.35);color:var(--purple-lt)}
+.tb-pill.gold{border-color:rgba(200,168,75,.3);color:var(--gold)}
+.tb-btn{padding:6px 12px;border-radius:6px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .15s,color .15s;text-decoration:none;white-space:nowrap}
+.tb-btn:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+
+/* ── SPLIT LAYOUT ── */
+.main-body{display:flex;flex:1;overflow:hidden}
+.content-left{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px}
+.content-left>*{flex-shrink:0}
+.content-left::-webkit-scrollbar{width:4px}
+.content-left::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+
+/* ── AI PANEL ── */
+.ai-panel{width:var(--ai-panel-w);flex-shrink:0;border-left:1px solid var(--ink-border);background:linear-gradient(180deg,var(--ink-panel) 0%,#0A1520 100%);display:flex;flex-direction:column;overflow:hidden}
+.ai-header{padding:14px 16px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px}
+.ai-avatar-ring{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+.ai-avatar-ring::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:2px solid transparent;border-top-color:var(--purple-lt);animation:spin 3s linear infinite}
+.ai-avatar-ring svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:1.8}
+.ai-name{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--paper)}
+.ai-status{font-size:9px;color:var(--green-lt);display:flex;align-items:center;gap:4px}
+.ai-status-dot{width:5px;height:5px;border-radius:50%;background:var(--green-lt);animation:pulse 2s ease-in-out infinite}
+.ai-chat{flex:1;overflow-y:auto;padding:14px 14px;display:flex;flex-direction:column;gap:10px;min-height:0}
+.ai-chat>*{flex-shrink:0}
+.ai-chat::-webkit-scrollbar{width:3px}
+.ai-chat::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:2px}
+.ai-footer{padding:10px 14px;border-top:1px solid var(--ink-border);display:flex;align-items:center;gap:8px}
+.ai-footer-step{font-size:9px;color:var(--ink-soft);flex:1}
+.ai-footer-progress{width:60px;height:4px;border-radius:2px;background:rgba(255,255,255,0.06);overflow:hidden}
+.ai-footer-bar{height:100%;background:var(--purple-lt);border-radius:2px;transition:width .6s ease}
+
+/* AI Bubbles */
+.ai-bubble{display:flex;gap:8px;animation:fadeUp .35s ease both}
+.ai-bubble-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--purple) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.ai-bubble-avatar svg{width:10px;height:10px;stroke:#fff;fill:none;stroke-width:2}
+.ai-msg{background:rgba(106,58,154,0.08);border:1px solid rgba(160,112,224,0.15);border-radius:2px 10px 10px 10px;padding:10px 13px;font-size:11px;color:var(--paper-mid);line-height:1.65;max-width:100%}
+.ai-msg strong{color:var(--paper);font-weight:500}
+.ai-msg em{color:var(--gold);font-style:normal}
+
+/* AI Typing dots */
+.ai-typing{display:flex;gap:4px;padding:10px 16px}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--purple-lt);animation:typingDot 1.4s ease-in-out infinite}
+.ai-dot:nth-child(2){animation-delay:.2s}
+.ai-dot:nth-child(3){animation-delay:.4s}
+
+/* AI Context Card */
+.ai-context-card{background:linear-gradient(135deg,rgba(200,168,75,0.06) 0%,rgba(106,58,154,0.04) 100%);border:1px solid rgba(200,168,75,0.2);border-radius:8px;padding:10px 12px;animation:fadeUp .4s ease both}
+.ai-context-card h5{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px}
+.ai-context-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.ai-context-row:last-child{border:none}
+.ai-context-key{font-size:9px;color:var(--ink-soft)}
+.ai-context-val{font-size:10px;color:var(--paper);font-weight:500}
+
+/* AI Suggest Cards (sidebar) */
+.ai-suggest-card{background:var(--ink-card);border:1px solid var(--ink-border);border-radius:8px;padding:10px 12px;transition:all .25s;position:relative;overflow:hidden}
+.ai-suggest-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px 0 0 2px}
+.ai-suggest-card.priority-high::before{background:var(--red-lt)}
+.ai-suggest-card.priority-medium::before{background:var(--amber-lt)}
+.ai-suggest-card.priority-low::before{background:var(--blue-lt)}
+.ai-suggest-title{font-size:11px;font-weight:500;color:var(--paper);margin-bottom:2px}
+.ai-suggest-detail{font-size:9px;color:var(--ink-soft);margin-bottom:6px;line-height:1.4}
+.ai-suggest-actions{display:flex;gap:6px}
+.ai-suggest-btn{padding:3px 10px;border-radius:5px;font-size:9px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .15s}
+.ai-accept{background:var(--green-dim);color:var(--green-lt);border:1px solid rgba(58,184,122,0.2)}
+.ai-accept:hover{background:rgba(58,184,122,0.2)}
+.ai-dismiss{background:transparent;color:var(--ink-soft);border:1px solid var(--ink-border)}
+.ai-dismiss:hover{color:var(--red-lt);border-color:rgba(232,112,96,0.3)}
+.ai-suggest-card.accepted{border-color:rgba(58,184,122,0.3);background:rgba(26,122,74,0.06);opacity:.7;pointer-events:none}
+.ai-suggest-card.dismissed{opacity:0;transform:translateX(-20px);height:0;padding:0;margin:0;border:none;overflow:hidden;transition:all .3s ease}
+
+/* ── PANELS ── */
+.panel{background:var(--ink-card);border:1px solid var(--ink-border);border-radius:12px;overflow:hidden}
+.panel-head{padding:12px 18px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.panel-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--paper);flex:1;min-width:120px}
+.panel-body{padding:16px 18px}
+
+/* ── STEPPER ── */
+.stepper-bar{display:flex;align-items:center;gap:0;padding:8px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.stepper-bar::-webkit-scrollbar{height:2px}
+.stepper-bar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:2px}
+.step-item{display:flex;align-items:center;gap:4px;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s;flex-shrink:0}
+.step-item:hover{background:rgba(255,255,255,0.04)}
+.step-num{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:8px;font-weight:500;border:2px solid var(--ink-border);color:var(--ink-soft);transition:all .3s;flex-shrink:0}
+.step-label{font-size:8px;color:var(--ink-soft);transition:color .3s;white-space:nowrap}
+.step-item.active .step-num{border-color:var(--purple-lt);color:var(--purple-lt);background:var(--purple-dim)}
+.step-item.active .step-label{color:var(--purple-lt);font-weight:500}
+.step-item.done .step-num{border-color:var(--green-lt);color:var(--green-lt);background:var(--green-dim)}
+.step-item.done .step-label{color:var(--green-lt)}
+.step-conn{width:8px;height:2px;background:var(--ink-border);flex-shrink:0}
+.step-conn.done{background:var(--green-lt)}
+
+/* ── PROGRESS METER ── */
+.progress-meter{display:flex;align-items:center;gap:16px;padding:14px 18px;background:linear-gradient(135deg,var(--ink-card) 0%,rgba(106,58,154,0.06) 100%);border:1px solid rgba(160,112,224,0.2);border-radius:12px}
+.progress-ring-wrap{position:relative;width:56px;height:56px;flex-shrink:0}
+.progress-ring-wrap svg{width:100%;height:100%}
+.progress-ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--purple-lt)}
+.progress-info{flex:1;min-width:0}
+.progress-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--paper);margin-bottom:2px}
+.progress-sub{font-size:10px;color:var(--paper-mid)}
+
+/* ── FORMS ── */
+.form-group{margin-bottom:10px}
+.form-label{display:block;font-size:9px;color:var(--ink-soft);letter-spacing:.04em;margin-bottom:3px;text-transform:uppercase}.form-label span{font-size:7px;letter-spacing:.02em;font-family:'DM Mono',monospace;vertical-align:middle;margin-left:3px}
+.form-input,.form-select,.form-textarea{width:100%;padding:7px 11px;border-radius:6px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper);font-family:'DM Sans',sans-serif;font-size:11.5px;outline:none;transition:border-color .2s,box-shadow .2s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--purple-lt);box-shadow:0 0 0 3px rgba(160,112,224,0.1)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--ink-soft)}
+.form-select option{background:var(--ink-raised);color:var(--paper)}
+.form-textarea{resize:vertical;min-height:52px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:1100px){.form-row,.form-row-3{grid-template-columns:1fr}}
+.form-input.ai-filled,.form-select.ai-filled,.form-textarea.ai-filled{border-color:rgba(160,112,224,0.3);background:linear-gradient(135deg,var(--ink-raised) 0%,rgba(106,58,154,0.06) 100%)}
+
+.btn{padding:7px 16px;border-radius:6px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+.btn:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.btn-gold{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:600}
+.btn-gold:hover{opacity:.88;background:var(--gold);color:var(--ink)}
+.btn-blue{background:var(--blue);border-color:var(--blue);color:var(--paper);font-weight:500}
+.btn-blue:hover{opacity:.88}
+.btn-sm{padding:4px 10px;font-size:10px}
+
+.section-desc{font-size:10px;color:var(--paper-mid);line-height:1.6;margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:7px;border-left:3px solid var(--purple-lt)}
+
+/* ── DYNAMIC LISTS ── */
+.added-items{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.added-chip{padding:4px 9px;border-radius:5px;font-size:10px;color:var(--paper);border:1px solid var(--ink-border);background:var(--ink-raised);display:flex;align-items:center;gap:5px;transition:all .2s}
+.added-chip:hover{border-color:rgba(160,112,224,0.25)}
+.remove-chip{cursor:pointer;opacity:.4;transition:opacity .15s;font-size:12px}
+.remove-chip:hover{opacity:1;color:var(--red-lt)}
+.dashed-box{border:1px dashed var(--ink-border);border-radius:9px;padding:12px 14px;margin-top:10px}
+.dashed-title{font-size:11px;font-weight:500;color:var(--paper);margin-bottom:6px}
+.add-row{display:flex;gap:8px;align-items:flex-end}
+.add-row .form-group{margin-bottom:0;flex:1}
+
+/* ── STEP PANELS ── */
+.step-panel{display:none;opacity:0;transform:translateX(20px)}
+.step-panel.visible{display:block;animation:slideIn .4s ease both}
+
+/* ── MODEL CARDS ── */
+.model-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:12px}
+.model-card{padding:0;border-radius:9px;border:1px solid var(--ink-border);background:var(--ink-raised);cursor:pointer;transition:all .25s;overflow:hidden}
+.model-card:hover{border-color:var(--blue-lt);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.model-card.selected{border-color:var(--purple-lt);background:var(--purple-dim);box-shadow:0 0 20px rgba(106,58,154,0.15)}
+.model-card-svg{padding:12px 16px 4px;display:flex;justify-content:center}
+.model-card-svg svg{width:100%;height:80px}
+.model-card-text{padding:8px 14px 12px}
+.model-card-text h4{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--paper);margin-bottom:3px}
+.model-card-text p{font-size:9px;color:var(--ink-soft);line-height:1.4}
+.model-card.selected .model-card-text h4{color:var(--purple-lt)}
+
+/* ── ORG SVG STYLES ── */
+.org-box{fill:var(--ink-card);stroke:var(--paper-mid);stroke-width:1;rx:3}
+.org-box-top{fill:rgba(106,58,154,0.2);stroke:var(--purple-lt)}
+.org-line{stroke:var(--ink-soft);stroke-width:1;stroke-dasharray:200;stroke-dashoffset:200;transition:stroke-dashoffset .8s ease}
+.model-card.selected .org-line{stroke-dashoffset:0;stroke:var(--purple-lt)}
+.model-card.selected .org-box{stroke:var(--purple-lt)}
+.model-card:hover .org-line{stroke-dashoffset:0}
+.org-text{fill:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:7px;text-anchor:middle;dominant-baseline:middle}
+.org-text-top{fill:var(--purple-lt);font-family:'Syne',sans-serif;font-size:7px;font-weight:700;text-anchor:middle;dominant-baseline:middle}
+
+/* ── MATURITY BARS ── */
+.maturity-bar-wrap{margin-bottom:6px}
+.maturity-label{display:flex;justify-content:space-between;font-size:9px;margin-bottom:3px}
+.maturity-label span:first-child{color:var(--paper-mid)}
+.maturity-label span:last-child{color:var(--ink-soft)}
+.maturity-track{height:8px;background:var(--ink-raised);border-radius:4px;position:relative;overflow:hidden}
+.maturity-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.maturity-target{position:absolute;top:0;height:100%;border-right:2px dashed var(--gold);transition:left .8s ease}
+
+/* ── REVIEW ── */
+.rv-section{margin-bottom:14px}
+.rv-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.rv-check{width:13px;height:13px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rv-check.done{background:var(--green-dim);border:1px solid var(--green-lt)}
+.rv-check.pending{background:var(--amber-dim);border:1px solid var(--amber-lt)}
+.rv-check svg{width:7px;height:7px;stroke:currentColor;fill:none;stroke-width:3}
+
+/* ── CHECKBOX STYLES ── */
+.check-list{display:flex;flex-direction:column;gap:6px}
+.check-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;background:var(--ink-raised);border:1px solid var(--ink-border);cursor:pointer;font-size:11px;transition:border-color .2s}
+.check-item:hover{border-color:var(--purple-lt)}
+.check-item input[type=checkbox]{accent-color:var(--purple-lt)}
+
+/* ── SUCCESS ── */
+.success-banner{display:none;padding:16px 20px;background:linear-gradient(135deg,rgba(26,122,74,0.12) 0%,rgba(106,58,154,0.08) 100%);border:1px solid rgba(58,184,122,0.3);border-radius:12px;align-items:center;gap:14px}
+.success-banner.show{display:flex;animation:fadeUp .5s ease both}
+
+/* ── TOAST ── */
+.toast-msg{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink-raised);border:1px solid rgba(160,112,224,0.3);color:var(--purple-lt);font-size:11px;font-family:'DM Sans',sans-serif;padding:8px 18px;border-radius:8px;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:9999;white-space:nowrap}
+.toast-msg.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* AI SUGGESTION CHIPS */
+.ai-suggestion-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;margin-bottom:4px;animation:fadeUp .3s ease both}
+.ai-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px 3px 7px;border-radius:6px;font-size:10px;color:var(--purple-lt);background:linear-gradient(135deg,rgba(106,58,154,0.08) 0%,rgba(26,92,138,0.06) 100%);border:1px solid rgba(160,112,224,0.2);cursor:pointer;transition:all .2s;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.ai-chip:hover{background:rgba(160,112,224,0.14);border-color:rgba(160,112,224,0.4);transform:translateY(-1px);box-shadow:0 3px 10px rgba(106,58,154,0.15)}
+.ai-chip:active{transform:scale(0.97)}
+.ai-chip.applied{background:var(--green-dim);border-color:rgba(58,184,122,0.3);color:var(--green-lt);pointer-events:none;opacity:.7}
+.ai-chip svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.ai-chip-label{font-size:8px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;font-family:'DM Mono',monospace;display:flex;align-items:center;gap:4px}
+.ai-chip-label svg{width:10px;height:10px;stroke:var(--purple-lt);fill:none;stroke-width:1.8}
+
+/* AI suggestion card for list items */
+.ai-list-suggestion{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:linear-gradient(135deg,rgba(106,58,154,0.06) 0%,rgba(26,92,138,0.04) 100%);border:1px solid rgba(160,112,224,0.15);margin-bottom:6px;transition:all .2s;animation:fadeUp .3s ease both}
+.ai-list-suggestion:hover{border-color:rgba(160,112,224,0.35);background:rgba(160,112,224,0.08)}
+.ai-list-suggestion.applied{border-color:rgba(58,184,122,0.3);background:rgba(26,122,74,0.06);opacity:.6;pointer-events:none}
+.ai-list-suggestion-icon{width:24px;height:24px;border-radius:6px;background:var(--purple-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ai-list-suggestion-icon svg{width:12px;height:12px;stroke:var(--purple-lt);fill:none;stroke-width:2}
+.ai-list-suggestion-text{flex:1;min-width:0}
+.ai-list-suggestion-title{font-size:10px;color:var(--paper);font-weight:500}
+.ai-list-suggestion-detail{font-size:8px;color:var(--ink-soft);margin-top:1px}
+.ai-list-suggestion-btn{padding:4px 10px;border-radius:5px;font-size:9px;cursor:pointer;border:1px solid rgba(160,112,224,0.25);background:var(--purple-dim);color:var(--purple-lt);font-family:'DM Sans',sans-serif;transition:all .15s;flex-shrink:0}
+.ai-list-suggestion-btn:hover{background:rgba(160,112,224,0.2);border-color:rgba(160,112,224,0.4)}
+.ai-list-suggestion .applied-label{font-size:9px;color:var(--green-lt);flex-shrink:0}
+
+/* AI suggestion group header */
+.ai-suggestions-header{display:flex;align-items:center;gap:6px;margin:10px 0 6px;padding:6px 0;border-top:1px solid rgba(160,112,224,0.1)}
+.ai-suggestions-header svg{width:14px;height:14px;stroke:var(--purple-lt);fill:none;stroke-width:1.8}
+.ai-suggestions-header span{font-size:9px;color:var(--purple-lt);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.ai-suggestions-header .apply-all-btn{margin-left:auto;padding:2px 8px;border-radius:4px;font-size:8px;cursor:pointer;border:1px solid rgba(160,112,224,0.25);background:transparent;color:var(--purple-lt);font-family:'DM Sans',sans-serif;transition:all .15s}
+.ai-suggestions-header .apply-all-btn:hover{background:var(--purple-dim);border-color:rgba(160,112,224,0.4)}
+
+/* ── MASTER UPLOAD ── */
+.master-upload{background:linear-gradient(135deg,rgba(106,58,154,0.06) 0%,rgba(200,168,75,0.04) 100%);border:1px solid rgba(160,112,224,0.2);border-radius:12px;padding:18px 20px;margin-bottom:14px;position:relative;overflow:hidden;transition:all .25s}
+.master-upload:hover{border-color:rgba(160,112,224,0.4)}
+.master-upload-inner{display:flex;align-items:center;gap:16px}
+.master-upload-orb{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--purple) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+.master-upload-orb::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid transparent;border-top-color:var(--purple-lt);animation:spin 3s linear infinite}
+.master-upload-orb svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:1.8}
+.master-upload-text h4{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--paper);margin-bottom:3px}
+.master-upload-text p{font-size:10px;color:var(--paper-mid);line-height:1.5}
+.master-upload-btn{margin-left:auto;flex-shrink:0}
+.master-upload-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.master-upload-progress{margin-top:14px;display:none}
+.master-upload-progress.active{display:block;animation:fadeUp .3s ease both}
+
+/* ── UPLOAD ZONE (per-step) ── */
+.upload-zone{border:1px dashed rgba(160,112,224,0.25);border-radius:10px;padding:12px 14px;margin-bottom:12px;background:rgba(106,58,154,0.02);transition:all .25s;cursor:pointer;position:relative}
+.upload-zone:hover{border-color:var(--purple-lt);background:rgba(106,58,154,0.05)}
+.upload-zone.drag-over{border-color:var(--gold);background:rgba(200,168,75,0.08)}
+.upload-zone-inner{display:flex;align-items:center;gap:10px}
+.upload-icon-sm{width:28px;height:28px;border-radius:7px;background:var(--purple-dim);border:1px solid rgba(160,112,224,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.upload-icon-sm svg{width:14px;height:14px;stroke:var(--purple-lt);fill:none;stroke-width:1.8}
+.upload-zone p{font-size:9px;color:var(--ink-soft)}
+.upload-zone .upload-link{color:var(--purple-lt);text-decoration:underline;cursor:pointer}
+.upload-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-progress{margin-top:8px;display:none}
+.upload-progress.active{display:block;animation:fadeUp .3s ease both}
+.upload-file-badge{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--ink-raised);border:1px solid var(--ink-border);border-radius:6px;margin-bottom:6px;font-size:10px}
+.upload-extract-bar{height:3px;background:var(--ink-raised);border-radius:2px;overflow:hidden;margin-top:4px}
+.upload-extract-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--purple-lt),var(--blue-lt));transition:width .4s ease;width:0%}
+
+/* ── SHIMMER ── */
+.shimmer-overlay{position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(160,112,224,0.04) 50%,transparent 100%);background-size:200% 100%;animation:shimmer 2s ease-in-out infinite;border-radius:12px;pointer-events:none;z-index:10}
+
+/* ── DOWNLOAD TEMPLATE BTN ── */
+.dl-tpl-btn{padding:4px 10px;border-radius:5px;border:1px solid rgba(58,184,122,0.25);background:rgba(26,122,74,0.08);color:var(--green-lt);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s;white-space:nowrap}
+.dl-tpl-btn:hover{background:rgba(26,122,74,0.16);border-color:rgba(58,184,122,0.45)}
+.dl-tpl-btn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes typingDot{0%,80%,100%{opacity:.3;transform:scale(.7)}40%{opacity:1;transform:scale(1)}}
+@keyframes staggerIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CELEBRATION CARD (inline in AI chat) ── */
+.ai-celebrate{border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;animation:fadeUp .4s ease both;background:linear-gradient(135deg,rgba(26,122,74,0.1) 0%,rgba(106,58,154,0.08) 100%);border:1px solid rgba(58,184,122,0.25)}
+.ai-celebrate-header{display:flex;align-items:center;gap:10px}
+.ai-celebrate-icon{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--green) 0%,var(--green-lt) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:celebrateIconPop .5s cubic-bezier(.17,.67,.24,1.2) both}
+.ai-celebrate-icon svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.ai-celebrate-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--green-lt)}
+.ai-celebrate-sub{font-size:9px;color:var(--paper-mid)}
+.ai-celebrate-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ai-celebrate-confetti .c-dot{position:absolute;border-radius:50%;opacity:0;animation:cDotBurst .9s ease-out forwards}
+@keyframes celebrateIconPop{0%{transform:scale(0) rotate(-30deg);opacity:0}60%{transform:scale(1.15) rotate(5deg);opacity:1}100%{transform:scale(1) rotate(0deg);opacity:1}}
+@keyframes cDotBurst{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
+
+.sub-section-title{font-size:11px;font-weight:500;color:var(--paper);margin:12px 0 6px;padding-top:10px;border-top:1px solid var(--ink-border)}
+.sub-section-title:first-child{border-top:none;margin-top:0;padding-top:0}
+
+@media(max-width:1024px){.ai-panel{display:none}}
+@media(max-width:768px){.sidebar{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-hex"></div>
+    <div style="display:flex;flex-direction:column;gap:1px"><span class="brand-nm">Arcova SIP</span><span class="brand-tg">Admin Portal</span></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Setup</div>
+    <a class="nav-item" href="org-setup.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>OrgSetup V1</a>
+    <a class="nav-item active" href="org-setup-v2.html"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>OrgSetup V2 <span class="nav-badge">NEW</span></a>
+    <a class="nav-item" href="dataport.html"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>DataPort</a>
+    <div class="nav-section-label">AI Pipeline</div>
+    <a class="nav-item" href="skillforge.html"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>SkillForge</a>
+    <a class="nav-item" href="approvalhub.html"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>ApprovalHub</a>
+    <div class="nav-section-label">Assessment</div>
+    <a class="nav-item" href="assess-engine.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>AssessEngine</a>
+    <a class="nav-item" href="knowledge-tests.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>Knowledge Tests</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-avatar">KR</div>
+    <div style="display:flex;flex-direction:column;gap:1px"><div class="user-name">Kavitha Ramachandran</div><div class="user-role">L&amp;D Manager</div></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">OrgSetup V2 — AI-Guided Onboarding</div>
+    <a href="org-setup.html" class="tb-btn">Switch to V1</a>
+    <a href="../nav-menus.html" class="tb-btn">All screens</a>
+    <div class="tb-pill purple" id="levelPill">V2 Setup</div>
+    <button class="tb-btn" onclick="resetDemo()" style="color:var(--amber-lt);border-color:rgba(212,130,10,0.3)">Reset</button>
+  </div>
+
+  <div class="main-body">
+    <div class="content-left">
+      <div class="progress-meter" id="progressMeter">
+        <div class="progress-ring-wrap">
+          <svg viewBox="0 0 56 56">
+            <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
+            <circle id="progressRing" cx="28" cy="28" r="24" fill="none" stroke="url(#ringGrad)" stroke-width="4" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="150.8" transform="rotate(-90 28 28)" style="transition:stroke-dashoffset .8s ease"/>
+            <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#A070E0"/><stop offset="100%" stop-color="#3AB87A"/></linearGradient></defs>
+          </svg>
+          <div class="progress-ring-label" id="progressPct">0%</div>
+        </div>
+        <div class="progress-info">
+          <div class="progress-title" id="progressTitle">Onboarding: 0 of 20 screens</div>
+          <div class="progress-sub">AI-guided configuration. Complete each screen to calibrate the intelligence engine.</div>
+        </div>
+      </div>
+      <div class="stepper-bar" id="stepper"></div>
+      <div class="success-banner" id="successBanner">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--green-dim);border:2px solid var(--green-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg style="width:18px;height:18px;stroke:var(--green-lt);fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div><h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--green-lt);margin-bottom:3px">Onboarding Complete</h3><p style="font-size:11px;color:var(--paper-mid)">Organization DNA captured. SkillForge AI pipeline ready.</p></div>
+        <a href="skillforge.html" class="btn btn-gold" style="margin-left:auto">SkillForge &rarr;</a>
+      </div>
+      <div id="stepContainer"></div>
+    </div>
+
+    <!-- RIGHT: AI PANEL -->
+    <div class="ai-panel" id="aiPanel">
+      <div class="ai-header">
+        <div class="ai-avatar-ring"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div style="flex:1"><div class="ai-name">SIP Architect</div><div class="ai-status"><span class="ai-status-dot"></span> Guiding you</div></div>
+      </div>
+      <div class="ai-chat" id="aiChat"></div>
+      <div class="ai-footer">
+        <div class="ai-footer-step" id="aiFooterStep">Screen 1 of 21</div>
+        <div class="ai-footer-progress"><div class="ai-footer-bar" id="aiFooterBar" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="toast-msg" id="toast"></div>
+
+<script>
+// ═════════════════════════════════════════════════════
+// CONFIG & STATE
+// ═════════════════════════════════════════════════════
+var STEPS=[
+  {id:1,title:'Company Basics',seg:'Foundation'},{id:2,title:'Org Model',seg:'Model'},
+  {id:3,title:'Strategic Foundation',seg:'Strategy'},{id:4,title:'Org Context',seg:'Context'},
+  {id:5,title:'Locations',seg:'Locations'},{id:6,title:'Culture Setup',seg:'Culture'},
+  {id:7,title:'Policies',seg:'Policies'},{id:8,title:'Standards',seg:'Compliance'},
+  {id:9,title:'Products & Services',seg:'Market'},{id:10,title:'Tech Stack',seg:'Technology'},
+  {id:11,title:'Skill Ontology',seg:'Skills'},{id:12,title:'Competencies',seg:'Competency'},
+  {id:13,title:'Role Architecture',seg:'Roles'},{id:14,title:'Employee Data',seg:'People'},
+  {id:15,title:'Performance History',seg:'History'},{id:16,title:'Learning',seg:'Learning'},
+  {id:17,title:'Assessments',seg:'Evidence'},{id:18,title:'Market Intel',seg:'Market Intel'},
+  {id:19,title:'Competitor',seg:'Benchmarks'},{id:20,title:'Risk & ESG',seg:'Governance'},
+  {id:21,title:'Validation',seg:null}
+];
+var TOTAL=20;
+var state={current:1,completed:{},visited:{},masterUploaded:false};
+for(var i=1;i<=TOTAL;i++)state.completed[i]=false;
+var selectedModels={hier:'',op:'',flow:''};
+var D={locations:[],policies:[],compliance:[],standards:[],products:[],services:[],projects:[],techStack:[],skillDomains:[],skillsMaster:[],competencies:[],jobLevels:[],roles:[],roleSkillReqs:[],cultureElements:[],trainingPrograms:[],vendors:[],learningCalendar:[],triangulationConfig:[],marketDemand:[],benchmarks:[],crisisHistory:[]};
+var appliedSuggestions={};
+
+// ═════════════════════════════════════════════════════
+// AI SUGGESTIONS DATA
+// ═════════════════════════════════════════════════════
+function getAiSuggestions(){
+  var org=gv('f-orgname')||'Your Company';
+  var sector=gv('f-sector')||'';
+  var country=gv('f-hqcountry')||'';
+  return {
+    3:{fields:{
+      'f-mission':{val:'To engineer resilient, sustainable infrastructure that powers human progress across APAC.',label:'Based on '+sector+' in '+country},
+      'f-vision':{val:'To be the most trusted digitally-enabled infrastructure partner in APAC by 2030.',label:'Industry-aligned vision'},
+      'f-values':{val:'Safety, Excellence, Innovation, Integrity, Respect, Sustainability',label:'Common values for '+sector},
+      'f-stratpriorities':{val:'Digital Transformation, Operational Excellence, Sustainability Leadership, Leadership Pipeline',label:'Top priorities for mid-size infrastructure firms'},
+      'f-countries':{val:'Singapore, India, UAE, Malaysia',label:'Based on HQ and market analysis'},
+      'f-hqaddress':{val:'One Raffles Place, Tower 2, Singapore',label:''}
+    }},
+    4:{fields:{
+      'f-ctx-market':{val:'Moderate growth, increasing digital adoption',label:'Based on '+sector},
+      'f-ctx-talent':{val:'Tight market for digital & engineering talent',label:'Industry trend'},
+      'f-ctx-regulatory':{val:'Moderate — ISO compliance + local building codes',label:'Based on operating countries'},
+      'f-ctx-digital':{val:'Transitioning (Stage 2 of 4)',label:'Industry median'},
+      'f-ctx-sustainability':{val:'Growing — Green Mark and ESG mandates',label:'SG regulatory push'},
+      'f-ctx-workforce':{val:'Aging workforce, skills gap in digital/BIM',label:'Construction sector trend'},
+      'f-perf-sales':{val:'180',label:'Estimated from revenue band'},
+      'f-perf-empcount':{val:gv('f-totalemps')||'812',label:'From company basics'},
+      'f-perf-training':{val:'1.2',label:'Industry benchmark'},
+      'f-perf-gross':{val:'32',label:'Sector average'},
+      'f-perf-operating':{val:'12',label:'Sector average'}
+    }},
+    5:{items:[
+      {name:'Singapore HQ',country:'Singapore',city:'Singapore',type:'Office',tier:'Tier 1 (Strategic)',status:'Active',state:'',region:'APAC',zone:'APAC',location_size_sqft:'25000',opening_year:'2009',manager_or_owner:'CEO',_list:'locations',label:'Primary HQ'},
+      {name:'Mumbai Hub',country:'India',city:'Mumbai',type:'Office',tier:'Tier 1 (Strategic)',status:'Active',state:'Maharashtra',region:'South Asia',zone:'APAC',location_size_sqft:'15000',opening_year:'2012',manager_or_owner:'VP India Ops',_list:'locations',label:'Key APAC delivery center'},
+      {name:'Dubai Office',country:'UAE',city:'Dubai',type:'Office',tier:'Tier 2 (Regional)',status:'Active',state:'',region:'Middle East',zone:'EMEA',location_size_sqft:'8000',opening_year:'2016',manager_or_owner:'Regional Director',_list:'locations',label:'Middle East presence'},
+      {name:'KL Branch',country:'Malaysia',city:'Kuala Lumpur',type:'Office',tier:'Tier 2 (Regional)',status:'Active',state:'',region:'SE Asia',zone:'APAC',location_size_sqft:'5000',opening_year:'2018',manager_or_owner:'Branch Manager',_list:'locations',label:'SE Asia expansion'}
+    ]},
+    6:{items:[
+      {dim:'Safety Culture',name:'Safety-First Mindset',current:'Established',target:'Exemplary',_list:'cultureElements',label:'Critical for construction'},
+      {dim:'Innovation Culture',name:'Digital Readiness',current:'Developing',target:'Embedded',_list:'cultureElements',label:'Supports digital transformation'},
+      {dim:'Learning Culture',name:'Learning Agility',current:'Developing',target:'Established',_list:'cultureElements',label:'Enables reskilling'},
+      {dim:'Customer Culture',name:'Client Centricity',current:'Established',target:'Exemplary',_list:'cultureElements',label:'Revenue driver'},
+      {dim:'Core Values',name:'Integrity & Ethics',current:'Embedded',target:'Exemplary',_list:'cultureElements',label:'Governance essential'}
+    ]},
+    7:{items:[
+      {name:'Code of Conduct',cat:'HR & People',mandatory:'Yes',status:'Active',effective_year:'2020',applicable_to:'All Employees',review_frequency:'Annual',policy_description:'Organization-wide code of conduct',_list:'policies',label:'Universal requirement'},
+      {name:'Anti-Harassment (POSH)',cat:'Compliance & Legal',mandatory:'Yes',status:'Active',effective_year:'2019',applicable_to:'All Employees',review_frequency:'Annual',policy_description:'Prevention of sexual harassment',_list:'policies',label:'Mandatory in SG & India'},
+      {name:'Data Privacy (PDPA)',cat:'IT & Security',mandatory:'Yes',status:'Active',effective_year:'2021',applicable_to:'All Employees',review_frequency:'Annual',policy_description:'Data protection compliance',_list:'policies',label:'Required for APAC ops'},
+      {name:'Health & Safety',cat:'Health & Safety',mandatory:'Yes',status:'Active',effective_year:'2018',applicable_to:'All Employees',review_frequency:'Annual',policy_description:'Workplace health and safety standards',_list:'policies',label:'Critical for construction'},
+      {name:'L&D Policy',cat:'HR & People',mandatory:'No',status:'Active',effective_year:'2022',applicable_to:'All Employees',review_frequency:'Annual',policy_description:'Learning and development framework',_list:'policies',label:'Recommended for 200+ orgs'}
+    ],
+    compliance_items:[
+      {compliance_name:'Workplace Safety & Health Act',regulatory_body:'MOM Singapore',mandatory_status:'Mandatory',applicable_to:'All SG Operations',risk_level:'Critical',review_frequency:'Annual',_list:'compliance',label:'SG workplace safety'},
+      {compliance_name:'PDPA Compliance',regulatory_body:'PDPC Singapore',mandatory_status:'Mandatory',applicable_to:'All Data Processing',risk_level:'High',review_frequency:'Annual',_list:'compliance',label:'SG data protection'},
+      {compliance_name:'BCA Building Control',regulatory_body:'BCA Singapore',mandatory_status:'Mandatory',applicable_to:'Construction Projects',risk_level:'Critical',review_frequency:'Annual',_list:'compliance',label:'SG construction compliance'}
+    ]},
+    8:{items:[
+      {name:'ISO 45001',type:'Industry Standard',body:'ISO',renewal:'Annual',certification_scope:'All Operations',issue_date:'2022-03',expiry_date:'2025-03',surveillance_audit_frequency:'Annual',certification_status:'Active',strategic_importance:'Strategic',_list:'standards',label:'Workplace safety'},
+      {name:'ISO 9001',type:'Industry Standard',body:'ISO',renewal:'3 years',certification_scope:'Engineering & Delivery',issue_date:'2021-06',expiry_date:'2024-06',surveillance_audit_frequency:'Annual',certification_status:'Active',strategic_importance:'Strategic',_list:'standards',label:'Quality management'},
+      {name:'ISO 14001',type:'Industry Standard',body:'ISO',renewal:'3 years',certification_scope:'All Operations',issue_date:'2022-01',expiry_date:'2025-01',surveillance_audit_frequency:'Annual',certification_status:'Active',strategic_importance:'Operational',_list:'standards',label:'Environmental management'},
+      {name:'BCA Green Mark',type:'Industry Standard',body:'BCA Singapore',renewal:'Per project',certification_scope:'SG Projects',issue_date:'2023-01',expiry_date:'2026-01',surveillance_audit_frequency:'Biennial',certification_status:'Active',strategic_importance:'Strategic',_list:'standards',label:'Singapore construction'}
+    ]},
+    9:{
+      items:[
+        {name:'Civil & Structural Engineering',cat:'Service',life:'Active',product_category:'Core Engineering',product_type:'Service',business_unit:'Engineering',launch_year:'2009',revenue_contribution:'45',regulatory_criticality:'High',_list:'products',label:'Core service'},
+        {name:'Smart Building Solutions',cat:'Product',life:'Growth',product_category:'Digital Infrastructure',product_type:'Product',business_unit:'Digital',launch_year:'2020',revenue_contribution:'15',regulatory_criticality:'Medium',_list:'products',label:'Growth segment'},
+        {name:'Sustainability Consulting',cat:'Service',life:'Growth',product_category:'Advisory',product_type:'Service',business_unit:'Consulting',launch_year:'2021',revenue_contribution:'10',regulatory_criticality:'Medium',_list:'products',label:'ESG-driven'}
+      ],
+      service_items:[
+        {service_name:'BIM Consulting',service_type:'Consulting',delivery_model:'Hybrid',business_unit:'Digital Delivery',revenue_contribution:'8',critical_skills_dependence:'High',_list:'services',label:'Digital delivery service'},
+        {service_name:'Safety Training Services',service_type:'Training',delivery_model:'Onsite',business_unit:'EHS',revenue_contribution:'3',critical_skills_dependence:'Medium',_list:'services',label:'Compliance service'}
+      ],
+      items2:[
+        {name:'Marina Bay Tower Phase 2',client:'Marina Bay Sands',status:'Active',project_type:'Customer Delivery',budget_USD:'45000000',start_year:'2024',end_year:'2027',primary_skill:'Structural Engineering',_list:'projects',label:'Flagship SG project'},
+        {name:'Mumbai Metro Line 4',client:'MMRDA',status:'Active',project_type:'Customer Delivery',budget_USD:'120000000',start_year:'2023',end_year:'2026',primary_skill:'Civil Engineering',_list:'projects',label:'Major India project'},
+        {name:'Digital Twin Platform',client:'Internal',status:'Planned',project_type:'Technology Upgrade',budget_USD:'2500000',start_year:'2025',end_year:'2026',primary_skill:'BIM & IoT',_list:'projects',label:'Internal digital initiative'}
+      ]
+    },
+    10:{items:[
+      {name:'Autodesk Revit',cat:'Dev & Engineering',status:'Current',depts:'Engineering, BIM',deployment_model:'On-Premise',adoption_level:'High',criticality_level:'Mission Critical',estimated_user_count:'120',automation_impact:'Medium',training_required_flag:'Yes',skills_impacted:'BIM, 3D Modeling',_list:'techStack',label:'BIM standard'},
+      {name:'Workday',cat:'Core Business Apps',status:'Current',depts:'All',deployment_model:'SaaS',adoption_level:'Enterprise-wide',criticality_level:'Mission Critical',estimated_user_count:'812',automation_impact:'High',training_required_flag:'Yes',skills_impacted:'HR Analytics, Self-Service',_list:'techStack',label:'HRIS'},
+      {name:'Power BI',cat:'Data & Analytics',status:'Current',depts:'All',deployment_model:'Cloud',adoption_level:'High',criticality_level:'High',estimated_user_count:'200',automation_impact:'Medium',training_required_flag:'Yes',skills_impacted:'Data Visualization, Analytics',_list:'techStack',label:'Analytics'},
+      {name:'Primavera P6',cat:'Dev & Engineering',status:'Current',depts:'Project Delivery',deployment_model:'On-Premise',adoption_level:'Medium',criticality_level:'High',estimated_user_count:'60',automation_impact:'Low',training_required_flag:'Yes',skills_impacted:'Project Scheduling',_list:'techStack',label:'Project scheduling'}
+    ]},
+    11:{
+      domain_items:[
+        {domain_name:'Engineering & Construction',knowledge_areas:'Structural Analysis, Geotechnical, Materials Science, BIM',_list:'skillDomains',label:'Core domain'},
+        {domain_name:'Digital & Technology',knowledge_areas:'Cloud Computing, Data Analytics, IoT, Cybersecurity',_list:'skillDomains',label:'Digital transformation enabler'},
+        {domain_name:'Project Management',knowledge_areas:'Scheduling, Cost Control, Risk Management, Stakeholder Management',_list:'skillDomains',label:'Delivery excellence'},
+        {domain_name:'Safety & Compliance',knowledge_areas:'OH&S, Environmental, Regulatory, Quality',_list:'skillDomains',label:'Regulatory essential'}
+      ],
+      skill_items:[
+        {skill_name:'BIM Modeling (Revit)',skill_domain:'Digital & Technology',skill_type:'Technical',emerging_flag:'No',regulatory_flag:'No',_list:'skillsMaster',label:'Core digital skill'},
+        {skill_name:'Structural Analysis',skill_domain:'Engineering & Construction',skill_type:'Technical',emerging_flag:'No',regulatory_flag:'No',_list:'skillsMaster',label:'Core engineering skill'},
+        {skill_name:'AI/ML for Construction',skill_domain:'Digital & Technology',skill_type:'Technical',emerging_flag:'Yes',regulatory_flag:'No',_list:'skillsMaster',label:'Emerging skill'},
+        {skill_name:'ISO 45001 Compliance',skill_domain:'Safety & Compliance',skill_type:'Compliance',emerging_flag:'No',regulatory_flag:'Yes',_list:'skillsMaster',label:'Regulatory skill'},
+        {skill_name:'Stakeholder Communication',skill_domain:'Project Management',skill_type:'Behavioral',emerging_flag:'No',regulatory_flag:'No',_list:'skillsMaster',label:'Soft skill'}
+      ]
+    },
+    12:{
+      comps:[
+        {name:'Safety-First Mindset',type:'Core / Enterprise',category:'Safety',description:'Commitment to workplace safety in all activities',_list:'competencies',label:'Core for construction'},
+        {name:'Digital Fluency',type:'Technical',category:'Digital',description:'Ability to leverage digital tools and data',_list:'competencies',label:'Supports digital transformation'},
+        {name:'Strategic Leadership',type:'Leadership',category:'Leadership',description:'Ability to set direction and inspire teams',_list:'competencies',label:'L5+ requirement'},
+        {name:'Client Partnership',type:'Core / Enterprise',category:'Business',description:'Building and maintaining client relationships',_list:'competencies',label:'Business development'}
+      ]
+    },
+    13:{
+      level_items:[
+        {level_code:'L1',level_name:'Entry',seniority_tier:'Entry',ic_or_manager:'IC',min_years_experience:'0',_list:'jobLevels',label:'Graduate / Trainee'},
+        {level_code:'L2',level_name:'Associate',seniority_tier:'Early Career',ic_or_manager:'IC',min_years_experience:'2',_list:'jobLevels',label:'2+ years'},
+        {level_code:'L3',level_name:'Mid-Level',seniority_tier:'Mid-Level',ic_or_manager:'IC',min_years_experience:'4',_list:'jobLevels',label:'4+ years'},
+        {level_code:'L4',level_name:'Senior',seniority_tier:'Senior',ic_or_manager:'Both',min_years_experience:'7',_list:'jobLevels',label:'7+ years'},
+        {level_code:'L5',level_name:'Lead / Principal',seniority_tier:'Senior',ic_or_manager:'Both',min_years_experience:'10',_list:'jobLevels',label:'10+ years'},
+        {level_code:'L6',level_name:'Director',seniority_tier:'Leadership',ic_or_manager:'Manager',min_years_experience:'12',_list:'jobLevels',label:'12+ years'},
+        {level_code:'L7',level_name:'C-Suite',seniority_tier:'Executive',ic_or_manager:'Manager',min_years_experience:'15',_list:'jobLevels',label:'15+ years'}
+      ],
+      roles:[
+        {title:'Senior Structural Engineer',family:'Engineering',dept:'Structural Engineering',level:'L4 — Senior',reports_to:'Chief Engineer',role_purpose:'Lead structural design and analysis',_list:'roles',label:'Core engineering role'},
+        {title:'BIM Coordinator',family:'Technology',dept:'BIM & Digital Delivery',level:'L3 — Mid',reports_to:'BIM Manager',role_purpose:'Coordinate BIM workflows and standards',_list:'roles',label:'Digital delivery'},
+        {title:'Project Manager',family:'Operations',dept:'Project Delivery',level:'L4 — Senior',reports_to:'Division Director',role_purpose:'End-to-end project delivery',_list:'roles',label:'Revenue-critical'},
+        {title:'Safety Manager',family:'Operations',dept:'EHS & Risk',level:'L4 — Senior',reports_to:'VP Operations',role_purpose:'Ensure workplace safety compliance',_list:'roles',label:'Compliance-critical'},
+        {title:'Cloud Architect',family:'Technology',dept:'IT Infrastructure',level:'L5 — Lead',reports_to:'CTO',role_purpose:'Design and manage cloud infrastructure',_list:'roles',label:'Digital infrastructure'}
+      ],
+      rsr_items:[
+        {role_title:'Senior Structural Engineer',skill:'Structural Analysis',required_level:'Level 4',criticality:'Critical',_list:'roleSkillReqs',label:'Primary skill'},
+        {role_title:'BIM Coordinator',skill:'BIM Modeling (Revit)',required_level:'Level 4',criticality:'Critical',_list:'roleSkillReqs',label:'Primary skill'},
+        {role_title:'Project Manager',skill:'Stakeholder Communication',required_level:'Level 4',criticality:'High',_list:'roleSkillReqs',label:'Key PM skill'}
+      ]
+    },
+    14:{fields:{
+      'f-emp-hris':{val:'Workday',label:'Detected from tech stack'},'f-emp-count':{val:gv('f-totalemps')||'812',label:'From company basics'},
+      'f-emp-quality':{val:'High — Clean HRIS data',label:'Workday = high quality'},'f-emp-workmodes':{val:'On-site, Hybrid, Remote, Field',label:'Construction industry mix'}
+    }},
+    16:{
+      items:[
+        {name:'BIM Fundamentals',cat:'Technical',mode:'Blended',status:'Active',duration_hours:'40',certification_awarded:'Yes',target_audience:'Engineers, BIM team',criticality:'High',cost_per_participant_USD:'1200',_list:'trainingPrograms',label:'Aligns to tech stack'},
+        {name:'ISO 45001 Safety Awareness',cat:'Compliance',mode:'E-Learning',status:'Active',duration_hours:'8',certification_awarded:'Yes',target_audience:'All Employees',criticality:'Critical',cost_per_participant_USD:'200',_list:'trainingPrograms',label:'Mandatory safety standard'},
+        {name:'Leadership Essentials',cat:'Leadership',mode:'Instructor-Led',status:'Active',duration_hours:'24',certification_awarded:'No',target_audience:'L4+ Managers',criticality:'High',cost_per_participant_USD:'2500',_list:'trainingPrograms',label:'Pipeline development'},
+        {name:'PMP Prep',cat:'Technical',mode:'Virtual',status:'Active',duration_hours:'35',certification_awarded:'Yes',target_audience:'Project Managers',criticality:'Medium',cost_per_participant_USD:'1800',_list:'trainingPrograms',label:'PM capability building'}
+      ],
+      vendors:[
+        {name:'Edstellar',spec:'Leadership, Digital, Safety',vendor_type:'External',country:'India',coverage:'Global',quality_rating:'4.5/5',preferred_vendor:'Yes',_list:'vendors',label:'Multi-domain L&D partner'},
+        {name:'Autodesk Learning',spec:'BIM, Revit',vendor_type:'Technology Platform',country:'United States',coverage:'Global',quality_rating:'4.3/5',preferred_vendor:'Yes',_list:'vendors',label:'BIM certification'}
+      ],
+      calendar_items:[
+        {event_name:'Annual L&D Strategy Review',event_type:'Governance Review',quarter:'Q1',governance_owner:'CLO',_list:'learningCalendar',label:'Strategic alignment'},
+        {event_name:'Training Nominations Window',event_type:'Nomination Window',quarter:'Q1',governance_owner:'HR Managers',_list:'learningCalendar',label:'Program intake'},
+        {event_name:'Mid-Year Learning Audit',event_type:'Audit',quarter:'Q3',governance_owner:'L&D Head',_list:'learningCalendar',label:'Quality check'}
+      ]
+    },
+    18:{
+      demand_items:[
+        {skill_name:'BIM & Digital Twin',demand_level:'Very High',demand_growth_YoY:'25',supply_scarcity:'High',strategic_relevance:'Critical',_list:'marketDemand',label:'Top demand in construction tech'},
+        {skill_name:'AI/ML Engineering',demand_level:'Very High',demand_growth_YoY:'35',supply_scarcity:'High',strategic_relevance:'High',_list:'marketDemand',label:'Cross-industry demand'},
+        {skill_name:'Sustainability & ESG',demand_level:'High',demand_growth_YoY:'20',supply_scarcity:'Medium',strategic_relevance:'High',_list:'marketDemand',label:'Regulatory-driven demand'},
+        {skill_name:'Cloud Architecture',demand_level:'High',demand_growth_YoY:'18',supply_scarcity:'Medium',strategic_relevance:'High',_list:'marketDemand',label:'Digital infrastructure'},
+        {skill_name:'Project Risk Management',demand_level:'Moderate',demand_growth_YoY:'8',supply_scarcity:'Low',strategic_relevance:'Medium',_list:'marketDemand',label:'Stable demand'}
+      ]
+    },
+    19:{
+      bench_items:[
+        {benchmark_category:'Workforce',parameter:'Attrition Rate %',industry_benchmark:'12%',company_value:'',_list:'benchmarks',label:'Key HR metric'},
+        {benchmark_category:'L&D',parameter:'Training Hours per Employee',industry_benchmark:'40 hrs',company_value:'',_list:'benchmarks',label:'Learning investment'},
+        {benchmark_category:'L&D',parameter:'L&D Spend as % of Revenue',industry_benchmark:'1.5%',company_value:'',_list:'benchmarks',label:'Budget benchmark'},
+        {benchmark_category:'Skills',parameter:'Digital Skills Coverage %',industry_benchmark:'45%',company_value:'',_list:'benchmarks',label:'Digital readiness'},
+        {benchmark_category:'Quality',parameter:'Defect Rate %',industry_benchmark:'2.5%',company_value:'',_list:'benchmarks',label:'Quality metric'},
+        {benchmark_category:'Operations',parameter:'On-Time Project Delivery %',industry_benchmark:'78%',company_value:'',_list:'benchmarks',label:'Delivery metric'}
+      ]
+    }
+  };
+}
+
+// ═════════════════════════════════════════════════════
+// SVG ORG DIAGRAMS
+// ═════════════════════════════════════════════════════
+function svgFunctional(){return '<svg viewBox="0 0 180 90"><rect x="65" y="2" width="50" height="16" class="org-box org-box-top"/><text x="90" y="12" class="org-text-top">CEO</text><line x1="90" y1="18" x2="90" y2="30" class="org-line"/><line x1="20" y1="30" x2="160" y2="30" class="org-line"/><line x1="20" y1="30" x2="20" y2="38" class="org-line"/><line x1="55" y1="30" x2="55" y2="38" class="org-line"/><line x1="90" y1="30" x2="90" y2="38" class="org-line"/><line x1="125" y1="30" x2="125" y2="38" class="org-line"/><line x1="160" y1="30" x2="160" y2="38" class="org-line"/><rect x="3" y="38" width="34" height="14" class="org-box"/><text x="20" y="47" class="org-text">Eng</text><rect x="38" y="38" width="34" height="14" class="org-box"/><text x="55" y="47" class="org-text">Sales</text><rect x="73" y="38" width="34" height="14" class="org-box"/><text x="90" y="47" class="org-text">HR</text><rect x="108" y="38" width="34" height="14" class="org-box"/><text x="125" y="47" class="org-text">Finance</text><rect x="143" y="38" width="34" height="14" class="org-box"/><text x="160" y="47" class="org-text">Ops</text></svg>'}
+function svgDivisional(){return '<svg viewBox="0 0 180 90"><rect x="65" y="2" width="50" height="16" class="org-box org-box-top"/><text x="90" y="12" class="org-text-top">CEO</text><line x1="90" y1="18" x2="90" y2="28" class="org-line"/><line x1="30" y1="28" x2="150" y2="28" class="org-line"/><line x1="30" y1="28" x2="30" y2="36" class="org-line"/><line x1="90" y1="28" x2="90" y2="36" class="org-line"/><line x1="150" y1="28" x2="150" y2="36" class="org-line"/><rect x="6" y="36" width="48" height="14" class="org-box"/><text x="30" y="45" class="org-text">Div A</text><rect x="66" y="36" width="48" height="14" class="org-box"/><text x="90" y="45" class="org-text">Div B</text><rect x="126" y="36" width="48" height="14" class="org-box"/><text x="150" y="45" class="org-text">Div C</text></svg>'}
+function svgMatrix(){return '<svg viewBox="0 0 180 90"><rect x="65" y="2" width="50" height="14" class="org-box org-box-top"/><text x="90" y="11" class="org-text-top">CEO</text><rect x="32" y="26" width="28" height="12" class="org-box"/><text x="46" y="34" class="org-text">Eng</text><rect x="64" y="26" width="28" height="12" class="org-box"/><text x="78" y="34" class="org-text">Mktg</text><rect x="96" y="26" width="28" height="12" class="org-box"/><text x="110" y="34" class="org-text">Ops</text><rect x="2" y="44" width="28" height="10" class="org-box" style="fill:rgba(26,92,138,0.15);stroke:var(--blue-lt)"/><text x="16" y="51" class="org-text" style="fill:var(--blue-lt)">Proj 1</text><rect x="2" y="58" width="28" height="10" class="org-box" style="fill:rgba(26,92,138,0.15);stroke:var(--blue-lt)"/><text x="16" y="65" class="org-text" style="fill:var(--blue-lt)">Proj 2</text><circle cx="46" cy="49" r="3" fill="var(--purple-lt)" opacity=".6"/><circle cx="78" cy="49" r="3" fill="var(--purple-lt)" opacity=".6"/><circle cx="110" cy="49" r="3" fill="var(--purple-lt)" opacity=".6"/></svg>'}
+function svgFlat(){return '<svg viewBox="0 0 180 90"><rect x="65" y="8" width="50" height="14" class="org-box org-box-top"/><text x="90" y="17" class="org-text-top">Lead</text><line x1="90" y1="22" x2="90" y2="34" class="org-line"/><line x1="10" y1="34" x2="170" y2="34" class="org-line"/><circle cx="30" cy="48" r="8" class="org-box"/><text x="30" y="50" class="org-text" style="font-size:6px">T1</text><circle cx="60" cy="48" r="8" class="org-box"/><text x="60" y="50" class="org-text" style="font-size:6px">T2</text><circle cx="90" cy="48" r="8" class="org-box"/><text x="90" y="50" class="org-text" style="font-size:6px">T3</text><circle cx="120" cy="48" r="8" class="org-box"/><text x="120" y="50" class="org-text" style="font-size:6px">T4</text><circle cx="150" cy="48" r="8" class="org-box"/><text x="150" y="50" class="org-text" style="font-size:6px">T5</text></svg>'}
+function svgGeographic(){return '<svg viewBox="0 0 180 90"><rect x="60" y="2" width="60" height="14" class="org-box org-box-top"/><text x="90" y="11" class="org-text-top">Global HQ</text><line x1="90" y1="16" x2="90" y2="26" class="org-line"/><line x1="30" y1="26" x2="150" y2="26" class="org-line"/><rect x="6" y="34" width="48" height="14" class="org-box" style="fill:rgba(26,92,138,0.1)"/><text x="30" y="43" class="org-text" style="fill:var(--blue-lt)">APAC</text><rect x="66" y="34" width="48" height="14" class="org-box" style="fill:rgba(212,130,10,0.1)"/><text x="90" y="43" class="org-text" style="fill:var(--amber-lt)">EMEA</text><rect x="126" y="34" width="48" height="14" class="org-box" style="fill:rgba(26,122,74,0.1)"/><text x="150" y="43" class="org-text" style="fill:var(--green-lt)">Americas</text></svg>'}
+function svgHolding(){return '<svg viewBox="0 0 180 90"><rect x="50" y="2" width="80" height="16" class="org-box org-box-top"/><text x="90" y="12" class="org-text-top">Holding Co.</text><line x1="90" y1="18" x2="90" y2="24" class="org-line"/><line x1="45" y1="24" x2="135" y2="24" class="org-line"/><rect x="20" y="32" width="50" height="14" class="org-box"/><text x="45" y="41" class="org-text">Sub A</text><rect x="80" y="32" width="50" height="14" class="org-box"/><text x="105" y="41" class="org-text">Sub B</text></svg>'}
+function svgProcess(){return '<svg viewBox="0 0 180 70"><rect x="2" y="20" width="30" height="22" rx="4" class="org-box" style="fill:rgba(26,92,138,0.1)"/><text x="17" y="33" class="org-text" style="fill:var(--blue-lt);font-size:6px">Inbound</text><polygon points="36,31 42,25 42,37" fill="var(--ink-soft)" opacity=".5"/><rect x="44" y="20" width="30" height="22" rx="4" class="org-box" style="fill:rgba(106,58,154,0.1)"/><text x="59" y="33" class="org-text" style="fill:var(--purple-lt);font-size:6px">Ops</text><polygon points="78,31 84,25 84,37" fill="var(--ink-soft)" opacity=".5"/><rect x="86" y="20" width="30" height="22" rx="4" class="org-box" style="fill:rgba(200,168,75,0.1)"/><text x="101" y="33" class="org-text" style="fill:var(--gold);font-size:6px">Outbound</text><polygon points="120,31 126,25 126,37" fill="var(--ink-soft)" opacity=".5"/><rect x="128" y="20" width="30" height="22" rx="4" class="org-box" style="fill:rgba(26,122,74,0.1)"/><text x="143" y="33" class="org-text" style="fill:var(--green-lt);font-size:6px">Service</text></svg>'}
+var orgSvgs={Functional:svgFunctional,Divisional:svgDivisional,Matrix:svgMatrix,Flat:svgFlat,Geographic:svgGeographic,Holding:svgHolding,Process:svgProcess};
+
+// ═════════════════════════════════════════════════════
+// AI MESSAGES
+// ═════════════════════════════════════════════════════
+var AI_MESSAGES={
+  1:{welcome:"Welcome! I'm your <strong>SIP Architect</strong>. You can <em>upload any existing company document</em> (annual report, handbook, HR manual, org chart) and I'll extract data for all 20 screens automatically.",follow:"Or fill in company basics manually below. Your industry sector, size, and country drive all downstream intelligence &mdash; benchmarks, compliance, and skill recommendations."},
+  2:{welcome:"Now let's define your <strong>organizational DNA</strong>. These three choices reshape the entire platform experience.",follow:"After this, I'll guide each remaining screen with <em>intelligent suggestions</em> based on your profile. You choose what to accept."},
+  3:{welcome:"Let's define your <strong>strategic foundation</strong>. I've prepared suggestions based on your industry and size.",follow:"Click any <em>AI suggestion</em> to apply it, or type your own values. Every field shapes downstream intelligence."},
+  4:{welcome:"Let's capture your <strong>organization context and performance</strong>. These environmental factors drive skill demand forecasting.",follow:"Market conditions, talent supply, and regulatory pressure all shape how the AI prioritizes skill gaps and training recommendations."},
+  5:{welcome:"Let's map your <strong>operational footprint</strong>. I've suggested locations based on your country and market profile.",follow:"Click <em>Add</em> on any suggestion to include it, or add your own locations manually."},
+  6:{welcome:"Culture is the <strong>operating system</strong> your people run on. I've suggested culture dimensions relevant to your industry.",follow:"Each element has maturity levels. Accept suggestions or define your own culture framework."},
+  7:{welcome:"Policies define the <strong>rules your workforce operates under</strong>. I've recommended policies based on your industry, size, and geography.",follow:"I've also added a <em>Compliance Master</em> section for regulatory tracking. Mandatory policies are flagged."},
+  8:{welcome:"Let's set up your <strong>standards and certifications</strong>. Suggestions are based on your industry and operating countries.",follow:"Every certification needs supporting skills and renewal tracking. I've expanded the fields for complete lifecycle management."},
+  9:{welcome:"Products, services, and projects are where <strong>capability meets business value</strong>. I'll map these to skill requirements.",follow:"I've added a <em>Service Portfolio</em> section alongside products and projects. Adjust to match your actual portfolio."},
+  10:{welcome:"Your <strong>technology landscape</strong> directly shapes digital skill requirements. Sunset tools trigger reskilling needs.",follow:"I've expanded tech tracking with deployment models, adoption levels, and automation impact — all driving skill intelligence."},
+  11:{welcome:"The <strong>Skill Ontology</strong> is the language your platform speaks. Domains and skills form the foundation of all analysis.",follow:"I've suggested skill domains and individual skills based on your industry, tech stack, and standards. This feeds everything downstream."},
+  12:{welcome:"<strong>Competencies</strong> define how capability is measured. Combined with proficiency levels, they power assessments.",follow:"I've separated competencies from roles for cleaner architecture. Define your competency framework and proficiency scale here."},
+  13:{welcome:"<strong>Role Architecture</strong> is the structural backbone. Job levels, roles, and skill requirements all connect here.",follow:"I've suggested a 7-level framework. Define roles with reporting lines, then map required skills to each role."},
+  14:{welcome:"Employee data <strong>connects people to roles</strong> and skills. I've pre-suggested your HRIS based on your tech stack.",follow:"I detected <em>Workday</em> in your technology stack and suggested it as your HRIS."},
+  15:{welcome:"Historical data turns the platform into a <strong>trend-analysis engine</strong>. More history = better forecasts.",follow:"Select which datasets are available. I've recommended the most impactful ones."},
+  16:{welcome:"Your training portfolio <strong>closes capability gaps</strong>. I've aligned suggestions to your strategic priorities and standards.",follow:"I've expanded with duration, certification tracking, vendor details, and a <em>Learning Governance Calendar</em>."},
+  17:{welcome:"Assessments are the <strong>evidence base</strong> for capability intelligence. Configure triangulation rules here.",follow:"Multiple sources combined give more accurate gap analysis. The new <em>Data Triangulation Config</em> lets you fine-tune weights."},
+  18:{welcome:"<strong>Market Intelligence</strong> connects your internal skill data to external demand signals and regulatory requirements.",follow:"I've suggested in-demand skills for "+((gv('f-sector')||'your sector'))+". This powers proactive workforce planning."},
+  19:{welcome:"<strong>Competitor benchmarks</strong> and supply chain risk give you an external frame of reference for your capability maturity.",follow:"I've suggested key benchmark parameters for your industry. Fill in your company values to see the gap."},
+  20:{welcome:"These round out your <strong>organizational intelligence</strong>. Risk registers and crisis history improve resilience planning.",follow:"I've expanded with a <em>Crisis & Disaster History</em> section for resilience analytics."},
+  21:{welcome:"Here's your <strong>Validation Dashboard</strong>. Review all 20 screens.",follow:"Green = complete. Amber = missing. Lock when ready."}
+};
+
+// ═════════════════════════════════════════════════════
+// CONGRATULATIONS + UNLOCK MESSAGES
+// ═════════════════════════════════════════════════════
+var CONGRATS={
+  1:{msg:"Excellent! Company basics locked in.",unlocks:["Industry-specific skill benchmarks","Country-specific compliance engine","Organization-size calibrated recommendations","Fiscal year aligned reporting cycles"],icon:'building'},
+  2:{msg:"Organizational DNA captured!",unlocks:["Role hierarchy & reporting structure","Division/BU-level analytics","Decision flow adapted platform UX","Org-model specific dashboards"],icon:'structure'},
+  3:{msg:"Strategic compass is set!",unlocks:["Strategic skill gap analysis","Priority-aligned training recommendations","Mission-linked competency frameworks","Vision-to-capability roadmaps"],icon:'compass'},
+  4:{msg:"Organization context captured!",unlocks:["Market-aware skill demand forecasting","Talent supply-demand analysis","Regulatory pressure scoring","Digital maturity benchmarking","Performance-linked training ROI"],icon:'chart'},
+  5:{msg:"Operational footprint mapped!",unlocks:["Location-based workforce analytics","Regional compliance automation","Cross-timezone scheduling","Geographic skill distribution heat maps"],icon:'globe'},
+  6:{msg:"Culture DNA captured!",unlocks:["Culture health dashboard","Change readiness scoring","Culture-performance correlation","Engagement prediction models"],icon:'heart'},
+  7:{msg:"Policy & compliance framework established!",unlocks:["Policy compliance tracker","Training-policy alignment checks","Governance gap detection","Mandatory training auto-assignment","Regulatory compliance heat map"],icon:'shield'},
+  8:{msg:"Certification landscape configured!",unlocks:["Certification expiry alerts","Compliance coverage heat map","Audit-ready evidence trails","Regulatory skill gap flagging","Surveillance audit scheduling"],icon:'check'},
+  9:{msg:"Business portfolio registered!",unlocks:["Product-to-skill dependency maps","Service capability heat maps","Project capability planning","Revenue-at-risk skill analysis","Service line workforce planning"],icon:'briefcase'},
+  10:{msg:"Technology landscape mapped!",unlocks:["Digital skill gap analysis","Tool adoption tracking","Sunset tool reskilling alerts","Tech-driven learning recommendations","Automation impact forecasting"],icon:'monitor'},
+  11:{msg:"Skill Ontology built!",unlocks:["Skill taxonomy engine","Skill-to-role mapping","Emerging skill tracking","Regulatory skill flagging","Cross-domain skill analysis"],icon:'brain'},
+  12:{msg:"Competency framework locked!",unlocks:["Competency-based assessments","Proficiency level scoring","Capability maturity tracking","Assessment rubric generation"],icon:'layers'},
+  13:{msg:"Role architecture built!",unlocks:["Full role-skill matrix","Career pathway generation","Span-of-control analysis","Succession planning models","Role-skill gap heat maps"],icon:'users'},
+  14:{msg:"Employee data pipeline configured!",unlocks:["People analytics dashboards","Headcount & demographics reporting","Skill inventory per employee","Manager span-of-control analysis"],icon:'database'},
+  15:{msg:"Historical data connected!",unlocks:["Multi-year trend analysis","Predictive attrition modeling","Promotion velocity tracking","Workforce planning forecasts"],icon:'trending'},
+  16:{msg:"Learning ecosystem set up!",unlocks:["Training ROI analytics","Skill-gap closure tracking","L&D budget optimization","Vendor performance comparison","Governance calendar automation"],icon:'book'},
+  17:{msg:"Assessment framework configured!",unlocks:["Multi-source skill validation","Confidence-scored capability profiles","Evidence-based gap analysis","Triangulated competency scores"],icon:'clipboard'},
+  18:{msg:"Market intelligence activated!",unlocks:["External skill demand signals","Supply-scarcity alerts","Proactive hiring recommendations","Regulatory skill compliance tracking","Strategic skill investment priorities"],icon:'signal'},
+  19:{msg:"Competitive benchmarking set!",unlocks:["Industry benchmark dashboards","Competitive gap analysis","Supply chain risk scoring","Performance gap heat maps"],icon:'target'},
+  20:{msg:"Governance & risk activated!",unlocks:["ESG compliance dashboard","Governance audit log","Crisis resilience scoring","Risk-aware workforce planning"],icon:'shield2'}
+};
+
+// ═════════════════════════════════════════════════════
+// SKIP WARNINGS
+// ═════════════════════════════════════════════════════
+var SKIP_CHECKS={
+  1:[
+    {field:'f-sector',type:'select',label:'Industry Sector',warn:'Without this, I can\'t provide industry-specific benchmarks, compliance suggestions, or skill frameworks.'},
+    {field:'f-hqcountry',type:'select',label:'HQ Country',warn:'Country drives regulatory compliance rules, holiday calendars, and labor law alignment.'},
+    {field:'f-totalemps',type:'input',label:'Total Employees',warn:'Employee count calibrates organization-size recommendations.'},
+    {field:'f-empband',type:'select',label:'Employee Band',warn:'This helps size the platform — training budgets, license tiers, and dashboard layouts adjust based on band.'},
+    {field:'f-timezone',type:'select',label:'Timezone',warn:'Timezone aligns all reporting cycles and cross-location scheduling.'},
+    {field:'f-revenue',type:'select',label:'Revenue Band',warn:'Revenue context helps prioritize which skill gaps are most business-critical.'}
+  ],
+  2:[
+    {check:function(){return !selectedModels.op},label:'Operating Model',warn:'Without this, I\'ll default to centralized analytics.'},
+    {check:function(){return !selectedModels.flow},label:'Decision Flow',warn:'Decision flow affects how skill priorities cascade.'}
+  ],
+  3:[
+    {field:'f-vision',type:'textarea',label:'Vision',warn:'Vision gives the platform a long-term target for skill forecasting.'},
+    {field:'f-values',type:'textarea',label:'Core Values',warn:'Values feed into culture measurement and behavioral competency frameworks.'},
+    {field:'f-stratpriorities',type:'textarea',label:'Strategic Priorities',warn:'Priorities drive skill gap rankings, training recommendations, and investment prioritization.'},
+    {field:'f-countries',type:'input',label:'Countries of Operation',warn:'Multi-country operations need country-specific compliance, holiday, and labor data.'}
+  ],
+  4:[
+    {field:'f-ctx-market',type:'input',label:'Market Conditions',warn:'Without market context, skill demand forecasting will be less accurate.'},
+    {field:'f-perf-sales',type:'input',label:'Total Sales',warn:'Revenue data enables training ROI calculations.'}
+  ],
+  5:[{check:function(){return D.locations.length===0},label:'Locations',warn:'Without locations, geographic analytics and regional compliance won\'t work.'}],
+  6:[{check:function(){return D.cultureElements.length===0},label:'Culture Elements',warn:'Skipping culture means no culture health dashboard or change readiness scoring.'}],
+  7:[{check:function(){return D.policies.length===0},label:'Policies',warn:'Without policies, training-policy alignment and governance gap detection won\'t be available.'}],
+  8:[{check:function(){return D.standards.length===0},label:'Standards',warn:'Without standards, certification tracking and compliance skill coverage won\'t be available.'}],
+  9:[{check:function(){return D.products.length===0&&D.projects.length===0&&D.services.length===0},label:'Products, Services & Projects',warn:'Without these, the platform can\'t map skills to business value.'}],
+  10:[{check:function(){return D.techStack.length===0},label:'Technology Stack',warn:'Without tech stack, digital skill gaps and reskilling alerts won\'t be available.'}],
+  11:[{check:function(){return D.skillDomains.length===0&&D.skillsMaster.length===0},label:'Skill Ontology',warn:'Skills are foundational — without them, assessments and gap analysis can\'t run.'}],
+  12:[{check:function(){return D.competencies.length===0},label:'Competencies',warn:'Competencies are the building blocks for assessments.'}],
+  13:[{check:function(){return D.roles.length===0},label:'Roles',warn:'Roles are essential — without them, skill assessments, gap analysis, and career paths can\'t work.'}],
+  14:[{field:'f-emp-hris',type:'input',label:'HRIS System',warn:'Knowing your HRIS helps auto-map data columns during import.'},{field:'f-emp-count',type:'input',label:'Records to Import',warn:'Helps pre-allocate resources and estimate import time.'}],
+  16:[{check:function(){return D.trainingPrograms.length===0},label:'Training Programs',warn:'Without training programs, learning paths and training ROI can\'t be calculated.'}],
+  18:[{check:function(){return D.marketDemand.length===0},label:'Market Demand Data',warn:'Without market intelligence, proactive workforce planning won\'t have external signals.'}],
+  19:[{check:function(){return D.benchmarks.length===0},label:'Benchmarks',warn:'Without benchmarks, competitive gap analysis won\'t be available.'}]
+};
+
+function aiAvatar(){return '<div class="ai-bubble-avatar"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 12l10 5 10-5"/></svg></div>'}
+function addAiMsg(t){var c=document.getElementById('aiChat'),b=document.createElement('div');b.className='ai-bubble';b.innerHTML=aiAvatar()+'<div class="ai-msg">'+t+'</div>';c.appendChild(b);c.scrollTop=c.scrollHeight}
+function addAiTyping(){var c=document.getElementById('aiChat'),e=document.createElement('div');e.className='ai-bubble';e.id='aiTypingEl';e.innerHTML=aiAvatar()+'<div class="ai-typing"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div>';c.appendChild(e);c.scrollTop=c.scrollHeight}
+function removeAiTyping(){var e=document.getElementById('aiTypingEl');if(e)e.remove()}
+function clearAiChat(){document.getElementById('aiChat').innerHTML=''}
+function addAiContextCard(d){var c=document.getElementById('aiChat'),e=document.createElement('div');e.className='ai-context-card';var h='<h5>Context Extracted</h5>';for(var k in d)h+='<div class="ai-context-row"><span class="ai-context-key">'+k+'</span><span class="ai-context-val">'+d[k]+'</span></div>';e.innerHTML=h;c.appendChild(e);c.scrollTop=c.scrollHeight}
+
+function updateAiForStep(n){
+  clearAiChat();
+  var m=AI_MESSAGES[n];if(!m)return;
+  document.getElementById('aiFooterStep').textContent='Screen '+n+' of 21';
+  if(state.visited[n]){addAiMsg(m.welcome);if(m.follow)addAiMsg(m.follow);return}
+  state.visited[n]=true;
+  addAiTyping();
+  setTimeout(function(){removeAiTyping();addAiMsg(m.welcome);if(m.follow)setTimeout(function(){addAiTyping();setTimeout(function(){removeAiTyping();addAiMsg(m.follow)},800)},600)},700);
+}
+
+// ═════════════════════════════════════════════════════
+// HELPERS
+// ═════════════════════════════════════════════════════
+function gv(id){var e=document.getElementById(id);return e?e.value.trim():''}
+function sv(id,v){var e=document.getElementById(id);if(e){e.value=v;e.classList.add('ai-filled')}}
+function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show')},2200)}
+function dlBtn(s){return '<button class="dl-tpl-btn" onclick="event.stopPropagation();showToast(\'Template download coming soon\')" title="Download CSV template"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Template</button>'}
+
+function uploadZone(step){
+  return '<div class="upload-zone" id="uploadZone'+step+'" ondragover="event.preventDefault();this.classList.add(\'drag-over\')" ondragleave="this.classList.remove(\'drag-over\')" ondrop="event.preventDefault();this.classList.remove(\'drag-over\');simulateStepUpload('+step+')">'
+    +'<input type="file" class="upload-input" onchange="simulateStepUpload('+step+')" accept=".pdf,.docx,.xlsx,.csv">'
+    +'<div class="upload-zone-inner"><div class="upload-icon-sm"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>'
+    +'<p>Upload a document or <span class="upload-link">browse files</span> to auto-fill this screen</p></div>'
+    +'<div class="upload-progress" id="uploadProg'+step+'"></div></div>';
+}
+
+function simulateStepUpload(step){
+  var z=document.getElementById('uploadZone'+step);
+  z.querySelector('.upload-zone-inner').style.display='none';z.querySelector('.upload-input').style.display='none';z.style.cursor='default';
+  var p=document.getElementById('uploadProg'+step);
+  p.innerHTML='<div class="upload-file-badge"><span style="color:var(--purple-lt)">Extracting...</span></div><div class="upload-extract-bar"><div class="upload-extract-fill" id="uploadBar'+step+'"></div></div>';
+  p.classList.add('active');
+  var bar=document.getElementById('uploadBar'+step);
+  bar.style.width='30%';
+  setTimeout(function(){bar.style.width='70%'},500);
+  setTimeout(function(){bar.style.width='100%';p.querySelector('.upload-file-badge span').textContent='Extracted!';p.querySelector('.upload-file-badge span').style.color='var(--green-lt)';applyAllSuggestions(step);addAiMsg("Document extracted! Fields have been populated for Screen "+step+". Review and adjust as needed.")},1200);
+}
+
+// ═════════════════════════════════════════════════════
+// AI SUGGESTION RENDERING
+// ═════════════════════════════════════════════════════
+function fieldSuggestion(fieldId,stepNum){
+  var sug=getAiSuggestions();
+  if(!sug[stepNum]||!sug[stepNum].fields||!sug[stepNum].fields[fieldId])return '';
+  var s=sug[stepNum].fields[fieldId];
+  var key=fieldId+'_'+stepNum;
+  if(appliedSuggestions[key])return '';
+  var truncVal=s.val.length>80?s.val.substring(0,80)+'...':s.val;
+  return '<div class="ai-suggestion-row"><span class="ai-chip-label"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>AI suggests</span>'
+    +'<span class="ai-chip" onclick="applyFieldSuggestion(\''+fieldId+'\','+stepNum+',this)" title="'+escH(s.val)+'"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>'+escH(truncVal)+'</span></div>';
+}
+
+function applyFieldSuggestion(fieldId,step,chipEl){
+  var sug=getAiSuggestions();
+  var s=sug[step].fields[fieldId];
+  sv(fieldId,s.val);
+  chipEl.classList.add('applied');chipEl.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Applied';
+  appliedSuggestions[fieldId+'_'+step]=true;
+  showToast('AI suggestion applied');
+}
+
+function listSuggestions(listKey,items,stepNum){
+  if(!items||!items.length)return '';
+  var h='<div class="ai-suggestions-header"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>AI Suggestions</span><button class="apply-all-btn" onclick="applyAllListSuggestions(\''+listKey+'\','+stepNum+')">Apply All</button></div>';
+  items.forEach(function(item,i){
+    var key=listKey+'_'+stepNum+'_'+i;
+    if(appliedSuggestions[key])return;
+    var title=item.name||item.title||item.skill_name||item.domain_name||item.compliance_name||item.service_name||item.event_name||item.evidence_source||item.crisis_name||item.level_code||item.role_title||item.benchmark_category||item.parameter||'';
+    var detail=item.label||'';
+    h+='<div class="ai-list-suggestion" id="aiSug_'+key+'"><div class="ai-list-suggestion-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="ai-list-suggestion-text"><div class="ai-list-suggestion-title">'+escH(title)+'</div><div class="ai-list-suggestion-detail">'+escH(detail)+'</div></div><button class="ai-list-suggestion-btn" onclick="applyListSuggestion(\''+listKey+'\','+stepNum+','+i+')">Add</button></div>';
+  });
+  return h;
+}
+
+function getListItems(listKey,step){
+  var sug=getAiSuggestions();
+  if(step===7&&listKey==='compliance')return sug[7]?sug[7].compliance_items:null;
+  if(step===9&&listKey==='services')return sug[9]?sug[9].service_items:null;
+  if(step===9&&listKey==='projects')return sug[9]?sug[9].items2:null;
+  if(step===11&&listKey==='skillDomains')return sug[11]?sug[11].domain_items:null;
+  if(step===11&&listKey==='skillsMaster')return sug[11]?sug[11].skill_items:null;
+  if(step===12&&listKey==='competencies')return sug[12]?sug[12].comps:null;
+  if(step===13&&listKey==='jobLevels')return sug[13]?sug[13].level_items:null;
+  if(step===13&&listKey==='roles')return sug[13]?sug[13].roles:null;
+  if(step===13&&listKey==='roleSkillReqs')return sug[13]?sug[13].rsr_items:null;
+  if(step===16&&listKey==='vendors')return sug[16]?sug[16].vendors:null;
+  if(step===16&&listKey==='learningCalendar')return sug[16]?sug[16].calendar_items:null;
+  if(step===18&&listKey==='marketDemand')return sug[18]?sug[18].demand_items:null;
+  if(step===19&&listKey==='benchmarks')return sug[19]?sug[19].bench_items:null;
+  if(sug[step]&&sug[step].items)return sug[step].items;
+  return null;
+}
+
+function applyListSuggestion(listKey,step,idx){
+  var items=getListItems(listKey,step);
+  if(!items||!items[idx])return;
+  var item=JSON.parse(JSON.stringify(items[idx]));
+  delete item.label;delete item._list;
+  D[listKey].push(item);
+  var key=listKey+'_'+step+'_'+idx;
+  appliedSuggestions[key]=true;
+  var el=document.getElementById('aiSug_'+key);
+  if(el){el.classList.add('applied');el.querySelector('.ai-list-suggestion-btn').outerHTML='<span class="applied-label">Added</span>'}
+  reRenderList(listKey);showToast((item.name||item.title||item.skill_name||item.domain_name||item.compliance_name||item.service_name||item.event_name||item.level_code||item.role_title||item.parameter||'Item')+' added');
+}
+
+function applyAllListSuggestions(listKey,step){
+  var items=getListItems(listKey,step);
+  if(!items)return;
+  items.forEach(function(item,i){
+    var key=listKey+'_'+step+'_'+i;
+    if(appliedSuggestions[key])return;
+    var copy=JSON.parse(JSON.stringify(item));delete copy.label;delete copy._list;
+    D[listKey].push(copy);appliedSuggestions[key]=true;
+    var el=document.getElementById('aiSug_'+key);
+    if(el){el.classList.add('applied');var btn=el.querySelector('.ai-list-suggestion-btn');if(btn)btn.outerHTML='<span class="applied-label">Added</span>'}
+  });
+  reRenderList(listKey);showToast('All suggestions applied');
+}
+
+function applyAllSuggestions(step){
+  var sug=getAiSuggestions();if(!sug[step])return;
+  if(sug[step].fields){for(var fid in sug[step].fields){sv(fid,sug[step].fields[fid].val);appliedSuggestions[fid+'_'+step]=true}}
+  // Apply all list types for the step
+  var allListKeys=['locations','cultureElements','policies','compliance','standards','products','services','projects','techStack','skillDomains','skillsMaster','competencies','jobLevels','roles','roleSkillReqs','trainingPrograms','vendors','learningCalendar','triangulationConfig','marketDemand','benchmarks','crisisHistory'];
+  allListKeys.forEach(function(lk){
+    var items=getListItems(lk,step);
+    if(items){
+      items.forEach(function(item,i){
+        var key=lk+'_'+step+'_'+i;
+        if(!appliedSuggestions[key]){var c=JSON.parse(JSON.stringify(item));delete c.label;delete c._list;D[lk].push(c);appliedSuggestions[key]=true}
+      });
+      reRenderList(lk);
+    }
+  });
+  renderSteps();goToStep(step);
+}
+
+function escH(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+// ═════════════════════════════════════════════════════
+// MASTER DOCUMENT UPLOAD
+// ═════════════════════════════════════════════════════
+function masterUploadZone(){
+  return '<div class="master-upload" id="masterUploadBox">'
+    +'<input type="file" class="master-upload-input" onchange="handleMasterUpload(this)" accept=".pdf,.docx,.doc,.xlsx,.xls,.csv,.pptx,.ppt,.txt,.rtf">'
+    +'<div class="master-upload-inner">'
+    +'<div class="master-upload-orb"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>'
+    +'<div class="master-upload-text"><h4>Upload Any Company Document</h4>'
+    +'<p>AI reads <strong>any document your organization already maintains</strong> and extracts data across all 20 screens. Upload as-is &mdash; no special format needed.</p>'
+    +'<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px">'
+    +'<span style="padding:2px 8px;border-radius:4px;font-size:8px;background:rgba(232,112,96,0.1);color:var(--red-lt);border:1px solid rgba(232,112,96,0.15)">Annual Report PDF</span>'
+    +'<span style="padding:2px 8px;border-radius:4px;font-size:8px;background:rgba(58,140,192,0.1);color:var(--blue-lt);border:1px solid rgba(58,140,192,0.15)">Company Handbook DOCX</span>'
+    +'<span style="padding:2px 8px;border-radius:4px;font-size:8px;background:rgba(26,122,74,0.1);color:var(--green-lt);border:1px solid rgba(26,122,74,0.15)">HR Policy Manual</span>'
+    +'<span style="padding:2px 8px;border-radius:4px;font-size:8px;background:rgba(200,168,75,0.1);color:var(--gold);border:1px solid rgba(200,168,75,0.15)">Org Chart</span>'
+    +'<span style="padding:2px 8px;border-radius:4px;font-size:8px;background:rgba(160,112,224,0.1);color:var(--purple-lt);border:1px solid rgba(160,112,224,0.15)">Strategy Deck</span>'
+    +'<span style="padding:2px 8px;border-radius:4px;font-size:8px;background:rgba(212,130,10,0.1);color:var(--amber-lt);border:1px solid rgba(212,130,10,0.15)">Employee Directory XLSX</span>'
+    +'</div>'
+    +'<div style="margin-top:10px;display:flex;gap:8px;align-items:center"><span style="font-size:9px;color:var(--ink-soft)">Don\'t have a document?</span><button class="dl-tpl-btn" onclick="event.preventDefault();event.stopPropagation();downloadMasterTemplate()" style="position:relative;z-index:2"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download Structured CSV Template</button></div>'
+    +'</div></div>'
+    +'<div class="master-upload-progress" id="masterUploadProgress"></div>'
+    +'</div>';
+}
+
+function handleMasterUpload(inputEl){
+  var box=document.getElementById('masterUploadBox');
+  var fileName='Company_Document.pdf',fileSize='2.4 MB',fileType='pdf';
+  if(inputEl&&inputEl.files&&inputEl.files[0]){
+    var f=inputEl.files[0];fileName=f.name;fileSize=(f.size/1024/1024).toFixed(1)+' MB';
+    var ext=f.name.split('.').pop().toLowerCase();
+    fileType=ext==='docx'||ext==='doc'?'docx':ext==='xlsx'||ext==='xls'?'xlsx':ext==='csv'?'csv':ext==='pptx'||ext==='ppt'?'pptx':'pdf';
+  }
+  box.querySelector('.master-upload-input').style.display='none';
+  box.querySelector('.master-upload-inner').style.display='none';
+  var prog=document.getElementById('masterUploadProgress');
+  var typeColors={pdf:'var(--red-lt)',docx:'var(--blue-lt)',xlsx:'var(--green-lt)',csv:'var(--gold)',pptx:'var(--amber-lt)'};
+  var typeLabels={pdf:'PDF Document',docx:'Word Document',xlsx:'Excel Spreadsheet',csv:'CSV Data',pptx:'Presentation'};
+  var screens=['Company Basics','Org Model','Strategic Foundation','Org Context','Locations','Culture','Policies & Compliance','Standards & Certifications','Products, Services & Projects','Tech Stack','Skill Ontology','Competencies','Role Architecture','Employee Data','Performance History','Learning & Training','Assessments','Market Intelligence','Competitor & Supply Chain','Risk & ESG'];
+  var h='<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--ink-raised);border:1px solid var(--ink-border);border-radius:8px;margin-bottom:10px">'
+    +'<div style="width:32px;height:32px;border-radius:7px;background:rgba(160,112,224,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:'+(typeColors[fileType]||'var(--paper-mid)')+';fill:none;stroke-width:1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>'
+    +'<div style="flex:1;min-width:0"><div style="font-size:11px;color:var(--paper);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escH(fileName)+'</div><div style="font-size:9px;color:var(--ink-soft)">'+(typeLabels[fileType]||'Document')+' &middot; '+fileSize+'</div></div>'
+    +'<div style="font-size:9px;font-weight:500;color:var(--purple-lt)" id="masterFileStatus">Reading...</div></div>';
+  h+='<div style="font-size:10px;color:var(--paper);font-weight:500;margin-bottom:8px">AI is reading your document and extracting data across all screens...</div>';
+  screens.forEach(function(s,i){h+='<div class="upload-file-badge" id="masterStep'+i+'" style="padding:4px 10px;font-size:9px;color:var(--ink-soft);border-color:transparent;background:transparent"><span style="width:14px;display:inline-block;text-align:center">'+(i+1)+'</span> '+s+' <span style="margin-left:auto;font-size:8px" id="masterStepStatus'+i+'"></span></div>'});
+  h+='<div class="upload-extract-bar" style="margin-top:6px"><div class="upload-extract-fill" id="masterBar"></div></div>';
+  prog.innerHTML=h;prog.classList.add('active');
+  addAiMsg("Document received: <em>"+escH(fileName)+"</em> ("+(typeLabels[fileType]||'Document')+", "+fileSize+"). Reading and extracting data across all 20 screens...");
+
+  var bar=document.getElementById('masterBar');var cur=0;
+  function processScreen(){
+    if(cur>=screens.length){
+      bar.style.width='100%';
+      var fs=document.getElementById('masterFileStatus');if(fs){fs.textContent='Extracted';fs.style.color='var(--green-lt)'}
+      state.masterUploaded=true;
+      doAutofillStep1();selectedModels={hier:'Divisional',op:'Federated',flow:'Balanced'};
+      state.completed[1]=true;state.completed[2]=true;
+      addAiMsg("Extraction complete! I found data relevant to <em>all 20 screens</em>. Navigate through each screen &mdash; AI suggestions are pre-loaded based on your document. <strong>Click to accept</strong> what looks right, or type your own values.");
+      setTimeout(function(){renderSteps();goToStep(3)},500);
+      return;
+    }
+    var el=document.getElementById('masterStep'+cur);
+    var st=document.getElementById('masterStepStatus'+cur);
+    if(el)el.style.color='var(--purple-lt)';if(st)st.textContent='extracting...';st.style.color='var(--purple-lt)';
+    bar.style.width=((cur+1)/screens.length*95)+'%';
+    setTimeout(function(){
+      if(el)el.style.color='var(--green-lt)';if(st){st.textContent='done';st.style.color='var(--green-lt)'}
+      cur++;processScreen();
+    },300+Math.random()*200);
+  }
+  setTimeout(processScreen,600);
+}
+
+function downloadMasterTemplate(){
+  showToast('Master template downloaded');
+  addAiMsg("Template download coming soon. You can also upload <em>any existing company document</em> and I'll extract what I can.");
+}
+
+function csvEsc(val){var s=String(val);if(s.indexOf(',')>-1||s.indexOf('"')>-1||s.indexOf('\n')>-1)return '"'+s.replace(/"/g,'""')+'"';return s}
+
+function doAutofillStep1(){
+  var m={'f-orgname':'Arcova Infrastructure Pte. Ltd.','f-legaltype':'Private Limited','f-sector':'Infrastructure & Construction','f-subsector':'Civil Engineering, Smart Infrastructure, BIM','f-hqcity':'Singapore','f-hqcountry':'Singapore','f-timezone':'Asia/Singapore (SGT +8)','f-fiscalmonth':'January','f-empband':'201-1000','f-totalemps':'812','f-revenue':'50M-250M','f-founded':'2009','f-website':'https://arcova.sg','f-listed':'Private','f-parent':'','f-cin':'','f-primarybiz':'Infrastructure & Construction','f-otherbiz':'Smart Buildings (Singapore), BIM Consulting (India)'};
+  for(var k in m){var el=document.getElementById(k);if(el)el.value=m[k]}
+}
+
+// ═════════════════════════════════════════════════════
+// STEP BUILDERS
+// ═════════════════════════════════════════════════════
+function navBtns(prev,next){
+  var h='<div style="display:flex;justify-content:space-between;gap:10px;margin-top:14px">';
+  h+=prev?'<button class="btn" onclick="goToStep('+prev+')">&larr; Back</button>':'<div></div>';
+  h+=next?'<button class="btn btn-gold" onclick="saveStep('+(next-1)+')">Save & Continue &rarr;</button>':'';
+  return h+'</div>';
+}
+
+function hasSuggestions(step){return state.completed[1]&&state.completed[2]}
+
+function buildStep1(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 1 — Company Basics & Platform Configuration</div>'+dlBtn(1)+'</div><div class="panel-body">'
+  +masterUploadZone()
+  +'<div style="display:flex;align-items:center;gap:12px;margin:12px 0"><div style="flex:1;height:1px;background:var(--ink-border)"></div><span style="font-size:9px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em">Or fill manually</span><div style="flex:1;height:1px;background:var(--ink-border)"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Organization Name <span style="color:var(--red-lt)">*required</span></label><input class="form-input" id="f-orgname" placeholder="Registered business name" onchange="onFieldChange(1)"></div><div class="form-group"><label class="form-label">Legal Entity Type</label><select class="form-select" id="f-legaltype"><option value="">Select...</option><option>Private Limited</option><option>Public Limited</option><option>LLC</option><option>PLC</option><option>Government</option><option>Non-Profit</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Parent Company</label><input class="form-input" id="f-parent" placeholder="Parent company name (if any)"></div><div class="form-group"><label class="form-label">CIN / Registration No.</label><input class="form-input" id="f-cin" placeholder="Corporate ID number"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Industry Sector <span style="color:var(--amber-lt)">recommended</span></label><select class="form-select" id="f-sector" onchange="onFieldChange(1)"><option value="">Select...</option><option>Infrastructure & Construction</option><option>Technology & Software</option><option>Financial Services</option><option>Healthcare & Life Sciences</option><option>Manufacturing</option><option>Energy & Utilities</option><option>Retail & E-commerce</option><option>Professional Services</option><option>Food & Beverage</option><option>Education</option><option>Logistics & Transportation</option></select></div><div class="form-group"><label class="form-label">Sub-Sector</label><input class="form-input" id="f-subsector" placeholder="e.g. Civil Engineering"></div></div>'
+  +'<div class="form-group"><label class="form-label">Primary Business</label><textarea class="form-textarea" id="f-primarybiz" placeholder="Core business description"></textarea></div>'
+  +'<div class="form-group"><label class="form-label">Other Business Units & Locations</label><textarea class="form-textarea" id="f-otherbiz" placeholder="Other business units, subsidiaries, and their locations"></textarea></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">HQ Country <span style="color:var(--amber-lt)">recommended</span></label><select class="form-select" id="f-hqcountry" onchange="onFieldChange(1)"><option value="">Select...</option><option>Singapore</option><option>India</option><option>United States</option><option>United Kingdom</option><option>United Arab Emirates</option><option>Malaysia</option><option>Australia</option><option>Germany</option></select></div><div class="form-group"><label class="form-label">HQ City</label><input class="form-input" id="f-hqcity" placeholder="City"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Primary Timezone</label><select class="form-select" id="f-timezone"><option value="">Auto from country...</option><option>Asia/Singapore (SGT +8)</option><option>Asia/Kolkata (IST +5:30)</option><option>Asia/Dubai (GST +4)</option><option>Europe/London (GMT)</option><option>America/New_York (EST)</option></select></div><div class="form-group"><label class="form-label">Fiscal Year Start</label><select class="form-select" id="f-fiscalmonth"><option value="">Select...</option><option>January</option><option>April</option><option>July</option><option>October</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Employee Band <span style="color:var(--amber-lt)">recommended</span></label><select class="form-select" id="f-empband"><option value="">Select...</option><option>1-50</option><option>51-200</option><option>201-1000</option><option>1001-5000</option><option>5001-10000</option><option>10000+</option></select></div><div class="form-group"><label class="form-label">Total Employees <span style="color:var(--amber-lt)">recommended</span></label><input class="form-input" id="f-totalemps" type="number" placeholder="Exact count"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Revenue Band</label><select class="form-select" id="f-revenue"><option value="">Select...</option><option>&lt;10M USD</option><option>10M-50M</option><option>50M-250M</option><option>250M-1B</option><option>&gt;1B USD</option></select></div><div class="form-group"><label class="form-label">Founded Year</label><input class="form-input" id="f-founded" type="number" placeholder="e.g. 2009"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Website</label><input class="form-input" id="f-website" placeholder="https://..."></div><div class="form-group"><label class="form-label">Listed Status</label><select class="form-select" id="f-listed"><option value="">Select...</option><option>Listed</option><option>Unlisted</option><option>Private</option><option>Subsidiary</option></select></div></div>'
+  +navBtns(null,2)+'</div></div>';
+}
+
+function buildStep2(){
+  var hierCards='';
+  [{key:'Functional',title:'Functional',desc:'Divided by business functions.'},{key:'Divisional',title:'Divisional / BU',desc:'Semi-autonomous divisions with P&L.'},{key:'Matrix',title:'Matrix',desc:'Dual reporting — functional + project.'},{key:'Flat',title:'Flat / Team',desc:'Minimal hierarchy, self-organizing.'},{key:'Geographic',title:'Geographic',desc:'Structured by geography.'},{key:'Holding',title:'Holding Co.',desc:'Parent with multiple subsidiaries.'},{key:'Process',title:'Process',desc:'Organized around core processes.'}].forEach(function(m){
+    hierCards+='<div class="model-card'+(selectedModels.hier===m.key?' selected':'')+'" onclick="selectModel(\'hier\',this,\''+m.key+'\')"><div class="model-card-svg">'+orgSvgs[m.key]()+'</div><div class="model-card-text"><h4>'+m.title+'</h4><p>'+m.desc+'</p></div></div>';
+  });
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 2 — Organization Model Selection</div>'+dlBtn(2)+'</div><div class="panel-body">'
+  +uploadZone(2)
+  +'<div style="font-size:11px;font-weight:500;color:var(--paper);margin-bottom:8px">Step 2A: Hierarchy Model <span style="color:var(--red-lt);font-size:8px;font-family:\'DM Mono\',monospace">*required</span></div><div class="model-cards">'+hierCards+'</div>'
+  +'<div style="font-size:11px;font-weight:500;color:var(--paper);margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--ink-border)">Step 2B: Operating Model</div><div class="model-cards">'
+  +'<div class="model-card'+(selectedModels.op==='Centralized'?' selected':'')+'" onclick="selectModel(\'op\',this,\'Centralized\')"><div class="model-card-text"><h4>Centralized</h4><p>All decisions from HQ.</p></div></div>'
+  +'<div class="model-card'+(selectedModels.op==='Decentralized'?' selected':'')+'" onclick="selectModel(\'op\',this,\'Decentralized\')"><div class="model-card-text"><h4>Decentralized</h4><p>BUs have autonomy.</p></div></div>'
+  +'<div class="model-card'+(selectedModels.op==='Federated'?' selected':'')+'" onclick="selectModel(\'op\',this,\'Federated\')"><div class="model-card-text"><h4>Federated / Hybrid</h4><p>Mix of centralized and local.</p></div></div></div>'
+  +'<div style="font-size:11px;font-weight:500;color:var(--paper);margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--ink-border)">Step 2C: Decision Flow</div><div class="model-cards">'
+  +'<div class="model-card'+(selectedModels.flow==='Top-Down'?' selected':'')+'" onclick="selectModel(\'flow\',this,\'Top-Down\')"><div class="model-card-text"><h4>Top-Down</h4><p>Strategy cascades from leadership.</p></div></div>'
+  +'<div class="model-card'+(selectedModels.flow==='Bottom-Up'?' selected':'')+'" onclick="selectModel(\'flow\',this,\'Bottom-Up\')"><div class="model-card-text"><h4>Bottom-Up</h4><p>Capability needs from ground up.</p></div></div>'
+  +'<div class="model-card'+(selectedModels.flow==='Balanced'?' selected':'')+'" onclick="selectModel(\'flow\',this,\'Balanced\')"><div class="model-card-text"><h4>Balanced</h4><p>Bidirectional flow.</p></div></div></div>'
+  +navBtns(1,3)+'</div></div>';
+}
+
+function buildStep3(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 3 — Strategic Foundation</div>'+dlBtn(3)+'</div><div class="panel-body">'
+  +uploadZone(3)
+  +'<div class="form-group"><label class="form-label">Mission <span style="color:var(--amber-lt)">recommended</span></label><textarea class="form-textarea" id="f-mission" placeholder="Core purpose"></textarea>'+fieldSuggestion('f-mission',3)+'</div>'
+  +'<div class="form-group"><label class="form-label">Vision <span style="color:var(--amber-lt)">recommended</span></label><textarea class="form-textarea" id="f-vision" placeholder="Long-term aspirational future state"></textarea>'+fieldSuggestion('f-vision',3)+'</div>'
+  +'<div class="form-group"><label class="form-label">Core Values <span style="color:var(--amber-lt)">recommended</span></label><textarea class="form-textarea" id="f-values" placeholder="e.g. Safety, Excellence, Innovation"></textarea>'+fieldSuggestion('f-values',3)+'</div>'
+  +'<div class="form-group"><label class="form-label">Strategic Priorities <span style="color:var(--amber-lt)">strongly recommended</span></label><textarea class="form-textarea" id="f-stratpriorities" placeholder="Top priorities driving investment"></textarea>'+fieldSuggestion('f-stratpriorities',3)+'</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Countries of Operation</label><input class="form-input" id="f-countries" placeholder="e.g. Singapore, India">'+fieldSuggestion('f-countries',3)+'</div><div class="form-group"><label class="form-label">HQ Address</label><input class="form-input" id="f-hqaddress" placeholder="Full address">'+fieldSuggestion('f-hqaddress',3)+'</div></div>'
+  +navBtns(2,4)+'</div></div>';
+}
+
+function buildStep4(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 4 — Org Context & Performance</div>'+dlBtn(4)+'</div><div class="panel-body">'
+  +uploadZone(4)
+  +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Organization Context (Current Year)</div>'
+  +'<div class="form-group"><label class="form-label">Market Conditions</label><input class="form-input" id="f-ctx-market" placeholder="e.g. Moderate growth, increasing digital adoption">'+fieldSuggestion('f-ctx-market',4)+'</div>'
+  +'<div class="form-group"><label class="form-label">Talent Market Conditions</label><input class="form-input" id="f-ctx-talent" placeholder="e.g. Tight market for digital talent">'+fieldSuggestion('f-ctx-talent',4)+'</div>'
+  +'<div class="form-group"><label class="form-label">Regulatory Environment</label><input class="form-input" id="f-ctx-regulatory" placeholder="e.g. Moderate — ISO + local codes">'+fieldSuggestion('f-ctx-regulatory',4)+'</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Digital Transformation Stage</label><input class="form-input" id="f-ctx-digital" placeholder="e.g. Transitioning (Stage 2 of 4)">'+fieldSuggestion('f-ctx-digital',4)+'</div><div class="form-group"><label class="form-label">Sustainability Pressure</label><input class="form-input" id="f-ctx-sustainability" placeholder="e.g. Growing — Green Mark mandates">'+fieldSuggestion('f-ctx-sustainability',4)+'</div></div>'
+  +'<div class="form-group"><label class="form-label">Workforce Challenges</label><input class="form-input" id="f-ctx-workforce" placeholder="e.g. Aging workforce, digital skills gap">'+fieldSuggestion('f-ctx-workforce',4)+'</div>'
+  +'<div class="sub-section-title">Organization Performance</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Total Sales (USD million)</label><input class="form-input" id="f-perf-sales" type="number" placeholder="e.g. 180">'+fieldSuggestion('f-perf-sales',4)+'</div><div class="form-group"><label class="form-label">Employee Count</label><input class="form-input" id="f-perf-empcount" type="number" placeholder="e.g. 812">'+fieldSuggestion('f-perf-empcount',4)+'</div></div>'
+  +'<div class="form-row-3"><div class="form-group"><label class="form-label">Training Investment (USD M)</label><input class="form-input" id="f-perf-training" type="number" step="0.1" placeholder="e.g. 1.2">'+fieldSuggestion('f-perf-training',4)+'</div><div class="form-group"><label class="form-label">Gross Margin %</label><input class="form-input" id="f-perf-gross" type="number" placeholder="e.g. 32">'+fieldSuggestion('f-perf-gross',4)+'</div><div class="form-group"><label class="form-label">Operating Margin %</label><input class="form-input" id="f-perf-operating" type="number" placeholder="e.g. 12">'+fieldSuggestion('f-perf-operating',4)+'</div></div>'
+  +navBtns(3,5)+'</div></div>';
+}
+
+function buildStep5(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 5 — Locations & Hierarchy</div>'+dlBtn(5)+'</div><div class="panel-body">'
+  +uploadZone(5)+'<div id="locationList"></div>'
+  +(hasSuggestions(5)?listSuggestions('locations',sug[5]?sug[5].items:null,5):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Location</div><div class="form-row"><div class="form-group"><label class="form-label">Name *</label><input class="form-input" id="f-loc-name"></div><div class="form-group"><label class="form-label">Country *</label><select class="form-select" id="f-loc-country"><option value="">Select...</option><option>Singapore</option><option>India</option><option>UAE</option><option>Malaysia</option><option>United Kingdom</option><option>United States</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">City</label><input class="form-input" id="f-loc-city"></div><div class="form-group"><label class="form-label">State</label><input class="form-input" id="f-loc-state"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Region</label><input class="form-input" id="f-loc-region" placeholder="e.g. South Asia"></div><div class="form-group"><label class="form-label">Zone</label><select class="form-select" id="f-loc-zone"><option>North</option><option>South</option><option>East</option><option>West</option><option>Central</option><option>APAC</option><option>EMEA</option><option>Americas</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Type</label><select class="form-select" id="f-loc-type"><option>Office</option><option>Plant</option><option>Branch</option><option>Campus</option><option>Delivery Center</option></select></div><div class="form-group"><label class="form-label">Tier</label><select class="form-select" id="f-loc-tier"><option>Tier 1 (Strategic)</option><option>Tier 2 (Regional)</option><option>Tier 3 (Local)</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Status</label><select class="form-select" id="f-loc-status"><option>Active</option><option>Planned</option><option>Closed</option></select></div><div class="form-group"><label class="form-label">Size (sq ft)</label><input class="form-input" id="f-loc-size" type="number"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Opening Year</label><input class="form-input" id="f-loc-year" type="number"></div><div class="form-group"><label class="form-label">Manager / Owner</label><input class="form-input" id="f-loc-manager"></div></div>'
+  +'<div class="form-group"><label class="form-label">Parent Location</label><input class="form-input" id="f-loc-parent" placeholder="e.g. Singapore HQ"></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addLocation()" style="margin-top:4px">+ Add Location</button></div>'
+  +navBtns(4,6)+'</div></div>';
+}
+
+function buildStep6(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 6 — Culture Setup</div>'+dlBtn(6)+'</div><div class="panel-body">'
+  +uploadZone(6)+'<div id="cultureElementList"></div><div id="maturityBars" style="margin-top:8px"></div>'
+  +(hasSuggestions(6)?listSuggestions('cultureElements',sug[6]?sug[6].items:null,6):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Culture Element</div><div class="form-row"><div class="form-group"><label class="form-label">Dimension</label><select class="form-select" id="f-cult-dim"><option>Core Values</option><option>Safety Culture</option><option>Innovation Culture</option><option>Learning Culture</option><option>Customer Culture</option><option>Inclusion Culture</option></select></div><div class="form-group"><label class="form-label">Element Name *</label><input class="form-input" id="f-cult-name"></div></div><div class="form-row"><div class="form-group"><label class="form-label">Current Maturity</label><select class="form-select" id="f-cult-current"><option>Emerging</option><option>Developing</option><option>Established</option><option>Embedded</option><option>Exemplary</option></select></div><div class="form-group"><label class="form-label">Target Maturity</label><select class="form-select" id="f-cult-target"><option>Emerging</option><option>Developing</option><option>Established</option><option>Embedded</option><option>Exemplary</option></select></div></div><button class="btn btn-blue btn-sm" onclick="addCulture()" style="margin-top:4px">+ Add</button></div>'
+  +navBtns(5,7)+'</div></div>';
+}
+
+function buildStep7(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 7 — Policies & Compliance</div>'+dlBtn(7)+'</div><div class="panel-body">'
+  +uploadZone(7)
+  +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">HR Policies</div><div id="policList"></div>'
+  +(hasSuggestions(7)?listSuggestions('policies',sug[7]?sug[7].items:null,7):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Policy</div><div class="form-row"><div class="form-group"><label class="form-label">Policy Name *</label><input class="form-input" id="f-pol-name"></div><div class="form-group"><label class="form-label">Category</label><select class="form-select" id="f-pol-cat"><option>HR & People</option><option>IT & Security</option><option>Compliance & Legal</option><option>Health & Safety</option><option>Finance & Accounting</option><option>ESG & Sustainability</option><option>Operations</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Mandatory?</label><select class="form-select" id="f-pol-mandatory"><option>Yes</option><option>No</option></select></div><div class="form-group"><label class="form-label">Status</label><select class="form-select" id="f-pol-status"><option>Active</option><option>Draft</option><option>Under Review</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Effective Year</label><input class="form-input" id="f-pol-year" type="number" placeholder="e.g. 2023"></div><div class="form-group"><label class="form-label">Applicable To</label><input class="form-input" id="f-pol-applicable" placeholder="e.g. All Employees"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Review Frequency</label><select class="form-select" id="f-pol-freq"><option>Annual</option><option>Biennial</option><option>Quarterly</option></select></div><div class="form-group"><label class="form-label">Policy Description</label><input class="form-input" id="f-pol-desc" placeholder="Brief description"></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addPolicy()" style="margin-top:4px">+ Add Policy</button></div>'
+  +'<div class="sub-section-title">Compliance Master</div><div id="complianceList"></div>'
+  +(hasSuggestions(7)?listSuggestions('compliance',sug[7]?sug[7].compliance_items:null,7):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Compliance Item</div><div class="form-row"><div class="form-group"><label class="form-label">Compliance Name *</label><input class="form-input" id="f-compl-name"></div><div class="form-group"><label class="form-label">Regulatory Body</label><input class="form-input" id="f-compl-body"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Mandatory Status</label><select class="form-select" id="f-compl-mandatory"><option>Mandatory</option><option>Conditional</option><option>Recommended</option></select></div><div class="form-group"><label class="form-label">Applicable To</label><input class="form-input" id="f-compl-applicable" placeholder="e.g. All Operations"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Risk Level</label><select class="form-select" id="f-compl-risk"><option>Low</option><option>Moderate</option><option>High</option><option>Critical</option></select></div><div class="form-group"><label class="form-label">Review Frequency</label><select class="form-select" id="f-compl-freq"><option>Annual</option><option>Biennial</option><option>Quarterly</option></select></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addCompliance()" style="margin-top:4px">+ Add Compliance</button></div>'
+  +navBtns(6,8)+'</div></div>';
+}
+
+function buildStep8(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 8 — Standards & Certifications</div>'+dlBtn(8)+'</div><div class="panel-body">'
+  +uploadZone(8)+'<div id="standardList"></div>'
+  +(hasSuggestions(8)?listSuggestions('standards',sug[8]?sug[8].items:null,8):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Standard / Certification</div><div class="form-row"><div class="form-group"><label class="form-label">Name *</label><input class="form-input" id="f-std-name"></div><div class="form-group"><label class="form-label">Type</label><select class="form-select" id="f-std-type"><option>Regulatory Compliance</option><option>Industry Standard</option><option>Internal Standard</option><option>Certification Requirement</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Standard Body</label><input class="form-input" id="f-std-body"></div><div class="form-group"><label class="form-label">Renewal</label><input class="form-input" id="f-std-renewal"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Certification Scope</label><input class="form-input" id="f-std-scope" placeholder="e.g. All Operations"></div><div class="form-group"><label class="form-label">Issue Date</label><input class="form-input" id="f-std-issue" placeholder="YYYY-MM"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Expiry Date</label><input class="form-input" id="f-std-expiry" placeholder="YYYY-MM"></div><div class="form-group"><label class="form-label">Surveillance Audit Frequency</label><select class="form-select" id="f-std-audit"><option>Annual</option><option>Biennial</option><option>Triennial</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Certification Status</label><select class="form-select" id="f-std-certstatus"><option>Active</option><option>Under Renewal</option><option>Expired</option><option>Suspended</option></select></div><div class="form-group"><label class="form-label">Strategic Importance</label><select class="form-select" id="f-std-importance"><option>Operational</option><option>Important</option><option>Strategic</option></select></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addStandard()" style="margin-top:4px">+ Add Standard</button></div>'
+  +navBtns(7,9)+'</div></div>';
+}
+
+function buildStep9(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 9 — Products, Services & Projects</div>'+dlBtn(9)+'</div><div class="panel-body">'
+  +uploadZone(9)
+  +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Product Portfolio</div><div id="productList"></div>'
+  +(hasSuggestions(9)?listSuggestions('products',sug[9]?sug[9].items:null,9):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Product</div><div class="form-row"><div class="form-group"><label class="form-label">Name *</label><input class="form-input" id="f-prod-name"></div><div class="form-group"><label class="form-label">Category</label><input class="form-input" id="f-prod-cat2" placeholder="e.g. Core Engineering"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Type</label><input class="form-input" id="f-prod-type2" placeholder="e.g. Product or Service"></div><div class="form-group"><label class="form-label">Business Unit</label><input class="form-input" id="f-prod-bu" placeholder="e.g. Engineering"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Lifecycle</label><select class="form-select" id="f-prod-life"><option>Active</option><option>Growth</option><option>Mature</option><option>Sunset</option></select></div><div class="form-group"><label class="form-label">Launch Year</label><input class="form-input" id="f-prod-year" type="number"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Revenue Contribution %</label><input class="form-input" id="f-prod-rev" placeholder="e.g. 30"></div><div class="form-group"><label class="form-label">Regulatory Criticality</label><select class="form-select" id="f-prod-regcrit"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addProduct()" style="margin-top:4px">+ Add Product</button></div>'
+  +'<div class="sub-section-title">Service Portfolio</div><div id="serviceList"></div>'
+  +(hasSuggestions(9)?listSuggestions('services',sug[9]?sug[9].service_items:null,9):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Service</div><div class="form-row"><div class="form-group"><label class="form-label">Service Name *</label><input class="form-input" id="f-svc-name"></div><div class="form-group"><label class="form-label">Service Type</label><select class="form-select" id="f-svc-type"><option>Consulting</option><option>Managed Service</option><option>Support</option><option>Implementation</option><option>Training</option><option>Subscription</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Delivery Model</label><select class="form-select" id="f-svc-delivery"><option>Onsite</option><option>Remote</option><option>Hybrid</option><option>Self-Service</option></select></div><div class="form-group"><label class="form-label">Business Unit</label><input class="form-input" id="f-svc-bu"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Revenue Contribution %</label><input class="form-input" id="f-svc-rev"></div><div class="form-group"><label class="form-label">Critical Skills Dependence</label><select class="form-select" id="f-svc-crit"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addService()" style="margin-top:4px">+ Add Service</button></div>'
+  +'<div class="sub-section-title">Projects</div><div id="projectList"></div>'
+  +(hasSuggestions(9)?listSuggestions('projects',sug[9]?sug[9].items2:null,9):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Project</div><div class="form-row"><div class="form-group"><label class="form-label">Project Name *</label><input class="form-input" id="f-proj-name"></div><div class="form-group"><label class="form-label">Client</label><input class="form-input" id="f-proj-client"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Project Type</label><select class="form-select" id="f-proj-type"><option>Transformation</option><option>Compliance</option><option>Product Development</option><option>Cost Optimization</option><option>Customer Delivery</option><option>Technology Upgrade</option></select></div><div class="form-group"><label class="form-label">Status</label><select class="form-select" id="f-proj-status"><option>Active</option><option>Completed</option><option>Planned</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Budget (USD)</label><input class="form-input" id="f-proj-budget" type="number"></div><div class="form-group"><label class="form-label">Primary Skill</label><input class="form-input" id="f-proj-skill"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Start Year</label><input class="form-input" id="f-proj-start" type="number"></div><div class="form-group"><label class="form-label">End Year</label><input class="form-input" id="f-proj-end" type="number"></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addProject()" style="margin-top:4px">+ Add Project</button></div>'
+  +navBtns(8,10)+'</div></div>';
+}
+
+function buildStep10(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 10 — Technology Stack</div>'+dlBtn(10)+'</div><div class="panel-body">'
+  +uploadZone(10)+'<div id="techList"></div>'
+  +(hasSuggestions(10)?listSuggestions('techStack',sug[10]?sug[10].items:null,10):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Technology</div><div class="form-row"><div class="form-group"><label class="form-label">Tool Name *</label><input class="form-input" id="f-tech-name"></div><div class="form-group"><label class="form-label">Category</label><select class="form-select" id="f-tech-cat"><option>Core Business Apps</option><option>Dev & Engineering</option><option>Data & Analytics</option><option>Collaboration</option><option>AI & Automation</option><option>Security</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Status</label><select class="form-select" id="f-tech-status"><option>Current</option><option>Evaluating</option><option>Sunset / Phase-out</option></select></div><div class="form-group"><label class="form-label">Departments</label><input class="form-input" id="f-tech-depts"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Deployment Model</label><select class="form-select" id="f-tech-deploy"><option>Cloud</option><option>On-Premise</option><option>Hybrid</option><option>SaaS</option></select></div><div class="form-group"><label class="form-label">Adoption Level</label><select class="form-select" id="f-tech-adoption"><option>Low</option><option>Medium</option><option>High</option><option>Enterprise-wide</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Criticality Level</label><select class="form-select" id="f-tech-crit"><option>Low</option><option>Moderate</option><option>High</option><option>Mission Critical</option></select></div><div class="form-group"><label class="form-label">Est. User Count</label><input class="form-input" id="f-tech-users" type="number"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Automation Impact</label><select class="form-select" id="f-tech-auto"><option>None</option><option>Low</option><option>Medium</option><option>High</option></select></div><div class="form-group"><label class="form-label">Training Required?</label><select class="form-select" id="f-tech-training"><option>Yes</option><option>No</option></select></div></div>'
+  +'<div class="form-group"><label class="form-label">Skills Impacted</label><input class="form-input" id="f-tech-skills" placeholder="e.g. BIM, 3D Modeling"></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addTech()" style="margin-top:4px">+ Add</button></div>'
+  +navBtns(9,11)+'</div></div>';
+}
+
+function buildStep11(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 11 — Skill Ontology & Taxonomy</div>'+dlBtn(11)+'</div><div class="panel-body">'
+  +uploadZone(11)
+  +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Skill Domains</div><div id="skillDomainList"></div>'
+  +(hasSuggestions(11)?listSuggestions('skillDomains',sug[11]?sug[11].domain_items:null,11):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Skill Domain</div><div class="form-row"><div class="form-group"><label class="form-label">Domain Name *</label><input class="form-input" id="f-sd-name"></div><div class="form-group"><label class="form-label">Knowledge Areas (comma-sep)</label><input class="form-input" id="f-sd-areas" placeholder="e.g. Structural, Geotech, Materials"></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addSkillDomain()" style="margin-top:4px">+ Add Domain</button></div>'
+  +'<div class="sub-section-title">Skills Master</div><div id="skillsMasterList"></div>'
+  +(hasSuggestions(11)?listSuggestions('skillsMaster',sug[11]?sug[11].skill_items:null,11):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Skill</div><div class="form-row"><div class="form-group"><label class="form-label">Skill Name *</label><input class="form-input" id="f-sk-name"></div><div class="form-group"><label class="form-label">Skill Domain</label><input class="form-input" id="f-sk-domain" placeholder="e.g. Engineering & Construction"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Skill Type</label><select class="form-select" id="f-sk-type"><option>Technical</option><option>Functional</option><option>Behavioral</option><option>Digital</option><option>Compliance</option><option>Analytical</option></select></div><div class="form-group"><label class="form-label">Emerging?</label><select class="form-select" id="f-sk-emerging"><option>No</option><option>Yes</option></select></div></div>'
+  +'<div class="form-group"><label class="form-label">Regulatory?</label><select class="form-select" id="f-sk-regulatory"><option>No</option><option>Yes</option></select></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addSkillMaster()" style="margin-top:4px">+ Add Skill</button></div>'
+  +navBtns(10,12)+'</div></div>';
+}
+
+function buildStep12(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 12 — Competency Framework</div>'+dlBtn(12)+'</div><div class="panel-body">'
+  +uploadZone(12)
+  +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Competencies</div><div id="competenciesList"></div>'
+  +(hasSuggestions(12)?listSuggestions('competencies',sug[12]?sug[12].comps:null,12):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Competency</div><div class="form-row"><div class="form-group"><label class="form-label">Name *</label><input class="form-input" id="f-comp-name"></div><div class="form-group"><label class="form-label">Type</label><select class="form-select" id="f-comp-type"><option>Core / Enterprise</option><option>Leadership</option><option>Technical</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Category</label><input class="form-input" id="f-comp-cat" placeholder="e.g. Safety, Digital"></div><div class="form-group"><label class="form-label">Description</label><input class="form-input" id="f-comp-desc" placeholder="Brief description"></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addCompetency()" style="margin-top:4px">+ Add</button></div>'
+  +'<div class="sub-section-title">Proficiency Levels Configuration</div>'
+  +'<div class="form-group"><label class="form-label">Proficiency Scale</label><input class="form-input" id="f-prof-scale" placeholder="e.g. Level 1-5: Awareness to Expert" value="Level 1-5: Awareness, Foundation, Competent, Advanced, Expert"></div>'
+  +'<div class="form-group"><label class="form-label">Assessment Approach</label><input class="form-input" id="f-prof-approach" placeholder="e.g. Manager review + self-assessment" value="Manager review + self-assessment + evidence validation"></div>'
+  +navBtns(11,13)+'</div></div>';
+}
+
+function buildStep13(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 13 — Role Architecture</div>'+dlBtn(13)+'</div><div class="panel-body">'
+  +uploadZone(13)
+  +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Job Role Levels</div><div id="jobLevelList"></div>'
+  +(hasSuggestions(13)?listSuggestions('jobLevels',sug[13]?sug[13].level_items:null,13):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Job Level</div><div class="form-row"><div class="form-group"><label class="form-label">Level Code *</label><input class="form-input" id="f-jl-code" placeholder="e.g. L1"></div><div class="form-group"><label class="form-label">Level Name</label><input class="form-input" id="f-jl-name" placeholder="e.g. Entry"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Seniority Tier</label><select class="form-select" id="f-jl-tier"><option>Entry</option><option>Early Career</option><option>Mid-Level</option><option>Senior</option><option>Leadership</option><option>Executive</option></select></div><div class="form-group"><label class="form-label">IC or Manager</label><select class="form-select" id="f-jl-icmgr"><option>IC</option><option>Manager</option><option>Both</option></select></div></div>'
+  +'<div class="form-group"><label class="form-label">Min Years Experience</label><input class="form-input" id="f-jl-minyrs" type="number"></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addJobLevel()" style="margin-top:4px">+ Add Level</button></div>'
+  +'<div class="sub-section-title">Roles</div><div id="roleList"></div>'
+  +(hasSuggestions(13)?listSuggestions('roles',sug[13]?sug[13].roles:null,13):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Role</div><div class="form-row"><div class="form-group"><label class="form-label">Job Title *</label><input class="form-input" id="f-role-title"></div><div class="form-group"><label class="form-label">Family</label><select class="form-select" id="f-role-family"><option>Engineering</option><option>Technology</option><option>Operations</option><option>Corporate</option><option>Leadership</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Department</label><input class="form-input" id="f-role-dept"></div><div class="form-group"><label class="form-label">Level</label><select class="form-select" id="f-role-level"><option>L1 — Entry</option><option>L2 — Associate</option><option>L3 — Mid</option><option>L4 — Senior</option><option>L5 — Lead</option><option>L6 — Director</option><option>L7 — C-Suite</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Reports To</label><input class="form-input" id="f-role-reports" placeholder="e.g. Chief Engineer"></div><div class="form-group"><label class="form-label">Role Purpose</label><input class="form-input" id="f-role-purpose" placeholder="Brief description"></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addRole()" style="margin-top:4px">+ Add Role</button></div>'
+  +'<div class="sub-section-title">Role-Skill Requirements</div><div id="roleSkillReqList"></div>'
+  +(hasSuggestions(13)?listSuggestions('roleSkillReqs',sug[13]?sug[13].rsr_items:null,13):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Requirement</div><div class="form-row"><div class="form-group"><label class="form-label">Role Title</label><input class="form-input" id="f-rsr-role" placeholder="e.g. Senior Engineer"></div><div class="form-group"><label class="form-label">Skill</label><input class="form-input" id="f-rsr-skill" placeholder="e.g. Structural Analysis"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Required Level</label><select class="form-select" id="f-rsr-level"><option>Level 1</option><option>Level 2</option><option>Level 3</option><option>Level 4</option><option>Level 5</option></select></div><div class="form-group"><label class="form-label">Criticality</label><select class="form-select" id="f-rsr-crit"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addRoleSkillReq()" style="margin-top:4px">+ Add Requirement</button></div>'
+  +navBtns(12,14)+'</div></div>';
+}
+
+function buildStep14(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 14 — Employee Data Ingestion</div>'+dlBtn(14)+'</div><div class="panel-body">'
+  +uploadZone(14)
+  +'<div class="form-row"><div class="form-group"><label class="form-label">HRIS System</label><input class="form-input" id="f-emp-hris" placeholder="e.g. Workday">'+fieldSuggestion('f-emp-hris',14)+'</div><div class="form-group"><label class="form-label">Records to Import</label><input class="form-input" id="f-emp-count" type="number">'+fieldSuggestion('f-emp-count',14)+'</div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Data Quality</label><select class="form-select" id="f-emp-quality"><option value="">Select...</option><option>High — Clean HRIS data</option><option>Medium — Some gaps</option><option>Low — Significant cleanup</option></select>'+fieldSuggestion('f-emp-quality',14)+'</div><div class="form-group"><label class="form-label">Work Modes</label><input class="form-input" id="f-emp-workmodes" placeholder="e.g. On-site, Hybrid">'+fieldSuggestion('f-emp-workmodes',14)+'</div></div>'
+  +navBtns(13,15)+'</div></div>';
+}
+
+function buildStep15(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 15 — Performance & Workforce History</div>'+dlBtn(15)+'</div><div class="panel-body">'
+  +uploadZone(15)
+  +'<div class="section-desc">Select which historical datasets are available for trend analysis.</div>'
+  +'<div class="check-list"><label class="check-item"><input type="checkbox" id="f-hist-perf" checked> Employee Yearly Performance</label><label class="check-item"><input type="checkbox" id="f-hist-promo"> Promotion History</label><label class="check-item"><input type="checkbox" id="f-hist-mobility"> Internal Mobility</label><label class="check-item"><input type="checkbox" id="f-hist-exit"> Employee Exit Data</label><label class="check-item"><input type="checkbox" id="f-hist-workforce"> Workforce Planning</label><label class="check-item"><input type="checkbox" id="f-hist-leadership"> Leadership Pipeline & Succession</label><label class="check-item"><input type="checkbox" id="f-hist-retention"> Retention Risk Data</label></div>'
+  +'<div class="form-row" style="margin-top:10px"><div class="form-group"><label class="form-label">Years Available</label><select class="form-select" id="f-hist-years"><option>1 year</option><option>2 years</option><option>3 years</option><option>5+ years</option></select></div><div class="form-group"><label class="form-label">Data Source</label><input class="form-input" id="f-hist-source" placeholder="e.g. Workday exports"></div></div>'
+  +navBtns(14,16)+'</div></div>';
+}
+
+function buildStep16(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 16 — Learning & Training Setup</div>'+dlBtn(16)+'</div><div class="panel-body">'
+  +uploadZone(16)
+  +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Training Programs</div><div id="trainingList"></div>'
+  +(hasSuggestions(16)?listSuggestions('trainingPrograms',sug[16]?sug[16].items:null,16):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Program</div><div class="form-row"><div class="form-group"><label class="form-label">Program Name *</label><input class="form-input" id="f-trn-name"></div><div class="form-group"><label class="form-label">Category</label><select class="form-select" id="f-trn-cat"><option>Technical</option><option>Leadership</option><option>Compliance</option><option>Digital</option><option>Safety</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Mode</label><select class="form-select" id="f-trn-mode"><option>Instructor-Led</option><option>Virtual</option><option>E-Learning</option><option>Blended</option><option>Self-Paced</option></select></div><div class="form-group"><label class="form-label">Status</label><select class="form-select" id="f-trn-status"><option>Active</option><option>Planned</option><option>Retired</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Duration (hours)</label><input class="form-input" id="f-trn-hours" type="number"></div><div class="form-group"><label class="form-label">Certification Awarded?</label><select class="form-select" id="f-trn-cert"><option>No</option><option>Yes</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Target Audience</label><input class="form-input" id="f-trn-audience" placeholder="e.g. Engineers, L4+"></div><div class="form-group"><label class="form-label">Criticality</label><select class="form-select" id="f-trn-crit"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div></div>'
+  +'<div class="form-group"><label class="form-label">Cost per Participant (USD)</label><input class="form-input" id="f-trn-cost" type="number"></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addTraining()" style="margin-top:4px">+ Add</button></div>'
+  +'<div class="sub-section-title">Vendors</div><div id="vendorList"></div>'
+  +(hasSuggestions(16)?listSuggestions('vendors',sug[16]?sug[16].vendors:null,16):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Vendor</div><div class="form-row"><div class="form-group"><label class="form-label">Vendor Name *</label><input class="form-input" id="f-vendor-name"></div><div class="form-group"><label class="form-label">Specialization</label><input class="form-input" id="f-vendor-spec"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Vendor Type</label><select class="form-select" id="f-vendor-type"><option>External</option><option>Internal</option><option>University</option><option>Technology Platform</option></select></div><div class="form-group"><label class="form-label">Country</label><input class="form-input" id="f-vendor-country"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Coverage</label><select class="form-select" id="f-vendor-coverage"><option>Local</option><option>Regional</option><option>National</option><option>Global</option></select></div><div class="form-group"><label class="form-label">Quality Rating</label><input class="form-input" id="f-vendor-rating" placeholder="e.g. 4.5/5"></div></div>'
+  +'<div class="form-group"><label class="form-label">Preferred Vendor?</label><select class="form-select" id="f-vendor-pref"><option>No</option><option>Yes</option></select></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addVendor()" style="margin-top:4px">+ Add Vendor</button></div>'
+  +'<div class="sub-section-title">Learning Governance Calendar</div><div id="learningCalendarList"></div>'
+  +(hasSuggestions(16)?listSuggestions('learningCalendar',sug[16]?sug[16].calendar_items:null,16):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Calendar Event</div><div class="form-row"><div class="form-group"><label class="form-label">Event Name *</label><input class="form-input" id="f-lc-name"></div><div class="form-group"><label class="form-label">Event Type</label><select class="form-select" id="f-lc-type"><option>Governance Review</option><option>Program Launch</option><option>Audit</option><option>Nomination Window</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Quarter</label><select class="form-select" id="f-lc-quarter"><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option></select></div><div class="form-group"><label class="form-label">Governance Owner</label><input class="form-input" id="f-lc-owner"></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addLearningCalendar()" style="margin-top:4px">+ Add Event</button></div>'
+  +navBtns(15,17)+'</div></div>';
+}
+
+function buildStep17(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 17 — Assessments & Evidence</div>'+dlBtn(17)+'</div><div class="panel-body">'
+  +uploadZone(17)
+  +'<div class="check-list"><label class="check-item"><input type="checkbox" id="f-assess-skill" checked> Skill Self-Assessments</label><label class="check-item"><input type="checkbox" id="f-assess-mgr" checked> Manager Assessments</label><label class="check-item"><input type="checkbox" id="f-assess-comp"> Competency Assessments</label><label class="check-item"><input type="checkbox" id="f-assess-cert"> Certifications</label><label class="check-item"><input type="checkbox" id="f-assess-360"> 360-Degree Feedback</label><label class="check-item"><input type="checkbox" id="f-assess-knowledge"> Knowledge Tests</label><label class="check-item"><input type="checkbox" id="f-assess-psychometric"> Psychometric Assessments</label></div>'
+  +'<div class="form-row" style="margin-top:10px"><div class="form-group"><label class="form-label">Triangulation Method</label><select class="form-select" id="f-assess-tri"><option>Weighted Average</option><option>Manager Override</option><option>Evidence-First</option></select></div><div class="form-group"><label class="form-label">Assessment Frequency</label><select class="form-select" id="f-assess-freq"><option>Annual</option><option>Semi-Annual</option><option>Quarterly</option></select></div></div>'
+  +'<div class="sub-section-title">Data Triangulation Config</div><div id="triangulationConfigList"></div>'
+  +'<div class="dashed-box"><div class="dashed-title">Add Evidence Source</div><div class="form-row"><div class="form-group"><label class="form-label">Evidence Source *</label><input class="form-input" id="f-tri-source" placeholder="e.g. Manager Assessment"></div><div class="form-group"><label class="form-label">Weight %</label><input class="form-input" id="f-tri-weight" type="number" placeholder="e.g. 30"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Confidence Method</label><select class="form-select" id="f-tri-method"><option>Statistical</option><option>Rules-Based</option><option>AI-Driven</option></select></div><div class="form-group"><label class="form-label">Update Frequency</label><select class="form-select" id="f-tri-freq"><option>Real-time</option><option>Monthly</option><option>Quarterly</option><option>Annual</option></select></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addTriangulation()" style="margin-top:4px">+ Add Source</button></div>'
+  +navBtns(16,18)+'</div></div>';
+}
+
+function buildStep18(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 18 — Market & Regulatory Intelligence</div>'+dlBtn(18)+'</div><div class="panel-body">'
+  +uploadZone(18)
+  +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Market Skill Demand</div><div id="marketDemandList"></div>'
+  +(hasSuggestions(18)?listSuggestions('marketDemand',sug[18]?sug[18].demand_items:null,18):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Demand Entry</div><div class="form-row"><div class="form-group"><label class="form-label">Skill Name *</label><input class="form-input" id="f-md-skill"></div><div class="form-group"><label class="form-label">Demand Level</label><select class="form-select" id="f-md-level"><option>Low</option><option>Moderate</option><option>High</option><option>Very High</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Demand Growth YoY %</label><input class="form-input" id="f-md-growth" placeholder="e.g. 25"></div><div class="form-group"><label class="form-label">Supply Scarcity</label><select class="form-select" id="f-md-scarcity"><option>Low</option><option>Medium</option><option>High</option></select></div></div>'
+  +'<div class="form-group"><label class="form-label">Strategic Relevance</label><select class="form-select" id="f-md-relevance"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addMarketDemand()" style="margin-top:4px">+ Add</button></div>'
+  +'<div class="sub-section-title">Regulatory Skill Demand</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Regulatory Demand Level</label><select class="form-select" id="f-reg-level"><option value="">Select...</option><option>Low</option><option>Moderate</option><option>High</option></select></div><div class="form-group"><label class="form-label">Top Compliance Skills</label><input class="form-input" id="f-reg-skills" placeholder="e.g. ISO 45001, PDPA, BCA"></div></div>'
+  +'<div class="form-group"><label class="form-label">Compliance Training Hours (annual)</label><input class="form-input" id="f-reg-hours" type="number" placeholder="e.g. 24"></div>'
+  +navBtns(17,19)+'</div></div>';
+}
+
+function buildStep19(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 19 — Competitor & Supply Chain</div>'+dlBtn(19)+'</div><div class="panel-body">'
+  +uploadZone(19)
+  +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Competitor Benchmarks</div><div id="benchmarkList"></div>'
+  +(hasSuggestions(19)?listSuggestions('benchmarks',sug[19]?sug[19].bench_items:null,19):'')
+  +'<div class="dashed-box"><div class="dashed-title">Add Benchmark</div><div class="form-row"><div class="form-group"><label class="form-label">Category</label><select class="form-select" id="f-bm-cat"><option>Financial</option><option>Workforce</option><option>Skills</option><option>L&D</option><option>Operations</option><option>Quality</option><option>Customer</option><option>Digital</option><option>Compliance</option><option>ESG</option></select></div><div class="form-group"><label class="form-label">Parameter *</label><input class="form-input" id="f-bm-param" placeholder="e.g. Attrition Rate %"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Industry Benchmark</label><input class="form-input" id="f-bm-industry" placeholder="e.g. 12%"></div><div class="form-group"><label class="form-label">Company Value</label><input class="form-input" id="f-bm-company" placeholder="Your value"></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addBenchmark()" style="margin-top:4px">+ Add Benchmark</button></div>'
+  +'<div class="sub-section-title">Supply Chain Risk</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Supply Chain Risk Level</label><select class="form-select" id="f-sc-risk"><option value="">Select...</option><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div><div class="form-group"><label class="form-label">Critical Supplier Count</label><input class="form-input" id="f-sc-suppliers" type="number"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">On-Time Delivery %</label><input class="form-input" id="f-sc-otd" placeholder="e.g. 92"></div><div class="form-group"><label class="form-label">Dual-Source Coverage %</label><input class="form-input" id="f-sc-dual" placeholder="e.g. 65"></div></div>'
+  +navBtns(18,20)+'</div></div>';
+}
+
+function buildStep20(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 20 — Risk, ESG & Governance</div>'+dlBtn(20)+'</div><div class="panel-body">'
+  +uploadZone(20)
+  +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Always Recommended</div>'
+  +'<div class="check-list"><label class="check-item"><input type="checkbox" id="f-gov-bench" checked> Competitor Benchmarks</label><label class="check-item"><input type="checkbox" id="f-gov-context" checked> Organization Context Yearly</label><label class="check-item"><input type="checkbox" id="f-gov-perf" checked> Organization Performance Yearly</label><label class="check-item"><input type="checkbox" id="f-gov-audit" checked> Governance Audit & Log</label><label class="check-item"><input type="checkbox" id="f-gov-market" checked> Market & Regulatory Skill Demand</label></div>'
+  +'<div class="sub-section-title">For Larger / Listed Organizations</div>'
+  +'<div class="check-list"><label class="check-item"><input type="checkbox" id="f-gov-supply"> Supply Chain Risk</label><label class="check-item"><input type="checkbox" id="f-gov-dei"> DEI Statistics</label><label class="check-item"><input type="checkbox" id="f-gov-culture"> Culture Indicators</label><label class="check-item"><input type="checkbox" id="f-gov-env"> Environmental Impact</label><label class="check-item"><input type="checkbox" id="f-gov-csr"> CSR Programs</label></div>'
+  +'<div class="sub-section-title">Crisis & Disaster History</div><div id="crisisHistoryList"></div>'
+  +'<div class="dashed-box"><div class="dashed-title">Add Crisis Event</div><div class="form-row"><div class="form-group"><label class="form-label">Crisis Name *</label><input class="form-input" id="f-crisis-name"></div><div class="form-group"><label class="form-label">Category</label><select class="form-select" id="f-crisis-cat"><option>Natural Disaster</option><option>Health Emergency</option><option>Cyber Incident</option><option>Political</option><option>Infrastructure Failure</option><option>Supply Shock</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Severity Level</label><select class="form-select" id="f-crisis-severity"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div><div class="form-group"><label class="form-label">Year</label><input class="form-input" id="f-crisis-year" type="number"></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addCrisis()" style="margin-top:4px">+ Add Crisis</button></div>'
+  +navBtns(19,21)+'</div></div>';
+}
+
+function buildStep21(){
+  var h='<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 21 — Validation & Completion Dashboard</div></div><div class="panel-body" id="reviewBody"></div></div>';
+  h+='<div style="display:flex;justify-content:space-between;gap:10px;margin-top:10px"><button class="btn" onclick="goToStep(20)">&larr; Back</button><button class="btn btn-gold" onclick="confirmSetup()"><svg style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Confirm & Lock</button></div>';
+  return h;
+}
+
+var stepBuilders=[buildStep1,buildStep2,buildStep3,buildStep4,buildStep5,buildStep6,buildStep7,buildStep8,buildStep9,buildStep10,buildStep11,buildStep12,buildStep13,buildStep14,buildStep15,buildStep16,buildStep17,buildStep18,buildStep19,buildStep20,buildStep21];
+
+// ═════════════════════════════════════════════════════
+// RENDERING
+// ═════════════════════════════════════════════════════
+function renderStepper(){
+  var h='';STEPS.forEach(function(s,i){if(i>0)h+='<div class="step-conn'+(state.completed[i]?' done':'')+'"></div>';var cls=s.id===state.current?' active':'';if(state.completed[s.id])cls=' done';h+='<div class="step-item'+cls+'" onclick="goToStep('+s.id+')"><div class="step-num">'+(state.completed[s.id]?'<svg style="width:9px;height:9px;stroke:currentColor;fill:none;stroke-width:3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':s.id)+'</div><span class="step-label">'+s.title+'</span></div>'});
+  document.getElementById('stepper').innerHTML=h;
+}
+
+function renderSteps(){
+  var h='';STEPS.forEach(function(s,i){var vis=s.id===state.current?' visible':'';h+='<div class="step-panel'+vis+'" id="step'+s.id+'">'+stepBuilders[i]()+'</div>'});
+  document.getElementById('stepContainer').innerHTML=h;
+  var allLists=['locations','cultureElements','policies','compliance','standards','products','services','projects','techStack','skillDomains','skillsMaster','competencies','jobLevels','roles','roleSkillReqs','trainingPrograms','vendors','learningCalendar','triangulationConfig','marketDemand','benchmarks','crisisHistory'];
+  allLists.forEach(function(k){reRenderList(k)});
+  if(D.cultureElements.length)renderMaturityBars();
+}
+
+function goToStep(n){
+  state.current=n;renderStepper();
+  STEPS.forEach(function(s){var el=document.getElementById('step'+s.id);if(el){if(s.id===n)el.classList.add('visible');else el.classList.remove('visible')}});
+  if(n===21)buildReview();
+  if(n===6&&D.cultureElements.length)setTimeout(renderMaturityBars,100);
+  document.querySelector('.content-left').scrollTop=0;
+  updateAiForStep(n);updateProgress();
+}
+
+function updateProgress(){
+  var done=0;for(var k in state.completed)if(state.completed[k])done++;
+  var pct=done/TOTAL;
+  var ring=document.getElementById('progressRing');if(ring)ring.setAttribute('stroke-dashoffset',150.8*(1-pct));
+  document.getElementById('progressPct').textContent=Math.round(pct*100)+'%';
+  document.getElementById('progressPct').style.color=pct<.4?'var(--amber-lt)':pct<.7?'var(--purple-lt)':'var(--green-lt)';
+  document.getElementById('progressTitle').textContent='Onboarding: '+done+' of '+TOTAL+' screens';
+  document.getElementById('aiFooterBar').style.width=Math.round(pct*100)+'%';
+  document.getElementById('levelPill').textContent=done>=TOTAL?'Complete':'V2 ('+done+'/'+TOTAL+')';
+  document.getElementById('levelPill').className=done>=TOTAL?'tb-pill gold':'tb-pill purple';
+  renderStepper();
+}
+
+// ═════════════════════════════════════════════════════
+// MODEL SELECTION + SAVE + ADD
+// ═════════════════════════════════════════════════════
+function selectModel(group,el,val){selectedModels[group]=val;el.parentElement.querySelectorAll('.model-card').forEach(function(c){c.classList.remove('selected')});el.classList.add('selected');showToast(val+' selected');if(group==='hier')setTimeout(function(){addAiMsg("You selected <em>"+val+"</em>. This shapes how roles, reporting, and analytics are structured.")},300)}
+
+function saveStep(n){
+  if(n===1&&!gv('f-orgname')){showToast('Organization Name is required to proceed');return}
+  if(n===2&&!selectedModels.hier){showToast('Select at least a Hierarchy Model to proceed');return}
+  var skipped=[];
+  var checks=SKIP_CHECKS[n];
+  if(checks){checks.forEach(function(c){if(c.field){if(!gv(c.field))skipped.push(c)}else if(c.check&&c.check())skipped.push(c)})}
+  var pct=getStepCompletionPct(n);
+  state.completed[n]=true;updateProgress();
+  if(n===2)renderSteps();
+  goToStep(n<21?n+1:21);
+  var cg=CONGRATS[n];
+  if(cg){
+    var done=0;for(var dk in state.completed)if(state.completed[dk])done++;
+    var showCelebrate=pct>=90;
+    if(showCelebrate){
+      var sub='Screen '+n+' — '+pct+'% complete'+(done>=TOTAL?' — all done!':'');
+      setTimeout(function(){showCelebration(cg.msg,sub)},1800);
+      setTimeout(function(){
+        var unlockHtml='<em>This unlocks:</em><br>';
+        cg.unlocks.forEach(function(u){unlockHtml+='&bull; '+u+'<br>'});
+        if(pct===100)unlockHtml+='<br>All fields filled — <strong>maximum intelligence</strong> enabled.';
+        else unlockHtml+='<br>Nearly complete — a few optional fields left.';
+        addAiMsg(unlockHtml);
+      },2400);
+    } else {
+      setTimeout(function(){
+        var progHtml='<strong>Screen '+n+' saved</strong> — '+pct+'% of fields filled.<br><br><em>What you\'ve added unlocks:</em><br>';
+        cg.unlocks.slice(0,2).forEach(function(u){progHtml+='&bull; '+u+'<br>'});
+        if(cg.unlocks.length>2)progHtml+='&bull; ...and '+(cg.unlocks.length-2)+' more with additional data<br>';
+        progHtml+='<br>Fill more fields on Screen '+n+' to unlock <strong>full intelligence</strong>. <span style="color:var(--red-lt)">Go back anytime to complete them.</span>';
+        addAiMsg(progHtml);
+      },1800);
+      if(skipped.length>0){
+        setTimeout(function(){
+          var skipHtml="Here's what you're missing on Screen "+n+":<br><br>";
+          skipped.forEach(function(s){skipHtml+='<strong>'+s.label+':</strong> '+s.warn+'<br><br>'});
+          skipHtml+='<em style="color:var(--red-lt)">Go back anytime to fill these.</em>';
+          addAiMsg(skipHtml);
+        },2800);
+      }
+    }
+  } else {
+    showToast('Screen '+n+' saved');
+  }
+}
+
+function onFieldChange(step){
+  if(step===1){var sector=gv('f-sector'),country=gv('f-hqcountry');if(sector&&country){setTimeout(function(){addAiMsg("I see you're in <em>"+sector+"</em> headquartered in <em>"+country+"</em>. I'll calibrate all suggestions for this profile.");addAiContextCard({Industry:sector,Country:country,Size:gv('f-empband')||'Not set'})},500)}}
+}
+
+// ═════════════════════════════════════════════════════
+// STEP COMPLETION %
+// ═════════════════════════════════════════════════════
+function getStepCompletionPct(n){
+  var filled=0,total=0;
+  function chk(id){total++;if(gv(id))filled++}
+  function chkList(key,min){total+=min||1;filled+=Math.min(D[key].length,min||1)}
+  function chkCb(id){total++;var e=document.getElementById(id);if(e&&e.checked)filled++}
+
+  if(n===1){chk('f-orgname');chk('f-legaltype');chk('f-sector');chk('f-subsector');chk('f-hqcountry');chk('f-hqcity');chk('f-timezone');chk('f-fiscalmonth');chk('f-empband');chk('f-totalemps');chk('f-revenue');chk('f-founded');chk('f-website');chk('f-listed');chk('f-parent');chk('f-cin');chk('f-primarybiz');chk('f-otherbiz')}
+  if(n===2){total=3;if(selectedModels.hier)filled++;if(selectedModels.op)filled++;if(selectedModels.flow)filled++}
+  if(n===3){chk('f-mission');chk('f-vision');chk('f-values');chk('f-stratpriorities');chk('f-countries');chk('f-hqaddress')}
+  if(n===4){chk('f-ctx-market');chk('f-ctx-talent');chk('f-ctx-regulatory');chk('f-ctx-digital');chk('f-ctx-sustainability');chk('f-ctx-workforce');chk('f-perf-sales');chk('f-perf-empcount');chk('f-perf-training');chk('f-perf-gross');chk('f-perf-operating')}
+  if(n===5){chkList('locations',1)}
+  if(n===6){chkList('cultureElements',1)}
+  if(n===7){chkList('policies',1);chkList('compliance',1)}
+  if(n===8){chkList('standards',1)}
+  if(n===9){chkList('products',1);chkList('services',1);chkList('projects',1)}
+  if(n===10){chkList('techStack',1)}
+  if(n===11){chkList('skillDomains',1);chkList('skillsMaster',1)}
+  if(n===12){chkList('competencies',1);chk('f-prof-scale');chk('f-prof-approach')}
+  if(n===13){chkList('jobLevels',1);chkList('roles',1);chkList('roleSkillReqs',1)}
+  if(n===14){chk('f-emp-hris');chk('f-emp-count');chk('f-emp-quality');chk('f-emp-workmodes')}
+  if(n===15){chkCb('f-hist-perf');chkCb('f-hist-promo');chkCb('f-hist-mobility');chkCb('f-hist-exit');chkCb('f-hist-workforce');chkCb('f-hist-leadership');chkCb('f-hist-retention');chk('f-hist-years');chk('f-hist-source')}
+  if(n===16){chkList('trainingPrograms',1);chkList('vendors',1);chkList('learningCalendar',1)}
+  if(n===17){chkCb('f-assess-skill');chkCb('f-assess-mgr');chkCb('f-assess-comp');chkCb('f-assess-cert');chkCb('f-assess-360');chkCb('f-assess-knowledge');chkCb('f-assess-psychometric');chk('f-assess-tri');chk('f-assess-freq')}
+  if(n===18){chkList('marketDemand',1);chk('f-reg-level');chk('f-reg-skills');chk('f-reg-hours')}
+  if(n===19){chkList('benchmarks',1);chk('f-sc-risk');chk('f-sc-suppliers');chk('f-sc-otd');chk('f-sc-dual')}
+  if(n===20){chkCb('f-gov-bench');chkCb('f-gov-context');chkCb('f-gov-perf');chkCb('f-gov-audit');chkCb('f-gov-market');chkCb('f-gov-supply');chkCb('f-gov-dei');chkCb('f-gov-culture');chkCb('f-gov-env');chkCb('f-gov-csr');chkList('crisisHistory',0)}
+
+  return total===0?100:Math.round(filled/total*100);
+}
+
+// ═════════════════════════════════════════════════════
+// CELEBRATION ANIMATION
+// ═════════════════════════════════════════════════════
+function showCelebration(msg,sub){
+  var chat=document.getElementById('aiChat');
+  var card=document.createElement('div');
+  card.className='ai-celebrate';
+  var confettiHtml='<div class="ai-celebrate-confetti">';
+  var colors=['#A070E0','#3AB87A','#E0CC70','#3A8CC0','#F0A030','#E87060'];
+  for(var i=0;i<18;i++){
+    var dx=(Math.random()>0.5?1:-1)*(30+Math.random()*80)+'px';
+    var dy=(Math.random()>0.5?1:-1)*(20+Math.random()*50)+'px';
+    confettiHtml+='<span class="c-dot" style="width:'+(3+Math.random()*4)+'px;height:'+(3+Math.random()*4)+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';left:16px;top:22px;--dx:'+dx+';--dy:'+dy+';animation-delay:'+(Math.random()*0.3)+'s"></span>';
+  }
+  confettiHtml+='</div>';
+  card.innerHTML=confettiHtml+'<div class="ai-celebrate-header"><div class="ai-celebrate-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="ai-celebrate-title">'+msg+'</div>'+(sub?'<div class="ai-celebrate-sub">'+sub+'</div>':'')+'</div></div>';
+  chat.appendChild(card);chat.scrollTop=chat.scrollHeight;
+}
+
+// ═════════════════════════════════════════════════════
+// ADD FUNCTIONS
+// ═════════════════════════════════════════════════════
+function addLocation(){var n=gv('f-loc-name');if(!n){showToast('Enter name');return}D.locations.push({name:n,country:gv('f-loc-country'),city:gv('f-loc-city'),state:gv('f-loc-state'),region:gv('f-loc-region'),zone:gv('f-loc-zone'),type:gv('f-loc-type'),tier:gv('f-loc-tier'),status:gv('f-loc-status'),location_size_sqft:gv('f-loc-size'),opening_year:gv('f-loc-year'),manager_or_owner:gv('f-loc-manager'),parent_location:gv('f-loc-parent')});reRenderList('locations');['f-loc-name','f-loc-city','f-loc-state','f-loc-region','f-loc-size','f-loc-year','f-loc-manager','f-loc-parent'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast(n+' added')}
+function addCulture(){var n=gv('f-cult-name');if(!n){showToast('Enter name');return}D.cultureElements.push({dim:gv('f-cult-dim'),name:n,current:gv('f-cult-current'),target:gv('f-cult-target')});reRenderList('cultureElements');document.getElementById('f-cult-name').value='';renderMaturityBars();showToast(n+' added')}
+function addPolicy(){var n=gv('f-pol-name');if(!n){showToast('Enter name');return}D.policies.push({name:n,cat:gv('f-pol-cat'),mandatory:gv('f-pol-mandatory'),status:gv('f-pol-status'),effective_year:gv('f-pol-year'),applicable_to:gv('f-pol-applicable'),review_frequency:gv('f-pol-freq'),policy_description:gv('f-pol-desc')});reRenderList('policies');['f-pol-name','f-pol-year','f-pol-applicable','f-pol-desc'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast(n+' added')}
+function addCompliance(){var n=gv('f-compl-name');if(!n){showToast('Enter name');return}D.compliance.push({compliance_name:n,regulatory_body:gv('f-compl-body'),mandatory_status:gv('f-compl-mandatory'),applicable_to:gv('f-compl-applicable'),risk_level:gv('f-compl-risk'),review_frequency:gv('f-compl-freq')});reRenderList('compliance');['f-compl-name','f-compl-body','f-compl-applicable'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast(n+' added')}
+function addStandard(){var n=gv('f-std-name');if(!n){showToast('Enter name');return}D.standards.push({name:n,type:gv('f-std-type'),body:gv('f-std-body'),renewal:gv('f-std-renewal'),certification_scope:gv('f-std-scope'),issue_date:gv('f-std-issue'),expiry_date:gv('f-std-expiry'),surveillance_audit_frequency:gv('f-std-audit'),certification_status:gv('f-std-certstatus'),strategic_importance:gv('f-std-importance')});reRenderList('standards');['f-std-name','f-std-body','f-std-renewal','f-std-scope','f-std-issue','f-std-expiry'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast(n+' added')}
+function addProduct(){var n=gv('f-prod-name');if(!n)return;D.products.push({name:n,cat:gv('f-prod-cat2')||'Product',life:gv('f-prod-life'),product_category:gv('f-prod-cat2'),product_type:gv('f-prod-type2'),business_unit:gv('f-prod-bu'),launch_year:gv('f-prod-year'),revenue_contribution:gv('f-prod-rev'),regulatory_criticality:gv('f-prod-regcrit')});reRenderList('products');['f-prod-name','f-prod-cat2','f-prod-type2','f-prod-bu','f-prod-year','f-prod-rev'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''})}
+function addService(){var n=gv('f-svc-name');if(!n)return;D.services.push({service_name:n,service_type:gv('f-svc-type'),delivery_model:gv('f-svc-delivery'),business_unit:gv('f-svc-bu'),revenue_contribution:gv('f-svc-rev'),critical_skills_dependence:gv('f-svc-crit')});reRenderList('services');['f-svc-name','f-svc-bu','f-svc-rev'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''})}
+function addProject(){var n=gv('f-proj-name');if(!n)return;D.projects.push({name:n,client:gv('f-proj-client'),status:gv('f-proj-status'),project_type:gv('f-proj-type'),budget_USD:gv('f-proj-budget'),start_year:gv('f-proj-start'),end_year:gv('f-proj-end'),primary_skill:gv('f-proj-skill')});reRenderList('projects');['f-proj-name','f-proj-client','f-proj-budget','f-proj-skill','f-proj-start','f-proj-end'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''})}
+function addTech(){var n=gv('f-tech-name');if(!n)return;D.techStack.push({name:n,cat:gv('f-tech-cat'),status:gv('f-tech-status'),depts:gv('f-tech-depts'),deployment_model:gv('f-tech-deploy'),adoption_level:gv('f-tech-adoption'),criticality_level:gv('f-tech-crit'),estimated_user_count:gv('f-tech-users'),automation_impact:gv('f-tech-auto'),training_required_flag:gv('f-tech-training'),skills_impacted:gv('f-tech-skills')});reRenderList('techStack');['f-tech-name','f-tech-depts','f-tech-users','f-tech-skills'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''})}
+function addSkillDomain(){var n=gv('f-sd-name');if(!n){showToast('Enter domain name');return}D.skillDomains.push({domain_name:n,knowledge_areas:gv('f-sd-areas')});reRenderList('skillDomains');['f-sd-name','f-sd-areas'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast(n+' added')}
+function addSkillMaster(){var n=gv('f-sk-name');if(!n){showToast('Enter skill name');return}D.skillsMaster.push({skill_name:n,skill_domain:gv('f-sk-domain'),skill_type:gv('f-sk-type'),emerging_flag:gv('f-sk-emerging'),regulatory_flag:gv('f-sk-regulatory')});reRenderList('skillsMaster');['f-sk-name','f-sk-domain'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast(n+' added')}
+function addCompetency(){var n=gv('f-comp-name');if(!n)return;D.competencies.push({name:n,type:gv('f-comp-type'),category:gv('f-comp-cat'),description:gv('f-comp-desc')});reRenderList('competencies');['f-comp-name','f-comp-cat','f-comp-desc'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''})}
+function addJobLevel(){var n=gv('f-jl-code');if(!n){showToast('Enter level code');return}D.jobLevels.push({level_code:n,level_name:gv('f-jl-name'),seniority_tier:gv('f-jl-tier'),ic_or_manager:gv('f-jl-icmgr'),min_years_experience:gv('f-jl-minyrs')});reRenderList('jobLevels');['f-jl-code','f-jl-name','f-jl-minyrs'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast(n+' added')}
+function addRole(){var n=gv('f-role-title');if(!n){showToast('Enter title');return}D.roles.push({title:n,family:gv('f-role-family'),dept:gv('f-role-dept'),level:gv('f-role-level'),reports_to:gv('f-role-reports'),role_purpose:gv('f-role-purpose')});reRenderList('roles');['f-role-title','f-role-dept','f-role-reports','f-role-purpose'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast(n+' added')}
+function addRoleSkillReq(){var r=gv('f-rsr-role'),s=gv('f-rsr-skill');if(!r||!s){showToast('Enter role and skill');return}D.roleSkillReqs.push({role_title:r,skill:s,required_level:gv('f-rsr-level'),criticality:gv('f-rsr-crit')});reRenderList('roleSkillReqs');['f-rsr-role','f-rsr-skill'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast('Requirement added')}
+function addTraining(){var n=gv('f-trn-name');if(!n)return;D.trainingPrograms.push({name:n,cat:gv('f-trn-cat'),mode:gv('f-trn-mode'),status:gv('f-trn-status'),duration_hours:gv('f-trn-hours'),certification_awarded:gv('f-trn-cert'),target_audience:gv('f-trn-audience'),criticality:gv('f-trn-crit'),cost_per_participant_USD:gv('f-trn-cost')});reRenderList('trainingPrograms');['f-trn-name','f-trn-hours','f-trn-audience','f-trn-cost'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''})}
+function addVendor(){var n=gv('f-vendor-name');if(!n)return;D.vendors.push({name:n,spec:gv('f-vendor-spec'),vendor_type:gv('f-vendor-type'),country:gv('f-vendor-country'),coverage:gv('f-vendor-coverage'),quality_rating:gv('f-vendor-rating'),preferred_vendor:gv('f-vendor-pref')});reRenderList('vendors');['f-vendor-name','f-vendor-spec','f-vendor-country','f-vendor-rating'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''})}
+function addLearningCalendar(){var n=gv('f-lc-name');if(!n)return;D.learningCalendar.push({event_name:n,event_type:gv('f-lc-type'),quarter:gv('f-lc-quarter'),governance_owner:gv('f-lc-owner')});reRenderList('learningCalendar');['f-lc-name','f-lc-owner'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''})}
+function addTriangulation(){var n=gv('f-tri-source');if(!n)return;D.triangulationConfig.push({evidence_source:n,weight:gv('f-tri-weight'),confidence_method:gv('f-tri-method'),update_frequency:gv('f-tri-freq')});reRenderList('triangulationConfig');['f-tri-source','f-tri-weight'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''})}
+function addMarketDemand(){var n=gv('f-md-skill');if(!n)return;D.marketDemand.push({skill_name:n,demand_level:gv('f-md-level'),demand_growth_YoY:gv('f-md-growth'),supply_scarcity:gv('f-md-scarcity'),strategic_relevance:gv('f-md-relevance')});reRenderList('marketDemand');['f-md-skill','f-md-growth'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''})}
+function addBenchmark(){var n=gv('f-bm-param');if(!n)return;D.benchmarks.push({benchmark_category:gv('f-bm-cat'),parameter:n,industry_benchmark:gv('f-bm-industry'),company_value:gv('f-bm-company')});reRenderList('benchmarks');['f-bm-param','f-bm-industry','f-bm-company'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''})}
+function addCrisis(){var n=gv('f-crisis-name');if(!n)return;D.crisisHistory.push({crisis_name:n,crisis_category:gv('f-crisis-cat'),severity_level:gv('f-crisis-severity'),year:gv('f-crisis-year')});reRenderList('crisisHistory');['f-crisis-name','f-crisis-year'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''})}
+
+function renderList(elId,arr,fmt,key){
+  var h='';arr.forEach(function(item,i){h+='<div class="added-chip" style="animation:staggerIn .25s ease both;animation-delay:'+(i*40)+'ms">'+fmt(item)+'<span class="remove-chip" onclick="removeItem(\''+key+'\','+i+')">&times;</span></div>'});
+  var el=document.getElementById(elId);if(el)el.innerHTML=h?'<div class="added-items">'+h+'</div>':'';
+}
+function reRenderList(key){
+  var listMap={
+    policies:'policList',standards:'standardList',products:'productList',services:'serviceList',
+    techStack:'techList',cultureElements:'cultureElementList',trainingPrograms:'trainingList',
+    roles:'roleList',competencies:'competenciesList',locations:'locationList',projects:'projectList',
+    vendors:'vendorList',compliance:'complianceList',skillDomains:'skillDomainList',
+    skillsMaster:'skillsMasterList',jobLevels:'jobLevelList',roleSkillReqs:'roleSkillReqList',
+    learningCalendar:'learningCalendarList',triangulationConfig:'triangulationConfigList',
+    marketDemand:'marketDemandList',benchmarks:'benchmarkList',crisisHistory:'crisisHistoryList'
+  };
+  var fmtMap={
+    policies:function(p){return p.name+' · '+p.cat+(p.mandatory==='Yes'?' · Mandatory':'')},
+    compliance:function(c){return c.compliance_name+' · '+c.regulatory_body+' · '+c.risk_level},
+    standards:function(s){return s.name+' · '+s.type+(s.certification_status?' · '+s.certification_status:'')},
+    products:function(p){return p.name+' · '+(p.product_category||p.cat||'Product')+' · '+p.life},
+    services:function(s){return s.service_name+' · '+s.service_type+' · '+s.delivery_model},
+    techStack:function(t){return t.name+' · '+t.cat+' · '+t.status},
+    cultureElements:function(c){return c.name+' ('+c.dim+') · '+c.current+' \u2192 '+c.target},
+    trainingPrograms:function(t){return t.name+' · '+t.cat+(t.duration_hours?' · '+t.duration_hours+'h':'')},
+    roles:function(r){return r.title+' · '+r.family+' · '+r.level},
+    competencies:function(c){return c.name+' · '+c.type+(c.category?' · '+c.category:'')},
+    locations:function(l){return l.name+' — '+l.country+' · '+l.type},
+    projects:function(p){return p.name+' · '+(p.client||p.project_type||'')},
+    vendors:function(v){return v.name+' · '+(v.spec||'')+(v.vendor_type?' · '+v.vendor_type:'')},
+    skillDomains:function(d){return d.domain_name+' — '+d.knowledge_areas},
+    skillsMaster:function(s){return s.skill_name+' · '+s.skill_type+(s.emerging_flag==='Yes'?' · Emerging':'')},
+    jobLevels:function(l){return l.level_code+' — '+l.level_name+' · '+l.seniority_tier},
+    roleSkillReqs:function(r){return r.role_title+' \u2192 '+r.skill+' ('+r.required_level+')'},
+    learningCalendar:function(e){return e.event_name+' · '+e.quarter+' · '+e.governance_owner},
+    triangulationConfig:function(t){return t.evidence_source+' · '+t.weight+'% · '+t.confidence_method},
+    marketDemand:function(m){return m.skill_name+' · '+m.demand_level+' · Scarcity: '+m.supply_scarcity},
+    benchmarks:function(b){return b.benchmark_category+': '+b.parameter+' — Industry: '+b.industry_benchmark},
+    crisisHistory:function(c){return c.crisis_name+' · '+c.crisis_category+' · '+c.severity_level+(c.year?' · '+c.year:'')}
+  };
+  if(listMap[key]&&fmtMap[key])renderList(listMap[key],D[key],fmtMap[key],key);
+}
+function removeItem(key,idx){D[key].splice(idx,1);reRenderList(key)}
+
+function renderMaturityBars(){
+  var el=document.getElementById('maturityBars');if(!el||!D.cultureElements.length)return;
+  var levels={Emerging:1,Developing:2,Established:3,Embedded:4,Exemplary:5};
+  var colors={1:'var(--red-lt)',2:'var(--amber-lt)',3:'var(--blue-lt)',4:'var(--green-lt)',5:'var(--gold)'};
+  var h='';D.cultureElements.forEach(function(c){var curr=levels[c.current]||1,tgt=levels[c.target]||1;h+='<div class="maturity-bar-wrap"><div class="maturity-label"><span>'+c.name+'</span><span>'+c.current+' \u2192 '+c.target+'</span></div><div class="maturity-track"><div class="maturity-fill" style="width:'+(curr/5*100)+'%;background:'+(colors[curr]||'var(--blue-lt)')+'"></div><div class="maturity-target" style="left:'+(tgt/5*100)+'%"></div></div></div>'});
+  el.innerHTML=h;
+}
+
+// ═════════════════════════════════════════════════════
+// REVIEW + CONFIRM
+// ═════════════════════════════════════════════════════
+function buildReview(){
+  var h='';
+  var labels=['Company Basics','Org Model','Strategic Foundation','Org Context & Performance',
+    'Locations ('+D.locations.length+')','Culture ('+D.cultureElements.length+')',
+    'Policies ('+D.policies.length+') & Compliance ('+D.compliance.length+')',
+    'Standards ('+D.standards.length+')',
+    'Products ('+D.products.length+'), Services ('+D.services.length+') & Projects ('+D.projects.length+')',
+    'Tech Stack ('+D.techStack.length+')',
+    'Skill Domains ('+D.skillDomains.length+') & Skills ('+D.skillsMaster.length+')',
+    'Competencies ('+D.competencies.length+')',
+    'Levels ('+D.jobLevels.length+'), Roles ('+D.roles.length+') & Skill Reqs ('+D.roleSkillReqs.length+')',
+    'Employee Data','Performance History',
+    'Training ('+D.trainingPrograms.length+'), Vendors ('+D.vendors.length+') & Calendar ('+D.learningCalendar.length+')',
+    'Assessments & Triangulation ('+D.triangulationConfig.length+')',
+    'Market Demand ('+D.marketDemand.length+')',
+    'Benchmarks ('+D.benchmarks.length+')',
+    'Risk, ESG & Crises ('+D.crisisHistory.length+')'];
+  for(var i=1;i<=20;i++){var done=state.completed[i];h+='<div class="rv-section" onclick="goToStep('+i+')" style="cursor:pointer"><div class="rv-title"><div class="rv-check '+(done?'done':'pending')+'"><svg viewBox="0 0 24 24">'+(done?'<polyline points="20 6 9 17 4 12"/>':'<line x1="5" y1="12" x2="19" y2="12"/>')+'</svg></div>Screen '+i+': '+labels[i-1]+'</div></div>'}
+  var done2=0;for(var j=1;j<=TOTAL;j++)if(state.completed[j])done2++;
+  var totalItems=0;for(var dk in D)totalItems+=D[dk].length;
+  h+='<div style="margin-top:14px;padding:12px 16px;background:linear-gradient(135deg,var(--ink-card) 0%,rgba(106,58,154,0.06) 100%);border:1px solid rgba(160,112,224,0.2);border-radius:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div style="font-family:\'Syne\',sans-serif;font-size:12px;font-weight:700;color:var(--paper)">Summary</div><div style="font-size:10px;color:var(--paper-mid)">'+done2+'/'+TOTAL+' screens</div><div style="font-size:10px;color:var(--paper-mid)">'+totalItems+' items</div><div style="font-size:10px;color:'+(done2>=TOTAL?'var(--green-lt)':'var(--amber-lt)')+'">Status: '+(done2>=TOTAL?'Ready':'Incomplete')+'</div></div>';
+  document.getElementById('reviewBody').innerHTML=h;
+}
+
+function confirmSetup(){
+  var done=0;for(var i=1;i<=TOTAL;i++)if(state.completed[i])done++;
+  if(done<TOTAL){showToast('Complete all 20 screens first');return}
+  document.getElementById('successBanner').classList.add('show');
+  document.getElementById('stepper').style.display='none';
+  document.getElementById('progressMeter').style.display='none';
+  for(var j=1;j<=21;j++){var el=document.getElementById('step'+j);if(el)el.classList.remove('visible')}
+  updateProgress();addAiMsg("Onboarding complete! All 20 screens captured. The SkillForge AI pipeline is now fully calibrated for <em>"+(gv('f-orgname')||'your organization')+"</em>.");showToast('Onboarding locked — SkillForge ready');
+}
+
+function resetDemo(){
+  state={current:1,completed:{},visited:{},masterUploaded:false};for(var i=1;i<=TOTAL;i++)state.completed[i]=false;
+  D={locations:[],policies:[],compliance:[],standards:[],products:[],services:[],projects:[],techStack:[],skillDomains:[],skillsMaster:[],competencies:[],jobLevels:[],roles:[],roleSkillReqs:[],cultureElements:[],trainingPrograms:[],vendors:[],learningCalendar:[],triangulationConfig:[],marketDemand:[],benchmarks:[],crisisHistory:[]};
+  selectedModels={hier:'',op:'',flow:''};appliedSuggestions={};
+  document.getElementById('successBanner').classList.remove('show');
+  document.getElementById('stepper').style.display='flex';document.getElementById('progressMeter').style.display='flex';
+  renderSteps();updateProgress();goToStep(1);showToast('Demo reset');
+}
+
+// INIT
+renderSteps();renderStepper();updateProgress();updateAiForStep(1);
+</script>
+</body>
+</html>
