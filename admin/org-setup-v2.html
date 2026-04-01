@@ -1719,7 +1719,7 @@ var AI_QUESTIONS = [
     desc:'Enter the job title for this role profile. AI will use this to suggest relevant attributes for the remaining fields.',
     type:'input', placeholder:'e.g. Senior Structural Engineer',
     suggestions:function(){
-      var industry = (state.data.identity && state.data.identity['f-industry']) || '';
+      var industry = ((state.data&&state.data.identity) && (state.data&&state.data.identity)['f-industry']) || '';
       if(industry.indexOf('Infrastructure')>-1||industry.indexOf('Construction')>-1) return ['Senior Structural Engineer','BIM Coordinator','Project Manager','Safety Manager','Geotechnical Engineer','Quantity Surveyor','Site Supervisor','Sustainability Consultant'];
       if(industry.indexOf('Technology')>-1||industry.indexOf('Software')>-1) return ['Software Engineer','Product Manager','DevOps Engineer','Data Scientist','UX Designer','QA Lead','Cloud Architect','Engineering Manager'];
       if(industry.indexOf('Financial')>-1) return ['Risk Analyst','Compliance Officer','Portfolio Manager','Financial Advisor','Credit Analyst','Treasury Manager','Audit Manager','Data Analyst'];
@@ -1820,7 +1820,7 @@ var AI_QUESTIONS = [
     desc:'Minimum qualifications for this role. AI suggests based on the role title, family, and industry standards.',
     type:'input', placeholder:'e.g. BE/BTech Civil, PE certification',
     suggestions:function(){
-      var t=(aiAnswers().title||'').toLowerCase(), industry=(state.data.identity&&state.data.identity['f-industry'])||'';
+      var t=(aiAnswers().title||'').toLowerCase(), industry=((state.data&&state.data.identity)&&(state.data&&state.data.identity)['f-industry'])||'';
       if(t.indexOf('structural')>-1||t.indexOf('civil')>-1) return ['BE/BTech Civil Engineering, PE certification','MSc Structural Engineering, Chartered Engineer (CEng)','BSc Civil Engineering, Professional Engineer (PE)'];
       if(t.indexOf('bim')>-1) return ['Autodesk Revit Professional certification','BSc Architecture/Engineering + BIM Specialist certification','Diploma in CAD/BIM, Autodesk Certified Professional'];
       if(t.indexOf('project manager')>-1) return ['PMP certification, BSc Engineering','PRINCE2 Practitioner + BSc/BEng','MBA + PMP, 8+ years project delivery experience'];
@@ -1915,7 +1915,7 @@ function renderAiCountScreen(){
     launchMindMap();
   };
 
-  var id=state.data.identity||{};
+  var id=(state.data&&state.data.identity)||{};
   var company=id['f-company']||'your organisation';
   var industry=id['f-industry']||'';
   var buCount=(D.bus||[]).length;
@@ -1951,7 +1951,7 @@ function renderAiCountScreen(){
 }
 
 function generateBulkTitles(count){
-  var industry=(state.data.identity&&state.data.identity['f-industry'])||'';
+  var industry=((state.data&&state.data.identity)&&(state.data&&state.data.identity)['f-industry'])||'';
   var pools={
     'Infrastructure & Construction':['Senior Structural Engineer','BIM Coordinator','Project Manager','Safety Manager','Geotechnical Engineer','Quantity Surveyor','Site Supervisor','Sustainability Consultant','Civil Engineer','L&D Manager','Cloud Architect','Quality Manager','Procurement Manager','Contract Manager','HSE Officer','Project Director','CAD Technician','Environmental Engineer','Construction Manager','Finance Controller','HR Business Partner','Legal Counsel','IT Manager','Data Analyst','Risk Manager','Business Development Manager','Regional Director','Operations Manager','Design Engineer','Chief Engineer'],
     'Technology & Software':['Software Engineer','Product Manager','DevOps Engineer','Data Scientist','UX Designer','QA Lead','Cloud Architect','Engineering Manager','Frontend Developer','Backend Developer','Site Reliability Engineer','Security Engineer','Technical Writer','Scrum Master','VP Engineering','CTO','Data Engineer','ML Engineer','Platform Engineer','Solutions Architect','IT Support Lead','Program Manager','Business Analyst','Release Manager','UX Researcher','Mobile Developer','Database Administrator','Network Engineer','Chief Information Officer','Product Designer'],
@@ -2004,7 +2004,7 @@ function renderAiTitlesScreen(){
   var card=document.getElementById('aiQuestionCard');
   card.className='ai-question-card';
   document.querySelector('.ai-popup-body').classList.remove('mm-mode');
-  var id=state.data.identity||{};
+  var id=(state.data&&state.data.identity)||{};
   var company=id['f-company']||'your organisation';
   var industry=id['f-industry']||'';
   var buCount=(D.bus||[]).length;
