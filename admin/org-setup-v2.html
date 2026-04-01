@@ -429,6 +429,72 @@ a.sidebar-brand:hover .brand-hex{opacity:.75;transition:opacity .15s}
 .ai-typing span:nth-child(2){animation-delay:.2s}
 .ai-typing span:nth-child(3){animation-delay:.4s}
 @keyframes typingDot{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
+
+/* ═══════════════════════════════════════════════════ */
+/* FIELD-BY-FIELD POPUP SYSTEM                        */
+/* ═══════════════════════════════════════════════════ */
+.field-popup-overlay{position:fixed;inset:0;background:rgba(4,8,14,0.94);backdrop-filter:blur(24px);z-index:11000;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .35s ease}
+.field-popup-overlay.fp-open{display:flex;opacity:1}
+.field-popup{width:100%;max-width:720px;display:flex;flex-direction:column;max-height:90vh;position:relative}
+.fp-header{display:flex;align-items:center;padding:18px 0;gap:12px;border-bottom:1px solid var(--ink-border);flex-shrink:0}
+.fp-header-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.fp-header-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--gold) 0%,#E0CC70 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fp-header-icon svg{width:16px;height:16px;stroke:var(--ink);fill:none;stroke-width:2}
+.fp-header-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--paper);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fp-header-counter{font-size:11px;color:var(--ink-soft);font-family:'DM Mono',monospace;white-space:nowrap}
+.fp-close{width:34px;height:34px;border-radius:7px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.fp-close:hover{background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:var(--red-lt)}
+.fp-close svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.fp-progress{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;flex-shrink:0;margin:12px 0}
+.fp-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-lt));border-radius:2px;transition:width .5s ease}
+.fp-body{flex:1;overflow-y:auto;padding:24px 0;display:flex;flex-direction:column;gap:18px;min-height:0}
+.fp-body::-webkit-scrollbar{width:3px}
+.fp-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:2px}
+.fp-field-area{animation:fadeUp .35s ease both}
+.fp-field-label{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--paper);line-height:1.35;margin-bottom:4px}
+.fp-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-left:8px;vertical-align:middle}
+.fp-badge.required{background:rgba(192,57,43,0.12);color:var(--red-lt);border:1px solid rgba(192,57,43,0.25)}
+.fp-badge.recommended{background:rgba(200,168,75,0.1);color:var(--gold);border:1px solid rgba(200,168,75,0.2)}
+.fp-input,.fp-select,.fp-textarea{width:100%;padding:12px 16px;border-radius:8px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;margin-top:8px}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,168,75,0.1)}
+.fp-input::placeholder,.fp-textarea::placeholder{color:var(--ink-soft)}
+.fp-select option{background:var(--ink-raised);color:var(--paper)}
+.fp-textarea{resize:vertical;min-height:80px}
+.fp-checkbox-wrap{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:8px;border:1px solid var(--ink-border);background:var(--ink-raised);cursor:pointer;margin-top:8px;transition:border-color .2s}
+.fp-checkbox-wrap:hover{border-color:var(--gold)}
+.fp-checkbox-wrap input[type=checkbox]{accent-color:var(--gold);width:16px;height:16px}
+.fp-checkbox-wrap span{font-size:14px;color:var(--paper)}
+.fp-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-top:8px}
+.fp-card-option{padding:12px 14px;border-radius:8px;border:1px solid var(--ink-border);background:var(--ink-raised);cursor:pointer;transition:all .2s}
+.fp-card-option:hover{border-color:var(--gold);transform:translateY(-1px)}
+.fp-card-option.fp-selected{border-color:var(--gold);background:var(--gold-dim)}
+.fp-card-option h4{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--paper);margin-bottom:2px}
+.fp-card-option p{font-size:9px;color:var(--ink-soft);line-height:1.4}
+.fp-card-option.fp-selected h4{color:var(--gold)}
+.fp-ai-area{padding:14px 16px;border-radius:10px;background:linear-gradient(135deg,rgba(106,58,154,0.06) 0%,rgba(200,168,75,0.04) 100%);border:1px solid rgba(160,112,224,0.15)}
+.fp-ai-msg{font-size:12px;color:var(--paper-mid);line-height:1.6;margin-bottom:8px}
+.fp-ai-msg svg{width:12px;height:12px;stroke:var(--purple-lt);fill:none;stroke-width:2;vertical-align:middle;margin-right:4px}
+.fp-ai-rule{font-size:10px;color:var(--ink-soft);line-height:1.5;padding-top:6px;border-top:1px solid rgba(255,255,255,0.04)}
+.fp-ai-rule strong{color:var(--gold);font-weight:600}
+.fp-suggestion-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.fp-chip{padding:7px 14px;border-radius:7px;font-size:12px;color:var(--paper-mid);border:1px solid var(--ink-border);background:var(--ink-raised);cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.fp-chip:hover{border-color:var(--gold);color:var(--paper);background:var(--gold-dim)}
+.fp-chip.fp-applied{border-color:rgba(58,184,122,0.3);color:var(--green-lt);background:var(--green-dim);pointer-events:none;opacity:.7}
+.fp-chip svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.fp-list-section{padding:16px;border-radius:10px;border:1px solid var(--ink-border);background:var(--ink-card);margin-top:4px}
+.fp-list-section-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--paper);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.fp-list-mini-form{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fp-list-mini-form .fp-mini-group{display:flex;flex-direction:column;gap:2px}
+.fp-list-mini-form .fp-mini-label{font-size:8px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em}
+.fp-list-mini-form .fp-mini-input,.fp-list-mini-form .fp-mini-select{width:100%;padding:6px 10px;border-radius:5px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper);font-family:'DM Sans',sans-serif;font-size:11px;outline:none}
+.fp-list-mini-form .fp-mini-input:focus,.fp-list-mini-form .fp-mini-select:focus{border-color:var(--gold)}
+.fp-list-added{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.fp-footer{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-top:1px solid var(--ink-border);flex-shrink:0}
+.fp-back-btn{padding:8px 16px;border-radius:7px;border:1px solid var(--ink-border);background:transparent;color:var(--ink-soft);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s}
+.fp-back-btn:hover{color:var(--paper-mid);border-color:rgba(255,255,255,0.15)}
+.fp-next-btn{padding:10px 24px;border-radius:8px;border:none;background:var(--gold);color:var(--ink);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .15s;letter-spacing:.03em}
+.fp-next-btn:hover{opacity:.88}
+.fp-next-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5}
 </style>
 </head>
 <body>
@@ -551,6 +617,26 @@ a.sidebar-brand:hover .brand-hex{opacity:.75;transition:opacity .15s}
         <button class="ai-skip" id="aiSkipBtn" onclick="aiSkip()">Skip this question</button>
       </div>
       <button class="ai-next-btn" id="aiNextBtn" onclick="aiNext()">Next <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<!-- FIELD-BY-FIELD POPUP -->
+<div class="field-popup-overlay" id="fieldPopup">
+  <div class="field-popup">
+    <div class="fp-header">
+      <div class="fp-header-left">
+        <div class="fp-header-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <div class="fp-header-title" id="fpHeaderTitle">Screen 1</div>
+        <div class="fp-header-counter" id="fpHeaderCounter">1 / 5</div>
+      </div>
+      <button class="fp-close" onclick="closeFieldPopup()" title="Close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="fp-progress"><div class="fp-progress-fill" id="fpProgressFill" style="width:0%"></div></div>
+    <div class="fp-body" id="fpBody"></div>
+    <div class="fp-footer">
+      <button class="fp-back-btn" id="fpBackBtn" onclick="fpBack()">&larr; Back</button>
+      <button class="fp-next-btn" id="fpNextBtn" onclick="fpNext()">Next <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
     </div>
   </div>
 </div>
@@ -2292,6 +2378,607 @@ function confirmAllRoles(){
 }
 
 
+
+// ═══════════════════════════════════════════════════
+// FIELD-BY-FIELD POPUP SYSTEM
+// ═══════════════════════════════════════════════════
+var SCREEN_FIELDS = {
+  1:[
+    {id:'f-orgname',label:'Organization Name',type:'input',placeholder:'Registered business name',required:true,aiMsg:'Your organization name anchors all AI models — every recommendation, benchmark, and report is scoped to this entity.',aiRule:'Feeds into identity resolution across SIP pipelines and SkillForge entity tagging.'},
+    {id:'f-legaltype',label:'Legal Entity Type',type:'select',options:['Private Limited','Public Limited','LLC','PLC','Government','Non-Profit'],aiMsg:'Legal structure affects compliance requirements, governance frameworks, and regulatory reporting obligations.',aiRule:'Drives compliance rule selection and governance template matching in SIP.'},
+    {id:'f-parent',label:'Parent Company',type:'input',placeholder:'Parent company name (if any)',aiMsg:'Parent-subsidiary relationships enable group-level analytics and shared capability planning.',aiRule:'Enables hierarchical roll-up analytics in SkillForge dashboards.'},
+    {id:'f-cin',label:'CIN / Registration No.',type:'input',placeholder:'Corporate ID number',aiMsg:'Unique registration number helps with regulatory filing and audit trail compliance.',aiRule:'Used for compliance document generation and regulatory cross-reference.'},
+    {id:'f-sector',label:'Industry Sector',type:'select',options:['Infrastructure & Construction','Technology & Software','Financial Services','Healthcare & Life Sciences','Manufacturing','Energy & Utilities','Retail & E-commerce','Professional Services','Food & Beverage','Education','Logistics & Transportation'],recommended:true,aiMsg:'Industry sector is the single most impactful field — it determines benchmarks, compliance rules, skill taxonomies, and all AI recommendations.',aiRule:'Primary classifier for the entire SIP intelligence engine and SkillForge skill taxonomy.'},
+    {id:'f-subsector',label:'Sub-Sector',type:'input',placeholder:'e.g. Civil Engineering',aiMsg:'Sub-sector refines recommendations to your specific niche within the broader industry.',aiRule:'Narrows skill ontology and benchmark datasets for higher accuracy.'},
+    {id:'f-primarybiz',label:'Primary Business',type:'textarea',placeholder:'Core business description',aiMsg:'A clear business description helps AI understand your value chain and capability needs.',aiRule:'Used by SkillForge to map business activities to skill domains.'},
+    {id:'f-otherbiz',label:'Other Business Units & Locations',type:'textarea',placeholder:'Other business units, subsidiaries, and their locations',aiMsg:'Additional business units expand the scope of workforce planning and skill analytics.',aiRule:'Enables multi-BU analytics and cross-unit capability comparison.'},
+    {id:'f-hqcountry',label:'HQ Country',type:'select',options:['Singapore','India','United States','United Kingdom','United Arab Emirates','Malaysia','Australia','Germany'],recommended:true,aiMsg:'HQ country drives labor law compliance, holiday calendars, and regional regulatory frameworks.',aiRule:'Activates country-specific compliance engine and regulatory skill requirements.'},
+    {id:'f-hqcity',label:'HQ City',type:'input',placeholder:'City',aiMsg:'City-level data enables local talent market analysis and cost-of-living adjustments.',aiRule:'Feeds location-based workforce analytics and regional benchmarking.'},
+    {id:'f-timezone',label:'Primary Timezone',type:'select',options:['Asia/Singapore (SGT +8)','Asia/Kolkata (IST +5:30)','Asia/Dubai (GST +4)','Europe/London (GMT)','America/New_York (EST)'],aiMsg:'Timezone aligns all reporting cycles, scheduling, and cross-location coordination.',aiRule:'Synchronizes dashboard refresh cycles and cross-timezone learning schedules.'},
+    {id:'f-fiscalmonth',label:'Fiscal Year Start',type:'select',options:['January','April','July','October'],aiMsg:'Fiscal year determines budget cycle alignment for L&D spend and training ROI calculations.',aiRule:'Aligns all financial reporting and budget allocation in the SIP pipeline.'},
+    {id:'f-empband',label:'Employee Band',type:'select',options:['1-50','51-200','201-1000','1001-5000','5001-10000','10000+'],recommended:true,aiMsg:'Employee band calibrates organization-size recommendations — training budgets, license tiers, and dashboard complexity.',aiRule:'Scales all SIP recommendations and SkillForge capacity planning.'},
+    {id:'f-totalemps',label:'Total Employees',type:'input',placeholder:'Exact count',inputType:'number',recommended:true,aiMsg:'Exact headcount powers precise workforce analytics, per-employee metrics, and capacity planning.',aiRule:'Denominators for all per-capita metrics in SIP dashboards and SkillForge ROI.'},
+    {id:'f-revenue',label:'Revenue Band',type:'select',options:['<10M USD','10M-50M','50M-250M','250M-1B','>1B USD'],aiMsg:'Revenue context helps prioritize which skill gaps are most business-critical and calculates training ROI.',aiRule:'Enables revenue-at-risk analysis and L&D investment benchmarking.'},
+    {id:'f-founded',label:'Founded Year',type:'input',placeholder:'e.g. 2009',inputType:'number',aiMsg:'Organization maturity affects change management approaches and digital readiness expectations.',aiRule:'Factors into organizational maturity scoring in SIP analytics.'},
+    {id:'f-website',label:'Website',type:'input',placeholder:'https://...',aiMsg:'Website URL can be used for automated company research and enrichment.',aiRule:'Enables AI-powered company profiling and external data enrichment.'},
+    {id:'f-listed',label:'Listed Status',type:'select',options:['Listed','Unlisted','Private','Subsidiary'],aiMsg:'Listed companies have additional governance, ESG, and regulatory reporting requirements.',aiRule:'Activates ESG compliance modules and governance audit requirements in SIP.'}
+  ],
+  2:{standalone:[],lists:[],cards:{
+    groups:[
+      {key:'hier',label:'Hierarchy Model',required:true,aiMsg:'The hierarchy model shapes how roles, reporting lines, and analytics are structured across the entire platform.',aiRule:'Determines org-chart rendering, role hierarchy, and span-of-control calculations.',
+        options:[
+          {value:'Functional',title:'Functional',desc:'Divided by business functions.'},
+          {value:'Divisional',title:'Divisional / BU',desc:'Semi-autonomous divisions with P&L.'},
+          {value:'Matrix',title:'Matrix',desc:'Dual reporting — functional + project.'},
+          {value:'Flat',title:'Flat / Team',desc:'Minimal hierarchy, self-organizing.'},
+          {value:'Geographic',title:'Geographic',desc:'Structured by geography.'},
+          {value:'Holding',title:'Holding Co.',desc:'Parent with multiple subsidiaries.'},
+          {value:'Process',title:'Process',desc:'Organized around core processes.'}
+        ]},
+      {key:'op',label:'Operating Model',required:false,aiMsg:'Operating model determines how decisions and policies flow through the organization.',aiRule:'Configures analytics aggregation mode — centralized vs distributed dashboards.',
+        options:[
+          {value:'Centralized',title:'Centralized',desc:'All decisions from HQ.'},
+          {value:'Decentralized',title:'Decentralized',desc:'BUs have autonomy.'},
+          {value:'Federated',title:'Federated / Hybrid',desc:'Mix of centralized and local.'}
+        ]},
+      {key:'flow',label:'Decision Flow',required:false,aiMsg:'Decision flow affects how skill priorities cascade through the organization.',aiRule:'Controls priority propagation direction in SkillForge gap analysis.',
+        options:[
+          {value:'Top-Down',title:'Top-Down',desc:'Strategy cascades from leadership.'},
+          {value:'Bottom-Up',title:'Bottom-Up',desc:'Capability needs from ground up.'},
+          {value:'Balanced',title:'Balanced',desc:'Bidirectional flow.'}
+        ]}
+    ]
+  }},
+  3:[
+    {id:'f-mission',label:'Mission',type:'textarea',placeholder:'Core purpose',recommended:true,aiMsg:'Mission defines why your organization exists — AI uses it to align all competency frameworks to business purpose.',aiRule:'Feeds mission-linked competency frameworks and strategic skill gap analysis.'},
+    {id:'f-vision',label:'Vision',type:'textarea',placeholder:'Long-term aspirational future state',recommended:true,aiMsg:'Vision gives the platform a long-term target for skill forecasting and capability roadmaps.',aiRule:'Powers vision-to-capability roadmaps and future-state skill demand modeling.'},
+    {id:'f-values',label:'Core Values',type:'textarea',placeholder:'e.g. Safety, Excellence, Innovation',recommended:true,aiMsg:'Values feed into culture measurement, behavioral competency frameworks, and assessment rubrics.',aiRule:'Generates behavioral competency indicators and culture health scoring criteria.'},
+    {id:'f-stratpriorities',label:'Strategic Priorities',type:'textarea',placeholder:'Top priorities driving investment',recommended:true,aiMsg:'Priorities drive skill gap rankings, training recommendations, and investment prioritization across the pipeline.',aiRule:'Primary weighting factor for skill gap severity scoring in SkillForge.'},
+    {id:'f-countries',label:'Countries of Operation',type:'input',placeholder:'e.g. Singapore, India',aiMsg:'Multi-country operations need country-specific compliance, holiday, and labor data per geography.',aiRule:'Activates per-country compliance modules and localized skill benchmarks.'},
+    {id:'f-hqaddress',label:'HQ Address',type:'input',placeholder:'Full address',aiMsg:'Full address supports geographic analytics and local regulatory mapping.',aiRule:'Pins the primary location node in the SIP geographic intelligence layer.'}
+  ],
+  4:[
+    {id:'f-ctx-market',label:'Market Conditions',type:'input',placeholder:'e.g. Moderate growth, increasing digital adoption',aiMsg:'Market conditions drive skill demand forecasting — growth markets need different capabilities than contracting ones.',aiRule:'Adjusts demand multipliers in SkillForge skill forecasting models.'},
+    {id:'f-ctx-talent',label:'Talent Market Conditions',type:'input',placeholder:'e.g. Tight market for digital talent',aiMsg:'Talent supply/demand shapes hiring urgency and internal reskilling priority.',aiRule:'Feeds supply-scarcity alerts and build-vs-buy workforce planning.'},
+    {id:'f-ctx-regulatory',label:'Regulatory Environment',type:'input',placeholder:'e.g. Moderate — ISO + local codes',aiMsg:'Regulatory pressure determines mandatory compliance training and certification requirements.',aiRule:'Drives compliance training auto-assignment and regulatory skill gap flagging.'},
+    {id:'f-ctx-digital',label:'Digital Transformation Stage',type:'input',placeholder:'e.g. Transitioning (Stage 2 of 4)',aiMsg:'Digital maturity stage calibrates the pace and scope of digital skill recommendations.',aiRule:'Adjusts digital skill urgency scores and tech adoption training priorities.'},
+    {id:'f-ctx-sustainability',label:'Sustainability Pressure',type:'input',placeholder:'e.g. Growing — Green Mark mandates',aiMsg:'ESG pressure drives sustainability skill requirements and green certification planning.',aiRule:'Activates ESG competency modules and sustainability skill tracking.'},
+    {id:'f-ctx-workforce',label:'Workforce Challenges',type:'input',placeholder:'e.g. Aging workforce, digital skills gap',aiMsg:'Current workforce challenges are the most direct input to skill gap prioritization.',aiRule:'Top-priority input for SkillForge gap severity ranking algorithm.'},
+    {id:'f-perf-sales',label:'Total Sales (USD million)',type:'input',placeholder:'e.g. 180',inputType:'number',aiMsg:'Revenue data enables training ROI calculations and L&D budget benchmarking.',aiRule:'Denominator for L&D-spend-as-percentage-of-revenue and training ROI metrics.'},
+    {id:'f-perf-empcount',label:'Employee Count',type:'input',placeholder:'e.g. 812',inputType:'number',aiMsg:'Employee count cross-validates earlier entry and feeds per-capita analytics.',aiRule:'Feeds workforce density metrics and per-employee investment calculations.'},
+    {id:'f-perf-training',label:'Training Investment (USD M)',type:'input',placeholder:'e.g. 1.2',inputType:'number',aiMsg:'Training spend is benchmarked against industry peers to assess L&D investment adequacy.',aiRule:'Core input for L&D budget optimization and industry benchmarking.'},
+    {id:'f-perf-gross',label:'Gross Margin %',type:'input',placeholder:'e.g. 32',inputType:'number',aiMsg:'Gross margin indicates how much operational efficiency matters for skill prioritization.',aiRule:'Used in revenue-at-risk skill gap calculations and efficiency modeling.'},
+    {id:'f-perf-operating',label:'Operating Margin %',type:'input',placeholder:'e.g. 12',inputType:'number',aiMsg:'Operating margin reveals capacity to invest in capability building initiatives.',aiRule:'Factors into L&D budget recommendation and ROI modeling in SIP.'}
+  ],
+  5:{standalone:[],lists:[{key:'locations',label:'Location',addFn:'addLocation',fields:[
+    {id:'f-loc-name',label:'Name',type:'input',required:true},
+    {id:'f-loc-country',label:'Country',type:'select',options:['Singapore','India','UAE','Malaysia','United Kingdom','United States']},
+    {id:'f-loc-city',label:'City',type:'input'},
+    {id:'f-loc-state',label:'State',type:'input'},
+    {id:'f-loc-region',label:'Region',type:'input',placeholder:'e.g. South Asia'},
+    {id:'f-loc-zone',label:'Zone',type:'select',options:['North','South','East','West','Central','APAC','EMEA','Americas']},
+    {id:'f-loc-type',label:'Type',type:'select',options:['Office','Plant','Branch','Campus','Delivery Center']},
+    {id:'f-loc-tier',label:'Tier',type:'select',options:['Tier 1 (Strategic)','Tier 2 (Regional)','Tier 3 (Local)']},
+    {id:'f-loc-status',label:'Status',type:'select',options:['Active','Planned','Closed']},
+    {id:'f-loc-size',label:'Size (sq ft)',type:'input',inputType:'number'},
+    {id:'f-loc-year',label:'Opening Year',type:'input',inputType:'number'},
+    {id:'f-loc-manager',label:'Manager / Owner',type:'input'}
+  ],aiMsg:'Locations define your operational footprint — enabling geographic workforce analytics, regional compliance, and cross-timezone scheduling.',aiRule:'Each location node feeds regional skill distribution heat maps and compliance rule activation.'}]},
+  6:{standalone:[],lists:[{key:'cultureElements',label:'Culture Element',addFn:'addCulture',fields:[
+    {id:'f-cult-dim',label:'Dimension',type:'select',options:['Core Values','Safety Culture','Innovation Culture','Learning Culture','Customer Culture','Inclusion Culture']},
+    {id:'f-cult-name',label:'Element Name',type:'input',required:true},
+    {id:'f-cult-current',label:'Current Maturity',type:'select',options:['Emerging','Developing','Established','Embedded','Exemplary']},
+    {id:'f-cult-target',label:'Target Maturity',type:'select',options:['Emerging','Developing','Established','Embedded','Exemplary']}
+  ],aiMsg:'Culture elements power the culture health dashboard, change readiness scoring, and culture-performance correlation analytics.',aiRule:'Maturity gaps feed behavioral competency prioritization and engagement prediction models.'}]},
+  7:{standalone:[],lists:[
+    {key:'policies',label:'Policy',addFn:'addPolicy',fields:[
+      {id:'f-pol-name',label:'Policy Name',type:'input',required:true},
+      {id:'f-pol-cat',label:'Category',type:'select',options:['HR & People','IT & Security','Compliance & Legal','Health & Safety','Finance & Accounting','ESG & Sustainability','Operations']},
+      {id:'f-pol-mandatory',label:'Mandatory?',type:'select',options:['Yes','No']},
+      {id:'f-pol-status',label:'Status',type:'select',options:['Active','Draft','Under Review']},
+      {id:'f-pol-year',label:'Effective Year',type:'input',inputType:'number'},
+      {id:'f-pol-applicable',label:'Applicable To',type:'input',placeholder:'e.g. All Employees'},
+      {id:'f-pol-freq',label:'Review Frequency',type:'select',options:['Annual','Biennial','Quarterly']},
+      {id:'f-pol-desc',label:'Description',type:'input',placeholder:'Brief description'}
+    ],aiMsg:'Policies define workforce operating rules — mandatory policies trigger auto-assigned compliance training.',aiRule:'Feeds policy-training alignment checks and governance gap detection in SIP.'},
+    {key:'compliance',label:'Compliance Item',addFn:'addCompliance',fields:[
+      {id:'f-compl-name',label:'Compliance Name',type:'input',required:true},
+      {id:'f-compl-body',label:'Regulatory Body',type:'input'},
+      {id:'f-compl-mandatory',label:'Mandatory Status',type:'select',options:['Mandatory','Conditional','Recommended']},
+      {id:'f-compl-applicable',label:'Applicable To',type:'input',placeholder:'e.g. All Operations'},
+      {id:'f-compl-risk',label:'Risk Level',type:'select',options:['Low','Moderate','High','Critical']},
+      {id:'f-compl-freq',label:'Review Frequency',type:'select',options:['Annual','Biennial','Quarterly']}
+    ],aiMsg:'Compliance items track regulatory obligations — each one maps to required skills and certifications.',aiRule:'Drives regulatory compliance heat map and mandatory training auto-assignment.'}
+  ]},
+  8:{standalone:[],lists:[{key:'standards',label:'Standard / Certification',addFn:'addStandard',fields:[
+    {id:'f-std-name',label:'Name',type:'input',required:true},
+    {id:'f-std-type',label:'Type',type:'select',options:['Regulatory Compliance','Industry Standard','Internal Standard','Certification Requirement']},
+    {id:'f-std-body',label:'Standard Body',type:'input'},
+    {id:'f-std-renewal',label:'Renewal',type:'input'},
+    {id:'f-std-scope',label:'Certification Scope',type:'input',placeholder:'e.g. All Operations'},
+    {id:'f-std-issue',label:'Issue Date',type:'input',placeholder:'YYYY-MM'},
+    {id:'f-std-expiry',label:'Expiry Date',type:'input',placeholder:'YYYY-MM'},
+    {id:'f-std-audit',label:'Surveillance Audit Freq',type:'select',options:['Annual','Biennial','Triennial']},
+    {id:'f-std-certstatus',label:'Certification Status',type:'select',options:['Active','Under Renewal','Expired','Suspended']},
+    {id:'f-std-importance',label:'Strategic Importance',type:'select',options:['Operational','Important','Strategic']}
+  ],aiMsg:'Standards and certifications define compliance skill requirements and trigger renewal alerts.',aiRule:'Powers certification expiry tracking, compliance skill gap flagging, and audit-ready evidence trails.'}]},
+  9:{standalone:[],lists:[
+    {key:'products',label:'Product',addFn:'addProduct',fields:[
+      {id:'f-prod-name',label:'Name',type:'input',required:true},
+      {id:'f-prod-cat2',label:'Category',type:'input',placeholder:'e.g. Core Engineering'},
+      {id:'f-prod-type2',label:'Type',type:'input',placeholder:'e.g. Product or Service'},
+      {id:'f-prod-bu',label:'Business Unit',type:'input'},
+      {id:'f-prod-life',label:'Lifecycle',type:'select',options:['Active','Growth','Mature','Sunset']},
+      {id:'f-prod-year',label:'Launch Year',type:'input',inputType:'number'},
+      {id:'f-prod-rev',label:'Revenue Contribution %',type:'input',placeholder:'e.g. 30'},
+      {id:'f-prod-regcrit',label:'Regulatory Criticality',type:'select',options:['Low','Medium','High','Critical']}
+    ],aiMsg:'Products map directly to skill dependencies — sunset products trigger reskilling, growth products trigger hiring.',aiRule:'Enables product-to-skill dependency maps and revenue-at-risk skill analysis.'},
+    {key:'services',label:'Service',addFn:'addService',fields:[
+      {id:'f-svc-name',label:'Service Name',type:'input',required:true},
+      {id:'f-svc-type',label:'Service Type',type:'select',options:['Consulting','Managed Service','Support','Implementation','Training','Subscription']},
+      {id:'f-svc-delivery',label:'Delivery Model',type:'select',options:['Onsite','Remote','Hybrid','Self-Service']},
+      {id:'f-svc-bu',label:'Business Unit',type:'input'},
+      {id:'f-svc-rev',label:'Revenue Contribution %',type:'input'},
+      {id:'f-svc-crit',label:'Critical Skills Dependence',type:'select',options:['Low','Medium','High','Critical']}
+    ],aiMsg:'Services depend on specific skill sets — service capability maps ensure workforce readiness.',aiRule:'Feeds service line workforce planning and capability heat maps in SkillForge.'},
+    {key:'projects',label:'Project',addFn:'addProject',fields:[
+      {id:'f-proj-name',label:'Project Name',type:'input',required:true},
+      {id:'f-proj-client',label:'Client',type:'input'},
+      {id:'f-proj-type',label:'Project Type',type:'select',options:['Transformation','Compliance','Product Development','Cost Optimization','Customer Delivery','Technology Upgrade']},
+      {id:'f-proj-status',label:'Status',type:'select',options:['Active','Completed','Planned']},
+      {id:'f-proj-budget',label:'Budget (USD)',type:'input',inputType:'number'},
+      {id:'f-proj-skill',label:'Primary Skill',type:'input'},
+      {id:'f-proj-start',label:'Start Year',type:'input',inputType:'number'},
+      {id:'f-proj-end',label:'End Year',type:'input',inputType:'number'}
+    ],aiMsg:'Projects are where capability meets delivery — each project maps to required skills for capacity planning.',aiRule:'Enables project capability planning and delivery-risk skill gap analysis.'}
+  ]},
+  10:{standalone:[],lists:[{key:'techStack',label:'Technology',addFn:'addTech',fields:[
+    {id:'f-tech-name',label:'Tool Name',type:'input',required:true},
+    {id:'f-tech-cat',label:'Category',type:'select',options:['Core Business Apps','Dev & Engineering','Data & Analytics','Collaboration','AI & Automation','Security']},
+    {id:'f-tech-status',label:'Status',type:'select',options:['Current','Evaluating','Sunset / Phase-out']},
+    {id:'f-tech-depts',label:'Departments',type:'input'},
+    {id:'f-tech-deploy',label:'Deployment Model',type:'select',options:['Cloud','On-Premise','Hybrid','SaaS']},
+    {id:'f-tech-adoption',label:'Adoption Level',type:'select',options:['Low','Medium','High','Enterprise-wide']},
+    {id:'f-tech-crit',label:'Criticality Level',type:'select',options:['Low','Moderate','High','Mission Critical']},
+    {id:'f-tech-users',label:'Est. User Count',type:'input',inputType:'number'},
+    {id:'f-tech-auto',label:'Automation Impact',type:'select',options:['None','Low','Medium','High']},
+    {id:'f-tech-training',label:'Training Required?',type:'select',options:['Yes','No']},
+    {id:'f-tech-skills',label:'Skills Impacted',type:'input',placeholder:'e.g. BIM, 3D Modeling'}
+  ],aiMsg:'Your technology landscape directly shapes digital skill requirements. Sunset tools trigger reskilling alerts.',aiRule:'Drives digital skill gap analysis, tool adoption tracking, and automation impact forecasting.'}]},
+  11:{standalone:[],lists:[
+    {key:'skillDomains',label:'Skill Domain',addFn:'addSkillDomain',fields:[
+      {id:'f-sd-name',label:'Domain Name',type:'input',required:true},
+      {id:'f-sd-areas',label:'Knowledge Areas (comma-sep)',type:'input',placeholder:'e.g. Structural, Geotech, Materials'}
+    ],aiMsg:'Skill domains are the top-level categories in your skill taxonomy — everything downstream organizes under these.',aiRule:'Foundation nodes in the SkillForge ontology graph powering all skill-to-role mapping.'},
+    {key:'skillsMaster',label:'Skill',addFn:'addSkillMaster',fields:[
+      {id:'f-sk-name',label:'Skill Name',type:'input',required:true},
+      {id:'f-sk-domain',label:'Skill Domain',type:'input',placeholder:'e.g. Engineering & Construction'},
+      {id:'f-sk-type',label:'Skill Type',type:'select',options:['Technical','Functional','Behavioral','Digital','Compliance','Analytical']},
+      {id:'f-sk-emerging',label:'Emerging?',type:'select',options:['No','Yes']},
+      {id:'f-sk-regulatory',label:'Regulatory?',type:'select',options:['No','Yes']}
+    ],aiMsg:'Individual skills are the atomic units of capability measurement — assessments, gaps, and training all reference these.',aiRule:'Each skill node connects to roles, assessments, training, and market demand in the full SIP pipeline.'}
+  ]},
+  12:{standalone:[
+    {id:'f-prof-scale',label:'Proficiency Scale',type:'input',placeholder:'e.g. Level 1-5: Awareness to Expert',aiMsg:'The proficiency scale defines how capability levels are measured and compared across the organization.',aiRule:'Sets the assessment rubric granularity for all SkillForge competency scoring.'},
+    {id:'f-prof-approach',label:'Assessment Approach',type:'input',placeholder:'e.g. Manager review + self-assessment',aiMsg:'Assessment approach determines how competency data is collected and validated.',aiRule:'Configures data collection methods for the SIP triangulation engine.'}
+  ],lists:[{key:'competencies',label:'Competency',addFn:'addCompetency',fields:[
+    {id:'f-comp-name',label:'Name',type:'input',required:true},
+    {id:'f-comp-type',label:'Type',type:'select',options:['Core / Enterprise','Leadership','Technical']},
+    {id:'f-comp-cat',label:'Category',type:'input',placeholder:'e.g. Safety, Digital'},
+    {id:'f-comp-desc',label:'Description',type:'input',placeholder:'Brief description'}
+  ],aiMsg:'Competencies are the building blocks for assessments — each competency maps to proficiency levels and evidence requirements.',aiRule:'Generates competency-based assessment rubrics and capability maturity tracking in SkillForge.'}]},
+  13:{standalone:[],lists:[
+    {key:'jobLevels',label:'Job Level',addFn:'addJobLevel',fields:[
+      {id:'f-jl-code',label:'Level Code',type:'input',required:true,placeholder:'e.g. L1'},
+      {id:'f-jl-name',label:'Level Name',type:'input',placeholder:'e.g. Entry'},
+      {id:'f-jl-tier',label:'Seniority Tier',type:'select',options:['Entry','Early Career','Mid-Level','Senior','Leadership','Executive']},
+      {id:'f-jl-icmgr',label:'IC or Manager',type:'select',options:['IC','Manager','Both']},
+      {id:'f-jl-minyrs',label:'Min Years Experience',type:'input',inputType:'number'}
+    ],aiMsg:'Job levels define the career ladder — proficiency expectations and compensation bands align to these tiers.',aiRule:'Structures career pathway generation and promotion velocity analytics in SIP.'},
+    {key:'roles',label:'Role',addFn:'addRole',fields:[
+      {id:'f-role-title',label:'Job Title',type:'input',required:true},
+      {id:'f-role-family',label:'Family',type:'select',options:['Engineering','Technology','Operations','Corporate','Leadership']},
+      {id:'f-role-dept',label:'Department',type:'input'},
+      {id:'f-role-level',label:'Level',type:'select',options:['L1 — Entry','L2 — Associate','L3 — Mid','L4 — Senior','L5 — Lead','L6 — Director','L7 — C-Suite']},
+      {id:'f-role-reports',label:'Reports To',type:'input',placeholder:'e.g. Chief Engineer'},
+      {id:'f-role-purpose',label:'Role Purpose',type:'input',placeholder:'Brief description'}
+    ],aiMsg:'Roles are the structural backbone — every skill assessment, gap analysis, and career path references role definitions.',aiRule:'Core entity in the SkillForge role-skill matrix powering gap analysis and succession planning.'},
+    {key:'roleSkillReqs',label:'Role-Skill Requirement',addFn:'addRoleSkillReq',fields:[
+      {id:'f-rsr-role',label:'Role Title',type:'input',placeholder:'e.g. Senior Engineer'},
+      {id:'f-rsr-skill',label:'Skill',type:'input',placeholder:'e.g. Structural Analysis'},
+      {id:'f-rsr-level',label:'Required Level',type:'select',options:['Level 1','Level 2','Level 3','Level 4','Level 5']},
+      {id:'f-rsr-crit',label:'Criticality',type:'select',options:['Low','Medium','High','Critical']}
+    ],aiMsg:'Role-skill requirements define what proficiency each role needs — the foundation of gap analysis.',aiRule:'Primary input for SkillForge gap detection, training recommendation, and succession risk scoring.'}
+  ]},
+  14:[
+    {id:'f-emp-hris',label:'HRIS System',type:'input',placeholder:'e.g. Workday',aiMsg:'Knowing your HRIS helps auto-map data columns during import and configure integrations.',aiRule:'Enables HRIS connector configuration and automated data pipeline setup in SIP.'},
+    {id:'f-emp-count',label:'Records to Import',type:'input',placeholder:'Exact count',inputType:'number',aiMsg:'Record count helps pre-allocate resources and estimate import processing time.',aiRule:'Pre-sizes data pipeline buffers and estimates import duration.'},
+    {id:'f-emp-quality',label:'Data Quality',type:'select',options:['High — Clean HRIS data','Medium — Some gaps','Low — Significant cleanup'],aiMsg:'Data quality determines how much cleansing and validation is needed before analytics can run.',aiRule:'Configures data quality rules and validation strictness in the SIP import pipeline.'},
+    {id:'f-emp-workmodes',label:'Work Modes',type:'input',placeholder:'e.g. On-site, Hybrid',aiMsg:'Work modes affect training delivery methods and skill development approaches.',aiRule:'Adjusts learning modality recommendations and scheduling in SkillForge.'}
+  ],
+  15:[
+    {id:'f-hist-perf',label:'Employee Yearly Performance',type:'checkbox',aiMsg:'Performance data enables trend analysis, promotion prediction, and skill-performance correlation.',aiRule:'Feeds multi-year performance trend analysis and predictive attrition modeling.'},
+    {id:'f-hist-promo',label:'Promotion History',type:'checkbox',aiMsg:'Promotion history reveals career velocity patterns and internal mobility effectiveness.',aiRule:'Powers promotion velocity tracking and succession pipeline health metrics.'},
+    {id:'f-hist-mobility',label:'Internal Mobility',type:'checkbox',aiMsg:'Mobility data shows how talent flows across roles and departments.',aiRule:'Enables internal talent marketplace analytics and cross-functional skill transfer tracking.'},
+    {id:'f-hist-exit',label:'Employee Exit Data',type:'checkbox',aiMsg:'Exit data identifies retention risks and skill-loss patterns from attrition.',aiRule:'Feeds predictive attrition modeling and skill-loss risk scoring in SIP.'},
+    {id:'f-hist-workforce',label:'Workforce Planning',type:'checkbox',aiMsg:'Historical workforce plans vs actuals improve future planning accuracy.',aiRule:'Calibrates workforce planning forecast models with historical accuracy data.'},
+    {id:'f-hist-leadership',label:'Leadership Pipeline & Succession',type:'checkbox',aiMsg:'Succession data identifies leadership bench strength and development priorities.',aiRule:'Powers succession risk scoring and leadership pipeline health dashboards.'},
+    {id:'f-hist-retention',label:'Retention Risk Data',type:'checkbox',aiMsg:'Retention risk scores help prioritize development investment for flight-risk talent.',aiRule:'Feeds retention risk overlay in SkillForge capability dashboards.'},
+    {id:'f-hist-years',label:'Years Available',type:'select',options:['1 year','2 years','3 years','5+ years'],aiMsg:'More history years enable better trend detection and forecasting accuracy.',aiRule:'Sets the lookback window for all SIP trend analysis algorithms.'},
+    {id:'f-hist-source',label:'Data Source',type:'input',placeholder:'e.g. Workday exports',aiMsg:'Source system identification helps configure automated data refresh pipelines.',aiRule:'Configures source connector and refresh schedule in the SIP data pipeline.'}
+  ],
+  16:{standalone:[],lists:[
+    {key:'trainingPrograms',label:'Training Program',addFn:'addTraining',fields:[
+      {id:'f-trn-name',label:'Program Name',type:'input',required:true},
+      {id:'f-trn-cat',label:'Category',type:'select',options:['Technical','Leadership','Compliance','Digital','Safety']},
+      {id:'f-trn-mode',label:'Mode',type:'select',options:['Instructor-Led','Virtual','E-Learning','Blended','Self-Paced']},
+      {id:'f-trn-status',label:'Status',type:'select',options:['Active','Planned','Retired']},
+      {id:'f-trn-hours',label:'Duration (hours)',type:'input',inputType:'number'},
+      {id:'f-trn-cert',label:'Certification Awarded?',type:'select',options:['No','Yes']},
+      {id:'f-trn-audience',label:'Target Audience',type:'input',placeholder:'e.g. Engineers, L4+'},
+      {id:'f-trn-crit',label:'Criticality',type:'select',options:['Low','Medium','High','Critical']},
+      {id:'f-trn-cost',label:'Cost per Participant (USD)',type:'input',inputType:'number'}
+    ],aiMsg:'Training programs are the primary mechanism for closing skill gaps — each maps to skills and competencies.',aiRule:'Feeds training ROI analytics, skill-gap closure tracking, and L&D budget optimization.'},
+    {key:'vendors',label:'Vendor',addFn:'addVendor',fields:[
+      {id:'f-vendor-name',label:'Vendor Name',type:'input',required:true},
+      {id:'f-vendor-spec',label:'Specialization',type:'input'},
+      {id:'f-vendor-type',label:'Vendor Type',type:'select',options:['External','Internal','University','Technology Platform']},
+      {id:'f-vendor-country',label:'Country',type:'input'},
+      {id:'f-vendor-coverage',label:'Coverage',type:'select',options:['Local','Regional','National','Global']},
+      {id:'f-vendor-rating',label:'Quality Rating',type:'input',placeholder:'e.g. 4.5/5'},
+      {id:'f-vendor-pref',label:'Preferred Vendor?',type:'select',options:['No','Yes']}
+    ],aiMsg:'Vendor data enables vendor performance comparison and preferred-vendor routing for training programs.',aiRule:'Powers vendor performance analytics and auto-routing of training nominations.'},
+    {key:'learningCalendar',label:'Calendar Event',addFn:'addLearningCalendar',fields:[
+      {id:'f-lc-name',label:'Event Name',type:'input',required:true},
+      {id:'f-lc-type',label:'Event Type',type:'select',options:['Governance Review','Program Launch','Audit','Nomination Window']},
+      {id:'f-lc-quarter',label:'Quarter',type:'select',options:['Q1','Q2','Q3','Q4']},
+      {id:'f-lc-owner',label:'Governance Owner',type:'input'}
+    ],aiMsg:'The learning governance calendar ensures L&D activities align with organizational planning cycles.',aiRule:'Automates governance reminders and aligns L&D activities to fiscal cycles in SIP.'}
+  ]},
+  17:{standalone:[
+    {id:'f-assess-skill',label:'Skill Self-Assessments',type:'checkbox',aiMsg:'Self-assessments provide the employee perspective in multi-source capability evaluation.',aiRule:'One vertex in the SIP triangulation model for confidence-scored capability profiles.'},
+    {id:'f-assess-mgr',label:'Manager Assessments',type:'checkbox',aiMsg:'Manager assessments add supervisory validation to self-reported skill levels.',aiRule:'Weighted evidence source in SkillForge triangulated competency scoring.'},
+    {id:'f-assess-comp',label:'Competency Assessments',type:'checkbox',aiMsg:'Competency assessments evaluate behavioral and functional capabilities beyond technical skills.',aiRule:'Feeds competency maturity tracking and behavioral assessment rubrics.'},
+    {id:'f-assess-cert',label:'Certifications',type:'checkbox',aiMsg:'Certifications provide objective, third-party validation of skill proficiency.',aiRule:'Highest-confidence evidence source in the SIP triangulation model.'},
+    {id:'f-assess-360',label:'360-Degree Feedback',type:'checkbox',aiMsg:'360 feedback captures peer, subordinate, and cross-functional perspectives on capability.',aiRule:'Multi-rater input for leadership competency scoring and development planning.'},
+    {id:'f-assess-knowledge',label:'Knowledge Tests',type:'checkbox',aiMsg:'Knowledge tests provide quantitative skill measurement through structured evaluation.',aiRule:'Objective scoring input for skill verification and gap quantification.'},
+    {id:'f-assess-psychometric',label:'Psychometric Assessments',type:'checkbox',aiMsg:'Psychometric assessments measure cognitive abilities and personality traits relevant to role fit.',aiRule:'Feeds role-fit scoring and team composition analytics in SkillForge.'},
+    {id:'f-assess-tri',label:'Triangulation Method',type:'select',options:['Weighted Average','Manager Override','Evidence-First'],aiMsg:'Triangulation method determines how multiple assessment sources are combined into a single capability score.',aiRule:'Core algorithm configuration for the SIP multi-source skill validation engine.'},
+    {id:'f-assess-freq',label:'Assessment Frequency',type:'select',options:['Annual','Semi-Annual','Quarterly'],aiMsg:'Assessment frequency determines how often capability data refreshes for decision-making.',aiRule:'Sets the data refresh cadence for all SkillForge capability dashboards.'}
+  ],lists:[{key:'triangulationConfig',label:'Evidence Source',addFn:'addTriangulation',fields:[
+    {id:'f-tri-source',label:'Evidence Source',type:'input',required:true,placeholder:'e.g. Manager Assessment'},
+    {id:'f-tri-weight',label:'Weight %',type:'input',inputType:'number',placeholder:'e.g. 30'},
+    {id:'f-tri-method',label:'Confidence Method',type:'select',options:['Statistical','Rules-Based','AI-Driven']},
+    {id:'f-tri-freq',label:'Update Frequency',type:'select',options:['Real-time','Monthly','Quarterly','Annual']}
+  ],aiMsg:'Evidence source configuration fine-tunes how the AI weighs different assessment data for capability scoring.',aiRule:'Direct parameter input for the SIP triangulation algorithm weighting matrix.'}]},
+  18:{standalone:[
+    {id:'f-reg-level',label:'Regulatory Demand Level',type:'select',options:['Low','Moderate','High'],aiMsg:'Regulatory demand level indicates how much compliance training your workforce needs.',aiRule:'Scales mandatory training allocation and compliance budget forecasting.'},
+    {id:'f-reg-skills',label:'Top Compliance Skills',type:'input',placeholder:'e.g. ISO 45001, PDPA, BCA',aiMsg:'Top compliance skills identify the most critical regulatory capabilities to track and develop.',aiRule:'Flags high-priority compliance skills for mandatory tracking in SkillForge.'},
+    {id:'f-reg-hours',label:'Compliance Training Hours (annual)',type:'input',inputType:'number',placeholder:'e.g. 24',aiMsg:'Annual compliance training hours set the baseline obligation for workforce planning.',aiRule:'Reserves training capacity hours in the SIP learning capacity model.'}
+  ],lists:[{key:'marketDemand',label:'Market Demand Entry',addFn:'addMarketDemand',fields:[
+    {id:'f-md-skill',label:'Skill Name',type:'input',required:true},
+    {id:'f-md-level',label:'Demand Level',type:'select',options:['Low','Moderate','High','Very High']},
+    {id:'f-md-growth',label:'Demand Growth YoY %',type:'input',placeholder:'e.g. 25'},
+    {id:'f-md-scarcity',label:'Supply Scarcity',type:'select',options:['Low','Medium','High']},
+    {id:'f-md-relevance',label:'Strategic Relevance',type:'select',options:['Low','Medium','High','Critical']}
+  ],aiMsg:'Market skill demand data connects internal capabilities to external market signals for proactive workforce planning.',aiRule:'Powers external demand signal overlay and supply-scarcity alerts in SkillForge dashboards.'}]},
+  19:{standalone:[
+    {id:'f-sc-risk',label:'Supply Chain Risk Level',type:'select',options:['Low','Medium','High','Critical'],aiMsg:'Supply chain risk level indicates operational vulnerability from supplier dependencies.',aiRule:'Feeds supply chain risk overlay in SIP operational dashboards.'},
+    {id:'f-sc-suppliers',label:'Critical Supplier Count',type:'input',inputType:'number',aiMsg:'Number of critical suppliers helps assess concentration risk and contingency needs.',aiRule:'Inputs to supplier dependency risk scoring and contingency planning.'},
+    {id:'f-sc-otd',label:'On-Time Delivery %',type:'input',placeholder:'e.g. 92',aiMsg:'On-time delivery rate is a key operational performance benchmark.',aiRule:'Benchmarked against industry peers for operational excellence scoring.'},
+    {id:'f-sc-dual',label:'Dual-Source Coverage %',type:'input',placeholder:'e.g. 65',aiMsg:'Dual-sourcing coverage indicates supply chain resilience and risk mitigation.',aiRule:'Feeds supply chain resilience scoring in the SIP risk module.'}
+  ],lists:[{key:'benchmarks',label:'Benchmark',addFn:'addBenchmark',fields:[
+    {id:'f-bm-cat',label:'Category',type:'select',options:['Financial','Workforce','Skills','L&D','Operations','Quality','Customer','Digital','Compliance','ESG']},
+    {id:'f-bm-param',label:'Parameter',type:'input',required:true,placeholder:'e.g. Attrition Rate %'},
+    {id:'f-bm-industry',label:'Industry Benchmark',type:'input',placeholder:'e.g. 12%'},
+    {id:'f-bm-company',label:'Company Value',type:'input',placeholder:'Your value'}
+  ],aiMsg:'Competitor benchmarks provide the external frame of reference for capability maturity assessment.',aiRule:'Powers industry benchmark dashboards and competitive gap analysis in SIP.'}]},
+  20:{standalone:[
+    {id:'f-gov-bench',label:'Competitor Benchmarks',type:'checkbox',aiMsg:'Enables ongoing competitive benchmarking for strategic capability planning.',aiRule:'Activates benchmark tracking module in SIP governance dashboards.'},
+    {id:'f-gov-context',label:'Organization Context Yearly',type:'checkbox',aiMsg:'Annual context refresh keeps AI recommendations aligned with changing conditions.',aiRule:'Triggers yearly context refresh workflow in the SIP data pipeline.'},
+    {id:'f-gov-perf',label:'Organization Performance Yearly',type:'checkbox',aiMsg:'Yearly performance data enables trend analysis and ROI tracking.',aiRule:'Feeds multi-year performance trend analysis and training ROI calculations.'},
+    {id:'f-gov-audit',label:'Governance Audit & Log',type:'checkbox',aiMsg:'Audit logs provide accountability and compliance evidence for regulatory reviews.',aiRule:'Activates immutable audit trail logging across all SIP modules.'},
+    {id:'f-gov-market',label:'Market & Regulatory Skill Demand',type:'checkbox',aiMsg:'Market demand tracking keeps skill priorities aligned with external forces.',aiRule:'Activates external signal monitoring in SkillForge demand forecasting.'},
+    {id:'f-gov-supply',label:'Supply Chain Risk',type:'checkbox',aiMsg:'Supply chain risk monitoring identifies skill dependencies in your value chain.',aiRule:'Feeds supply chain skill dependency analysis in SIP risk module.'},
+    {id:'f-gov-dei',label:'DEI Statistics',type:'checkbox',aiMsg:'DEI data enables diversity analytics and inclusive capability planning.',aiRule:'Powers DEI dashboards and inclusive hiring recommendation models.'},
+    {id:'f-gov-culture',label:'Culture Indicators',type:'checkbox',aiMsg:'Culture indicator tracking enables change readiness and engagement analytics.',aiRule:'Feeds culture health scoring and change readiness prediction in SIP.'},
+    {id:'f-gov-env',label:'Environmental Impact',type:'checkbox',aiMsg:'Environmental data supports ESG reporting and sustainability skill planning.',aiRule:'Activates environmental impact tracking and green skill requirements.'},
+    {id:'f-gov-csr',label:'CSR Programs',type:'checkbox',aiMsg:'CSR program data connects social responsibility initiatives to workforce planning.',aiRule:'Feeds CSR-linked competency modules and community impact analytics.'}
+  ],lists:[{key:'crisisHistory',label:'Crisis Event',addFn:'addCrisis',fields:[
+    {id:'f-crisis-name',label:'Crisis Name',type:'input',required:true},
+    {id:'f-crisis-cat',label:'Category',type:'select',options:['Natural Disaster','Health Emergency','Cyber Incident','Political','Infrastructure Failure','Supply Shock']},
+    {id:'f-crisis-severity',label:'Severity Level',type:'select',options:['Low','Medium','High','Critical']},
+    {id:'f-crisis-year',label:'Year',type:'input',inputType:'number'}
+  ],aiMsg:'Crisis history improves resilience planning and identifies skill gaps exposed during past events.',aiRule:'Feeds crisis resilience scoring and risk-aware workforce planning in SIP.'}]}
+};
+
+// ── FIELD POPUP STATE ──
+var fpState = {screen:1, fieldIdx:0, open:false};
+
+function fpGetFields(screenNum){
+  var cfg = SCREEN_FIELDS[screenNum];
+  if(!cfg) return [];
+  if(Array.isArray(cfg)) return cfg;
+  // Screen 2 card-based
+  if(cfg.cards) return cfg.cards.groups;
+  // List-based screens
+  var fields = [];
+  if(cfg.standalone && cfg.standalone.length) fields = fields.concat(cfg.standalone);
+  // For list screens, add a virtual entry per list
+  if(cfg.lists && cfg.lists.length){
+    cfg.lists.forEach(function(lst){
+      fields.push({_isList:true, listConfig:lst});
+    });
+  }
+  return fields;
+}
+
+function openFieldPopup(screenNum){
+  var fields = fpGetFields(screenNum);
+  if(!fields || !fields.length) return;
+  fpState.screen = screenNum;
+  fpState.fieldIdx = 0;
+  fpState.open = true;
+  var overlay = document.getElementById('fieldPopup');
+  overlay.style.display='flex';
+  setTimeout(function(){overlay.classList.add('fp-open')},10);
+  renderFieldPopup();
+}
+
+function closeFieldPopup(){
+  fpState.open = false;
+  var overlay = document.getElementById('fieldPopup');
+  overlay.classList.remove('fp-open');
+  setTimeout(function(){overlay.style.display='none'},350);
+}
+
+function renderFieldPopup(){
+  var screenNum = fpState.screen;
+  var fields = fpGetFields(screenNum);
+  if(!fields || !fields.length){closeFieldPopup();return}
+  var idx = fpState.fieldIdx;
+  if(idx >= fields.length) idx = fields.length - 1;
+  if(idx < 0) idx = 0;
+  fpState.fieldIdx = idx;
+
+  var stepTitle = STEPS[screenNum-1] ? STEPS[screenNum-1].title : 'Screen '+screenNum;
+  document.getElementById('fpHeaderTitle').textContent = 'Screen '+screenNum+' — '+stepTitle;
+  document.getElementById('fpHeaderCounter').textContent = (idx+1)+' / '+fields.length;
+  document.getElementById('fpProgressFill').style.width = ((idx+1)/fields.length*100)+'%';
+  document.getElementById('fpBackBtn').style.display = idx>0?'inline-flex':'none';
+  document.getElementById('fpNextBtn').innerHTML = idx >= fields.length-1 ? 'Complete <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>' : 'Next <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+
+  var f = fields[idx];
+  var body = document.getElementById('fpBody');
+  var h = '<div class="fp-field-area">';
+
+  // Screen 2 is card-based
+  var cfg = SCREEN_FIELDS[screenNum];
+  var isScreen2Cards = cfg && cfg.cards;
+
+  if(isScreen2Cards){
+    // f is a card group
+    var grp = f;
+    h += '<div class="fp-field-label">'+grp.label;
+    if(grp.required) h += ' <span class="fp-badge required">required</span>';
+    h += '</div>';
+    h += '<div class="fp-cards-grid">';
+    grp.options.forEach(function(opt){
+      var sel = selectedModels[grp.key] === opt.value ? ' fp-selected':'';
+      h += '<div class="fp-card-option'+sel+'" onclick="fpSelectCard(\''+grp.key+'\',\''+opt.value+'\',this)">';
+      h += '<h4>'+opt.title+'</h4><p>'+opt.desc+'</p></div>';
+    });
+    h += '</div>';
+    // AI area
+    h += '<div class="fp-ai-area" style="margin-top:16px">';
+    h += '<div class="fp-ai-msg"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> '+grp.aiMsg+'</div>';
+    h += '<div class="fp-ai-rule"><strong>SIP Rule:</strong> '+grp.aiRule+'</div>';
+    h += '</div>';
+  } else if(f._isList){
+    // List-based field
+    var lst = f.listConfig;
+    h += '<div class="fp-field-label">'+lst.label+'s';
+    h += ' <span class="fp-badge recommended" style="font-size:8px">list</span></div>';
+    // Show existing items
+    h += '<div class="fp-list-added" id="fpListItems_'+lst.key+'">';
+    D[lst.key].forEach(function(item,i){
+      var display = item.name||item.title||item.skill_name||item.domain_name||item.compliance_name||item.service_name||item.event_name||item.evidence_source||item.crisis_name||item.level_code||item.role_title||item.parameter||'Item';
+      h += '<div class="added-chip">'+escH(display)+'</div>';
+    });
+    h += '</div>';
+    // AI suggestions
+    var sugItems = getListItems(lst.key, screenNum);
+    if(sugItems && sugItems.length){
+      h += '<div class="fp-suggestion-chips" style="margin-top:10px">';
+      h += '<span style="font-size:9px;color:var(--purple-lt);width:100%;margin-bottom:2px"><svg style="width:10px;height:10px;stroke:var(--purple-lt);fill:none;stroke-width:2;vertical-align:middle" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> AI Suggestions — click to add</span>';
+      sugItems.forEach(function(item,i){
+        var key = lst.key+'_'+screenNum+'_'+i;
+        var title = item.name||item.title||item.skill_name||item.domain_name||item.compliance_name||item.service_name||item.event_name||item.level_code||item.role_title||item.parameter||'';
+        var applied = appliedSuggestions[key];
+        h += '<span class="fp-chip'+(applied?' fp-applied':'')+'" onclick="fpApplyListSuggestion(\''+lst.key+'\','+screenNum+','+i+',this)">';
+        h += '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> '+escH(title)+'</span>';
+      });
+      h += '</div>';
+    }
+    // Mini-form for adding
+    h += '<div class="fp-list-section" style="margin-top:12px"><div class="fp-list-section-title">Add '+lst.label+'</div>';
+    h += '<div class="fp-list-mini-form">';
+    lst.fields.forEach(function(ff){
+      h += '<div class="fp-mini-group">';
+      h += '<span class="fp-mini-label">'+ff.label+(ff.required?' *':'')+'</span>';
+      if(ff.type === 'select' && ff.options){
+        h += '<select class="fp-mini-select" id="'+ff.id+'">';
+        ff.options.forEach(function(o){h+='<option>'+o+'</option>'});
+        h += '</select>';
+      } else {
+        h += '<input class="fp-mini-input" id="'+ff.id+'" placeholder="'+(ff.placeholder||'')+'"'+(ff.inputType?' type="'+ff.inputType+'"':'')+'>';
+      }
+      h += '</div>';
+    });
+    h += '</div>';
+    h += '<button class="btn btn-blue btn-sm" onclick="fpAddListItem(\''+lst.addFn+'\',\''+lst.key+'\','+screenNum+')" style="margin-top:8px">+ Add '+lst.label+'</button>';
+    h += '</div>';
+    // AI area
+    h += '<div class="fp-ai-area" style="margin-top:12px">';
+    h += '<div class="fp-ai-msg"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> '+lst.aiMsg+'</div>';
+    h += '<div class="fp-ai-rule"><strong>SIP Rule:</strong> '+lst.aiRule+'</div>';
+    h += '</div>';
+  } else {
+    // Standard field
+    h += '<div class="fp-field-label">'+f.label;
+    if(f.required) h += ' <span class="fp-badge required">required</span>';
+    else if(f.recommended) h += ' <span class="fp-badge recommended">recommended</span>';
+    h += '</div>';
+
+    // Input element
+    var curVal = '';
+    var realEl = document.getElementById(f.id);
+    if(realEl){
+      if(f.type === 'checkbox') curVal = realEl.checked;
+      else curVal = realEl.value || '';
+    }
+
+    if(f.type === 'select'){
+      h += '<select class="fp-select" id="fp-field-input" onkeydown="if(event.key===\'Enter\')fpAutoAdvance()">';
+      h += '<option value="">Select...</option>';
+      (f.options||[]).forEach(function(opt){
+        h += '<option'+(curVal===opt?' selected':'')+'>'+opt+'</option>';
+      });
+      h += '</select>';
+    } else if(f.type === 'textarea'){
+      h += '<textarea class="fp-textarea" id="fp-field-input" placeholder="'+(f.placeholder||'')+'" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();fpAutoAdvance()}">'+escH(curVal)+'</textarea>';
+    } else if(f.type === 'checkbox'){
+      h += '<label class="fp-checkbox-wrap" onclick=""><input type="checkbox" id="fp-field-input"'+(curVal?' checked':'')+'><span>'+f.label+'</span></label>';
+    } else {
+      h += '<input class="fp-input" id="fp-field-input" placeholder="'+(f.placeholder||'')+'" value="'+escH(curVal)+'"'+(f.inputType?' type="'+f.inputType+'"':'')+' onkeydown="if(event.key===\'Enter\')fpAutoAdvance()">';
+    }
+
+    // AI suggestion chip from getAiSuggestions
+    var sug = getAiSuggestions();
+    if(sug[screenNum] && sug[screenNum].fields && sug[screenNum].fields[f.id]){
+      var s = sug[screenNum].fields[f.id];
+      var sugKey = f.id+'_'+screenNum;
+      if(!appliedSuggestions[sugKey]){
+        h += '<div class="fp-suggestion-chips" style="margin-top:8px">';
+        h += '<span class="fp-chip" onclick="fpApplySuggestion(\''+f.id+'\',\''+escH(s.val).replace(/'/g,"\\'")+'\',this)">';
+        h += '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> '+(s.label?s.label+': ':'')+escH(s.val.length>60?s.val.substring(0,60)+'...':s.val)+'</span>';
+        h += '</div>';
+      }
+    }
+
+    // AI area
+    if(f.aiMsg){
+      h += '<div class="fp-ai-area" style="margin-top:16px">';
+      h += '<div class="fp-ai-msg"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> '+f.aiMsg+'</div>';
+      if(f.aiRule) h += '<div class="fp-ai-rule"><strong>SIP Rule:</strong> '+f.aiRule+'</div>';
+      h += '</div>';
+    }
+  }
+
+  h += '</div>';
+  body.innerHTML = h;
+
+  // Auto-focus
+  setTimeout(function(){
+    var inp = document.getElementById('fp-field-input');
+    if(inp && inp.focus) inp.focus();
+  },100);
+}
+
+function fpSaveCurrentField(){
+  var screenNum = fpState.screen;
+  var fields = fpGetFields(screenNum);
+  var f = fields[fpState.fieldIdx];
+  if(!f || f._isList) return; // list items saved via addFn
+
+  var cfg = SCREEN_FIELDS[screenNum];
+  if(cfg && cfg.cards){
+    // Card selection — already saved via fpSelectCard
+    return;
+  }
+
+  var inp = document.getElementById('fp-field-input');
+  if(!inp) return;
+  var realEl = document.getElementById(f.id);
+  if(!realEl) return;
+
+  if(f.type === 'checkbox'){
+    realEl.checked = inp.checked;
+  } else {
+    realEl.value = inp.value;
+    if(inp.value) realEl.classList.add('ai-filled');
+  }
+}
+
+function fpNext(){
+  fpSaveCurrentField();
+  var fields = fpGetFields(fpState.screen);
+  if(fpState.fieldIdx >= fields.length - 1){
+    // Last field — close popup and save step
+    closeFieldPopup();
+    saveStep(fpState.screen);
+    return;
+  }
+  fpState.fieldIdx++;
+  renderFieldPopup();
+}
+
+function fpBack(){
+  fpSaveCurrentField();
+  if(fpState.fieldIdx > 0){
+    fpState.fieldIdx--;
+    renderFieldPopup();
+  }
+}
+
+function fpAutoAdvance(){
+  fpSaveCurrentField();
+  setTimeout(function(){fpNext()},200);
+}
+
+function fpApplySuggestion(fieldId, value, chipEl){
+  var inp = document.getElementById('fp-field-input');
+  if(inp){
+    inp.value = value;
+    inp.classList.add('ai-filled');
+  }
+  sv(fieldId, value);
+  appliedSuggestions[fieldId+'_'+fpState.screen] = true;
+  if(chipEl){chipEl.classList.add('fp-applied');chipEl.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Applied'}
+  showToast('AI suggestion applied');
+  setTimeout(function(){fpNext()},200);
+}
+
+function fpApplyListSuggestion(listKey, step, idx, chipEl){
+  applyListSuggestion(listKey, step, idx);
+  if(chipEl){chipEl.classList.add('fp-applied');chipEl.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Added'}
+  // Re-render to update the list display
+  setTimeout(function(){renderFieldPopup()},100);
+}
+
+function fpAddListItem(addFnName, listKey, screenNum){
+  // Call the existing add function
+  if(typeof window[addFnName] === 'function') window[addFnName]();
+  // Re-render
+  setTimeout(function(){renderFieldPopup()},100);
+}
+
+function fpSelectCard(groupKey, value, el){
+  selectedModels[groupKey] = value;
+  // Update UI
+  el.parentElement.querySelectorAll('.fp-card-option').forEach(function(c){c.classList.remove('fp-selected')});
+  el.classList.add('fp-selected');
+  showToast(value+' selected');
+}
+
+// ── MODIFY goToStep to auto-open popup ──
+var _origGoToStep = goToStep;
+goToStep = function(n){
+  _origGoToStep(n);
+  if(SCREEN_FIELDS[n] && n !== 21){
+    setTimeout(function(){openFieldPopup(n)},300);
+  }
+};
 
 // INIT
 renderSteps();renderStepper();updateProgress();updateAiForStep(1);
