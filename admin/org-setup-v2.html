@@ -1752,7 +1752,7 @@ var AI_QUESTIONS = [
     type:'input', placeholder:'e.g. Structural Engineering',
     suggestions:function(){
       var depts=[];
-      D.bus.forEach(function(bu){bu.depts.forEach(function(d){if(depts.indexOf(d.name)===-1) depts.push(d.name)})});
+      (D.bus||[]).forEach(function(bu){bu.depts.forEach(function(d){if(depts.indexOf(d.name)===-1) depts.push(d.name)})});
       if(depts.length>0) return depts;
       var fam=aiAnswers().family||'';
       if(fam==='Engineering') return ['Structural Engineering','Civil & Geotechnical','Project Delivery','Mechanical Engineering','Electrical Engineering'];
@@ -1893,7 +1893,7 @@ function closeAiPopup(){
   var count=0;
   aiRoleTitles.forEach(function(r){if(r.status==='done')count++});
   aiRoleCount=0;aiRoleTitles=[];aiRoleData=[];aiSessionPhase='count';
-  if(count>0){goToStep(3);showToast(count+' role'+(count>1?'s':'')+' added via AI Builder')}
+  if(count>0){goToStep(13);showToast(count+' role'+(count>1?'s':'')+' added via AI Builder')}
 }
 
 // ── SCREEN 1: COUNT ──
@@ -1918,8 +1918,8 @@ function renderAiCountScreen(){
   var id=state.data.identity||{};
   var company=id['f-company']||'your organisation';
   var industry=id['f-industry']||'';
-  var buCount=D.bus.length;
-  var deptCount=0;D.bus.forEach(function(b){deptCount+=b.depts.length});
+  var buCount=(D.bus||[]).length;
+  var deptCount=0;(D.bus||[]).forEach(function(b){deptCount+=b.depts.length});
   var recommended=Math.max(3,Math.min(deptCount||6,15));
 
   var card=document.getElementById('aiQuestionCard');
@@ -2007,8 +2007,8 @@ function renderAiTitlesScreen(){
   var id=state.data.identity||{};
   var company=id['f-company']||'your organisation';
   var industry=id['f-industry']||'';
-  var buCount=D.bus.length;
-  var buNames=D.bus.map(function(b){return b.name}).join(', ');
+  var buCount=(D.bus||[]).length;
+  var buNames=(D.bus||[]).map(function(b){return b.name}).join(', ');
 
   var researchLines=[];
   if(company!=='your organisation') researchLines.push({text:'Analysing org profile for <strong>'+company+'</strong>'});
@@ -2284,10 +2284,10 @@ function confirmAllRoles(){
   var count=0;
   aiRoleTitles.forEach(function(r,i){
     if(r.status!=='done') return;var d=aiRoleData[i];
-    D.roles.push({title:d.title||'',family:d.family||'',dept:d.dept||'',senior:d.senior||'',kra:d.kra||'',career:d.career||'',qual:d.qual||'',crit:d.crit||'',mgr:d.mgr==='Yes'?'yes':d.mgr==='No'?'no':(d.mgr||'').toLowerCase(),spof:d.spof||''});
+    D.roles.push({title:d.title||'',family:d.family||'',dept:d.dept||'',level:d.senior||'',reports_to:'',role_purpose:d.kra||''});
     count++;
   });
-  renderList('roleList',D.roles,function(r){return r.title+' \u2014 '+r.family+' \u00b7 '+r.senior+(r.spof?' \u00b7 '+r.spof:'')},'roles');
+  reRenderList('roles');
   closeAiPopup();
 }
 
