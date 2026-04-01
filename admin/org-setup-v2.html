@@ -462,6 +462,20 @@ a.sidebar-brand:hover .brand-hex{opacity:.75;transition:opacity .15s}
 <div class="main">
   <div class="topbar">
     <div class="topbar-title">OrgSetup V2 — AI-Guided Onboarding</div>
+    <select id="screenJump" onchange="if(this.value)goToStep(+this.value)" style="padding:4px 8px;border-radius:6px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;outline:none;max-width:180px">
+      <option value="">Jump to screen…</option>
+      <option value="1">1 — Company Basics</option><option value="2">2 — Org Model</option>
+      <option value="3">3 — Strategic Foundation</option><option value="4">4 — Org Context</option>
+      <option value="5">5 — Locations</option><option value="6">6 — Culture Setup</option>
+      <option value="7">7 — Policies</option><option value="8">8 — Standards</option>
+      <option value="9">9 — Products & Services</option><option value="10">10 — Tech Stack</option>
+      <option value="11">11 — Skill Ontology</option><option value="12">12 — Competencies</option>
+      <option value="13">13 — Role Architecture</option><option value="14">14 — Employee Data</option>
+      <option value="15">15 — Performance History</option><option value="16">16 — Learning</option>
+      <option value="17">17 — Assessments</option><option value="18">18 — Market Intel</option>
+      <option value="19">19 — Competitor & Supply</option><option value="20">20 — Risk & ESG</option>
+      <option value="21">21 — Review & Confirm</option>
+    </select>
     <a href="org-setup.html" class="tb-btn">Switch to V1</a>
     <a href="../nav-menus.html" class="tb-btn">All screens</a>
     <div class="tb-pill purple" id="levelPill">V2 Setup</div>
@@ -1439,6 +1453,7 @@ function goToStep(n){
   if(n===6&&D.cultureElements.length)setTimeout(renderMaturityBars,100);
   document.querySelector('.content-left').scrollTop=0;
   updateAiForStep(n);updateProgress();
+  var jmp=document.getElementById('screenJump');if(jmp)jmp.value=n;
 }
 
 function updateProgress(){
