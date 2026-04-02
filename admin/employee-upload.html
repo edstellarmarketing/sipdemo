@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Upload — AI-Guided · Arcova SIP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink:#080F18;--ink-panel:#0C1825;--ink-card:#101E2E;--ink-raised:#152438;--ink-border:rgba(255,255,255,0.07);--ink-soft:#4A6A84;
+  --paper:#D8E8F4;--paper-mid:#8AACC4;
+  --gold:#C8A84B;--gold-lt:#E0CC70;--gold-dim:rgba(200,168,75,0.10);
+  --blue:#1A5C8A;--blue-lt:#3A8CC0;--blue-dim:rgba(26,92,138,0.15);
+  --green:#1A7A4A;--green-lt:#3AB87A;--green-dim:rgba(26,122,74,0.12);
+  --amber:#D4820A;--amber-lt:#F0A030;--amber-dim:rgba(212,130,10,0.12);
+  --red:#C0392B;--red-lt:#E87060;--red-dim:rgba(192,57,43,0.12);
+  --purple:#6A3A9A;--purple-lt:#A070E0;--purple-dim:rgba(106,58,154,0.15);
+  --sidebar-w:220px;--ai-panel-w:310px;
+}
+html,body{height:100%;background:var(--ink);color:var(--paper);font-family:'DM Sans',sans-serif;overflow:hidden}
+.app{display:flex;height:100vh}
+
+/* -- SIDEBAR -- */
+.sidebar{width:var(--sidebar-w);background:var(--ink-panel);border-right:1px solid var(--ink-border);display:flex;flex-direction:column;flex-shrink:0}
+a.sidebar-brand{padding:22px 20px 20px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px;text-decoration:none}
+a.sidebar-brand:hover .brand-hex{opacity:.75;transition:opacity .15s}
+.brand-hex{width:28px;height:28px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);flex-shrink:0}
+.brand-nm{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--paper)}
+.brand-tg{font-size:10px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase}
+.sidebar-nav{flex:1;padding:12px 14px;overflow-y:auto}
+.nav-section-label{font-size:10px;color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase;padding:10px 6px 6px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;font-size:12.5px;color:var(--paper-mid);cursor:pointer;text-decoration:none;transition:background .15s,color .15s;margin-bottom:1px}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.nav-item.active{background:var(--purple-dim);color:var(--purple-lt)}
+.nav-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.nav-badge{margin-left:auto;padding:1px 6px;border-radius:100px;font-size:10px;font-weight:500;background:var(--amber-dim);color:var(--amber-lt)}
+.sidebar-user{padding:14px 16px;border-top:1px solid var(--ink-border);display:flex;align-items:center;gap:10px}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--paper);flex-shrink:0}
+.user-name{font-size:12px;font-weight:500;color:var(--paper)}
+.user-role{font-size:10px;color:var(--ink-soft)}
+
+/* -- MAIN -- */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:50px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;padding:0 24px;gap:12px;flex-shrink:0;background:var(--ink-panel)}
+.topbar-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--paper);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tb-pill{padding:3px 10px;border-radius:100px;font-size:10px;border:1px solid;white-space:nowrap}
+.tb-pill.purple{border-color:rgba(160,112,224,.35);color:var(--purple-lt)}
+.tb-pill.gold{border-color:rgba(200,168,75,.3);color:var(--gold)}
+.tb-btn{padding:6px 12px;border-radius:6px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .15s,color .15s;text-decoration:none;white-space:nowrap}
+.tb-btn:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+
+/* -- SPLIT LAYOUT -- */
+.main-body{display:flex;flex:1;overflow:hidden}
+.content-left{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px}
+.content-left>*{flex-shrink:0}
+.content-left::-webkit-scrollbar{width:4px}
+.content-left::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+
+/* -- AI PANEL -- */
+.ai-panel{width:var(--ai-panel-w);flex-shrink:0;border-left:1px solid var(--ink-border);background:linear-gradient(180deg,var(--ink-panel) 0%,#0A1520 100%);display:flex;flex-direction:column;overflow:hidden}
+.ai-header{padding:14px 16px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px}
+.ai-avatar-ring{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+.ai-avatar-ring::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:2px solid transparent;border-top-color:var(--purple-lt);animation:spin 3s linear infinite}
+.ai-avatar-ring svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:1.8}
+.ai-name{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--paper)}
+.ai-status{font-size:9px;color:var(--green-lt);display:flex;align-items:center;gap:4px}
+.ai-status-dot{width:5px;height:5px;border-radius:50%;background:var(--green-lt);animation:pulse 2s ease-in-out infinite}
+.ai-chat{flex:1;overflow-y:auto;padding:14px 14px;display:flex;flex-direction:column;gap:10px;min-height:0}
+.ai-chat>*{flex-shrink:0}
+.ai-chat::-webkit-scrollbar{width:3px}
+.ai-chat::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:2px}
+.ai-footer{padding:10px 14px;border-top:1px solid var(--ink-border);display:flex;align-items:center;gap:8px}
+.ai-footer-step{font-size:9px;color:var(--ink-soft);flex:1}
+.ai-footer-progress{width:60px;height:4px;border-radius:2px;background:rgba(255,255,255,0.06);overflow:hidden}
+.ai-footer-bar{height:100%;background:var(--purple-lt);border-radius:2px;transition:width .6s ease}
+
+/* AI Bubbles */
+.ai-bubble{display:flex;gap:8px;animation:fadeUp .35s ease both}
+.ai-bubble-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--purple) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.ai-bubble-avatar svg{width:10px;height:10px;stroke:#fff;fill:none;stroke-width:2}
+.ai-msg{background:rgba(106,58,154,0.08);border:1px solid rgba(160,112,224,0.15);border-radius:2px 10px 10px 10px;padding:10px 13px;font-size:11px;color:var(--paper-mid);line-height:1.65;max-width:100%}
+.ai-msg strong{color:var(--paper);font-weight:500}
+.ai-msg em{color:var(--gold);font-style:normal}
+
+/* AI Typing dots */
+.ai-typing{display:flex;gap:4px;padding:10px 16px}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--purple-lt);animation:typingDot 1.4s ease-in-out infinite}
+.ai-dot:nth-child(2){animation-delay:.2s}
+.ai-dot:nth-child(3){animation-delay:.4s}
+
+/* AI Context Card */
+.ai-context-card{background:linear-gradient(135deg,rgba(200,168,75,0.06) 0%,rgba(106,58,154,0.04) 100%);border:1px solid rgba(200,168,75,0.2);border-radius:8px;padding:10px 12px;animation:fadeUp .4s ease both}
+.ai-context-card h5{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px}
+.ai-context-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.ai-context-row:last-child{border:none}
+.ai-context-key{font-size:9px;color:var(--ink-soft)}
+.ai-context-val{font-size:10px;color:var(--paper);font-weight:500}
+
+/* AI Suggest Cards */
+.ai-suggest-card{background:var(--ink-card);border:1px solid var(--ink-border);border-radius:8px;padding:10px 12px;transition:all .25s;position:relative;overflow:hidden}
+.ai-suggest-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px 0 0 2px}
+.ai-suggest-card.priority-high::before{background:var(--red-lt)}
+.ai-suggest-card.priority-medium::before{background:var(--amber-lt)}
+.ai-suggest-card.priority-low::before{background:var(--blue-lt)}
+.ai-suggest-title{font-size:11px;font-weight:500;color:var(--paper);margin-bottom:2px}
+.ai-suggest-detail{font-size:9px;color:var(--ink-soft);margin-bottom:6px;line-height:1.4}
+.ai-suggest-actions{display:flex;gap:6px}
+.ai-suggest-btn{padding:3px 10px;border-radius:5px;font-size:9px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .15s}
+.ai-accept{background:var(--green-dim);color:var(--green-lt);border:1px solid rgba(58,184,122,0.2)}
+.ai-accept:hover{background:rgba(58,184,122,0.2)}
+.ai-dismiss{background:transparent;color:var(--ink-soft);border:1px solid var(--ink-border)}
+.ai-dismiss:hover{color:var(--red-lt);border-color:rgba(232,112,96,0.3)}
+.ai-suggest-card.accepted{border-color:rgba(58,184,122,0.3);background:rgba(26,122,74,0.06);opacity:.7;pointer-events:none}
+.ai-suggest-card.dismissed{opacity:0;transform:translateX(-20px);height:0;padding:0;margin:0;border:none;overflow:hidden;transition:all .3s ease}
+
+/* -- PANELS -- */
+.panel{background:var(--ink-card);border:1px solid var(--ink-border);border-radius:12px;overflow:hidden}
+.panel-head{padding:12px 18px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.panel-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--paper);flex:1;min-width:120px}
+.panel-body{padding:16px 18px}
+
+/* -- STEPPER -- */
+.stepper-bar{display:flex;align-items:center;gap:0;padding:8px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.stepper-bar::-webkit-scrollbar{height:2px}
+.stepper-bar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:2px}
+.step-item{display:flex;align-items:center;gap:4px;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s;flex-shrink:0}
+.step-item:hover{background:rgba(255,255,255,0.04)}
+.step-num{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:8px;font-weight:500;border:2px solid var(--ink-border);color:var(--ink-soft);transition:all .3s;flex-shrink:0}
+.step-label{font-size:8px;color:var(--ink-soft);transition:color .3s;white-space:nowrap}
+.step-item.active .step-num{border-color:var(--purple-lt);color:var(--purple-lt);background:var(--purple-dim)}
+.step-item.active .step-label{color:var(--purple-lt);font-weight:500}
+.step-item.done .step-num{border-color:var(--green-lt);color:var(--green-lt);background:var(--green-dim)}
+.step-item.done .step-label{color:var(--green-lt)}
+.step-conn{width:8px;height:2px;background:var(--ink-border);flex-shrink:0}
+.step-conn.done{background:var(--green-lt)}
+
+/* -- PROGRESS METER -- */
+.progress-meter{display:flex;align-items:center;gap:16px;padding:14px 18px;background:linear-gradient(135deg,var(--ink-card) 0%,rgba(106,58,154,0.06) 100%);border:1px solid rgba(160,112,224,0.2);border-radius:12px}
+.progress-ring-wrap{position:relative;width:56px;height:56px;flex-shrink:0}
+.progress-ring-wrap svg{width:100%;height:100%}
+.progress-ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--purple-lt)}
+.progress-info{flex:1;min-width:0}
+.progress-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--paper);margin-bottom:2px}
+.progress-sub{font-size:10px;color:var(--paper-mid)}
+
+/* -- FORMS -- */
+.form-group{margin-bottom:10px}
+.form-label{display:block;font-size:9px;color:var(--ink-soft);letter-spacing:.04em;margin-bottom:3px;text-transform:uppercase}.form-label span{font-size:7px;letter-spacing:.02em;font-family:'DM Mono',monospace;vertical-align:middle;margin-left:3px}
+.form-input,.form-select,.form-textarea{width:100%;padding:7px 11px;border-radius:6px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper);font-family:'DM Sans',sans-serif;font-size:11.5px;outline:none;transition:border-color .2s,box-shadow .2s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--purple-lt);box-shadow:0 0 0 3px rgba(160,112,224,0.1)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--ink-soft)}
+.form-select option{background:var(--ink-raised);color:var(--paper)}
+.form-textarea{resize:vertical;min-height:52px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:1100px){.form-row,.form-row-3{grid-template-columns:1fr}}
+.form-input.ai-filled,.form-select.ai-filled,.form-textarea.ai-filled{border-color:rgba(160,112,224,0.3);background:linear-gradient(135deg,var(--ink-raised) 0%,rgba(106,58,154,0.06) 100%)}
+
+.btn{padding:7px 16px;border-radius:6px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+.btn:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.btn-gold{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:600}
+.btn-gold:hover{opacity:.88;background:var(--gold);color:var(--ink)}
+.btn-blue{background:var(--blue);border-color:var(--blue);color:var(--paper);font-weight:500}
+.btn-blue:hover{opacity:.88}
+.btn-sm{padding:4px 10px;font-size:10px}
+
+.section-desc{font-size:10px;color:var(--paper-mid);line-height:1.6;margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:7px;border-left:3px solid var(--purple-lt)}
+
+/* -- DYNAMIC LISTS -- */
+.added-items{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.added-chip{padding:4px 9px;border-radius:5px;font-size:10px;color:var(--paper);border:1px solid var(--ink-border);background:var(--ink-raised);display:flex;align-items:center;gap:5px;transition:all .2s}
+.added-chip:hover{border-color:rgba(160,112,224,0.25)}
+.remove-chip{cursor:pointer;opacity:.4;transition:opacity .15s;font-size:12px}
+.remove-chip:hover{opacity:1;color:var(--red-lt)}
+
+/* -- STEP PANELS -- */
+.step-panel{display:none;opacity:0;transform:translateX(20px)}
+.step-panel.visible{display:block;animation:slideIn .4s ease both}
+
+/* -- UPLOAD ZONE -- */
+.upload-zone{border:1px dashed rgba(160,112,224,0.25);border-radius:10px;padding:12px 14px;margin-bottom:12px;background:rgba(106,58,154,0.02);transition:all .25s;cursor:pointer;position:relative}
+.upload-zone:hover{border-color:var(--purple-lt);background:rgba(106,58,154,0.05)}
+.upload-zone.drag-over{border-color:var(--gold);background:rgba(200,168,75,0.08)}
+.upload-zone-inner{display:flex;align-items:center;gap:10px}
+.upload-icon-sm{width:28px;height:28px;border-radius:7px;background:var(--purple-dim);border:1px solid rgba(160,112,224,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.upload-icon-sm svg{width:14px;height:14px;stroke:var(--purple-lt);fill:none;stroke-width:1.8}
+.upload-zone p{font-size:9px;color:var(--ink-soft)}
+.upload-zone .upload-link{color:var(--purple-lt);text-decoration:underline;cursor:pointer}
+.upload-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-progress{margin-top:8px;display:none}
+.upload-progress.active{display:block;animation:fadeUp .3s ease both}
+.upload-file-badge{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--ink-raised);border:1px solid var(--ink-border);border-radius:6px;margin-bottom:6px;font-size:10px}
+.upload-extract-bar{height:3px;background:var(--ink-raised);border-radius:2px;overflow:hidden;margin-top:4px}
+.upload-extract-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--purple-lt),var(--blue-lt));transition:width .4s ease;width:0%}
+
+/* -- LARGE UPLOAD ZONE -- */
+.upload-zone-lg{border:2px dashed rgba(160,112,224,0.3);border-radius:14px;padding:32px 24px;margin-bottom:16px;background:linear-gradient(135deg,rgba(106,58,154,0.04) 0%,rgba(200,168,75,0.02) 100%);transition:all .25s;cursor:pointer;position:relative;text-align:center}
+.upload-zone-lg:hover{border-color:var(--purple-lt);background:rgba(106,58,154,0.07)}
+.upload-zone-lg.drag-over{border-color:var(--gold);background:rgba(200,168,75,0.1)}
+.upload-zone-lg .upload-icon-lg{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--purple) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.upload-zone-lg .upload-icon-lg svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.8}
+.upload-zone-lg h4{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--paper);margin-bottom:4px}
+.upload-zone-lg p{font-size:10px;color:var(--paper-mid);margin-bottom:6px}
+.upload-zone-lg .upload-formats{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.upload-zone-lg .upload-formats span{padding:2px 8px;border-radius:4px;font-size:8px;border:1px solid}
+
+/* -- DATA TABLE -- */
+.data-table-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--ink-border);margin-bottom:14px}
+.data-table{width:100%;border-collapse:collapse;font-size:10px}
+.data-table th{background:var(--ink-raised);color:var(--paper-mid);font-weight:500;font-size:9px;text-transform:uppercase;letter-spacing:.04em;padding:8px 10px;text-align:left;border-bottom:1px solid var(--ink-border);white-space:nowrap;position:sticky;top:0}
+.data-table td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--paper);white-space:nowrap}
+.data-table tr:hover td{background:rgba(106,58,154,0.04)}
+.data-table tr:nth-child(even) td{background:rgba(255,255,255,0.01)}
+
+/* -- DATA QUALITY CARD -- */
+.dq-card{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:14px}
+.dq-item{padding:12px 14px;border-radius:8px;border:1px solid var(--ink-border);background:var(--ink-raised);text-align:center}
+.dq-item .dq-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:2px}
+.dq-item .dq-label{font-size:9px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em}
+.dq-item.good .dq-val{color:var(--green-lt)}
+.dq-item.warn .dq-val{color:var(--amber-lt)}
+.dq-item.bad .dq-val{color:var(--red-lt)}
+.dq-item.info .dq-val{color:var(--purple-lt)}
+
+/* AI SUGGESTION CHIPS */
+.ai-suggestion-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;margin-bottom:4px;animation:fadeUp .3s ease both}
+.ai-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px 3px 7px;border-radius:6px;font-size:10px;color:var(--purple-lt);background:linear-gradient(135deg,rgba(106,58,154,0.08) 0%,rgba(26,92,138,0.06) 100%);border:1px solid rgba(160,112,224,0.2);cursor:pointer;transition:all .2s;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.ai-chip:hover{background:rgba(160,112,224,0.14);border-color:rgba(160,112,224,0.4);transform:translateY(-1px);box-shadow:0 3px 10px rgba(106,58,154,0.15)}
+.ai-chip:active{transform:scale(0.97)}
+.ai-chip.applied{background:var(--green-dim);border-color:rgba(58,184,122,0.3);color:var(--green-lt);pointer-events:none;opacity:.7}
+.ai-chip svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.ai-chip-label{font-size:8px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;font-family:'DM Mono',monospace;display:flex;align-items:center;gap:4px}
+.ai-chip-label svg{width:10px;height:10px;stroke:var(--purple-lt);fill:none;stroke-width:1.8}
+
+/* -- SUCCESS -- */
+.success-banner{display:none;padding:16px 20px;background:linear-gradient(135deg,rgba(26,122,74,0.12) 0%,rgba(106,58,154,0.08) 100%);border:1px solid rgba(58,184,122,0.3);border-radius:12px;align-items:center;gap:14px}
+.success-banner.show{display:flex;animation:fadeUp .5s ease both}
+
+/* -- TOAST -- */
+.toast-msg{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink-raised);border:1px solid rgba(160,112,224,0.3);color:var(--purple-lt);font-size:11px;font-family:'DM Sans',sans-serif;padding:8px 18px;border-radius:8px;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:9999;white-space:nowrap}
+.toast-msg.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* -- REVIEW SECTIONS -- */
+.rv-section{margin-bottom:14px}
+.rv-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.rv-check{width:13px;height:13px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rv-check.done{background:var(--green-dim);border:1px solid var(--green-lt)}
+.rv-check.pending{background:var(--amber-dim);border:1px solid var(--amber-lt)}
+.rv-check svg{width:7px;height:7px;stroke:currentColor;fill:none;stroke-width:3}
+
+/* -- CELEBRATION CARD -- */
+.ai-celebrate{border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;animation:fadeUp .4s ease both;background:linear-gradient(135deg,rgba(26,122,74,0.1) 0%,rgba(106,58,154,0.08) 100%);border:1px solid rgba(58,184,122,0.25)}
+.ai-celebrate-header{display:flex;align-items:center;gap:10px}
+.ai-celebrate-icon{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--green) 0%,var(--green-lt) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:celebrateIconPop .5s cubic-bezier(.17,.67,.24,1.2) both}
+.ai-celebrate-icon svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.ai-celebrate-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--green-lt)}
+.ai-celebrate-sub{font-size:9px;color:var(--paper-mid)}
+.ai-celebrate-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ai-celebrate-confetti .c-dot{position:absolute;border-radius:50%;opacity:0;animation:cDotBurst .9s ease-out forwards}
+
+/* -- FIELD-BY-FIELD POPUP SYSTEM -- */
+.field-popup-overlay{position:fixed;inset:0;background:rgba(4,8,14,0.94);backdrop-filter:blur(24px);z-index:11000;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .35s ease}
+.field-popup-overlay.fp-open{display:flex;opacity:1}
+.field-popup{width:100%;max-width:720px;display:flex;flex-direction:column;max-height:90vh;position:relative}
+.fp-header{display:flex;align-items:center;padding:18px 0;gap:12px;border-bottom:1px solid var(--ink-border);flex-shrink:0}
+.fp-header-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.fp-header-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--gold) 0%,#E0CC70 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fp-header-icon svg{width:16px;height:16px;stroke:var(--ink);fill:none;stroke-width:2}
+.fp-header-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--paper);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fp-header-counter{font-size:11px;color:var(--ink-soft);font-family:'DM Mono',monospace;white-space:nowrap}
+.fp-close{width:34px;height:34px;border-radius:7px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.fp-close:hover{background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:var(--red-lt)}
+.fp-close svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.fp-progress{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;flex-shrink:0;margin:12px 0}
+.fp-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-lt));border-radius:2px;transition:width .5s ease}
+.fp-body{flex:1;overflow-y:auto;padding:24px 0;display:flex;flex-direction:column;gap:18px;min-height:0}
+.fp-body::-webkit-scrollbar{width:3px}
+.fp-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:2px}
+.fp-field-area{animation:fadeUp .35s ease both}
+.fp-field-label{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--paper);line-height:1.35;margin-bottom:4px}
+.fp-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-left:8px;vertical-align:middle}
+.fp-badge.required{background:rgba(192,57,43,0.12);color:var(--red-lt);border:1px solid rgba(192,57,43,0.25)}
+.fp-badge.recommended{background:rgba(200,168,75,0.1);color:var(--gold);border:1px solid rgba(200,168,75,0.2)}
+.fp-input,.fp-select,.fp-textarea{width:100%;padding:12px 16px;border-radius:8px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;margin-top:8px}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,168,75,0.1)}
+.fp-input::placeholder,.fp-textarea::placeholder{color:var(--ink-soft)}
+.fp-select option{background:var(--ink-raised);color:var(--paper)}
+.fp-textarea{resize:vertical;min-height:80px}
+.fp-suggestion-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.fp-chip{padding:7px 14px;border-radius:7px;font-size:12px;color:var(--paper-mid);border:1px solid var(--ink-border);background:var(--ink-raised);cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.fp-chip:hover{border-color:var(--gold);color:var(--paper);background:var(--gold-dim)}
+.fp-chip.fp-applied{border-color:rgba(58,184,122,0.3);color:var(--green-lt);background:var(--green-dim);pointer-events:none;opacity:.7}
+.fp-chip svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.fp-ai-area{padding:14px 16px;border-radius:10px;background:linear-gradient(135deg,rgba(106,58,154,0.06) 0%,rgba(200,168,75,0.04) 100%);border:1px solid rgba(160,112,224,0.15)}
+.fp-ai-msg{font-size:12px;color:var(--paper-mid);line-height:1.6;margin-bottom:8px}
+.fp-ai-msg svg{width:12px;height:12px;stroke:var(--purple-lt);fill:none;stroke-width:2;vertical-align:middle;margin-right:4px}
+.fp-ai-rule{font-size:10px;color:var(--ink-soft);line-height:1.5;padding-top:6px;border-top:1px solid rgba(255,255,255,0.04)}
+.fp-ai-rule strong{color:var(--gold);font-weight:600}
+.fp-footer{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-top:1px solid var(--ink-border);flex-shrink:0}
+.fp-back-btn{padding:8px 16px;border-radius:7px;border:1px solid var(--ink-border);background:transparent;color:var(--ink-soft);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s}
+.fp-back-btn:hover{color:var(--paper-mid);border-color:rgba(255,255,255,0.15)}
+.fp-next-btn{padding:10px 24px;border-radius:8px;border:none;background:var(--gold);color:var(--ink);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .15s;letter-spacing:.03em}
+.fp-next-btn:hover{opacity:.88}
+.fp-next-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5}
+
+/* -- ANIMATIONS -- */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes typingDot{0%,80%,100%{opacity:.3;transform:scale(.7)}40%{opacity:1;transform:scale(1)}}
+@keyframes staggerIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes celebrateIconPop{0%{transform:scale(0) rotate(-30deg);opacity:0}60%{transform:scale(1.15) rotate(5deg);opacity:1}100%{transform:scale(1) rotate(0deg);opacity:1}}
+@keyframes cDotBurst{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
+
+@media(max-width:1024px){.ai-panel{display:none}}
+@media(max-width:768px){.sidebar{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-hex"></div>
+    <div style="display:flex;flex-direction:column;gap:1px"><span class="brand-nm">Arcova SIP</span><span class="brand-tg">Admin Portal</span></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Onboarding Modules</div>
+    <a class="nav-item" href="org-setup-v2.html"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Company Setup <span class="nav-badge">1</span></a>
+    <a class="nav-item active" href="employee-upload.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Employee Upload <span class="nav-badge">2</span></a>
+    <a class="nav-item" href="role-competency-setup.html"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>Role &amp; Competency <span class="nav-badge">3</span></a>
+    <a class="nav-item" href="workforce-intelligence.html"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Workforce Intel <span class="nav-badge">4</span></a>
+    <div class="nav-section-label">Setup</div>
+    <a class="nav-item" href="org-setup.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>OrgSetup V1</a>
+    <a class="nav-item" href="dataport.html"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>DataPort</a>
+    <a class="nav-item" href="skillforge.html"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>SkillForge</a>
+    <a class="nav-item" href="approvalhub.html"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>ApprovalHub</a>
+    <div class="nav-section-label">Assessment</div>
+    <a class="nav-item" href="assess-engine.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>AssessEngine</a>
+    <a class="nav-item" href="knowledge-tests.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>Knowledge Tests</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-avatar">KR</div>
+    <div style="display:flex;flex-direction:column;gap:1px"><div class="user-name">Kavitha Ramachandran</div><div class="user-role">L&amp;D Manager</div></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Employee Upload — AI-Guided Onboarding</div>
+    <select id="screenJump" onchange="if(this.value)goToStep(+this.value)" style="padding:4px 8px;border-radius:6px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;outline:none;max-width:180px">
+      <option value="">Jump to screen...</option>
+      <option value="1">1 -- Employee Data Config</option>
+      <option value="2">2 -- Employee Upload & Review</option>
+      <option value="3">3 -- Review & Lock</option>
+    </select>
+    <a href="org-setup-v2.html" class="tb-btn">&larr; Company Setup</a>
+    <a href="../nav-menus.html" class="tb-btn">All screens</a>
+    <div class="tb-pill purple" id="levelPill">Module 2</div>
+    <button class="tb-btn" onclick="resetDemo()" style="color:var(--amber-lt);border-color:rgba(212,130,10,0.3)">Reset</button>
+  </div>
+
+  <div class="main-body">
+    <div class="content-left">
+      <div class="progress-meter" id="progressMeter">
+        <div class="progress-ring-wrap">
+          <svg viewBox="0 0 56 56">
+            <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
+            <circle id="progressRing" cx="28" cy="28" r="24" fill="none" stroke="url(#ringGrad)" stroke-width="4" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="150.8" transform="rotate(-90 28 28)" style="transition:stroke-dashoffset .8s ease"/>
+            <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#A070E0"/><stop offset="100%" stop-color="#3AB87A"/></linearGradient></defs>
+          </svg>
+          <div class="progress-ring-label" id="progressPct">0%</div>
+        </div>
+        <div class="progress-info">
+          <div class="progress-title" id="progressTitle">Employee Upload: 0 of 2 screens</div>
+          <div class="progress-sub">Module 2 of 4 — AI-guided employee data ingestion pipeline.</div>
+        </div>
+      </div>
+      <div class="stepper-bar" id="stepper"></div>
+      <div class="success-banner" id="successBanner">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--green-dim);border:2px solid var(--green-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg style="width:18px;height:18px;stroke:var(--green-lt);fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div><h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--green-lt);margin-bottom:3px">Employee Data Locked</h3><p style="font-size:11px;color:var(--paper-mid)">Employee data captured and saved. Role & Competency Setup is now unlocked.</p></div>
+        <a href="role-competency-setup.html" class="btn btn-gold" style="margin-left:auto">Proceed to Role & Competency Setup &rarr;</a>
+      </div>
+      <div id="stepContainer"></div>
+    </div>
+
+    <!-- RIGHT: AI PANEL -->
+    <div class="ai-panel" id="aiPanel">
+      <div class="ai-header">
+        <div class="ai-avatar-ring"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div style="flex:1"><div class="ai-name">SIP Architect</div><div class="ai-status"><span class="ai-status-dot"></span> Guiding you</div></div>
+      </div>
+      <div class="ai-chat" id="aiChat"></div>
+      <div class="ai-footer">
+        <div class="ai-footer-step" id="aiFooterStep">Screen 1 of 3</div>
+        <div class="ai-footer-progress"><div class="ai-footer-bar" id="aiFooterBar" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FIELD-BY-FIELD POPUP -->
+<div class="field-popup-overlay" id="fieldPopup">
+  <div class="field-popup">
+    <div class="fp-header">
+      <div class="fp-header-left">
+        <div class="fp-header-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <div class="fp-header-title" id="fpHeaderTitle">Screen 1</div>
+        <div class="fp-header-counter" id="fpHeaderCounter">1 / 5</div>
+      </div>
+      <button class="fp-close" onclick="closeFieldPopup()" title="Close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="fp-progress"><div class="fp-progress-fill" id="fpProgressFill" style="width:0%"></div></div>
+    <div class="fp-body" id="fpBody"></div>
+    <div class="fp-footer">
+      <button class="fp-back-btn" id="fpBackBtn" onclick="fpBack()">&larr; Back</button>
+      <button class="fp-next-btn" id="fpNextBtn" onclick="fpNext()">Next <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-msg" id="toast"></div>
+
+<script>
+// =====================================================
+// CONFIG & STATE
+// =====================================================
+var STEPS=[
+  {id:1,title:'Employee Data Config',seg:'Config'},
+  {id:2,title:'Upload & Review',seg:'Upload'},
+  {id:3,title:'Review & Lock',seg:null}
+];
+var TOTAL=2;
+var state={current:1,completed:{},visited:{},uploadSimulated:false};
+for(var i=1;i<=TOTAL;i++)state.completed[i]=false;
+var D={employees:[]};
+var appliedSuggestions={};
+var companyData=null;
+
+// Try to load company data from localStorage
+try{
+  var raw=localStorage.getItem('sip_company');
+  if(raw) companyData=JSON.parse(raw);
+}catch(e){}
+
+// Detect HRIS from tech stack
+function detectHRIS(){
+  if(!companyData) return '';
+  if(companyData.techStack && Array.isArray(companyData.techStack)){
+    for(var i=0;i<companyData.techStack.length;i++){
+      var t=companyData.techStack[i];
+      if(t.name && t.name.toLowerCase().indexOf('workday')>-1) return 'Workday';
+      if(t.name && t.name.toLowerCase().indexOf('bamboo')>-1) return 'BambooHR';
+      if(t.name && t.name.toLowerCase().indexOf('sap')>-1) return 'SAP SuccessFactors';
+    }
+  }
+  return '';
+}
+
+function getCompanyEmpCount(){
+  if(!companyData) return '';
+  return companyData.totalEmps || companyData.empCount || '';
+}
+
+// =====================================================
+// DEMO EMPLOYEE DATA (15-20 realistic records)
+// =====================================================
+var DEMO_EMPLOYEES=[
+  {name:'Rajesh Kumar',title:'Senior Structural Engineer',dept:'Engineering',manager:'Arun Mehta',location:'Singapore HQ',hireDate:'2018-03-15',type:'Full-time'},
+  {name:'Priya Venkatesh',title:'BIM Coordinator',dept:'Digital Delivery',manager:'Sarah Chen',location:'Singapore HQ',hireDate:'2020-06-01',type:'Full-time'},
+  {name:'David Tan',title:'Project Manager',dept:'Operations',manager:'James Lim',location:'Singapore HQ',hireDate:'2016-09-12',type:'Full-time'},
+  {name:'Fatima Al-Rashid',title:'Safety Manager',dept:'EHS & Risk',manager:'James Lim',location:'Dubai Office',hireDate:'2019-01-20',type:'Full-time'},
+  {name:'Vikram Singh',title:'Civil Engineer',dept:'Engineering',manager:'Rajesh Kumar',location:'Mumbai Hub',hireDate:'2021-07-05',type:'Full-time'},
+  {name:'Sarah Chen',title:'BIM Manager',dept:'Digital Delivery',manager:'Arun Mehta',location:'Singapore HQ',hireDate:'2017-11-28',type:'Full-time'},
+  {name:'Amit Patel',title:'Quantity Surveyor',dept:'Operations',manager:'David Tan',location:'Mumbai Hub',hireDate:'2020-02-14',type:'Full-time'},
+  {name:'Jessica Wong',title:'HR Business Partner',dept:'Corporate',manager:'Linda Ng',location:'Singapore HQ',hireDate:'2019-08-19',type:'Full-time'},
+  {name:'Mohammed Hassan',title:'Site Supervisor',dept:'Operations',manager:'Fatima Al-Rashid',location:'Dubai Office',hireDate:'2022-04-03',type:'Full-time'},
+  {name:'Arun Mehta',title:'Chief Engineer',dept:'Engineering',manager:'James Lim',location:'Singapore HQ',hireDate:'2014-05-22',type:'Full-time'},
+  {name:'Linda Ng',title:'Head of HR',dept:'Corporate',manager:'James Lim',location:'Singapore HQ',hireDate:'2015-01-10',type:'Full-time'},
+  {name:'Tan Wei Ming',title:'Cloud Architect',dept:'IT Infrastructure',manager:'Sarah Chen',location:'Singapore HQ',hireDate:'2021-10-11',type:'Full-time'},
+  {name:'Deepak Sharma',title:'Geotechnical Engineer',dept:'Engineering',manager:'Rajesh Kumar',location:'Mumbai Hub',hireDate:'2022-01-17',type:'Full-time'},
+  {name:'Nurul Huda',title:'Sustainability Consultant',dept:'Digital Delivery',manager:'Arun Mehta',location:'KL Branch',hireDate:'2023-03-06',type:'Full-time'},
+  {name:'Omar Farouk',title:'MEP Coordinator',dept:'Engineering',manager:'Fatima Al-Rashid',location:'Dubai Office',hireDate:'2020-09-28',type:'Contract'},
+  {name:'James Lim',title:'Managing Director',dept:'Corporate',manager:'Board',location:'Singapore HQ',hireDate:'2009-06-01',type:'Full-time'},
+  {name:'Ananya Reddy',title:'Data Analyst',dept:'Digital Delivery',manager:'Sarah Chen',location:'Mumbai Hub',hireDate:'2023-06-19',type:'Full-time'},
+  {name:'Chen Wei',title:'Procurement Manager',dept:'Operations',manager:'David Tan',location:'Singapore HQ',hireDate:'2018-11-05',type:'Full-time'}
+];
+
+// =====================================================
+// AI SUGGESTIONS
+// =====================================================
+function getAiSuggestions(){
+  var hris=detectHRIS()||'Workday';
+  var empCount=getCompanyEmpCount()||'812';
+  return {
+    1:{fields:{
+      'f-hris':{val:hris||'Workday',label:hris?'Detected from tech stack':'Common HRIS'},
+      'f-records':{val:empCount||'812',label:'From company employee count'},
+      'f-quality':{val:'High — Clean HRIS data',label:hris?hris+' = high quality data':'Recommended default'},
+      'f-workmodes':{val:'On-site, Hybrid, Remote, Field',label:'Construction industry mix'}
+    }}
+  };
+}
+
+// =====================================================
+// AI MESSAGES
+// =====================================================
+var AI_MESSAGES={
+  1:{welcome:"Let's configure your <strong>employee data pipeline</strong>. I've detected your HRIS from the tech stack setup &mdash; this helps me auto-map data columns during import.",follow:"Configure the data source settings below. AI suggestions are pre-loaded based on your <em>Company Setup</em> data."},
+  2:{welcome:"Upload your <strong>employee data file</strong>. I'll validate the data quality and flag any issues before import.",follow:"Drag &amp; drop a CSV or Excel file, or click to browse. I'll parse the file, validate columns, and show you a <em>preview with quality metrics</em>."},
+  3:{welcome:"Review your <strong>employee data summary</strong>. Once locked, this feeds into <em>Role Architecture</em> and downstream intelligence.",follow:"Verify the data quality metrics. When ready, click <strong>Confirm & Lock</strong> to save and proceed to Module 3."}
+};
+
+// =====================================================
+// CONGRATS + UNLOCK MESSAGES
+// =====================================================
+var CONGRATS={
+  1:{msg:"Employee pipeline configured!",unlocks:["People analytics dashboards","Headcount & demographics reporting","Manager span-of-control analysis","HRIS integration readiness"]},
+  2:{msg:"Employee data imported!",unlocks:["Role-to-employee mapping","Skill inventory per employee","Workforce demographics analytics","Succession planning models"]}
+};
+
+// =====================================================
+// HELPERS
+// =====================================================
+function gv(id){var e=document.getElementById(id);return e?e.value.trim():''}
+function sv(id,v){var e=document.getElementById(id);if(e){e.value=v;e.classList.add('ai-filled')}}
+function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show')},2200)}
+function escH(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function aiAvatar(){return '<div class="ai-bubble-avatar"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 12l10 5 10-5"/></svg></div>'}
+function addAiMsg(t){var c=document.getElementById('aiChat'),b=document.createElement('div');b.className='ai-bubble';b.innerHTML=aiAvatar()+'<div class="ai-msg">'+t+'</div>';c.appendChild(b);c.scrollTop=c.scrollHeight}
+function addAiTyping(){var c=document.getElementById('aiChat'),e=document.createElement('div');e.className='ai-bubble';e.id='aiTypingEl';e.innerHTML=aiAvatar()+'<div class="ai-typing"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div>';c.appendChild(e);c.scrollTop=c.scrollHeight}
+function removeAiTyping(){var e=document.getElementById('aiTypingEl');if(e)e.remove()}
+function clearAiChat(){document.getElementById('aiChat').innerHTML=''}
+
+function addAiContextCard(d){var c=document.getElementById('aiChat'),e=document.createElement('div');e.className='ai-context-card';var h='<h5>Context Detected</h5>';for(var k in d)h+='<div class="ai-context-row"><span class="ai-context-key">'+k+'</span><span class="ai-context-val">'+d[k]+'</span></div>';e.innerHTML=h;c.appendChild(e);c.scrollTop=c.scrollHeight}
+
+function updateAiForStep(n){
+  clearAiChat();
+  var m=AI_MESSAGES[n];if(!m)return;
+  document.getElementById('aiFooterStep').textContent='Screen '+n+' of 3';
+  if(state.visited[n]){addAiMsg(m.welcome);if(m.follow)addAiMsg(m.follow);return}
+  state.visited[n]=true;
+  addAiTyping();
+  setTimeout(function(){removeAiTyping();addAiMsg(m.welcome);
+    if(n===1){
+      var ctx={};
+      var hris=detectHRIS();
+      if(hris) ctx['HRIS Detected']=hris;
+      var empC=getCompanyEmpCount();
+      if(empC) ctx['Employee Count']=empC;
+      if(companyData && companyData.sector) ctx['Industry']=companyData.sector;
+      if(Object.keys(ctx).length) setTimeout(function(){addAiContextCard(ctx)},400);
+    }
+    if(m.follow)setTimeout(function(){addAiTyping();setTimeout(function(){removeAiTyping();addAiMsg(m.follow)},800)},600)
+  },700);
+}
+
+function showCelebration(msg,sub){
+  var chat=document.getElementById('aiChat');
+  var card=document.createElement('div');
+  card.className='ai-celebrate';
+  var confettiHtml='<div class="ai-celebrate-confetti">';
+  var colors=['#A070E0','#3AB87A','#E0CC70','#3A8CC0','#F0A030','#E87060'];
+  for(var i=0;i<18;i++){
+    var dx=(Math.random()>0.5?1:-1)*(30+Math.random()*80)+'px';
+    var dy=(Math.random()>0.5?1:-1)*(20+Math.random()*50)+'px';
+    confettiHtml+='<span class="c-dot" style="width:'+(3+Math.random()*4)+'px;height:'+(3+Math.random()*4)+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';left:16px;top:22px;--dx:'+dx+';--dy:'+dy+';animation-delay:'+(Math.random()*0.3)+'s"></span>';
+  }
+  confettiHtml+='</div>';
+  card.innerHTML=confettiHtml+'<div class="ai-celebrate-header"><div class="ai-celebrate-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="ai-celebrate-title">'+msg+'</div>'+(sub?'<div class="ai-celebrate-sub">'+sub+'</div>':'')+'</div></div>';
+  chat.appendChild(card);chat.scrollTop=chat.scrollHeight;
+}
+
+// =====================================================
+// AI SUGGESTION RENDERING
+// =====================================================
+function fieldSuggestion(fieldId,stepNum){
+  var sug=getAiSuggestions();
+  if(!sug[stepNum]||!sug[stepNum].fields||!sug[stepNum].fields[fieldId])return '';
+  var s=sug[stepNum].fields[fieldId];
+  var key=fieldId+'_'+stepNum;
+  if(appliedSuggestions[key])return '';
+  var truncVal=s.val.length>80?s.val.substring(0,80)+'...':s.val;
+  return '<div class="ai-suggestion-row"><span class="ai-chip-label"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>AI suggests</span>'
+    +'<span class="ai-chip" onclick="applyFieldSuggestion(\''+fieldId+'\','+stepNum+',this)" title="'+escH(s.val)+'"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>'+escH(truncVal)+'</span></div>';
+}
+
+function applyFieldSuggestion(fieldId,step,chipEl){
+  var sug=getAiSuggestions();
+  var s=sug[step].fields[fieldId];
+  sv(fieldId,s.val);
+  chipEl.classList.add('applied');chipEl.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Applied';
+  appliedSuggestions[fieldId+'_'+step]=true;
+  showToast('AI suggestion applied');
+}
+
+function applyAllSuggestions(step){
+  var sug=getAiSuggestions();if(!sug[step])return;
+  if(sug[step].fields){for(var fid in sug[step].fields){sv(fid,sug[step].fields[fid].val);appliedSuggestions[fid+'_'+step]=true}}
+  renderSteps();goToStep(step);
+}
+
+// =====================================================
+// UPLOAD ZONE HELPERS
+// =====================================================
+function uploadZone(step){
+  return '<div class="upload-zone" id="uploadZone'+step+'" ondragover="event.preventDefault();this.classList.add(\'drag-over\')" ondragleave="this.classList.remove(\'drag-over\')" ondrop="event.preventDefault();this.classList.remove(\'drag-over\');simulateStepUpload('+step+')">'
+    +'<input type="file" class="upload-input" onchange="simulateStepUpload('+step+')" accept=".pdf,.docx,.xlsx,.csv">'
+    +'<div class="upload-zone-inner"><div class="upload-icon-sm"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>'
+    +'<p>Upload a document or <span class="upload-link">browse files</span> to auto-fill this screen</p></div>'
+    +'<div class="upload-progress" id="uploadProg'+step+'"></div></div>';
+}
+
+function simulateStepUpload(step){
+  var z=document.getElementById('uploadZone'+step);
+  z.querySelector('.upload-zone-inner').style.display='none';z.querySelector('.upload-input').style.display='none';z.style.cursor='default';
+  var p=document.getElementById('uploadProg'+step);
+  p.innerHTML='<div class="upload-file-badge"><span style="color:var(--purple-lt)">Extracting...</span></div><div class="upload-extract-bar"><div class="upload-extract-fill" id="uploadBar'+step+'"></div></div>';
+  p.classList.add('active');
+  var bar=document.getElementById('uploadBar'+step);
+  bar.style.width='30%';
+  setTimeout(function(){bar.style.width='70%'},500);
+  setTimeout(function(){bar.style.width='100%';p.querySelector('.upload-file-badge span').textContent='Extracted!';p.querySelector('.upload-file-badge span').style.color='var(--green-lt)';applyAllSuggestions(step);addAiMsg("Document extracted! Fields have been populated for Screen "+step+". Review and adjust as needed.")},1200);
+}
+
+// =====================================================
+// STEP BUILDERS
+// =====================================================
+function navBtns(prev,next){
+  var h='<div style="display:flex;justify-content:space-between;gap:10px;margin-top:14px">';
+  h+=prev?'<button class="btn" onclick="goToStep('+prev+')">&larr; Back</button>':'<div></div>';
+  h+=next?'<button class="btn btn-gold" onclick="saveStep('+(next-1)+')">Save & Continue &rarr;</button>':'';
+  return h+'</div>';
+}
+
+function buildStep1(){
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 1 — Employee Data Configuration</div></div><div class="panel-body">'
+  +uploadZone(1)
+  +'<div class="section-desc">Configure your employee data source. AI has pre-detected settings from your Company Setup data.</div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">HRIS System <span style="color:var(--amber-lt)">recommended</span></label><input class="form-input" id="f-hris" placeholder="e.g. Workday">'+fieldSuggestion('f-hris',1)+'</div><div class="form-group"><label class="form-label">Records to Import</label><input class="form-input" id="f-records" type="number" placeholder="Number of employee records">'+fieldSuggestion('f-records',1)+'</div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Data Quality</label><select class="form-select" id="f-quality"><option value="">Select...</option><option>High — Clean HRIS data</option><option>Medium — Some gaps</option><option>Low — Significant cleanup</option></select>'+fieldSuggestion('f-quality',1)+'</div><div class="form-group"><label class="form-label">Work Modes</label><input class="form-input" id="f-workmodes" placeholder="e.g. On-site, Hybrid, Remote, Field">'+fieldSuggestion('f-workmodes',1)+'</div></div>'
+  +navBtns(null,2)+'</div></div>';
+}
+
+function buildStep2(){
+  var h='<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 2 — Employee Upload & Review</div></div><div class="panel-body">';
+
+  if(!state.uploadSimulated){
+    h+='<div class="upload-zone-lg" id="uploadZoneLg" ondragover="event.preventDefault();this.classList.add(\'drag-over\')" ondragleave="this.classList.remove(\'drag-over\')" ondrop="event.preventDefault();this.classList.remove(\'drag-over\');simulateEmployeeUpload()">'
+      +'<input type="file" class="upload-input" onchange="simulateEmployeeUpload()" accept=".csv,.xlsx,.xls">'
+      +'<div class="upload-icon-lg"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>'
+      +'<h4>Upload Employee Data File</h4>'
+      +'<p>Drag & drop your CSV or Excel file here, or <span class="upload-link">browse files</span></p>'
+      +'<div class="upload-formats">'
+      +'<span style="background:rgba(26,122,74,0.1);color:var(--green-lt);border-color:rgba(58,184,122,0.15)">.CSV</span>'
+      +'<span style="background:rgba(58,140,192,0.1);color:var(--blue-lt);border-color:rgba(58,140,192,0.15)">.XLSX</span>'
+      +'<span style="background:rgba(200,168,75,0.1);color:var(--gold);border-color:rgba(200,168,75,0.15)">.XLS</span>'
+      +'</div>'
+      +'<div id="uploadProgressLg" style="margin-top:12px"></div>'
+      +'</div>';
+    h+='<div style="text-align:center;margin-bottom:12px"><button class="btn btn-blue" onclick="simulateEmployeeUpload()">Or use demo data ('+DEMO_EMPLOYEES.length+' sample records)</button></div>';
+  } else {
+    h+=renderEmployeeTable();
+    h+=renderDataQualitySummary();
+    h+='<div style="text-align:right;margin-top:10px"><button class="btn btn-gold" onclick="saveStep(2)">Confirm Data & Continue &rarr;</button></div>';
+  }
+
+  h+='</div></div>';
+  return h;
+}
+
+function buildStep3(){
+  var h='<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 3 — Review & Lock Employee Data</div></div><div class="panel-body" id="reviewBody">';
+  h+=buildReviewContent();
+  h+='</div></div>';
+  h+='<div style="display:flex;justify-content:space-between;gap:10px;margin-top:10px"><button class="btn" onclick="goToStep(2)">&larr; Back</button><button class="btn btn-gold" onclick="confirmLock()"><svg style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Confirm & Lock</button></div>';
+  return h;
+}
+
+// =====================================================
+// EMPLOYEE TABLE RENDERING
+// =====================================================
+function renderEmployeeTable(){
+  var h='<div class="data-table-wrap" style="max-height:380px;overflow-y:auto"><table class="data-table"><thead><tr>'
+    +'<th>#</th><th>Name</th><th>Current Title</th><th>Department</th><th>Manager</th><th>Location</th><th>Hire Date</th><th>Employment Type</th>'
+    +'</tr></thead><tbody>';
+  D.employees.forEach(function(emp,i){
+    h+='<tr><td>'+(i+1)+'</td><td style="color:var(--paper);font-weight:500">'+escH(emp.name)+'</td><td>'+escH(emp.title)+'</td><td>'+escH(emp.dept)+'</td><td>'+escH(emp.manager)+'</td><td>'+escH(emp.location)+'</td><td>'+escH(emp.hireDate)+'</td><td>'+escH(emp.type)+'</td></tr>';
+  });
+  h+='</tbody></table></div>';
+  return h;
+}
+
+function renderDataQualitySummary(){
+  var total=D.employees.length;
+  var missing=Math.floor(total*0.03);
+  var dupes=0;
+  var h='<div style="font-family:\'Syne\',sans-serif;font-size:11px;font-weight:700;color:var(--paper);margin-bottom:8px">Data Quality Summary</div>';
+  h+='<div class="dq-card">';
+  h+='<div class="dq-item info"><div class="dq-val">'+total+'</div><div class="dq-label">Total Records</div></div>';
+  h+='<div class="dq-item '+(missing>5?'warn':'good')+'"><div class="dq-val">'+missing+'</div><div class="dq-label">Missing Fields</div></div>';
+  h+='<div class="dq-item '+(dupes>0?'warn':'good')+'"><div class="dq-val">'+dupes+'</div><div class="dq-label">Duplicates</div></div>';
+  h+='<div class="dq-item good"><div class="dq-val">Passed</div><div class="dq-label">Validation Status</div></div>';
+  h+='</div>';
+
+  // Department breakdown
+  var depts={};
+  D.employees.forEach(function(e){depts[e.dept]=(depts[e.dept]||0)+1});
+  h+='<div style="font-size:10px;color:var(--paper-mid);margin-bottom:6px"><strong style="color:var(--paper)">Department Breakdown:</strong></div>';
+  h+='<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">';
+  for(var d in depts){
+    h+='<span style="padding:3px 8px;border-radius:5px;font-size:9px;background:var(--ink-raised);border:1px solid var(--ink-border);color:var(--paper-mid)">'+d+': <strong style="color:var(--paper)">'+depts[d]+'</strong></span>';
+  }
+  h+='</div>';
+
+  // Location breakdown
+  var locs={};
+  D.employees.forEach(function(e){locs[e.location]=(locs[e.location]||0)+1});
+  h+='<div style="font-size:10px;color:var(--paper-mid);margin-bottom:6px"><strong style="color:var(--paper)">Location Distribution:</strong></div>';
+  h+='<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">';
+  for(var l in locs){
+    h+='<span style="padding:3px 8px;border-radius:5px;font-size:9px;background:var(--ink-raised);border:1px solid var(--ink-border);color:var(--paper-mid)">'+l+': <strong style="color:var(--paper)">'+locs[l]+'</strong></span>';
+  }
+  h+='</div>';
+
+  return h;
+}
+
+// =====================================================
+// EMPLOYEE UPLOAD SIMULATION
+// =====================================================
+function simulateEmployeeUpload(){
+  var zone=document.getElementById('uploadZoneLg');
+  if(zone){
+    var inner=zone.querySelector('.upload-zone-inner');
+    if(inner) inner.style.display='none';
+    var inputEl=zone.querySelector('.upload-input');
+    if(inputEl) inputEl.style.display='none';
+    var iconLg=zone.querySelector('.upload-icon-lg');
+    if(iconLg) iconLg.style.display='none';
+    var h4=zone.querySelector('h4');if(h4)h4.style.display='none';
+    var p=zone.querySelector('p');if(p)p.style.display='none';
+    var formats=zone.querySelector('.upload-formats');if(formats)formats.style.display='none';
+    zone.style.cursor='default';zone.style.borderStyle='solid';zone.style.borderColor='rgba(160,112,224,0.2)';
+
+    var prog=document.getElementById('uploadProgressLg');
+    prog.innerHTML='<div class="upload-file-badge"><span style="color:var(--purple-lt)">employee_data.csv</span> <span style="font-size:8px;color:var(--ink-soft);margin-left:auto">'+DEMO_EMPLOYEES.length+' records</span></div>'
+      +'<div style="font-size:10px;color:var(--purple-lt);margin-top:4px" id="uploadStatus">Parsing columns...</div>'
+      +'<div class="upload-extract-bar" style="margin-top:6px"><div class="upload-extract-fill" id="uploadBarLg"></div></div>';
+
+    var bar=document.getElementById('uploadBarLg');
+    bar.style.width='20%';
+    setTimeout(function(){bar.style.width='50%';document.getElementById('uploadStatus').textContent='Validating data quality...'},600);
+    setTimeout(function(){bar.style.width='80%';document.getElementById('uploadStatus').textContent='Checking for duplicates...'},1200);
+    setTimeout(function(){
+      bar.style.width='100%';
+      document.getElementById('uploadStatus').textContent='Import complete!';
+      document.getElementById('uploadStatus').style.color='var(--green-lt)';
+
+      D.employees=JSON.parse(JSON.stringify(DEMO_EMPLOYEES));
+      state.uploadSimulated=true;
+
+      addAiMsg("Employee data parsed successfully! <strong>"+D.employees.length+" records</strong> imported. I found <em>7 columns</em> mapped: Name, Title, Department, Manager, Location, Hire Date, Employment Type. Data quality looks <strong>excellent</strong>.");
+
+      setTimeout(function(){
+        renderSteps();goToStep(2);
+      },400);
+    },1800);
+  } else {
+    // Direct call (demo data button)
+    D.employees=JSON.parse(JSON.stringify(DEMO_EMPLOYEES));
+    state.uploadSimulated=true;
+    addAiMsg("Demo data loaded! <strong>"+D.employees.length+" sample employees</strong> from an infrastructure company. Review the data table and quality metrics below.");
+    renderSteps();goToStep(2);
+  }
+}
+
+// =====================================================
+// REVIEW & LOCK
+// =====================================================
+function buildReviewContent(){
+  var h='';
+  var empCount=D.employees.length;
+
+  // Screen 1 review
+  h+='<div class="rv-section" onclick="goToStep(1)" style="cursor:pointer"><div class="rv-title"><div class="rv-check '+(state.completed[1]?'done':'pending')+'"><svg viewBox="0 0 24 24">'+(state.completed[1]?'<polyline points="20 6 9 17 4 12"/>':'<line x1="5" y1="12" x2="19" y2="12"/>')+'</svg></div>Screen 1: Employee Data Config</div>';
+  h+='<div style="font-size:10px;color:var(--paper-mid);margin-left:19px">';
+  h+='HRIS: <strong style="color:var(--paper)">'+(gv('f-hris')||'Not set')+'</strong> | ';
+  h+='Records: <strong style="color:var(--paper)">'+(gv('f-records')||'Not set')+'</strong> | ';
+  h+='Quality: <strong style="color:var(--paper)">'+(gv('f-quality')||'Not set')+'</strong>';
+  h+='</div></div>';
+
+  // Screen 2 review
+  h+='<div class="rv-section" onclick="goToStep(2)" style="cursor:pointer"><div class="rv-title"><div class="rv-check '+(state.completed[2]?'done':'pending')+'"><svg viewBox="0 0 24 24">'+(state.completed[2]?'<polyline points="20 6 9 17 4 12"/>':'<line x1="5" y1="12" x2="19" y2="12"/>')+'</svg></div>Screen 2: Employee Upload & Review</div>';
+  h+='<div style="font-size:10px;color:var(--paper-mid);margin-left:19px">';
+  h+='Employees loaded: <strong style="color:var(--paper)">'+empCount+'</strong>';
+  if(empCount>0){
+    var depts={};D.employees.forEach(function(e){depts[e.dept]=(depts[e.dept]||0)+1});
+    h+=' | Departments: <strong style="color:var(--paper)">'+Object.keys(depts).length+'</strong>';
+    var locs={};D.employees.forEach(function(e){locs[e.location]=(locs[e.location]||0)+1});
+    h+=' | Locations: <strong style="color:var(--paper)">'+Object.keys(locs).length+'</strong>';
+  }
+  h+='</div></div>';
+
+  // Summary bar
+  var done=0;for(var j=1;j<=TOTAL;j++)if(state.completed[j])done++;
+  h+='<div style="margin-top:14px;padding:12px 16px;background:linear-gradient(135deg,var(--ink-card) 0%,rgba(106,58,154,0.06) 100%);border:1px solid rgba(160,112,224,0.2);border-radius:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">';
+  h+='<div style="font-family:\'Syne\',sans-serif;font-size:12px;font-weight:700;color:var(--paper)">Summary</div>';
+  h+='<div style="font-size:10px;color:var(--paper-mid)">'+done+'/'+TOTAL+' screens complete</div>';
+  h+='<div style="font-size:10px;color:var(--paper-mid)">'+empCount+' employees</div>';
+  h+='<div style="font-size:10px;color:'+(done>=TOTAL&&empCount>0?'var(--green-lt)':'var(--amber-lt)')+'">Status: '+(done>=TOTAL&&empCount>0?'Ready to lock':'Incomplete')+'</div>';
+  h+='</div>';
+
+  return h;
+}
+
+function confirmLock(){
+  var done=0;for(var i=1;i<=TOTAL;i++)if(state.completed[i])done++;
+  if(done<TOTAL||D.employees.length===0){
+    showToast('Complete both screens and upload employee data first');
+    return;
+  }
+
+  // Save to localStorage
+  var saveData={
+    employees:D.employees,
+    config:{
+      hris:gv('f-hris'),
+      records:gv('f-records'),
+      quality:gv('f-quality'),
+      workModes:gv('f-workmodes')
+    },
+    meta:{
+      totalRecords:D.employees.length,
+      lockedAt:new Date().toISOString(),
+      module:'employee-upload'
+    }
+  };
+  try{
+    localStorage.setItem('sip_employees',JSON.stringify(saveData));
+  }catch(e){}
+
+  document.getElementById('successBanner').classList.add('show');
+  document.getElementById('stepper').style.display='none';
+  document.getElementById('progressMeter').style.display='none';
+  for(var j=1;j<=3;j++){var el=document.getElementById('step'+j);if(el)el.classList.remove('visible')}
+  updateProgress();
+  addAiMsg("Employee data <strong>locked and saved</strong>! "+D.employees.length+" employee records are now stored. The <em>Role & Competency Setup</em> module is unlocked. Proceed when ready.");
+  showToast('Employee data locked — Module 3 ready');
+}
+
+// =====================================================
+// RENDERING
+// =====================================================
+var stepBuilders=[buildStep1,buildStep2,buildStep3];
+
+function renderStepper(){
+  var h='';STEPS.forEach(function(s,i){if(i>0)h+='<div class="step-conn'+(state.completed[i]?' done':'')+'"></div>';var cls=s.id===state.current?' active':'';if(state.completed[s.id])cls=' done';h+='<div class="step-item'+cls+'" onclick="goToStep('+s.id+')"><div class="step-num">'+(state.completed[s.id]?'<svg style="width:9px;height:9px;stroke:currentColor;fill:none;stroke-width:3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':s.id)+'</div><span class="step-label">'+s.title+'</span></div>'});
+  document.getElementById('stepper').innerHTML=h;
+}
+
+function renderSteps(){
+  var h='';STEPS.forEach(function(s,i){var vis=s.id===state.current?' visible':'';h+='<div class="step-panel'+vis+'" id="step'+s.id+'">'+stepBuilders[i]()+'</div>'});
+  document.getElementById('stepContainer').innerHTML=h;
+}
+
+function goToStep(n){
+  state.current=n;renderStepper();
+  STEPS.forEach(function(s){var el=document.getElementById('step'+s.id);if(el){if(s.id===n)el.classList.add('visible');else el.classList.remove('visible')}});
+  if(n===3){
+    var rb=document.getElementById('reviewBody');
+    if(rb) rb.innerHTML=buildReviewContent();
+  }
+  document.querySelector('.content-left').scrollTop=0;
+  updateAiForStep(n);updateProgress();
+  var jmp=document.getElementById('screenJump');if(jmp)jmp.value=n;
+}
+
+function updateProgress(){
+  var done=0;for(var k in state.completed)if(state.completed[k])done++;
+  var pct=done/TOTAL;
+  var ring=document.getElementById('progressRing');if(ring)ring.setAttribute('stroke-dashoffset',150.8*(1-pct));
+  document.getElementById('progressPct').textContent=Math.round(pct*100)+'%';
+  document.getElementById('progressPct').style.color=pct<.4?'var(--amber-lt)':pct<.7?'var(--purple-lt)':'var(--green-lt)';
+  document.getElementById('progressTitle').textContent='Employee Upload: '+done+' of '+TOTAL+' screens';
+  document.getElementById('aiFooterBar').style.width=Math.round(pct*100)+'%';
+  document.getElementById('levelPill').textContent=done>=TOTAL?'Complete':'Module 2 ('+done+'/'+TOTAL+')';
+  document.getElementById('levelPill').className=done>=TOTAL?'tb-pill gold':'tb-pill purple';
+  renderStepper();
+}
+
+function saveStep(n){
+  if(n===1){
+    if(!gv('f-hris')&&!gv('f-records')&&!gv('f-quality')){
+      showToast('Fill at least one field to proceed');return;
+    }
+  }
+  if(n===2){
+    if(D.employees.length===0){
+      showToast('Upload employee data first');return;
+    }
+  }
+  state.completed[n]=true;updateProgress();
+  goToStep(n<3?n+1:3);
+
+  var cg=CONGRATS[n];
+  if(cg){
+    setTimeout(function(){showCelebration(cg.msg,'Screen '+n+' complete')},1000);
+    setTimeout(function(){
+      var unlockHtml='<em>This unlocks:</em><br>';
+      cg.unlocks.forEach(function(u){unlockHtml+='&bull; '+u+'<br>'});
+      addAiMsg(unlockHtml);
+    },1600);
+  }
+}
+
+function resetDemo(){
+  state={current:1,completed:{},visited:{},uploadSimulated:false};
+  for(var i=1;i<=TOTAL;i++)state.completed[i]=false;
+  D={employees:[]};
+  appliedSuggestions={};
+  document.getElementById('successBanner').classList.remove('show');
+  document.getElementById('stepper').style.display='flex';
+  document.getElementById('progressMeter').style.display='flex';
+  renderSteps();updateProgress();goToStep(1);showToast('Demo reset');
+}
+
+// =====================================================
+// FIELD-BY-FIELD POPUP SYSTEM
+// =====================================================
+var fpState={screen:0,fieldIdx:0,open:false};
+
+var SCREEN_FIELDS={
+  1:{fields:[
+    {id:'f-hris',label:'HRIS System',type:'input',placeholder:'e.g. Workday',recommended:true,
+      aiMsg:'I detected your HRIS from the Company Setup tech stack. This determines how employee data columns are mapped during import.',
+      aiRule:'HRIS integration determines data quality expectations and column mapping strategy.'},
+    {id:'f-records',label:'Records to Import',type:'input',inputType:'number',placeholder:'Number of employee records',
+      aiMsg:'I suggest the employee count from your Company Setup. This helps pre-allocate resources for the import pipeline.',
+      aiRule:'Record count affects import batch sizing and validation throughput.'},
+    {id:'f-quality',label:'Data Quality',type:'select',options:['High — Clean HRIS data','Medium — Some gaps','Low — Significant cleanup'],recommended:true,
+      aiMsg:'Data quality level determines how aggressive the validation and cleanup rules are during import.',
+      aiRule:'High quality HRIS data like Workday typically has 95%+ field completeness.'},
+    {id:'f-workmodes',label:'Work Modes',type:'input',placeholder:'e.g. On-site, Hybrid, Remote, Field',
+      aiMsg:'Work modes help categorize employees for location-based analytics and scheduling intelligence.',
+      aiRule:'Infrastructure companies typically have On-site, Hybrid, Remote, and Field work modes.'}
+  ]}
+};
+
+function fpGetFields(screenNum){
+  var cfg=SCREEN_FIELDS[screenNum];
+  if(!cfg)return null;
+  return cfg.fields||[];
+}
+
+function openFieldPopup(screenNum){
+  var fields=fpGetFields(screenNum);
+  if(!fields||!fields.length)return;
+  fpState.screen=screenNum;
+  fpState.fieldIdx=0;
+  fpState.open=true;
+  var overlay=document.getElementById('fieldPopup');
+  overlay.style.display='flex';
+  setTimeout(function(){overlay.classList.add('fp-open')},10);
+  renderFieldPopup();
+}
+
+function closeFieldPopup(){
+  fpState.open=false;
+  var overlay=document.getElementById('fieldPopup');
+  overlay.classList.remove('fp-open');
+  setTimeout(function(){overlay.style.display='none'},350);
+}
+
+function renderFieldPopup(){
+  var screenNum=fpState.screen;
+  var fields=fpGetFields(screenNum);
+  if(!fields||!fields.length){closeFieldPopup();return}
+  var idx=fpState.fieldIdx;
+  if(idx>=fields.length)idx=fields.length-1;
+  if(idx<0)idx=0;
+  fpState.fieldIdx=idx;
+
+  var stepTitle=STEPS[screenNum-1]?STEPS[screenNum-1].title:'Screen '+screenNum;
+  document.getElementById('fpHeaderTitle').textContent='Screen '+screenNum+' — '+stepTitle;
+  document.getElementById('fpHeaderCounter').textContent=(idx+1)+' / '+fields.length;
+  document.getElementById('fpProgressFill').style.width=((idx+1)/fields.length*100)+'%';
+  document.getElementById('fpBackBtn').style.display=idx>0?'inline-flex':'none';
+  document.getElementById('fpNextBtn').innerHTML=idx>=fields.length-1?'Complete <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':'Next <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+
+  var f=fields[idx];
+  var body=document.getElementById('fpBody');
+  var h='<div class="fp-field-area">';
+  h+='<div class="fp-field-label">'+f.label;
+  if(f.required) h+=' <span class="fp-badge required">required</span>';
+  else if(f.recommended) h+=' <span class="fp-badge recommended">recommended</span>';
+  h+='</div>';
+
+  var curVal='';
+  var realEl=document.getElementById(f.id);
+  if(realEl) curVal=realEl.value||'';
+
+  if(f.type==='select'){
+    h+='<select class="fp-select" id="fp-field-input">';
+    h+='<option value="">Select...</option>';
+    (f.options||[]).forEach(function(opt){
+      h+='<option'+(curVal===opt?' selected':'')+'>'+opt+'</option>';
+    });
+    h+='</select>';
+  } else if(f.type==='textarea'){
+    h+='<textarea class="fp-textarea" id="fp-field-input" placeholder="'+(f.placeholder||'')+'">'+escH(curVal)+'</textarea>';
+  } else {
+    h+='<input class="fp-input" id="fp-field-input" placeholder="'+(f.placeholder||'')+'" value="'+escH(curVal)+'"'+(f.inputType?' type="'+f.inputType+'"':'')+' onkeydown="if(event.key===\'Enter\')fpNext()">';
+  }
+
+  // AI suggestion chips
+  var sug=getAiSuggestions();
+  if(sug[screenNum]&&sug[screenNum].fields&&sug[screenNum].fields[f.id]){
+    var s=sug[screenNum].fields[f.id];
+    var key=f.id+'_'+screenNum;
+    h+='<div class="fp-suggestion-chips">';
+    h+='<span class="fp-chip'+(appliedSuggestions[key]?' fp-applied':'')+'" onclick="fpApplySuggestion(\''+f.id+'\','+screenNum+',this)">';
+    h+='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> '+escH(s.val)+'</span>';
+    if(s.label) h+='<span style="font-size:9px;color:var(--ink-soft);align-self:center">'+escH(s.label)+'</span>';
+    h+='</div>';
+  }
+
+  // AI area
+  if(f.aiMsg){
+    h+='<div class="fp-ai-area" style="margin-top:16px">';
+    h+='<div class="fp-ai-msg"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> '+f.aiMsg+'</div>';
+    if(f.aiRule) h+='<div class="fp-ai-rule"><strong>SIP Rule:</strong> '+f.aiRule+'</div>';
+    h+='</div>';
+  }
+
+  h+='</div>';
+  body.innerHTML=h;
+
+  // Focus input
+  setTimeout(function(){
+    var inp=document.getElementById('fp-field-input');
+    if(inp)inp.focus();
+  },100);
+}
+
+function fpApplySuggestion(fieldId,step,chipEl){
+  var sug=getAiSuggestions();
+  var s=sug[step].fields[fieldId];
+  var inp=document.getElementById('fp-field-input');
+  if(inp)inp.value=s.val;
+  sv(fieldId,s.val);
+  chipEl.classList.add('fp-applied');
+  appliedSuggestions[fieldId+'_'+step]=true;
+  showToast('AI suggestion applied');
+}
+
+function fpSaveCurrentField(){
+  var screenNum=fpState.screen;
+  var fields=fpGetFields(screenNum);
+  if(!fields)return;
+  var f=fields[fpState.fieldIdx];
+  if(!f)return;
+  var inp=document.getElementById('fp-field-input');
+  if(!inp)return;
+  var val=inp.value;
+  var realEl=document.getElementById(f.id);
+  if(realEl){
+    realEl.value=val;
+    if(val)realEl.classList.add('ai-filled');
+  }
+}
+
+function fpNext(){
+  fpSaveCurrentField();
+  var fields=fpGetFields(fpState.screen);
+  if(fpState.fieldIdx>=fields.length-1){
+    closeFieldPopup();
+    showToast('All fields configured');
+    return;
+  }
+  fpState.fieldIdx++;
+  renderFieldPopup();
+}
+
+function fpBack(){
+  fpSaveCurrentField();
+  if(fpState.fieldIdx>0){
+    fpState.fieldIdx--;
+    renderFieldPopup();
+  }
+}
+
+// =====================================================
+// INIT
+// =====================================================
+renderSteps();updateProgress();goToStep(1);
+</script>
+</body>
+</html>

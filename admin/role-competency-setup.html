@@ -1,0 +1,1891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Role & Competency Setup — AI-Guided · Arcova SIP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink:#080F18;--ink-panel:#0C1825;--ink-card:#101E2E;--ink-raised:#152438;--ink-border:rgba(255,255,255,0.07);--ink-soft:#4A6A84;
+  --paper:#D8E8F4;--paper-mid:#8AACC4;
+  --gold:#C8A84B;--gold-lt:#E0CC70;--gold-dim:rgba(200,168,75,0.10);
+  --blue:#1A5C8A;--blue-lt:#3A8CC0;--blue-dim:rgba(26,92,138,0.15);
+  --green:#1A7A4A;--green-lt:#3AB87A;--green-dim:rgba(26,122,74,0.12);
+  --amber:#D4820A;--amber-lt:#F0A030;--amber-dim:rgba(212,130,10,0.12);
+  --red:#C0392B;--red-lt:#E87060;--red-dim:rgba(192,57,43,0.12);
+  --purple:#6A3A9A;--purple-lt:#A070E0;--purple-dim:rgba(106,58,154,0.15);
+  --sidebar-w:220px;--ai-panel-w:310px;
+}
+html,body{height:100%;background:var(--ink);color:var(--paper);font-family:'DM Sans',sans-serif;overflow:hidden}
+.app{display:flex;height:100vh}
+
+/* -- SIDEBAR -- */
+.sidebar{width:var(--sidebar-w);background:var(--ink-panel);border-right:1px solid var(--ink-border);display:flex;flex-direction:column;flex-shrink:0}
+a.sidebar-brand{padding:22px 20px 20px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px;text-decoration:none}
+a.sidebar-brand:hover .brand-hex{opacity:.75;transition:opacity .15s}
+.brand-hex{width:28px;height:28px;background:var(--gold);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);flex-shrink:0}
+.brand-nm{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--paper)}
+.brand-tg{font-size:10px;color:var(--ink-soft);letter-spacing:.06em;text-transform:uppercase}
+.sidebar-nav{flex:1;padding:12px 14px;overflow-y:auto}
+.nav-section-label{font-size:10px;color:var(--ink-soft);letter-spacing:.1em;text-transform:uppercase;padding:10px 6px 6px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;font-size:12.5px;color:var(--paper-mid);cursor:pointer;text-decoration:none;transition:background .15s,color .15s;margin-bottom:1px}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.nav-item.active{background:var(--purple-dim);color:var(--purple-lt)}
+.nav-item svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.nav-badge{margin-left:auto;padding:1px 6px;border-radius:100px;font-size:10px;font-weight:500;background:var(--amber-dim);color:var(--amber-lt)}
+.sidebar-user{padding:14px 16px;border-top:1px solid var(--ink-border);display:flex;align-items:center;gap:10px}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--paper);flex-shrink:0}
+.user-name{font-size:12px;font-weight:500;color:var(--paper)}
+.user-role{font-size:10px;color:var(--ink-soft)}
+
+/* -- MAIN -- */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:50px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;padding:0 24px;gap:12px;flex-shrink:0;background:var(--ink-panel)}
+.topbar-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--paper);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tb-pill{padding:3px 10px;border-radius:100px;font-size:10px;border:1px solid;white-space:nowrap}
+.tb-pill.purple{border-color:rgba(160,112,224,.35);color:var(--purple-lt)}
+.tb-pill.gold{border-color:rgba(200,168,75,.3);color:var(--gold)}
+.tb-btn{padding:6px 12px;border-radius:6px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .15s,color .15s;text-decoration:none;white-space:nowrap}
+.tb-btn:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+
+/* -- SPLIT LAYOUT -- */
+.main-body{display:flex;flex:1;overflow:hidden}
+.content-left{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px}
+.content-left>*{flex-shrink:0}
+.content-left::-webkit-scrollbar{width:4px}
+.content-left::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+
+/* -- AI PANEL -- */
+.ai-panel{width:var(--ai-panel-w);flex-shrink:0;border-left:1px solid var(--ink-border);background:linear-gradient(180deg,var(--ink-panel) 0%,#0A1520 100%);display:flex;flex-direction:column;overflow:hidden}
+.ai-header{padding:14px 16px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px}
+.ai-avatar-ring{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative}
+.ai-avatar-ring::after{content:'';position:absolute;inset:-3px;border-radius:50%;border:2px solid transparent;border-top-color:var(--purple-lt);animation:spin 3s linear infinite}
+.ai-avatar-ring svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:1.8}
+.ai-name{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--paper)}
+.ai-status{font-size:9px;color:var(--green-lt);display:flex;align-items:center;gap:4px}
+.ai-status-dot{width:5px;height:5px;border-radius:50%;background:var(--green-lt);animation:pulse 2s ease-in-out infinite}
+.ai-chat{flex:1;overflow-y:auto;padding:14px 14px;display:flex;flex-direction:column;gap:10px;min-height:0}
+.ai-chat>*{flex-shrink:0}
+.ai-chat::-webkit-scrollbar{width:3px}
+.ai-chat::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:2px}
+.ai-footer{padding:10px 14px;border-top:1px solid var(--ink-border);display:flex;align-items:center;gap:8px}
+.ai-footer-step{font-size:9px;color:var(--ink-soft);flex:1}
+.ai-footer-progress{width:60px;height:4px;border-radius:2px;background:rgba(255,255,255,0.06);overflow:hidden}
+.ai-footer-bar{height:100%;background:var(--purple-lt);border-radius:2px;transition:width .6s ease}
+
+/* AI Bubbles */
+.ai-bubble{display:flex;gap:8px;animation:fadeUp .35s ease both}
+.ai-bubble-avatar{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--purple) 0%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.ai-bubble-avatar svg{width:10px;height:10px;stroke:#fff;fill:none;stroke-width:2}
+.ai-msg{background:rgba(106,58,154,0.08);border:1px solid rgba(160,112,224,0.15);border-radius:2px 10px 10px 10px;padding:10px 13px;font-size:11px;color:var(--paper-mid);line-height:1.65;max-width:100%}
+.ai-msg strong{color:var(--paper);font-weight:500}
+.ai-msg em{color:var(--gold);font-style:normal}
+
+/* AI Typing dots */
+.ai-typing{display:flex;gap:4px;padding:10px 16px}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--purple-lt);animation:typingDot 1.4s ease-in-out infinite}
+.ai-dot:nth-child(2){animation-delay:.2s}
+.ai-dot:nth-child(3){animation-delay:.4s}
+
+/* AI Context Card */
+.ai-context-card{background:linear-gradient(135deg,rgba(200,168,75,0.06) 0%,rgba(106,58,154,0.04) 100%);border:1px solid rgba(200,168,75,0.2);border-radius:8px;padding:10px 12px;animation:fadeUp .4s ease both}
+.ai-context-card h5{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px}
+.ai-context-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.03)}
+.ai-context-row:last-child{border:none}
+.ai-context-key{font-size:9px;color:var(--ink-soft)}
+.ai-context-val{font-size:10px;color:var(--paper);font-weight:500}
+
+/* AI Suggest Cards (sidebar) */
+.ai-suggest-card{background:var(--ink-card);border:1px solid var(--ink-border);border-radius:8px;padding:10px 12px;transition:all .25s;position:relative;overflow:hidden}
+.ai-suggest-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px 0 0 2px}
+.ai-suggest-card.priority-high::before{background:var(--red-lt)}
+.ai-suggest-card.priority-medium::before{background:var(--amber-lt)}
+.ai-suggest-card.priority-low::before{background:var(--blue-lt)}
+.ai-suggest-title{font-size:11px;font-weight:500;color:var(--paper);margin-bottom:2px}
+.ai-suggest-detail{font-size:9px;color:var(--ink-soft);margin-bottom:6px;line-height:1.4}
+.ai-suggest-actions{display:flex;gap:6px}
+.ai-suggest-btn{padding:3px 10px;border-radius:5px;font-size:9px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .15s}
+.ai-accept{background:var(--green-dim);color:var(--green-lt);border:1px solid rgba(58,184,122,0.2)}
+.ai-accept:hover{background:rgba(58,184,122,0.2)}
+.ai-dismiss{background:transparent;color:var(--ink-soft);border:1px solid var(--ink-border)}
+.ai-dismiss:hover{color:var(--red-lt);border-color:rgba(232,112,96,0.3)}
+.ai-suggest-card.accepted{border-color:rgba(58,184,122,0.3);background:rgba(26,122,74,0.06);opacity:.7;pointer-events:none}
+.ai-suggest-card.dismissed{opacity:0;transform:translateX(-20px);height:0;padding:0;margin:0;border:none;overflow:hidden;transition:all .3s ease}
+
+/* -- PANELS -- */
+.panel{background:var(--ink-card);border:1px solid var(--ink-border);border-radius:12px;overflow:hidden}
+.panel-head{padding:12px 18px;border-bottom:1px solid var(--ink-border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.panel-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--paper);flex:1;min-width:120px}
+.panel-body{padding:16px 18px}
+
+/* -- STEPPER -- */
+.stepper-bar{display:flex;align-items:center;gap:0;padding:8px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.stepper-bar::-webkit-scrollbar{height:2px}
+.stepper-bar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:2px}
+.step-item{display:flex;align-items:center;gap:4px;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .15s;flex-shrink:0}
+.step-item:hover{background:rgba(255,255,255,0.04)}
+.step-num{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:8px;font-weight:500;border:2px solid var(--ink-border);color:var(--ink-soft);transition:all .3s;flex-shrink:0}
+.step-label{font-size:8px;color:var(--ink-soft);transition:color .3s;white-space:nowrap}
+.step-item.active .step-num{border-color:var(--purple-lt);color:var(--purple-lt);background:var(--purple-dim)}
+.step-item.active .step-label{color:var(--purple-lt);font-weight:500}
+.step-item.done .step-num{border-color:var(--green-lt);color:var(--green-lt);background:var(--green-dim)}
+.step-item.done .step-label{color:var(--green-lt)}
+.step-conn{width:8px;height:2px;background:var(--ink-border);flex-shrink:0}
+.step-conn.done{background:var(--green-lt)}
+
+/* -- PROGRESS METER -- */
+.progress-meter{display:flex;align-items:center;gap:16px;padding:14px 18px;background:linear-gradient(135deg,var(--ink-card) 0%,rgba(106,58,154,0.06) 100%);border:1px solid rgba(160,112,224,0.2);border-radius:12px}
+.progress-ring-wrap{position:relative;width:56px;height:56px;flex-shrink:0}
+.progress-ring-wrap svg{width:100%;height:100%}
+.progress-ring-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--purple-lt)}
+.progress-info{flex:1;min-width:0}
+.progress-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--paper);margin-bottom:2px}
+.progress-sub{font-size:10px;color:var(--paper-mid)}
+
+/* -- FORMS -- */
+.form-group{margin-bottom:10px}
+.form-label{display:block;font-size:9px;color:var(--ink-soft);letter-spacing:.04em;margin-bottom:3px;text-transform:uppercase}.form-label span{font-size:7px;letter-spacing:.02em;font-family:'DM Mono',monospace;vertical-align:middle;margin-left:3px}
+.form-input,.form-select,.form-textarea{width:100%;padding:7px 11px;border-radius:6px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper);font-family:'DM Sans',sans-serif;font-size:11.5px;outline:none;transition:border-color .2s,box-shadow .2s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--purple-lt);box-shadow:0 0 0 3px rgba(160,112,224,0.1)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--ink-soft)}
+.form-select option{background:var(--ink-raised);color:var(--paper)}
+.form-textarea{resize:vertical;min-height:52px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:1100px){.form-row,.form-row-3{grid-template-columns:1fr}}
+.form-input.ai-filled,.form-select.ai-filled,.form-textarea.ai-filled{border-color:rgba(160,112,224,0.3);background:linear-gradient(135deg,var(--ink-raised) 0%,rgba(106,58,154,0.06) 100%)}
+
+.btn{padding:7px 16px;border-radius:6px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+.btn:hover{background:rgba(255,255,255,0.05);color:var(--paper)}
+.btn-gold{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:600}
+.btn-gold:hover{opacity:.88;background:var(--gold);color:var(--ink)}
+.btn-blue{background:var(--blue);border-color:var(--blue);color:var(--paper);font-weight:500}
+.btn-blue:hover{opacity:.88}
+.btn-sm{padding:4px 10px;font-size:10px}
+
+.section-desc{font-size:10px;color:var(--paper-mid);line-height:1.6;margin-bottom:12px;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:7px;border-left:3px solid var(--purple-lt)}
+
+/* -- DYNAMIC LISTS -- */
+.added-items{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.added-chip{padding:4px 9px;border-radius:5px;font-size:10px;color:var(--paper);border:1px solid var(--ink-border);background:var(--ink-raised);display:flex;align-items:center;gap:5px;transition:all .2s}
+.added-chip:hover{border-color:rgba(160,112,224,0.25)}
+.remove-chip{cursor:pointer;opacity:.4;transition:opacity .15s;font-size:12px}
+.remove-chip:hover{opacity:1;color:var(--red-lt)}
+.dashed-box{border:1px dashed var(--ink-border);border-radius:9px;padding:12px 14px;margin-top:10px}
+.dashed-title{font-size:11px;font-weight:500;color:var(--paper);margin-bottom:6px}
+.add-row{display:flex;gap:8px;align-items:flex-end}
+.add-row .form-group{margin-bottom:0;flex:1}
+
+/* -- STEP PANELS -- */
+.step-panel{display:none;opacity:0;transform:translateX(20px)}
+.step-panel.visible{display:block;animation:slideIn .4s ease both}
+
+/* -- REVIEW -- */
+.rv-section{margin-bottom:14px}
+.rv-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.rv-check{width:13px;height:13px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rv-check.done{background:var(--green-dim);border:1px solid var(--green-lt)}
+.rv-check.pending{background:var(--amber-dim);border:1px solid var(--amber-lt)}
+.rv-check svg{width:7px;height:7px;stroke:currentColor;fill:none;stroke-width:3}
+
+/* -- SUCCESS -- */
+.success-banner{display:none;padding:16px 20px;background:linear-gradient(135deg,rgba(26,122,74,0.12) 0%,rgba(106,58,154,0.08) 100%);border:1px solid rgba(58,184,122,0.3);border-radius:12px;align-items:center;gap:14px}
+.success-banner.show{display:flex;animation:fadeUp .5s ease both}
+
+/* -- TOAST -- */
+.toast-msg{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink-raised);border:1px solid rgba(160,112,224,0.3);color:var(--purple-lt);font-size:11px;font-family:'DM Sans',sans-serif;padding:8px 18px;border-radius:8px;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:9999;white-space:nowrap}
+.toast-msg.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* AI SUGGESTION CHIPS */
+.ai-suggestion-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;margin-bottom:4px;animation:fadeUp .3s ease both}
+.ai-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 10px 3px 7px;border-radius:6px;font-size:10px;color:var(--purple-lt);background:linear-gradient(135deg,rgba(106,58,154,0.08) 0%,rgba(26,92,138,0.06) 100%);border:1px solid rgba(160,112,224,0.2);cursor:pointer;transition:all .2s;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.ai-chip:hover{background:rgba(160,112,224,0.14);border-color:rgba(160,112,224,0.4);transform:translateY(-1px);box-shadow:0 3px 10px rgba(106,58,154,0.15)}
+.ai-chip:active{transform:scale(0.97)}
+.ai-chip.applied{background:var(--green-dim);border-color:rgba(58,184,122,0.3);color:var(--green-lt);pointer-events:none;opacity:.7}
+.ai-chip svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.ai-chip-label{font-size:8px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;font-family:'DM Mono',monospace;display:flex;align-items:center;gap:4px}
+.ai-chip-label svg{width:10px;height:10px;stroke:var(--purple-lt);fill:none;stroke-width:1.8}
+
+/* AI suggestion card for list items */
+.ai-list-suggestion{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:linear-gradient(135deg,rgba(106,58,154,0.06) 0%,rgba(26,92,138,0.04) 100%);border:1px solid rgba(160,112,224,0.15);margin-bottom:6px;transition:all .2s;animation:fadeUp .3s ease both}
+.ai-list-suggestion:hover{border-color:rgba(160,112,224,0.35);background:rgba(160,112,224,0.08)}
+.ai-list-suggestion.applied{border-color:rgba(58,184,122,0.3);background:rgba(26,122,74,0.06);opacity:.6;pointer-events:none}
+.ai-list-suggestion-icon{width:24px;height:24px;border-radius:6px;background:var(--purple-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ai-list-suggestion-icon svg{width:12px;height:12px;stroke:var(--purple-lt);fill:none;stroke-width:2}
+.ai-list-suggestion-text{flex:1;min-width:0}
+.ai-list-suggestion-title{font-size:10px;color:var(--paper);font-weight:500}
+.ai-list-suggestion-detail{font-size:8px;color:var(--ink-soft);margin-top:1px}
+.ai-list-suggestion-btn{padding:4px 10px;border-radius:5px;font-size:9px;cursor:pointer;border:1px solid rgba(160,112,224,0.25);background:var(--purple-dim);color:var(--purple-lt);font-family:'DM Sans',sans-serif;transition:all .15s;flex-shrink:0}
+.ai-list-suggestion-btn:hover{background:rgba(160,112,224,0.2);border-color:rgba(160,112,224,0.4)}
+.ai-list-suggestion .applied-label{font-size:9px;color:var(--green-lt);flex-shrink:0}
+
+/* AI suggestion group header */
+.ai-suggestions-header{display:flex;align-items:center;gap:6px;margin:10px 0 6px;padding:6px 0;border-top:1px solid rgba(160,112,224,0.1)}
+.ai-suggestions-header svg{width:14px;height:14px;stroke:var(--purple-lt);fill:none;stroke-width:1.8}
+.ai-suggestions-header span{font-size:9px;color:var(--purple-lt);font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.ai-suggestions-header .apply-all-btn{margin-left:auto;padding:2px 8px;border-radius:4px;font-size:8px;cursor:pointer;border:1px solid rgba(160,112,224,0.25);background:transparent;color:var(--purple-lt);font-family:'DM Sans',sans-serif;transition:all .15s}
+.ai-suggestions-header .apply-all-btn:hover{background:var(--purple-dim);border-color:rgba(160,112,224,0.4)}
+
+/* -- UPLOAD ZONE -- */
+.upload-zone{border:1px dashed rgba(160,112,224,0.25);border-radius:10px;padding:12px 14px;margin-bottom:12px;background:rgba(106,58,154,0.02);transition:all .25s;cursor:pointer;position:relative}
+.upload-zone:hover{border-color:var(--purple-lt);background:rgba(106,58,154,0.05)}
+.upload-zone.drag-over{border-color:var(--gold);background:rgba(200,168,75,0.08)}
+.upload-zone-inner{display:flex;align-items:center;gap:10px}
+.upload-icon-sm{width:28px;height:28px;border-radius:7px;background:var(--purple-dim);border:1px solid rgba(160,112,224,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.upload-icon-sm svg{width:14px;height:14px;stroke:var(--purple-lt);fill:none;stroke-width:1.8}
+.upload-zone p{font-size:9px;color:var(--ink-soft)}
+.upload-zone .upload-link{color:var(--purple-lt);text-decoration:underline;cursor:pointer}
+.upload-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-progress{margin-top:8px;display:none}
+.upload-progress.active{display:block;animation:fadeUp .3s ease both}
+.upload-file-badge{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--ink-raised);border:1px solid var(--ink-border);border-radius:6px;margin-bottom:6px;font-size:10px}
+.upload-extract-bar{height:3px;background:var(--ink-raised);border-radius:2px;overflow:hidden;margin-top:4px}
+.upload-extract-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--purple-lt),var(--blue-lt));transition:width .4s ease;width:0%}
+
+/* -- DOWNLOAD TEMPLATE BTN -- */
+.dl-tpl-btn{padding:4px 10px;border-radius:5px;border:1px solid rgba(58,184,122,0.25);background:rgba(26,122,74,0.08);color:var(--green-lt);font-family:'DM Sans',sans-serif;font-size:10px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s;white-space:nowrap}
+.dl-tpl-btn:hover{background:rgba(26,122,74,0.16);border-color:rgba(58,184,122,0.45)}
+.dl-tpl-btn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* -- ANIMATIONS -- */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes typingDot{0%,80%,100%{opacity:.3;transform:scale(.7)}40%{opacity:1;transform:scale(1)}}
+@keyframes staggerIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* -- CELEBRATION CARD -- */
+.ai-celebrate{border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;animation:fadeUp .4s ease both;background:linear-gradient(135deg,rgba(26,122,74,0.1) 0%,rgba(106,58,154,0.08) 100%);border:1px solid rgba(58,184,122,0.25)}
+.ai-celebrate-header{display:flex;align-items:center;gap:10px}
+.ai-celebrate-icon{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--green) 0%,var(--green-lt) 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:celebrateIconPop .5s cubic-bezier(.17,.67,.24,1.2) both}
+.ai-celebrate-icon svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.ai-celebrate-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--green-lt)}
+.ai-celebrate-sub{font-size:9px;color:var(--paper-mid)}
+.ai-celebrate-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ai-celebrate-confetti .c-dot{position:absolute;border-radius:50%;opacity:0;animation:cDotBurst .9s ease-out forwards}
+@keyframes celebrateIconPop{0%{transform:scale(0) rotate(-30deg);opacity:0}60%{transform:scale(1.15) rotate(5deg);opacity:1}100%{transform:scale(1) rotate(0deg);opacity:1}}
+@keyframes cDotBurst{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
+
+.sub-section-title{font-size:11px;font-weight:500;color:var(--paper);margin:12px 0 6px;padding-top:10px;border-top:1px solid var(--ink-border)}
+.sub-section-title:first-child{border-top:none;margin-top:0;padding-top:0}
+
+@media(max-width:1024px){.ai-panel{display:none}}
+@media(max-width:768px){.sidebar{display:none}}
+
+/* AI GUIDED POPUP */
+.ai-popup-overlay{position:fixed;inset:0;background:rgba(4,8,14,0.92);backdrop-filter:blur(20px);z-index:10000;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .35s ease}
+.ai-popup-overlay.open{display:flex;opacity:1}
+.ai-popup{width:100%;height:100%;display:flex;flex-direction:column;position:relative}
+.ai-popup-header{display:flex;align-items:center;padding:20px 32px;border-bottom:1px solid var(--ink-border);flex-shrink:0}
+.ai-popup-header-left{display:flex;align-items:center;gap:12px}
+.ai-popup-header-left .ai-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--gold) 0%,#E0CC70 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ai-popup-header-left .ai-icon svg{width:18px;height:18px;stroke:var(--ink);fill:none;stroke-width:2}
+.ai-popup-header-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--paper)}
+.ai-popup-header-sub{font-size:11px;color:var(--ink-soft);margin-top:2px}
+.ai-popup-close{margin-left:auto;width:38px;height:38px;border-radius:8px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.ai-popup-close:hover{background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:var(--red-lt)}
+.ai-popup-close svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+.ai-popup-progress{padding:0 32px;flex-shrink:0;display:flex;align-items:center;gap:14px;height:48px;border-bottom:1px solid rgba(255,255,255,0.04)}
+.ai-prog-bar{flex:1;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
+.ai-prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-lt));border-radius:2px;transition:width .5s ease}
+.ai-prog-text{font-size:11px;color:var(--ink-soft);font-family:'DM Mono',monospace;white-space:nowrap}
+.ai-tab-bar{display:none;align-items:center;gap:6px;padding:8px 32px;border-bottom:1px solid var(--ink-border);overflow-x:auto;flex-shrink:0}
+.ai-tab-bar.visible{display:flex}
+.ai-tab-bar::-webkit-scrollbar{height:3px}
+.ai-tab-bar::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+.ai-tab{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:7px;border:1px dashed var(--ink-border);font-size:11px;color:var(--ink-soft);cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0}
+.ai-tab:hover{border-color:rgba(255,255,255,0.15);color:var(--paper-mid)}
+.ai-tab.active{border:1.5px solid var(--gold);color:var(--gold);background:var(--gold-dim);font-weight:500;border-style:solid}
+.ai-tab.done{border:1.5px solid var(--green-lt);color:var(--green-lt);background:var(--green-dim);border-style:solid}
+.ai-tab .tab-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;border:1.5px solid var(--ink-soft);transition:all .2s}
+.ai-tab.active .tab-dot{border-color:var(--gold);background:var(--gold);box-shadow:0 0 6px rgba(200,168,75,0.4)}
+.ai-tab.done .tab-dot{border-color:var(--green-lt);background:var(--green-lt)}
+.ai-tab .tab-check{display:none;width:12px;height:12px;flex-shrink:0}
+.ai-tab.done .tab-check{display:block}
+.ai-tab.done .tab-dot{display:none}
+.ai-tab .tab-del{display:none;width:14px;height:14px;margin-left:2px;stroke:var(--ink-soft);fill:none;stroke-width:2;cursor:pointer;opacity:.5;transition:opacity .15s;flex-shrink:0}
+.ai-tab:hover .tab-del{display:block}
+.ai-tab .tab-del:hover{opacity:1;stroke:var(--red-lt)}
+.ai-tab.done .tab-del,.ai-tab.active .tab-del{display:none}
+.ai-popup-body{flex:1;display:flex;align-items:center;justify-content:center;overflow-y:auto;padding:40px 32px}
+.ai-popup-body.mm-mode{padding:0;overflow:hidden}
+.ai-question-card{max-width:680px;width:100%;animation:fadeUp .4s ease both}
+.ai-question-card.mm-full{max-width:100%;height:100%}
+.ai-q-label{font-size:10px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.ai-q-label .q-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--gold-dim);font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);border:1px solid rgba(200,168,75,0.3)}
+.ai-q-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:var(--paper);line-height:1.35;margin-bottom:6px}
+.ai-q-desc{font-size:13px;color:var(--paper-mid);line-height:1.6;margin-bottom:28px}
+.ai-suggestion-label{font-size:10px;color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.ai-suggestion-label svg{width:13px;height:13px;stroke:var(--gold);fill:none;stroke-width:1.7}
+.ai-suggestions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.ai-popup .ai-chip{padding:9px 18px;border-radius:8px;font-size:13px;color:var(--paper-mid);border:1px solid var(--ink-border);background:var(--ink-raised);cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:7px}
+.ai-popup .ai-chip:hover{border-color:var(--gold);color:var(--paper);background:var(--gold-dim)}
+.ai-popup .ai-chip.selected{border-color:var(--gold);color:var(--gold);background:var(--gold-dim);font-weight:500}
+.ai-popup .ai-chip .chip-check{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--ink-border);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.ai-popup .ai-chip.selected .chip-check{border-color:var(--gold);background:var(--gold)}
+.ai-popup .ai-chip.selected .chip-check svg{display:block}
+.ai-popup .ai-chip .chip-check svg{display:none;width:10px;height:10px;stroke:var(--ink);fill:none;stroke-width:3}
+.ai-or-divider{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.ai-or-divider::before,.ai-or-divider::after{content:'';flex:1;height:1px;background:var(--ink-border)}
+.ai-or-divider span{font-size:10px;color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase}
+.ai-manual-input{width:100%;padding:12px 16px;border-radius:8px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s}
+.ai-manual-input:focus{border-color:var(--gold)}
+.ai-manual-input::placeholder{color:var(--ink-soft)}
+.ai-popup-footer{padding:16px 32px;border-top:1px solid var(--ink-border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ai-footer-left{display:flex;align-items:center;gap:10px}
+.ai-footer-left .ai-skip{padding:8px 16px;border-radius:7px;border:1px solid var(--ink-border);background:transparent;color:var(--ink-soft);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s}
+.ai-footer-left .ai-skip:hover{color:var(--paper-mid);border-color:rgba(255,255,255,0.15)}
+.ai-next-btn{padding:10px 28px;border-radius:8px;border:none;background:var(--gold);color:var(--ink);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .15s;letter-spacing:.03em}
+.ai-next-btn:hover{opacity:.88}
+.ai-next-btn:disabled{opacity:.35;cursor:not-allowed}
+.ai-next-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5}
+.ai-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:700px){.ai-summary-grid{grid-template-columns:1fr}}
+.ai-summary-item{padding:10px 14px;border-radius:8px;border:1px solid var(--ink-border);background:var(--ink-raised)}
+.ai-summary-item .s-label{font-size:9px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px}
+.ai-summary-item .s-value{font-size:12px;color:var(--paper);font-weight:500}
+.ai-count-stepper{display:flex;align-items:center;gap:0;margin:24px auto;width:fit-content}
+.ai-count-stepper button{width:44px;height:44px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.ai-count-stepper button:first-child{border-radius:8px 0 0 8px}
+.ai-count-stepper button:last-child{border-radius:0 8px 8px 0}
+.ai-count-stepper button:hover{background:var(--gold-dim);border-color:var(--gold);color:var(--gold)}
+.ai-count-stepper input{width:64px;height:44px;border:1px solid var(--ink-border);border-left:none;border-right:none;background:var(--ink-card);color:var(--paper);font-family:'Syne',sans-serif;font-size:20px;font-weight:700;text-align:center;outline:none}
+.ai-title-chip{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;border:1px solid var(--ink-border);background:var(--ink-raised);margin-bottom:6px;transition:all .2s;opacity:0;transform:translateX(-8px)}
+.ai-title-chip.visible{opacity:1;transform:translateX(0)}
+.ai-title-chip .tc-num{width:22px;height:22px;border-radius:50%;background:var(--gold-dim);border:1px solid rgba(200,168,75,0.3);display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);flex-shrink:0}
+.ai-title-chip input{flex:1;background:transparent;border:none;color:var(--paper);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;outline:none}
+.ai-title-chip input::placeholder{color:var(--ink-soft)}
+.ai-title-chip .tc-del{width:20px;height:20px;border-radius:4px;border:none;background:transparent;color:var(--ink-soft);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.ai-title-chip .tc-del:hover{background:rgba(192,57,43,0.12);color:var(--red-lt)}
+.ai-title-chip .tc-del svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+.ai-required{display:inline-block;color:var(--red-lt);font-weight:700;margin-left:2px}
+.ai-validation-msg{display:none;align-items:center;gap:7px;padding:9px 14px;border-radius:8px;background:rgba(192,57,43,0.1);border:1px solid rgba(192,57,43,0.25);margin-top:12px;font-size:12px;color:var(--red-lt);animation:fadeUp .25s ease both}
+.ai-validation-msg.show{display:flex}
+.ai-validation-msg svg{width:14px;height:14px;stroke:var(--red-lt);fill:none;stroke-width:2;flex-shrink:0}
+.ai-manual-input.error{border-color:var(--red-lt);box-shadow:0 0 0 2px rgba(192,57,43,0.15)}
+.ai-typing-inline{display:inline-flex;align-items:center;gap:4px;padding:4px 0}
+.ai-typing-inline span{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:typingDot 1.2s infinite}
+.ai-typing-inline span:nth-child(2){animation-delay:.2s}
+.ai-typing-inline span:nth-child(3){animation-delay:.4s}
+
+/* FIELD-BY-FIELD POPUP */
+.field-popup-overlay{position:fixed;inset:0;background:rgba(4,8,14,0.94);backdrop-filter:blur(24px);z-index:11000;display:none;align-items:center;justify-content:center;opacity:0;transition:opacity .35s ease}
+.field-popup-overlay.fp-open{display:flex;opacity:1}
+.field-popup{width:100%;max-width:720px;display:flex;flex-direction:column;max-height:90vh;position:relative}
+.fp-header{display:flex;align-items:center;padding:18px 0;gap:12px;border-bottom:1px solid var(--ink-border);flex-shrink:0}
+.fp-header-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.fp-header-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--gold) 0%,#E0CC70 100%);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fp-header-icon svg{width:16px;height:16px;stroke:var(--ink);fill:none;stroke-width:2}
+.fp-header-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--paper);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fp-header-counter{font-size:11px;color:var(--ink-soft);font-family:'DM Mono',monospace;white-space:nowrap}
+.fp-close{width:34px;height:34px;border-radius:7px;border:1px solid var(--ink-border);background:transparent;color:var(--paper-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.fp-close:hover{background:rgba(192,57,43,0.12);border-color:rgba(192,57,43,0.3);color:var(--red-lt)}
+.fp-close svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.fp-progress{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;flex-shrink:0;margin:12px 0}
+.fp-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-lt));border-radius:2px;transition:width .5s ease}
+.fp-body{flex:1;overflow-y:auto;padding:24px 0;display:flex;flex-direction:column;gap:18px;min-height:0}
+.fp-body::-webkit-scrollbar{width:3px}
+.fp-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:2px}
+.fp-field-area{animation:fadeUp .35s ease both}
+.fp-field-label{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--paper);line-height:1.35;margin-bottom:4px}
+.fp-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-left:8px;vertical-align:middle}
+.fp-badge.required{background:rgba(192,57,43,0.12);color:var(--red-lt);border:1px solid rgba(192,57,43,0.25)}
+.fp-badge.recommended{background:rgba(200,168,75,0.1);color:var(--gold);border:1px solid rgba(200,168,75,0.2)}
+.fp-input,.fp-select,.fp-textarea{width:100%;padding:12px 16px;border-radius:8px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;margin-top:8px}
+.fp-input:focus,.fp-select:focus,.fp-textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,168,75,0.1)}
+.fp-input::placeholder,.fp-textarea::placeholder{color:var(--ink-soft)}
+.fp-select option{background:var(--ink-raised);color:var(--paper)}
+.fp-textarea{resize:vertical;min-height:80px}
+.fp-checkbox-wrap{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:8px;border:1px solid var(--ink-border);background:var(--ink-raised);cursor:pointer;margin-top:8px;transition:border-color .2s}
+.fp-checkbox-wrap:hover{border-color:var(--gold)}
+.fp-checkbox-wrap input[type=checkbox]{accent-color:var(--gold);width:16px;height:16px}
+.fp-checkbox-wrap span{font-size:14px;color:var(--paper)}
+.fp-ai-area{padding:14px 16px;border-radius:10px;background:linear-gradient(135deg,rgba(106,58,154,0.06) 0%,rgba(200,168,75,0.04) 100%);border:1px solid rgba(160,112,224,0.15)}
+.fp-ai-msg{font-size:12px;color:var(--paper-mid);line-height:1.6;margin-bottom:8px}
+.fp-ai-msg svg{width:12px;height:12px;stroke:var(--purple-lt);fill:none;stroke-width:2;vertical-align:middle;margin-right:4px}
+.fp-ai-rule{font-size:10px;color:var(--ink-soft);line-height:1.5;padding-top:6px;border-top:1px solid rgba(255,255,255,0.04)}
+.fp-ai-rule strong{color:var(--gold);font-weight:600}
+.fp-suggestion-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.fp-chip{padding:7px 14px;border-radius:7px;font-size:12px;color:var(--paper-mid);border:1px solid var(--ink-border);background:var(--ink-raised);cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.fp-chip:hover{border-color:var(--gold);color:var(--paper);background:var(--gold-dim)}
+.fp-chip.fp-applied{border-color:rgba(58,184,122,0.3);color:var(--green-lt);background:var(--green-dim);pointer-events:none;opacity:.7}
+.fp-chip svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+.fp-list-section{padding:16px;border-radius:10px;border:1px solid var(--ink-border);background:var(--ink-card);margin-top:4px}
+.fp-list-section-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--paper);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.fp-list-mini-form{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fp-list-mini-form .fp-mini-group{display:flex;flex-direction:column;gap:2px}
+.fp-list-mini-form .fp-mini-label{font-size:8px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em}
+.fp-list-mini-form .fp-mini-input,.fp-list-mini-form .fp-mini-select{width:100%;padding:6px 10px;border-radius:5px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper);font-family:'DM Sans',sans-serif;font-size:11px;outline:none}
+.fp-list-mini-form .fp-mini-input:focus,.fp-list-mini-form .fp-mini-select:focus{border-color:var(--gold)}
+.fp-list-added{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.fp-footer{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-top:1px solid var(--ink-border);flex-shrink:0}
+.fp-back-btn{padding:8px 16px;border-radius:7px;border:1px solid var(--ink-border);background:transparent;color:var(--ink-soft);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s}
+.fp-back-btn:hover{color:var(--paper-mid);border-color:rgba(255,255,255,0.15)}
+.fp-next-btn{padding:10px 24px;border-radius:8px;border:none;background:var(--gold);color:var(--ink);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .15s;letter-spacing:.03em}
+.fp-next-btn:hover{opacity:.88}
+.fp-next-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5}
+
+/* Employee mapping table */
+.emp-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:8px}
+.emp-table th{text-align:left;padding:6px 8px;font-size:9px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--ink-border)}
+.emp-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--paper-mid)}
+.emp-table tr:hover td{background:rgba(255,255,255,0.02)}
+.emp-table select{padding:4px 8px;border-radius:5px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper);font-family:'DM Sans',sans-serif;font-size:10px;outline:none;max-width:200px}
+.emp-table .mapped{color:var(--green-lt)}
+.emp-table .unmapped{color:var(--amber-lt)}
+.mapping-progress{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--ink-raised);border:1px solid var(--ink-border);border-radius:8px;margin-bottom:10px}
+.mapping-progress-bar{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.mapping-progress-fill{height:100%;background:linear-gradient(90deg,var(--purple-lt),var(--green-lt));border-radius:3px;transition:width .4s ease}
+.mapping-progress-text{font-size:10px;color:var(--paper-mid);white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <a class="sidebar-brand" href="../index.html">
+    <div class="brand-hex"></div>
+    <div style="display:flex;flex-direction:column;gap:1px"><span class="brand-nm">Arcova SIP</span><span class="brand-tg">Admin Portal</span></div>
+  </a>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Onboarding Modules</div>
+    <a class="nav-item" href="org-setup-v2.html"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Company Setup <span class="nav-badge">1</span></a>
+    <a class="nav-item" href="employee-upload.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Employee Upload <span class="nav-badge">2</span></a>
+    <a class="nav-item active" href="role-competency-setup.html"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>Role &amp; Competency <span class="nav-badge">3</span></a>
+    <a class="nav-item" href="workforce-intelligence.html"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Workforce Intel <span class="nav-badge">4</span></a>
+    <div class="nav-section-label">Setup</div>
+    <a class="nav-item" href="org-setup.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>OrgSetup V1</a>
+    <a class="nav-item" href="dataport.html"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>DataPort</a>
+    <div class="nav-section-label">AI Pipeline</div>
+    <a class="nav-item" href="skillforge.html"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>SkillForge</a>
+    <a class="nav-item" href="approvalhub.html"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>ApprovalHub</a>
+    <div class="nav-section-label">Assessment</div>
+    <a class="nav-item" href="assess-engine.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>AssessEngine</a>
+    <a class="nav-item" href="knowledge-tests.html"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>Knowledge Tests</a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-avatar">KR</div>
+    <div style="display:flex;flex-direction:column;gap:1px"><div class="user-name">Kavitha Ramachandran</div><div class="user-role">L&amp;D Manager</div></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Role & Competency Setup — AI-Guided Onboarding</div>
+    <select id="screenJump" onchange="if(this.value)goToStep(+this.value)" style="padding:4px 8px;border-radius:6px;border:1px solid var(--ink-border);background:var(--ink-raised);color:var(--paper-mid);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;outline:none;max-width:200px">
+      <option value="">Jump to screen...</option>
+      <option value="1">1 — Skill Ontology</option>
+      <option value="2">2 — Competency Framework</option>
+      <option value="3">3 — Role Architecture</option>
+      <option value="4">4 — Role-Skill Mapping</option>
+      <option value="5">5 — Employee-Role Mapping</option>
+      <option value="6">6 — Review & Lock</option>
+    </select>
+    <a href="org-setup-v2.html" class="tb-btn">Back to Company Setup</a>
+    <div class="tb-pill purple" id="levelPill">Module 3</div>
+    <button class="tb-btn" onclick="resetDemo()" style="color:var(--amber-lt);border-color:rgba(212,130,10,0.3)">Reset</button>
+  </div>
+
+  <div class="main-body">
+    <div class="content-left">
+      <div class="progress-meter" id="progressMeter">
+        <div class="progress-ring-wrap">
+          <svg viewBox="0 0 56 56">
+            <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="4"/>
+            <circle id="progressRing" cx="28" cy="28" r="24" fill="none" stroke="url(#ringGrad)" stroke-width="4" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="150.8" transform="rotate(-90 28 28)" style="transition:stroke-dashoffset .8s ease"/>
+            <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#A070E0"/><stop offset="100%" stop-color="#3AB87A"/></linearGradient></defs>
+          </svg>
+          <div class="progress-ring-label" id="progressPct">0%</div>
+        </div>
+        <div class="progress-info">
+          <div class="progress-title" id="progressTitle">Role & Competency: 0 of 5 screens</div>
+          <div class="progress-sub">AI-guided configuration. Define skills, competencies, roles, and map employees.</div>
+        </div>
+      </div>
+      <div class="stepper-bar" id="stepper"></div>
+      <div class="success-banner" id="successBanner">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--green-dim);border:2px solid var(--green-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg style="width:18px;height:18px;stroke:var(--green-lt);fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div><h3 style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--green-lt);margin-bottom:3px">Role & Competency Setup Complete</h3><p style="font-size:11px;color:var(--paper-mid)">Roles, skills, and competencies locked. Workforce Intelligence ready.</p></div>
+        <a href="workforce-intelligence.html" class="btn btn-gold" style="margin-left:auto">Proceed to Workforce Intelligence &rarr;</a>
+      </div>
+      <div id="stepContainer"></div>
+    </div>
+
+    <!-- RIGHT: AI PANEL -->
+    <div class="ai-panel" id="aiPanel">
+      <div class="ai-header">
+        <div class="ai-avatar-ring"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div style="flex:1"><div class="ai-name">SIP Architect</div><div class="ai-status"><span class="ai-status-dot"></span> Guiding you</div></div>
+      </div>
+      <div class="ai-chat" id="aiChat"></div>
+      <div class="ai-footer">
+        <div class="ai-footer-step" id="aiFooterStep">Screen 1 of 6</div>
+        <div class="ai-footer-progress"><div class="ai-footer-bar" id="aiFooterBar" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- AI GUIDED POPUP -->
+<div class="ai-popup-overlay" id="aiPopup">
+  <div class="ai-popup">
+    <div class="ai-popup-header">
+      <div class="ai-popup-header-left">
+        <div class="ai-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <div>
+          <div class="ai-popup-header-title">AI-Guided Role Builder</div>
+          <div class="ai-popup-header-sub">SkillForge AI suggests options based on your organisation context</div>
+        </div>
+      </div>
+      <button class="ai-popup-close" onclick="closeAiPopup()" title="Close and return to Role Architecture">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="ai-popup-progress">
+      <div class="ai-prog-bar"><div class="ai-prog-fill" id="aiProgFill" style="width:10%"></div></div>
+      <div class="ai-prog-text" id="aiProgText">1 / 10</div>
+    </div>
+    <div class="ai-tab-bar" id="aiTabBar"></div>
+    <div class="ai-popup-body">
+      <div class="ai-question-card" id="aiQuestionCard"></div>
+    </div>
+    <div class="ai-popup-footer">
+      <div class="ai-footer-left">
+        <button class="ai-skip" id="aiBackBtn" onclick="aiBack()" style="display:none">&larr; Back</button>
+        <button class="ai-skip" id="aiSkipBtn" onclick="aiSkip()">Skip this question</button>
+      </div>
+      <button class="ai-next-btn" id="aiNextBtn" onclick="aiNext()">Next <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<!-- FIELD-BY-FIELD POPUP -->
+<div class="field-popup-overlay" id="fieldPopup">
+  <div class="field-popup">
+    <div class="fp-header">
+      <div class="fp-header-left">
+        <div class="fp-header-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <div class="fp-header-title" id="fpHeaderTitle">Screen 1</div>
+        <div class="fp-header-counter" id="fpHeaderCounter">1 / 5</div>
+      </div>
+      <button class="fp-close" onclick="closeFieldPopup()" title="Close"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="fp-progress"><div class="fp-progress-fill" id="fpProgressFill" style="width:0%"></div></div>
+    <div class="fp-body" id="fpBody"></div>
+    <div class="fp-footer">
+      <button class="fp-back-btn" id="fpBackBtn" onclick="fpBack()">&larr; Back</button>
+      <button class="fp-next-btn" id="fpNextBtn" onclick="fpNext()">Next <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-msg" id="toast"></div>
+
+<script>
+// =========================================================
+// CONFIG & STATE
+// =========================================================
+var STEPS=[
+  {id:1,title:'Skill Ontology',seg:'Skills'},
+  {id:2,title:'Competency Framework',seg:'Competency'},
+  {id:3,title:'Role Architecture',seg:'Roles'},
+  {id:4,title:'Role-Skill Mapping',seg:'Mapping'},
+  {id:5,title:'Employee-Role Mapping',seg:'People'},
+  {id:6,title:'Validation',seg:null}
+];
+var TOTAL=5;
+var state={current:1,completed:{},visited:{}};
+for(var i=1;i<=TOTAL;i++)state.completed[i]=false;
+
+var D={skillDomains:[],skillsMaster:[],competencies:[],jobLevels:[],roles:[],roleSkillReqs:[],employeeRoleMappings:[]};
+var appliedSuggestions={};
+
+// Load context from previous modules
+var companyData=null;
+try{companyData=JSON.parse(localStorage.getItem('sip_company'))}catch(e){}
+var employeeData=null;
+try{employeeData=JSON.parse(localStorage.getItem('sip_employees'))}catch(e){}
+if(!employeeData||!Array.isArray(employeeData))employeeData=[];
+
+function getCompanyField(key){return companyData&&companyData[key]?companyData[key]:''}
+var orgSector=getCompanyField('sector')||'Infrastructure & Construction';
+var orgCountry=getCompanyField('country')||'Singapore';
+
+// =========================================================
+// AI SUGGESTIONS DATA
+// =========================================================
+function getAiSuggestions(){
+  return {
+    1:{
+      domain_items:[
+        {domain_name:'Engineering & Construction',knowledge_areas:'Structural Analysis, Geotechnical, Materials Science, BIM',_list:'skillDomains',label:'Core domain'},
+        {domain_name:'Digital & Technology',knowledge_areas:'Cloud Computing, Data Analytics, IoT, Cybersecurity',_list:'skillDomains',label:'Digital transformation enabler'},
+        {domain_name:'Project Management',knowledge_areas:'Scheduling, Cost Control, Risk Management, Stakeholder Management',_list:'skillDomains',label:'Delivery excellence'},
+        {domain_name:'Safety & Compliance',knowledge_areas:'OH&S, Environmental, Regulatory, Quality',_list:'skillDomains',label:'Regulatory essential'}
+      ],
+      skill_items:[
+        {skill_name:'BIM Modeling (Revit)',skill_domain:'Digital & Technology',skill_type:'Technical',emerging_flag:'No',regulatory_flag:'No',_list:'skillsMaster',label:'Core digital skill'},
+        {skill_name:'Structural Analysis',skill_domain:'Engineering & Construction',skill_type:'Technical',emerging_flag:'No',regulatory_flag:'No',_list:'skillsMaster',label:'Core engineering skill'},
+        {skill_name:'AI/ML for Construction',skill_domain:'Digital & Technology',skill_type:'Technical',emerging_flag:'Yes',regulatory_flag:'No',_list:'skillsMaster',label:'Emerging skill'},
+        {skill_name:'ISO 45001 Compliance',skill_domain:'Safety & Compliance',skill_type:'Compliance',emerging_flag:'No',regulatory_flag:'Yes',_list:'skillsMaster',label:'Regulatory skill'},
+        {skill_name:'Stakeholder Communication',skill_domain:'Project Management',skill_type:'Behavioral',emerging_flag:'No',regulatory_flag:'No',_list:'skillsMaster',label:'Soft skill'}
+      ]
+    },
+    2:{
+      comps:[
+        {name:'Safety-First Mindset',type:'Core / Enterprise',category:'Safety',description:'Commitment to workplace safety in all activities',_list:'competencies',label:'Core for construction'},
+        {name:'Digital Fluency',type:'Technical',category:'Digital',description:'Ability to leverage digital tools and data',_list:'competencies',label:'Supports digital transformation'},
+        {name:'Strategic Leadership',type:'Leadership',category:'Leadership',description:'Ability to set direction and inspire teams',_list:'competencies',label:'L5+ requirement'},
+        {name:'Client Partnership',type:'Core / Enterprise',category:'Business',description:'Building and maintaining client relationships',_list:'competencies',label:'Business development'}
+      ]
+    },
+    3:{
+      level_items:[
+        {level_code:'L1',level_name:'Entry',seniority_tier:'Entry',ic_or_manager:'IC',min_years_experience:'0',_list:'jobLevels',label:'Graduate / Trainee'},
+        {level_code:'L2',level_name:'Associate',seniority_tier:'Early Career',ic_or_manager:'IC',min_years_experience:'2',_list:'jobLevels',label:'2+ years'},
+        {level_code:'L3',level_name:'Mid-Level',seniority_tier:'Mid-Level',ic_or_manager:'IC',min_years_experience:'4',_list:'jobLevels',label:'4+ years'},
+        {level_code:'L4',level_name:'Senior',seniority_tier:'Senior',ic_or_manager:'Both',min_years_experience:'7',_list:'jobLevels',label:'7+ years'},
+        {level_code:'L5',level_name:'Lead / Principal',seniority_tier:'Senior',ic_or_manager:'Both',min_years_experience:'10',_list:'jobLevels',label:'10+ years'},
+        {level_code:'L6',level_name:'Director',seniority_tier:'Leadership',ic_or_manager:'Manager',min_years_experience:'12',_list:'jobLevels',label:'12+ years'},
+        {level_code:'L7',level_name:'C-Suite',seniority_tier:'Executive',ic_or_manager:'Manager',min_years_experience:'15',_list:'jobLevels',label:'15+ years'}
+      ],
+      roles:[
+        {title:'Senior Structural Engineer',family:'Engineering',dept:'Structural Engineering',level:'L4 — Senior',reports_to:'Chief Engineer',role_purpose:'Lead structural design and analysis',_list:'roles',label:'Core engineering role'},
+        {title:'BIM Coordinator',family:'Technology',dept:'BIM & Digital Delivery',level:'L3 — Mid',reports_to:'BIM Manager',role_purpose:'Coordinate BIM workflows and standards',_list:'roles',label:'Digital delivery'},
+        {title:'Project Manager',family:'Operations',dept:'Project Delivery',level:'L4 — Senior',reports_to:'Division Director',role_purpose:'End-to-end project delivery',_list:'roles',label:'Revenue-critical'},
+        {title:'Safety Manager',family:'Operations',dept:'EHS & Risk',level:'L4 — Senior',reports_to:'VP Operations',role_purpose:'Ensure workplace safety compliance',_list:'roles',label:'Compliance-critical'},
+        {title:'Cloud Architect',family:'Technology',dept:'IT Infrastructure',level:'L5 — Lead',reports_to:'CTO',role_purpose:'Design and manage cloud infrastructure',_list:'roles',label:'Digital infrastructure'}
+      ]
+    },
+    4:{
+      rsr_items:[
+        {role_title:'Senior Structural Engineer',skill:'Structural Analysis',required_level:'Level 4',criticality:'Critical',_list:'roleSkillReqs',label:'Primary skill'},
+        {role_title:'Senior Structural Engineer',skill:'BIM Modeling (Revit)',required_level:'Level 3',criticality:'High',_list:'roleSkillReqs',label:'Supporting skill'},
+        {role_title:'BIM Coordinator',skill:'BIM Modeling (Revit)',required_level:'Level 4',criticality:'Critical',_list:'roleSkillReqs',label:'Primary skill'},
+        {role_title:'Project Manager',skill:'Stakeholder Communication',required_level:'Level 4',criticality:'High',_list:'roleSkillReqs',label:'Key PM skill'},
+        {role_title:'Safety Manager',skill:'ISO 45001 Compliance',required_level:'Level 5',criticality:'Critical',_list:'roleSkillReqs',label:'Compliance essential'},
+        {role_title:'Cloud Architect',skill:'AI/ML for Construction',required_level:'Level 3',criticality:'Medium',_list:'roleSkillReqs',label:'Emerging tech'}
+      ]
+    },
+    5:{}
+  };
+}
+
+// =========================================================
+// AI MESSAGES
+// =========================================================
+var AI_MESSAGES={
+  1:{welcome:"The <strong>Skill Ontology</strong> is the language your platform speaks. Domains and skills form the foundation of all analysis.",follow:"I've suggested skill domains and individual skills based on your industry, tech stack, and standards. This feeds everything downstream."},
+  2:{welcome:"<strong>Competencies</strong> define how capability is measured. Combined with proficiency levels, they power assessments.",follow:"I've separated competencies from roles for cleaner architecture. Define your competency framework and proficiency scale here."},
+  3:{welcome:"<strong>Role Architecture</strong> is the structural backbone. Job levels, roles, and skill requirements all connect here.",follow:"I've suggested a 7-level framework. Define roles with reporting lines. Use the <em>AI-Guided Builder</em> for batch role creation."},
+  4:{welcome:"<strong>Role-Skill Mapping</strong> defines what proficiency each role needs &mdash; the foundation of gap analysis.",follow:"I've pre-mapped skills to roles based on your defined role architecture. Adjust levels and criticality as needed."},
+  5:{welcome:"<strong>Employee-Role Mapping</strong> connects your people to standardized roles. I'll auto-suggest based on employee titles.",follow:"Employees loaded from your upload. Click <em>Auto-Map All</em> to let AI match titles to your defined roles."},
+  6:{welcome:"Here's your <strong>Validation Dashboard</strong>. Review all 5 screens.",follow:"Green = complete. Amber = missing. Confirm & Lock when ready to proceed to Workforce Intelligence."}
+};
+
+var CONGRATS={
+  1:{msg:"Skill Ontology built!",unlocks:["Skill taxonomy engine","Skill-to-role mapping","Emerging skill tracking","Regulatory skill flagging","Cross-domain skill analysis"]},
+  2:{msg:"Competency framework locked!",unlocks:["Competency-based assessments","Proficiency level scoring","Capability maturity tracking","Assessment rubric generation"]},
+  3:{msg:"Role architecture built!",unlocks:["Full role-skill matrix","Career pathway generation","Span-of-control analysis","Succession planning models","Role-skill gap heat maps"]},
+  4:{msg:"Role-Skill mapping complete!",unlocks:["Gap analysis engine","Skill requirement heat maps","Training recommendation engine","Criticality-based prioritization"]},
+  5:{msg:"Employee-Role mapping done!",unlocks:["Per-employee gap analysis","Workforce capability dashboard","Team skill coverage maps","Succession pipeline view"]}
+};
+
+// =========================================================
+// HELPERS
+// =========================================================
+function gv(id){var e=document.getElementById(id);return e?e.value.trim():''}
+function sv(id,v){var e=document.getElementById(id);if(e){e.value=v;e.classList.add('ai-filled')}}
+function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show')},2200)}
+function escH(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function dlBtn(s){return '<button class="dl-tpl-btn" onclick="event.stopPropagation();showToast(\'Template download coming soon\')" title="Download CSV template"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Template</button>'}
+
+function uploadZone(step){
+  return '<div class="upload-zone" id="uploadZone'+step+'" ondragover="event.preventDefault();this.classList.add(\'drag-over\')" ondragleave="this.classList.remove(\'drag-over\')" ondrop="event.preventDefault();this.classList.remove(\'drag-over\');simulateStepUpload('+step+')">'
+    +'<input type="file" class="upload-input" onchange="simulateStepUpload('+step+')" accept=".pdf,.docx,.xlsx,.csv">'
+    +'<div class="upload-zone-inner"><div class="upload-icon-sm"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>'
+    +'<p>Upload a document or <span class="upload-link">browse files</span> to auto-fill this screen</p></div>'
+    +'<div class="upload-progress" id="uploadProg'+step+'"></div></div>';
+}
+
+function simulateStepUpload(step){
+  var z=document.getElementById('uploadZone'+step);
+  z.querySelector('.upload-zone-inner').style.display='none';z.querySelector('.upload-input').style.display='none';z.style.cursor='default';
+  var p=document.getElementById('uploadProg'+step);
+  p.innerHTML='<div class="upload-file-badge"><span style="color:var(--purple-lt)">Extracting...</span></div><div class="upload-extract-bar"><div class="upload-extract-fill" id="uploadBar'+step+'"></div></div>';
+  p.classList.add('active');
+  var bar=document.getElementById('uploadBar'+step);
+  bar.style.width='30%';
+  setTimeout(function(){bar.style.width='70%'},500);
+  setTimeout(function(){bar.style.width='100%';p.querySelector('.upload-file-badge span').textContent='Extracted!';p.querySelector('.upload-file-badge span').style.color='var(--green-lt)';applyAllSuggestions(step);addAiMsg("Document extracted! Fields have been populated for Screen "+step+". Review and adjust as needed.")},1200);
+}
+
+// =========================================================
+// AI CHAT
+// =========================================================
+function aiAvatar(){return '<div class="ai-bubble-avatar"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 12l10 5 10-5"/></svg></div>'}
+function addAiMsg(t){var c=document.getElementById('aiChat'),b=document.createElement('div');b.className='ai-bubble';b.innerHTML=aiAvatar()+'<div class="ai-msg">'+t+'</div>';c.appendChild(b);c.scrollTop=c.scrollHeight}
+function addAiTyping(){var c=document.getElementById('aiChat'),e=document.createElement('div');e.className='ai-bubble';e.id='aiTypingEl';e.innerHTML=aiAvatar()+'<div class="ai-typing"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div>';c.appendChild(e);c.scrollTop=c.scrollHeight}
+function removeAiTyping(){var e=document.getElementById('aiTypingEl');if(e)e.remove()}
+function clearAiChat(){document.getElementById('aiChat').innerHTML=''}
+
+function updateAiForStep(n){
+  clearAiChat();
+  var m=AI_MESSAGES[n];if(!m)return;
+  document.getElementById('aiFooterStep').textContent='Screen '+n+' of 6';
+  if(state.visited[n]){addAiMsg(m.welcome);if(m.follow)addAiMsg(m.follow);return}
+  state.visited[n]=true;
+  addAiTyping();
+  setTimeout(function(){removeAiTyping();addAiMsg(m.welcome);if(m.follow)setTimeout(function(){addAiTyping();setTimeout(function(){removeAiTyping();addAiMsg(m.follow)},800)},600)},700);
+}
+
+function showCelebration(msg,sub){
+  var chat=document.getElementById('aiChat');
+  var card=document.createElement('div');card.className='ai-celebrate';
+  var confettiHtml='<div class="ai-celebrate-confetti">';
+  var colors=['#A070E0','#3AB87A','#E0CC70','#3A8CC0','#F0A030','#E87060'];
+  for(var ci=0;ci<18;ci++){var dx=(Math.random()>0.5?1:-1)*(30+Math.random()*80)+'px';var dy=(Math.random()>0.5?1:-1)*(20+Math.random()*50)+'px';confettiHtml+='<span class="c-dot" style="width:'+(3+Math.random()*4)+'px;height:'+(3+Math.random()*4)+'px;background:'+colors[Math.floor(Math.random()*colors.length)]+';left:16px;top:22px;--dx:'+dx+';--dy:'+dy+';animation-delay:'+(Math.random()*0.3)+'s"></span>'}
+  confettiHtml+='</div>';
+  card.innerHTML=confettiHtml+'<div class="ai-celebrate-header"><div class="ai-celebrate-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="ai-celebrate-title">'+msg+'</div>'+(sub?'<div class="ai-celebrate-sub">'+sub+'</div>':'')+'</div></div>';
+  chat.appendChild(card);chat.scrollTop=chat.scrollHeight;
+}
+
+// =========================================================
+// AI SUGGESTION ENGINE
+// =========================================================
+function getListItems(listKey,step){
+  var sug=getAiSuggestions();
+  if(step===1&&listKey==='skillDomains')return sug[1]?sug[1].domain_items:null;
+  if(step===1&&listKey==='skillsMaster')return sug[1]?sug[1].skill_items:null;
+  if(step===2&&listKey==='competencies')return sug[2]?sug[2].comps:null;
+  if(step===3&&listKey==='jobLevels')return sug[3]?sug[3].level_items:null;
+  if(step===3&&listKey==='roles')return sug[3]?sug[3].roles:null;
+  if(step===4&&listKey==='roleSkillReqs')return sug[4]?sug[4].rsr_items:null;
+  return null;
+}
+
+function listSuggestions(listKey,items,stepNum){
+  if(!items||!items.length)return '';
+  var h='<div class="ai-suggestions-header"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>AI Suggestions</span><button class="apply-all-btn" onclick="applyAllListSuggestions(\''+listKey+'\','+stepNum+')">Apply All</button></div>';
+  items.forEach(function(item,i){
+    var key=listKey+'_'+stepNum+'_'+i;
+    if(appliedSuggestions[key])return;
+    var title=item.name||item.title||item.skill_name||item.domain_name||item.level_code||item.role_title||'';
+    var detail=item.label||'';
+    h+='<div class="ai-list-suggestion" id="aiSug_'+key+'"><div class="ai-list-suggestion-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="ai-list-suggestion-text"><div class="ai-list-suggestion-title">'+escH(title)+'</div><div class="ai-list-suggestion-detail">'+escH(detail)+'</div></div><button class="ai-list-suggestion-btn" onclick="applyListSuggestion(\''+listKey+'\','+stepNum+','+i+')">Add</button></div>';
+  });
+  return h;
+}
+
+function applyListSuggestion(listKey,step,idx){
+  var items=getListItems(listKey,step);
+  if(!items||!items[idx])return;
+  var item=JSON.parse(JSON.stringify(items[idx]));
+  delete item.label;delete item._list;
+  D[listKey].push(item);
+  var key=listKey+'_'+step+'_'+idx;
+  appliedSuggestions[key]=true;
+  var el=document.getElementById('aiSug_'+key);
+  if(el){el.classList.add('applied');el.querySelector('.ai-list-suggestion-btn').outerHTML='<span class="applied-label">Added</span>'}
+  reRenderList(listKey);showToast((item.name||item.title||item.skill_name||item.domain_name||item.level_code||item.role_title||'Item')+' added');
+}
+
+function applyAllListSuggestions(listKey,step){
+  var items=getListItems(listKey,step);if(!items)return;
+  items.forEach(function(item,i){
+    var key=listKey+'_'+step+'_'+i;
+    if(appliedSuggestions[key])return;
+    var copy=JSON.parse(JSON.stringify(item));delete copy.label;delete copy._list;
+    D[listKey].push(copy);appliedSuggestions[key]=true;
+    var el=document.getElementById('aiSug_'+key);
+    if(el){el.classList.add('applied');var btn=el.querySelector('.ai-list-suggestion-btn');if(btn)btn.outerHTML='<span class="applied-label">Added</span>'}
+  });
+  reRenderList(listKey);showToast('All suggestions applied');
+}
+
+function applyAllSuggestions(step){
+  var allListKeys=['skillDomains','skillsMaster','competencies','jobLevels','roles','roleSkillReqs'];
+  allListKeys.forEach(function(lk){
+    var items=getListItems(lk,step);
+    if(items){items.forEach(function(item,i){var key=lk+'_'+step+'_'+i;if(!appliedSuggestions[key]){var c=JSON.parse(JSON.stringify(item));delete c.label;delete c._list;D[lk].push(c);appliedSuggestions[key]=true}});reRenderList(lk)}
+  });
+  renderSteps();goToStep(step);
+}
+
+// =========================================================
+// STEP BUILDERS
+// =========================================================
+function navBtns(prev,next){
+  var h='<div style="display:flex;justify-content:space-between;gap:10px;margin-top:14px">';
+  h+=prev?'<button class="btn" onclick="goToStep('+prev+')">&larr; Back</button>':'<div></div>';
+  h+=next?'<button class="btn btn-gold" onclick="saveStep('+(next-1)+')">Save & Continue &rarr;</button>':'';
+  return h+'</div>';
+}
+
+function buildStep1(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 1 — Skill Ontology & Taxonomy</div>'+dlBtn(1)+'</div><div class="panel-body">'
+  +uploadZone(1)
+  +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Skill Domains</div><div id="skillDomainList"></div>'
+  +listSuggestions('skillDomains',sug[1]?sug[1].domain_items:null,1)
+  +'<div class="dashed-box"><div class="dashed-title">Add Skill Domain</div><div class="form-row"><div class="form-group"><label class="form-label">Domain Name *</label><input class="form-input" id="f-sd-name"></div><div class="form-group"><label class="form-label">Knowledge Areas (comma-sep)</label><input class="form-input" id="f-sd-areas" placeholder="e.g. Structural, Geotech, Materials"></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addSkillDomain()" style="margin-top:4px">+ Add Domain</button></div>'
+  +'<div class="sub-section-title">Skills Master</div><div id="skillsMasterList"></div>'
+  +listSuggestions('skillsMaster',sug[1]?sug[1].skill_items:null,1)
+  +'<div class="dashed-box"><div class="dashed-title">Add Skill</div><div class="form-row"><div class="form-group"><label class="form-label">Skill Name *</label><input class="form-input" id="f-sk-name"></div><div class="form-group"><label class="form-label">Skill Domain</label><input class="form-input" id="f-sk-domain" placeholder="e.g. Engineering & Construction"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Skill Type</label><select class="form-select" id="f-sk-type"><option>Technical</option><option>Functional</option><option>Behavioral</option><option>Digital</option><option>Compliance</option><option>Analytical</option></select></div><div class="form-group"><label class="form-label">Emerging?</label><select class="form-select" id="f-sk-emerging"><option>No</option><option>Yes</option></select></div></div>'
+  +'<div class="form-group"><label class="form-label">Regulatory?</label><select class="form-select" id="f-sk-regulatory"><option>No</option><option>Yes</option></select></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addSkillMaster()" style="margin-top:4px">+ Add Skill</button></div>'
+  +navBtns(null,2)+'</div></div>';
+}
+
+function buildStep2(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 2 — Competency Framework</div>'+dlBtn(2)+'</div><div class="panel-body">'
+  +uploadZone(2)
+  +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Competencies</div><div id="competenciesList"></div>'
+  +listSuggestions('competencies',sug[2]?sug[2].comps:null,2)
+  +'<div class="dashed-box"><div class="dashed-title">Add Competency</div><div class="form-row"><div class="form-group"><label class="form-label">Name *</label><input class="form-input" id="f-comp-name"></div><div class="form-group"><label class="form-label">Type</label><select class="form-select" id="f-comp-type"><option>Core / Enterprise</option><option>Leadership</option><option>Technical</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Category</label><input class="form-input" id="f-comp-cat" placeholder="e.g. Safety, Digital"></div><div class="form-group"><label class="form-label">Description</label><input class="form-input" id="f-comp-desc" placeholder="Brief description"></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addCompetency()" style="margin-top:4px">+ Add</button></div>'
+  +'<div class="sub-section-title">Proficiency Levels Configuration</div>'
+  +'<div class="form-group"><label class="form-label">Proficiency Scale</label><input class="form-input" id="f-prof-scale" placeholder="e.g. Level 1-5: Awareness to Expert" value="Level 1-5: Awareness, Foundation, Competent, Advanced, Expert"></div>'
+  +'<div class="form-group"><label class="form-label">Assessment Approach</label><input class="form-input" id="f-prof-approach" placeholder="e.g. Manager review + self-assessment" value="Manager review + self-assessment + evidence validation"></div>'
+  +navBtns(1,3)+'</div></div>';
+}
+
+function buildStep3(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 3 — Role Architecture</div><div style="display:flex;gap:8px;align-items:center"><button class="btn btn-sm" onclick="openAiPopup()" style="background:linear-gradient(135deg,var(--gold) 0%,#E0CC70 100%);border-color:var(--gold);color:var(--ink);font-weight:600;gap:6px"><svg style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>AI-Guided Builder</button>'+dlBtn(3)+'</div></div><div class="panel-body">'
+  +uploadZone(3)
+  +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Job Role Levels</div><div id="jobLevelList"></div>'
+  +listSuggestions('jobLevels',sug[3]?sug[3].level_items:null,3)
+  +'<div class="dashed-box"><div class="dashed-title">Add Job Level</div><div class="form-row"><div class="form-group"><label class="form-label">Level Code *</label><input class="form-input" id="f-jl-code" placeholder="e.g. L1"></div><div class="form-group"><label class="form-label">Level Name</label><input class="form-input" id="f-jl-name" placeholder="e.g. Entry"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Seniority Tier</label><select class="form-select" id="f-jl-tier"><option>Entry</option><option>Early Career</option><option>Mid-Level</option><option>Senior</option><option>Leadership</option><option>Executive</option></select></div><div class="form-group"><label class="form-label">IC or Manager</label><select class="form-select" id="f-jl-icmgr"><option>IC</option><option>Manager</option><option>Both</option></select></div></div>'
+  +'<div class="form-group"><label class="form-label">Min Years Experience</label><input class="form-input" id="f-jl-minyrs" type="number"></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addJobLevel()" style="margin-top:4px">+ Add Level</button></div>'
+  +'<div class="sub-section-title">Roles</div><div id="roleList"></div>'
+  +listSuggestions('roles',sug[3]?sug[3].roles:null,3)
+  +'<div class="dashed-box"><div class="dashed-title">Add Role</div><div class="form-row"><div class="form-group"><label class="form-label">Job Title *</label><input class="form-input" id="f-role-title"></div><div class="form-group"><label class="form-label">Family</label><select class="form-select" id="f-role-family"><option>Engineering</option><option>Technology</option><option>Operations</option><option>Corporate</option><option>Leadership</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Department</label><input class="form-input" id="f-role-dept"></div><div class="form-group"><label class="form-label">Level</label><select class="form-select" id="f-role-level"><option>L1 — Entry</option><option>L2 — Associate</option><option>L3 — Mid</option><option>L4 — Senior</option><option>L5 — Lead</option><option>L6 — Director</option><option>L7 — C-Suite</option></select></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Reports To</label><input class="form-input" id="f-role-reports" placeholder="e.g. Chief Engineer"></div><div class="form-group"><label class="form-label">Role Purpose</label><input class="form-input" id="f-role-purpose" placeholder="Brief description"></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addRole()" style="margin-top:4px">+ Add Role</button></div>'
+  +navBtns(2,4)+'</div></div>';
+}
+
+function buildStep4(){
+  var sug=getAiSuggestions();
+  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 4 — Role-Skill Mapping</div>'+dlBtn(4)+'</div><div class="panel-body">'
+  +uploadZone(4)
+  +'<div class="section-desc">Map skills to roles with required proficiency levels and criticality. This powers gap analysis across the workforce.</div>'
+  +'<div id="roleSkillReqList"></div>'
+  +listSuggestions('roleSkillReqs',sug[4]?sug[4].rsr_items:null,4)
+  +'<div class="dashed-box"><div class="dashed-title">Add Role-Skill Requirement</div><div class="form-row"><div class="form-group"><label class="form-label">Role Title</label><input class="form-input" id="f-rsr-role" placeholder="e.g. Senior Engineer"></div><div class="form-group"><label class="form-label">Skill</label><input class="form-input" id="f-rsr-skill" placeholder="e.g. Structural Analysis"></div></div>'
+  +'<div class="form-row"><div class="form-group"><label class="form-label">Required Level</label><select class="form-select" id="f-rsr-level"><option>Level 1</option><option>Level 2</option><option>Level 3</option><option>Level 4</option><option>Level 5</option></select></div><div class="form-group"><label class="form-label">Criticality</label><select class="form-select" id="f-rsr-crit"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div></div>'
+  +'<button class="btn btn-blue btn-sm" onclick="addRoleSkillReq()" style="margin-top:4px">+ Add Requirement</button></div>'
+  +navBtns(3,5)+'</div></div>';
+}
+
+function buildStep5(){
+  var emps=employeeData;
+  var mappedCount=D.employeeRoleMappings.filter(function(m){return m.role}).length;
+  var totalEmps=emps.length;
+  var pct=totalEmps>0?Math.round(mappedCount/totalEmps*100):0;
+
+  var h='<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 5 — Employee-Role Mapping</div><button class="btn btn-sm" onclick="autoMapAll()" style="background:linear-gradient(135deg,var(--gold) 0%,#E0CC70 100%);border-color:var(--gold);color:var(--ink);font-weight:600;gap:6px"><svg style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Auto-Map All</button></div><div class="panel-body">';
+
+  if(totalEmps===0){
+    h+='<div class="section-desc" style="border-left-color:var(--amber-lt)">No employee data found in localStorage (key: <em>sip_employees</em>). Upload employees in Module 2 first, or add sample data below.</div>';
+    h+='<button class="btn btn-blue btn-sm" onclick="loadSampleEmployees()" style="margin-bottom:12px">Load 10 Sample Employees</button>';
+  } else {
+    h+='<div class="mapping-progress"><div class="mapping-progress-bar"><div class="mapping-progress-fill" style="width:'+pct+'%"></div></div><div class="mapping-progress-text">'+mappedCount+' of '+totalEmps+' mapped ('+pct+'%)</div></div>';
+  }
+
+  h+='<div id="empMappingTable"></div>';
+  h+=navBtns(4,6)+'</div></div>';
+  return h;
+}
+
+function buildStep6(){
+  var h='<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 6 — Review & Lock</div></div><div class="panel-body" id="reviewBody"></div></div>';
+  h+='<div style="display:flex;justify-content:space-between;gap:10px;margin-top:10px"><button class="btn" onclick="goToStep(5)">&larr; Back</button><button class="btn btn-gold" onclick="confirmSetup()"><svg style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Confirm & Lock</button></div>';
+  return h;
+}
+
+var stepBuilders=[buildStep1,buildStep2,buildStep3,buildStep4,buildStep5,buildStep6];
+
+// =========================================================
+// ADD FUNCTIONS
+// =========================================================
+function addSkillDomain(){var n=gv('f-sd-name');if(!n){showToast('Enter domain name');return}D.skillDomains.push({domain_name:n,knowledge_areas:gv('f-sd-areas')});reRenderList('skillDomains');['f-sd-name','f-sd-areas'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast(n+' added')}
+function addSkillMaster(){var n=gv('f-sk-name');if(!n){showToast('Enter skill name');return}D.skillsMaster.push({skill_name:n,skill_domain:gv('f-sk-domain'),skill_type:gv('f-sk-type'),emerging_flag:gv('f-sk-emerging'),regulatory_flag:gv('f-sk-regulatory')});reRenderList('skillsMaster');['f-sk-name','f-sk-domain'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast(n+' added')}
+function addCompetency(){var n=gv('f-comp-name');if(!n)return;D.competencies.push({name:n,type:gv('f-comp-type'),category:gv('f-comp-cat'),description:gv('f-comp-desc')});reRenderList('competencies');['f-comp-name','f-comp-cat','f-comp-desc'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''})}
+function addJobLevel(){var n=gv('f-jl-code');if(!n){showToast('Enter level code');return}D.jobLevels.push({level_code:n,level_name:gv('f-jl-name'),seniority_tier:gv('f-jl-tier'),ic_or_manager:gv('f-jl-icmgr'),min_years_experience:gv('f-jl-minyrs')});reRenderList('jobLevels');['f-jl-code','f-jl-name','f-jl-minyrs'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast(n+' added')}
+function addRole(){var n=gv('f-role-title');if(!n){showToast('Enter title');return}D.roles.push({title:n,family:gv('f-role-family'),dept:gv('f-role-dept'),level:gv('f-role-level'),reports_to:gv('f-role-reports'),role_purpose:gv('f-role-purpose')});reRenderList('roles');['f-role-title','f-role-dept','f-role-reports','f-role-purpose'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast(n+' added')}
+function addRoleSkillReq(){var r=gv('f-rsr-role'),s=gv('f-rsr-skill');if(!r||!s){showToast('Enter role and skill');return}D.roleSkillReqs.push({role_title:r,skill:s,required_level:gv('f-rsr-level'),criticality:gv('f-rsr-crit')});reRenderList('roleSkillReqs');['f-rsr-role','f-rsr-skill'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});showToast('Requirement added')}
+
+// =========================================================
+// LIST RENDERING
+// =========================================================
+function renderList(elId,arr,fmt,key){
+  var h='';arr.forEach(function(item,i){h+='<div class="added-chip" style="animation:staggerIn .25s ease both;animation-delay:'+(i*40)+'ms">'+fmt(item)+'<span class="remove-chip" onclick="removeItem(\''+key+'\','+i+')">&times;</span></div>'});
+  var el=document.getElementById(elId);if(el)el.innerHTML=h?'<div class="added-items">'+h+'</div>':'';
+}
+function reRenderList(key){
+  var listMap={
+    skillDomains:'skillDomainList',skillsMaster:'skillsMasterList',competencies:'competenciesList',
+    jobLevels:'jobLevelList',roles:'roleList',roleSkillReqs:'roleSkillReqList'
+  };
+  var fmtMap={
+    skillDomains:function(d){return d.domain_name+' — '+d.knowledge_areas},
+    skillsMaster:function(s){return s.skill_name+' · '+s.skill_type+(s.emerging_flag==='Yes'?' · Emerging':'')},
+    competencies:function(c){return c.name+' · '+c.type+(c.category?' · '+c.category:'')},
+    jobLevels:function(l){return l.level_code+' — '+l.level_name+' · '+l.seniority_tier},
+    roles:function(r){return r.title+' · '+r.family+' · '+r.level},
+    roleSkillReqs:function(r){return r.role_title+' \u2192 '+r.skill+' ('+r.required_level+')'}
+  };
+  if(listMap[key]&&fmtMap[key])renderList(listMap[key],D[key],fmtMap[key],key);
+}
+function removeItem(key,idx){D[key].splice(idx,1);reRenderList(key)}
+
+// =========================================================
+// EMPLOYEE MAPPING
+// =========================================================
+function loadSampleEmployees(){
+  employeeData=[
+    {id:1,name:'Anil Kumar',title:'Senior Structural Engineer',department:'Structural Engineering'},
+    {id:2,name:'Priya Menon',title:'BIM Coordinator',department:'BIM & Digital'},
+    {id:3,name:'James Tan',title:'Project Manager',department:'Project Delivery'},
+    {id:4,name:'Siti Nurhaliza',title:'Safety Officer',department:'EHS'},
+    {id:5,name:'Rajesh Patel',title:'Cloud Solutions Architect',department:'IT'},
+    {id:6,name:'Li Wei',title:'Civil Engineer',department:'Civil Engineering'},
+    {id:7,name:'Sarah Chen',title:'HR Manager',department:'Human Resources'},
+    {id:8,name:'Mohammad Ali',title:'Quantity Surveyor',department:'Cost Management'},
+    {id:9,name:'Emily Wong',title:'Data Analyst',department:'Analytics'},
+    {id:10,name:'Vikram Singh',title:'Site Supervisor',department:'Field Operations'}
+  ];
+  try{localStorage.setItem('sip_employees',JSON.stringify(employeeData))}catch(e){}
+  initEmployeeMappings();
+  renderSteps();goToStep(5);
+  showToast('10 sample employees loaded');
+  addAiMsg('Sample employees loaded. Click <em>Auto-Map All</em> to let AI match them to your defined roles.');
+}
+
+function initEmployeeMappings(){
+  if(D.employeeRoleMappings.length===employeeData.length)return;
+  D.employeeRoleMappings=[];
+  employeeData.forEach(function(emp){
+    var existing=D.employeeRoleMappings.find(function(m){return m.empId===emp.id});
+    if(!existing){
+      D.employeeRoleMappings.push({empId:emp.id,empName:emp.name||'',empTitle:emp.title||'',empDept:emp.department||'',role:''});
+    }
+  });
+}
+
+function renderEmpMappingTable(){
+  var el=document.getElementById('empMappingTable');if(!el)return;
+  if(employeeData.length===0){el.innerHTML='';return}
+  var roleOptions='<option value="">-- Select Role --</option>';
+  D.roles.forEach(function(r){roleOptions+='<option value="'+escH(r.title)+'">'+escH(r.title)+' ('+escH(r.level)+')</option>'});
+  var h='<table class="emp-table"><thead><tr><th>#</th><th>Employee</th><th>Current Title</th><th>Department</th><th>Mapped Role</th><th>Status</th></tr></thead><tbody>';
+  D.employeeRoleMappings.forEach(function(m,i){
+    var isMapped=m.role?true:false;
+    h+='<tr><td>'+(i+1)+'</td><td style="color:var(--paper);font-weight:500">'+escH(m.empName)+'</td><td>'+escH(m.empTitle)+'</td><td>'+escH(m.empDept)+'</td>';
+    h+='<td><select onchange="mapEmployee('+i+',this.value)">'+roleOptions.replace('value="'+escH(m.role)+'"','value="'+escH(m.role)+'" selected')+'</select></td>';
+    h+='<td class="'+(isMapped?'mapped':'unmapped')+'">'+(isMapped?'Mapped':'Unmapped')+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  el.innerHTML=h;
+}
+
+function mapEmployee(idx,role){
+  D.employeeRoleMappings[idx].role=role;
+  renderSteps();goToStep(5);
+}
+
+function autoMapAll(){
+  if(D.roles.length===0){showToast('Define roles first (Screen 3)');return}
+  var roleTitles=D.roles.map(function(r){return r.title.toLowerCase()});
+  D.employeeRoleMappings.forEach(function(m){
+    if(m.role)return;
+    var empTitle=(m.empTitle||'').toLowerCase();
+    var bestMatch='';var bestScore=0;
+    D.roles.forEach(function(r){
+      var rt=r.title.toLowerCase();
+      var score=0;
+      var empWords=empTitle.split(/\s+/);
+      var roleWords=rt.split(/\s+/);
+      empWords.forEach(function(ew){roleWords.forEach(function(rw){if(ew===rw)score+=3;else if(rw.indexOf(ew)>-1||ew.indexOf(rw)>-1)score+=1})});
+      if(r.dept&&m.empDept&&r.dept.toLowerCase().indexOf(m.empDept.toLowerCase())>-1)score+=2;
+      if(score>bestScore){bestScore=score;bestMatch=r.title}
+    });
+    if(bestScore>=1)m.role=bestMatch;
+    else if(D.roles.length>0)m.role=D.roles[0].title;
+  });
+  renderSteps();goToStep(5);
+  showToast('AI auto-mapped all employees');
+  addAiMsg('Auto-mapping complete! I matched employee titles to your defined roles using title keyword matching and department alignment. Review and adjust as needed.');
+}
+
+// =========================================================
+// RENDERING
+// =========================================================
+function renderStepper(){
+  var h='';STEPS.forEach(function(s,i){if(i>0)h+='<div class="step-conn'+(state.completed[i]?' done':'')+'"></div>';var cls=s.id===state.current?' active':'';if(state.completed[s.id])cls=' done';h+='<div class="step-item'+cls+'" onclick="goToStep('+s.id+')"><div class="step-num">'+(state.completed[s.id]?'<svg style="width:9px;height:9px;stroke:currentColor;fill:none;stroke-width:3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':s.id)+'</div><span class="step-label">'+s.title+'</span></div>'});
+  document.getElementById('stepper').innerHTML=h;
+}
+
+function renderSteps(){
+  var h='';STEPS.forEach(function(s,i){var vis=s.id===state.current?' visible':'';h+='<div class="step-panel'+vis+'" id="step'+s.id+'">'+stepBuilders[i]()+'</div>'});
+  document.getElementById('stepContainer').innerHTML=h;
+  var allLists=['skillDomains','skillsMaster','competencies','jobLevels','roles','roleSkillReqs'];
+  allLists.forEach(function(k){reRenderList(k)});
+  if(employeeData.length>0){initEmployeeMappings();renderEmpMappingTable()}
+}
+
+function goToStep(n){
+  state.current=n;renderStepper();
+  STEPS.forEach(function(s){var el=document.getElementById('step'+s.id);if(el){if(s.id===n)el.classList.add('visible');else el.classList.remove('visible')}});
+  if(n===6)buildReview();
+  if(n===5&&employeeData.length>0){initEmployeeMappings();setTimeout(renderEmpMappingTable,50)}
+  document.querySelector('.content-left').scrollTop=0;
+  updateAiForStep(n);updateProgress();
+  var jmp=document.getElementById('screenJump');if(jmp)jmp.value=n;
+}
+
+function updateProgress(){
+  var done=0;for(var k in state.completed)if(state.completed[k])done++;
+  var pct=done/TOTAL;
+  var ring=document.getElementById('progressRing');if(ring)ring.setAttribute('stroke-dashoffset',150.8*(1-pct));
+  document.getElementById('progressPct').textContent=Math.round(pct*100)+'%';
+  document.getElementById('progressPct').style.color=pct<.4?'var(--amber-lt)':pct<.7?'var(--purple-lt)':'var(--green-lt)';
+  document.getElementById('progressTitle').textContent='Role & Competency: '+done+' of '+TOTAL+' screens';
+  document.getElementById('aiFooterBar').style.width=Math.round(pct*100)+'%';
+  document.getElementById('levelPill').textContent=done>=TOTAL?'Complete':'Module 3 ('+done+'/'+TOTAL+')';
+  document.getElementById('levelPill').className=done>=TOTAL?'tb-pill gold':'tb-pill purple';
+  renderStepper();
+}
+
+function saveStep(n){
+  state.completed[n]=true;updateProgress();
+  goToStep(n<6?n+1:6);
+  var cg=CONGRATS[n];
+  if(cg){
+    setTimeout(function(){showCelebration(cg.msg,'Screen '+n+' complete')},1800);
+    setTimeout(function(){
+      var unlockHtml='<em>This unlocks:</em><br>';
+      cg.unlocks.forEach(function(u){unlockHtml+='&bull; '+u+'<br>'});
+      addAiMsg(unlockHtml);
+    },2400);
+  }
+}
+
+// =========================================================
+// REVIEW & CONFIRM
+// =========================================================
+function buildReview(){
+  var mappedEmps=D.employeeRoleMappings.filter(function(m){return m.role}).length;
+  var h='';
+  var labels=[
+    'Skill Domains ('+D.skillDomains.length+') & Skills ('+D.skillsMaster.length+')',
+    'Competencies ('+D.competencies.length+')',
+    'Levels ('+D.jobLevels.length+') & Roles ('+D.roles.length+')',
+    'Role-Skill Mappings ('+D.roleSkillReqs.length+')',
+    'Employee Mappings ('+mappedEmps+' of '+employeeData.length+')'
+  ];
+  for(var i=1;i<=5;i++){var done=state.completed[i];h+='<div class="rv-section" onclick="goToStep('+i+')" style="cursor:pointer"><div class="rv-title"><div class="rv-check '+(done?'done':'pending')+'"><svg viewBox="0 0 24 24">'+(done?'<polyline points="20 6 9 17 4 12"/>':'<line x1="5" y1="12" x2="19" y2="12"/>')+'</svg></div>Screen '+i+': '+labels[i-1]+'</div></div>'}
+
+  var done2=0;for(var j=1;j<=TOTAL;j++)if(state.completed[j])done2++;
+  var totalItems=D.skillDomains.length+D.skillsMaster.length+D.competencies.length+D.jobLevels.length+D.roles.length+D.roleSkillReqs.length;
+  h+='<div style="margin-top:14px;padding:12px 16px;background:linear-gradient(135deg,var(--ink-card) 0%,rgba(106,58,154,0.06) 100%);border:1px solid rgba(160,112,224,0.2);border-radius:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">';
+  h+='<div style="font-family:\'Syne\',sans-serif;font-size:12px;font-weight:700;color:var(--paper)">Summary</div>';
+  h+='<div style="font-size:10px;color:var(--paper-mid)">'+done2+'/'+TOTAL+' screens</div>';
+  h+='<div style="font-size:10px;color:var(--paper-mid)">'+totalItems+' items</div>';
+  h+='<div style="font-size:10px;color:var(--paper-mid)">'+mappedEmps+' employees mapped</div>';
+  h+='<div style="font-size:10px;color:'+(done2>=TOTAL?'var(--green-lt)':'var(--amber-lt)')+'">Status: '+(done2>=TOTAL?'Ready':'Incomplete')+'</div></div>';
+  document.getElementById('reviewBody').innerHTML=h;
+}
+
+function confirmSetup(){
+  var done=0;for(var i=1;i<=TOTAL;i++)if(state.completed[i])done++;
+  if(done<TOTAL){showToast('Complete all 5 screens first');return}
+
+  // Save to localStorage
+  var saveData={
+    skillDomains:D.skillDomains,
+    skillsMaster:D.skillsMaster,
+    competencies:D.competencies,
+    proficiencyScale:gv('f-prof-scale'),
+    assessmentApproach:gv('f-prof-approach'),
+    jobLevels:D.jobLevels,
+    roles:D.roles,
+    roleSkillReqs:D.roleSkillReqs,
+    employeeRoleMappings:D.employeeRoleMappings,
+    locked:true,
+    lockedAt:new Date().toISOString()
+  };
+  try{localStorage.setItem('sip_roles',JSON.stringify(saveData))}catch(e){}
+
+  document.getElementById('successBanner').classList.add('show');
+  document.getElementById('stepper').style.display='none';
+  document.getElementById('progressMeter').style.display='none';
+  for(var j=1;j<=6;j++){var el=document.getElementById('step'+j);if(el)el.classList.remove('visible')}
+  updateProgress();
+  addAiMsg("Role & Competency Setup complete! All data locked. <em>"+D.roles.length+" roles</em>, <em>"+D.skillsMaster.length+" skills</em>, and <em>"+D.competencies.length+" competencies</em> are now ready for Workforce Intelligence.");
+  showToast('Setup locked — Workforce Intelligence ready');
+}
+
+function resetDemo(){
+  state={current:1,completed:{},visited:{}};for(var i=1;i<=TOTAL;i++)state.completed[i]=false;
+  D={skillDomains:[],skillsMaster:[],competencies:[],jobLevels:[],roles:[],roleSkillReqs:[],employeeRoleMappings:[]};
+  appliedSuggestions={};
+  document.getElementById('successBanner').classList.remove('show');
+  document.getElementById('stepper').style.display='flex';document.getElementById('progressMeter').style.display='flex';
+  renderSteps();updateProgress();goToStep(1);showToast('Demo reset');
+}
+
+// =========================================================
+// AI GUIDED POPUP — BATCH ROLE BUILDER
+// =========================================================
+var aiRoleCount=0;
+var aiRoleTitles=[];
+var aiRoleData=[];
+var aiActiveRole=0;
+var aiCurrentQ=0;
+var aiSessionPhase='count';
+
+function aiAnswers(){return aiRoleData[aiActiveRole]||{}}
+function setAiAnswer(key,val){if(aiRoleData[aiActiveRole])aiRoleData[aiActiveRole][key]=val}
+
+var AI_QUESTIONS=[
+  {
+    id:'title',label:'Job Title',num:1,
+    title:'What role are you defining?',
+    desc:'Enter the job title for this role profile. AI will use this to suggest relevant attributes for the remaining fields.',
+    type:'input',placeholder:'e.g. Senior Structural Engineer',
+    suggestions:function(){
+      if(orgSector.indexOf('Infrastructure')>-1||orgSector.indexOf('Construction')>-1)return['Senior Structural Engineer','BIM Coordinator','Project Manager','Safety Manager','Geotechnical Engineer','Quantity Surveyor','Site Supervisor','Sustainability Consultant'];
+      if(orgSector.indexOf('Technology')>-1||orgSector.indexOf('Software')>-1)return['Software Engineer','Product Manager','DevOps Engineer','Data Scientist','UX Designer','QA Lead','Cloud Architect','Engineering Manager'];
+      if(orgSector.indexOf('Financial')>-1)return['Risk Analyst','Compliance Officer','Portfolio Manager','Financial Advisor','Credit Analyst','Treasury Manager','Audit Manager','Data Analyst'];
+      return['Project Manager','Business Analyst','Team Lead','Operations Manager','Data Analyst','HR Manager','Finance Controller','Marketing Manager'];
+    }
+  },
+  {
+    id:'family',label:'Role Family',num:2,required:true,
+    title:'Which role family does this belong to?',
+    desc:'Role families group similar positions together for career pathing and skill mapping.',
+    type:'select',
+    suggestions:function(){
+      var t=(aiAnswers().title||'').toLowerCase();
+      var all=['Engineering','Technology','Operations','Corporate','Leadership','Support'];
+      if(t.indexOf('engineer')>-1||t.indexOf('structural')>-1)return['Engineering','Technology','Operations','Corporate','Leadership','Support'];
+      if(t.indexOf('bim')>-1||t.indexOf('software')>-1||t.indexOf('cloud')>-1)return['Technology','Engineering','Operations','Corporate','Leadership','Support'];
+      if(t.indexOf('project')>-1||t.indexOf('safety')>-1||t.indexOf('operations')>-1)return['Operations','Engineering','Corporate','Technology','Leadership','Support'];
+      if(t.indexOf('director')>-1||t.indexOf('vp')>-1||t.indexOf('chief')>-1)return['Leadership','Corporate','Operations','Engineering','Technology','Support'];
+      return all;
+    }
+  },
+  {
+    id:'dept',label:'Department',num:3,required:true,
+    title:'Which department will this role sit in?',
+    desc:'Select or type the department.',
+    type:'input',placeholder:'e.g. Structural Engineering',
+    suggestions:function(){
+      var fam=aiAnswers().family||'';
+      if(fam==='Engineering')return['Structural Engineering','Civil & Geotechnical','Mechanical Engineering','Electrical Engineering','Project Delivery'];
+      if(fam==='Technology')return['BIM & Digital Delivery','IT Infrastructure','Software Development','Data & Analytics','Cybersecurity'];
+      if(fam==='Operations')return['Project Delivery','EHS & Risk','Facilities Management','Supply Chain','Quality Assurance'];
+      if(fam==='Corporate')return['Human Resources','Finance & Procurement','Legal & Compliance','Marketing & Communications'];
+      if(fam==='Leadership')return['Executive Office','Strategy & Planning','Business Development','Regional Management'];
+      return['Operations','Engineering','Corporate Services','Technology','Human Resources'];
+    }
+  },
+  {
+    id:'senior',label:'Seniority Band',num:4,required:true,
+    title:'What seniority level is this role?',
+    desc:'Seniority bands determine career progression levels.',
+    type:'select',
+    suggestions:function(){
+      var t=(aiAnswers().title||'').toLowerCase();
+      var all=['L1 — Entry','L2 — Associate','L3 — Mid-Level','L4 — Senior','L5 — Lead / Principal','L6 — Director','L7 — VP / C-Suite'];
+      if(t.indexOf('senior')>-1||t.indexOf('manager')>-1)return['L4 — Senior','L5 — Lead / Principal','L3 — Mid-Level','L6 — Director','L2 — Associate','L1 — Entry','L7 — VP / C-Suite'];
+      if(t.indexOf('lead')>-1||t.indexOf('principal')>-1||t.indexOf('architect')>-1)return['L5 — Lead / Principal','L4 — Senior','L6 — Director','L3 — Mid-Level','L7 — VP / C-Suite','L2 — Associate','L1 — Entry'];
+      if(t.indexOf('director')>-1)return['L6 — Director','L5 — Lead / Principal','L7 — VP / C-Suite','L4 — Senior','L3 — Mid-Level','L2 — Associate','L1 — Entry'];
+      if(t.indexOf('coordinator')>-1||t.indexOf('analyst')>-1)return['L3 — Mid-Level','L2 — Associate','L4 — Senior','L1 — Entry','L5 — Lead / Principal','L6 — Director','L7 — VP / C-Suite'];
+      return all;
+    }
+  },
+  {
+    id:'kra',label:'Key Result Areas',num:5,required:true,
+    title:'What are the Key Result Areas (KRAs)?',
+    desc:'KRAs define the primary outcomes this role is accountable for.',
+    type:'multi',placeholder:'e.g. Design accuracy, code compliance',
+    suggestions:function(){
+      var t=(aiAnswers().title||'').toLowerCase();
+      if(t.indexOf('structural')>-1||t.indexOf('civil')>-1)return['Design accuracy & code compliance','Structural analysis & modelling','Project delivery on time & budget','Technical review & quality assurance','Client technical liaison','Safety standards adherence'];
+      if(t.indexOf('bim')>-1)return['Model management & quality','Clash detection & resolution','BIM standards enforcement','Digital delivery coordination','Team training on BIM tools'];
+      if(t.indexOf('project manager')>-1)return['Schedule & milestone delivery','Budget management & cost control','Stakeholder management','Risk identification & mitigation','Team leadership & coordination'];
+      if(t.indexOf('safety')>-1)return['Safety audits & inspections','Incident investigation & reporting','Compliance with HSE regulations','Safety training programme delivery','Risk assessment & mitigation'];
+      return['Delivery quality','Process efficiency','Stakeholder satisfaction','Team collaboration','Continuous improvement','Reporting & compliance'];
+    }
+  },
+  {
+    id:'career',label:'Career Pathway',num:6,
+    title:'What does the career progression look like?',
+    desc:'Define the typical career trajectory for this role.',
+    type:'input',placeholder:'e.g. Engineer -> Senior -> Principal -> Director',
+    suggestions:function(){
+      var fam=aiAnswers().family||'';
+      if(fam==='Engineering')return['Graduate Engineer -> Engineer -> Senior -> Principal -> Director','Site Engineer -> Project Engineer -> Senior -> Engineering Manager'];
+      if(fam==='Technology')return['Junior Dev -> Developer -> Senior -> Staff Engineer -> Principal','Analyst -> Senior Analyst -> Lead -> Manager -> Director'];
+      return['Associate -> Specialist -> Senior -> Lead -> Manager -> Director','Junior -> Mid-Level -> Senior -> Principal -> Director'];
+    }
+  },
+  {
+    id:'qual',label:'Min Qualifications',num:7,
+    title:'What qualifications are required?',
+    desc:'Minimum qualifications for this role.',
+    type:'input',placeholder:'e.g. BE/BTech Civil, PE certification',
+    suggestions:function(){
+      var t=(aiAnswers().title||'').toLowerCase();
+      if(t.indexOf('structural')>-1||t.indexOf('civil')>-1)return['BE/BTech Civil Engineering, PE certification','MSc Structural Engineering, Chartered Engineer'];
+      if(t.indexOf('bim')>-1)return['Autodesk Revit Professional certification','BSc Architecture/Engineering + BIM certification'];
+      if(t.indexOf('project manager')>-1)return['PMP certification, BSc Engineering','PRINCE2 Practitioner + BSc/BEng'];
+      return['BSc/BA in relevant discipline','Professional certification in field','Graduate degree + 3-5 years experience'];
+    }
+  },
+  {
+    id:'crit',label:'Role Criticality',num:8,required:true,
+    title:'How critical is this role to the organisation?',
+    desc:'Role criticality determines priority weighting in gap analysis.',
+    type:'select',
+    suggestions:function(){
+      var sr=aiAnswers().senior||'';
+      if(sr.indexOf('L6')>-1||sr.indexOf('L7')>-1)return['C1 — Critical','C2 — High','C3 — Medium','C4 — Low'];
+      if(sr.indexOf('L5')>-1)return['C2 — High','C1 — Critical','C3 — Medium','C4 — Low'];
+      return['C3 — Medium','C2 — High','C4 — Low','C1 — Critical'];
+    }
+  },
+  {
+    id:'mgr',label:'People Manager',num:9,required:true,
+    title:'Is this a people management role?',
+    desc:'People managers have additional leadership skill requirements.',
+    type:'select',
+    suggestions:function(){
+      var t=(aiAnswers().title||'').toLowerCase();
+      if(t.indexOf('manager')>-1||t.indexOf('director')>-1||t.indexOf('head')>-1||t.indexOf('vp')>-1)return['Yes','No'];
+      return['No','Yes'];
+    }
+  },
+  {
+    id:'spof',label:'Succession Criticality',num:10,required:true,
+    title:'What is the succession risk for this role?',
+    desc:'Succession criticality identifies roles where talent gaps pose significant risk.',
+    type:'select',
+    suggestions:function(){
+      var crit=aiAnswers().crit||'';
+      if(crit.indexOf('C1')>-1)return['Single Point of Failure','Key Person Risk','Pipeline Available','Not Critical'];
+      if(crit.indexOf('C2')>-1)return['Key Person Risk','Single Point of Failure','Pipeline Available','Not Critical'];
+      return['Pipeline Available','Not Critical','Key Person Risk','Single Point of Failure'];
+    }
+  }
+];
+
+function openAiPopup(){
+  aiRoleCount=0;aiRoleTitles=[];aiRoleData=[];aiActiveRole=0;aiCurrentQ=0;
+  aiSessionPhase='count';
+  var popup=document.getElementById('aiPopup');
+  popup.style.display='flex';
+  setTimeout(function(){popup.classList.add('open')},10);
+  document.body.style.overflow='hidden';
+  document.getElementById('aiTabBar').classList.remove('visible');
+  renderAiCountScreen();
+}
+
+function closeAiPopup(){
+  var popup=document.getElementById('aiPopup');
+  popup.classList.remove('open');
+  setTimeout(function(){popup.style.display='none'},350);
+  document.body.style.overflow='';
+  document.getElementById('aiTabBar').classList.remove('visible');
+  var count=0;
+  aiRoleTitles.forEach(function(r){if(r.status==='done')count++});
+  aiRoleCount=0;aiRoleTitles=[];aiRoleData=[];aiSessionPhase='count';
+  if(count>0){goToStep(3);showToast(count+' role'+(count>1?'s':'')+' added via AI Builder')}
+}
+
+function renderAiCountScreen(){
+  aiSessionPhase='count';
+  document.getElementById('aiProgFill').style.width='0%';
+  document.getElementById('aiProgFill').style.background='';
+  document.getElementById('aiProgText').textContent='Step 1 of 3';
+  document.getElementById('aiTabBar').classList.remove('visible');
+  document.getElementById('aiBackBtn').style.display='none';
+  document.getElementById('aiSkipBtn').style.display='none';
+  document.getElementById('aiNextBtn').style.display='';
+  document.getElementById('aiNextBtn').disabled=false;
+  document.getElementById('aiNextBtn').innerHTML='Next <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5"><polyline points="9 18 15 12 9 6"/></svg>';
+  document.getElementById('aiNextBtn').onclick=function(){
+    var v=parseInt(document.getElementById('aiCountInput').value)||0;
+    if(v<1||v>30){showToast('Enter a number between 1 and 30');return}
+    aiRoleCount=v;
+    renderAiTitlesScreen();
+  };
+
+  // Try to detect from employee data
+  var empTitles=[];
+  employeeData.forEach(function(emp){if(emp.title&&empTitles.indexOf(emp.title)===-1)empTitles.push(emp.title)});
+  var recommended=Math.max(3,Math.min(empTitles.length||6,15));
+
+  var card=document.getElementById('aiQuestionCard');
+  var h='<div class="ai-q-label"><span class="q-num">1</span>Setup</div>';
+  h+='<div class="ai-q-title">How many role profiles do you want to create?</div>';
+  h+='<div class="ai-q-desc">AI will suggest role titles based on your organisation context'+(orgSector?' in <strong>'+orgSector+'</strong>':'')+'. You can edit, add, or remove titles in the next step.</div>';
+
+  if(empTitles.length>0){
+    h+='<div style="padding:10px 14px;border-radius:8px;background:rgba(200,168,75,0.06);border:1px solid rgba(200,168,75,0.15);margin-bottom:20px;font-size:12px;color:var(--gold);display:flex;align-items:center;gap:8px">';
+    h+='<svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.7;flex-shrink:0" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>';
+    h+='Found <strong style="margin:0 3px">'+empTitles.length+'</strong> unique titles from employee data. Recommend <strong style="margin:0 3px">'+recommended+'</strong> role profiles.</div>';
+  }
+
+  h+='<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px">';
+  [3,5,10,15].forEach(function(n){h+='<div class="ai-chip" onclick="document.getElementById(\'aiCountInput\').value='+n+'" style="padding:8px 18px;cursor:pointer">'+n+' roles</div>'});
+  h+='</div>';
+  h+='<div class="ai-count-stepper"><button onclick="var i=document.getElementById(\'aiCountInput\');i.value=Math.max(1,(parseInt(i.value)||0)-1)">&minus;</button><input type="number" id="aiCountInput" value="'+recommended+'" min="1" max="30"><button onclick="var i=document.getElementById(\'aiCountInput\');i.value=Math.min(30,(parseInt(i.value)||0)+1)">+</button></div>';
+
+  card.innerHTML=h;
+  card.style.animation='none';card.offsetHeight;card.style.animation='fadeUp .4s ease both';
+}
+
+function generateBulkTitles(count){
+  // First try from employee data
+  var empTitles=[];
+  employeeData.forEach(function(emp){if(emp.title&&empTitles.indexOf(emp.title)===-1)empTitles.push(emp.title)});
+  if(empTitles.length>=count)return empTitles.slice(0,count);
+
+  var pools={
+    'Infrastructure & Construction':['Senior Structural Engineer','BIM Coordinator','Project Manager','Safety Manager','Geotechnical Engineer','Quantity Surveyor','Site Supervisor','Sustainability Consultant','Civil Engineer','L&D Manager','Cloud Architect','Quality Manager','Procurement Manager','Contract Manager','HSE Officer','Project Director','CAD Technician','Environmental Engineer','Construction Manager','Finance Controller','HR Business Partner','Legal Counsel','IT Manager','Data Analyst','Risk Manager'],
+    'Technology & Software':['Software Engineer','Product Manager','DevOps Engineer','Data Scientist','UX Designer','QA Lead','Cloud Architect','Engineering Manager','Frontend Developer','Backend Developer','SRE','Security Engineer','Scrum Master','VP Engineering','Data Engineer','ML Engineer','Platform Engineer','Solutions Architect','Program Manager','Business Analyst'],
+    'Financial Services':['Risk Analyst','Compliance Officer','Portfolio Manager','Financial Advisor','Credit Analyst','Treasury Manager','Audit Manager','Data Analyst','Relationship Manager','Fund Accountant','Wealth Manager','Regulatory Specialist','Investment Analyst','Chief Risk Officer','Finance Controller']
+  };
+  var pool=null;
+  for(var key in pools){if(orgSector.indexOf(key.split(' ')[0])>-1){pool=pools[key];break}}
+  if(!pool)pool=['Project Manager','Business Analyst','Team Lead','Operations Manager','Data Analyst','HR Manager','Finance Controller','Marketing Manager','Product Manager','Software Engineer','QA Lead','DevOps Engineer','Sales Manager','L&D Manager','IT Manager','Risk Manager','Cloud Architect','Regional Manager','Quality Manager','Compliance Officer'];
+
+  var combined=empTitles.slice();
+  pool.forEach(function(t){if(combined.indexOf(t)===-1)combined.push(t)});
+  var shuffled=combined.slice();
+  for(var i=shuffled.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=shuffled[i];shuffled[i]=shuffled[j];shuffled[j]=tmp}
+  return shuffled.slice(0,Math.min(count,shuffled.length));
+}
+
+function generateAllRoleData(){
+  aiRoleTitles=[];aiRoleData=[];
+  var titles=generateBulkTitles(aiRoleCount);
+  titles.forEach(function(t,i){
+    aiRoleTitles.push({title:t,status:'pending'});
+    var rd={title:t};
+    aiRoleData.push(rd);
+    aiActiveRole=i;
+    ['family','dept','senior','kra','career','qual','crit','mgr','spof'].forEach(function(fid){
+      var q=null;AI_QUESTIONS.forEach(function(qq){if(qq.id===fid)q=qq});
+      if(q){var s=q.suggestions();rd[fid]=s.length>0?s[0]:'';rd['_ai_'+fid]=true}
+    });
+  });
+  aiActiveRole=0;
+}
+
+var aiTitleResearchTimer=null;
+function renderAiTitlesScreen(){
+  aiSessionPhase='titles';
+  document.getElementById('aiProgFill').style.width='33%';
+  document.getElementById('aiProgFill').style.background='';
+  document.getElementById('aiProgText').textContent='Step 2 of 3 \u00b7 Define Roles';
+  document.getElementById('aiTabBar').classList.remove('visible');
+  document.getElementById('aiBackBtn').style.display='inline-flex';
+  document.getElementById('aiBackBtn').onclick=function(){renderAiCountScreen()};
+  document.getElementById('aiSkipBtn').style.display='none';
+  document.getElementById('aiNextBtn').style.display='';
+  document.getElementById('aiNextBtn').disabled=true;
+  document.getElementById('aiNextBtn').innerHTML='Start Building <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5"><polyline points="9 18 15 12 9 6"/></svg>';
+  document.getElementById('aiNextBtn').onclick=function(){startBuilding()};
+
+  var researchLines=[
+    {text:'Analysing organisation profile for <strong>'+orgSector+'</strong>'},
+    {text:'Scanning employee data for <strong>'+employeeData.length+' employees</strong>'},
+    {text:'Generating <strong>'+aiRoleCount+'</strong> role titles with AI'},
+    {text:'Pre-filling 9 attributes per role from benchmarks'},
+    {text:'Preparing suggestions\u2026'}
+  ];
+
+  var card=document.getElementById('aiQuestionCard');
+  card.className='ai-question-card';
+  document.querySelector('.ai-popup-body').classList.remove('mm-mode');
+  var h='<div class="ai-q-label"><span class="q-num">2</span>Role Titles</div>';
+  h+='<div class="ai-q-title">AI-Suggested Role Titles</div>';
+  h+='<div class="ai-q-desc">Review and customise the '+aiRoleCount+' suggested roles. Click a title to edit, or use \u00d7 to remove.</div>';
+  h+='<div id="aiTitleResearchBox" style="background:linear-gradient(135deg,var(--ink-card) 0%,rgba(200,168,75,0.06) 100%);border:1px solid rgba(200,168,75,0.18);border-radius:12px;padding:18px 22px;margin-bottom:20px">';
+  h+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:14px"><div class="ai-typing-inline"><span></span><span></span><span></span></div><span style="font-size:11px;font-weight:600;color:var(--gold);letter-spacing:.04em">SkillForge AI is researching\u2026</span></div>';
+  h+='<div id="aiTitleResearchLines">';
+  researchLines.forEach(function(line){
+    h+='<div class="ai-research-line" style="opacity:0;transform:translateX(-8px);transition:opacity .4s ease,transform .4s ease;display:flex;align-items:center;gap:9px;padding:5px 0;font-size:12px;color:var(--paper-mid)">';
+    h+='<svg style="width:13px;height:13px;flex-shrink:0;stroke:var(--gold);fill:none;stroke-width:1.7" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>';
+    h+='<span>'+line.text+'</span>';
+    h+='<svg class="ai-line-check" style="width:14px;height:14px;stroke:var(--green-lt);fill:none;stroke-width:2.5;margin-left:auto;opacity:0;transition:opacity .3s;flex-shrink:0" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>';
+  });
+  h+='</div></div><div id="aiTitleChipsWrap" style="opacity:0;transition:opacity .5s"></div>';
+  card.innerHTML=h;
+  card.style.animation='none';card.offsetHeight;card.style.animation='fadeUp .4s ease both';
+
+  var lines=document.querySelectorAll('#aiTitleResearchLines .ai-research-line');
+  var lineDelay=500;
+  lines.forEach(function(line,i){
+    setTimeout(function(){line.style.opacity='1';line.style.transform='translateX(0)';if(i>0){var prev=lines[i-1].querySelector('.ai-line-check');if(prev)prev.style.opacity='1'}},(i+1)*lineDelay);
+  });
+
+  if(aiTitleResearchTimer)clearTimeout(aiTitleResearchTimer);
+  aiTitleResearchTimer=setTimeout(function(){
+    generateAllRoleData();
+    if(lines.length>0){var last=lines[lines.length-1].querySelector('.ai-line-check');if(last)last.style.opacity='1'}
+    var box=document.getElementById('aiTitleResearchBox');
+    if(box){var hdr=box.querySelector('div:first-child');if(hdr)hdr.innerHTML='<svg style="width:15px;height:15px;stroke:var(--green-lt);fill:none;stroke-width:2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622"/></svg><span style="font-size:11px;font-weight:600;color:var(--green-lt)">Analysis complete \u2014 '+aiRoleCount+' roles generated</span>'}
+    var wrap=document.getElementById('aiTitleChipsWrap');if(!wrap)return;
+    var ch='';
+    aiRoleTitles.forEach(function(r,i){ch+='<div class="ai-title-chip" id="tcRow'+i+'"><span class="tc-num">'+(i+1)+'</span><input type="text" value="'+r.title+'" onchange="aiRoleTitles['+i+'].title=this.value;aiRoleData['+i+'].title=this.value" placeholder="Role title"><button class="tc-del" onclick="removeTitleChip('+i+')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>'});
+    ch+='<div style="margin-top:10px"><button class="ai-chip" onclick="addCustomTitleChip()" style="border-style:dashed;gap:5px"><svg style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add custom role</button></div>';
+    wrap.innerHTML=ch;wrap.style.opacity='1';
+    var chips=wrap.querySelectorAll('.ai-title-chip');
+    chips.forEach(function(chip,ci){setTimeout(function(){chip.classList.add('visible')},ci*70)});
+    document.getElementById('aiNextBtn').disabled=false;
+  },(lines.length+1)*lineDelay+300);
+}
+
+function removeTitleChip(idx){aiRoleTitles.splice(idx,1);aiRoleData.splice(idx,1);refreshTitleChips()}
+function addCustomTitleChip(){
+  aiRoleTitles.push({title:'',status:'pending'});
+  aiRoleData.push({title:'',family:'',dept:'',senior:'',kra:'',career:'',qual:'',crit:'',mgr:'',spof:''});
+  refreshTitleChips();
+  var lastInput=document.querySelector('#tcRow'+(aiRoleTitles.length-1)+' input');if(lastInput)lastInput.focus();
+}
+function refreshTitleChips(){
+  var wrap=document.getElementById('aiTitleChipsWrap');if(!wrap)return;
+  var ch='';
+  aiRoleTitles.forEach(function(r,i){ch+='<div class="ai-title-chip visible" id="tcRow'+i+'"><span class="tc-num">'+(i+1)+'</span><input type="text" value="'+r.title+'" onchange="aiRoleTitles['+i+'].title=this.value;aiRoleData['+i+'].title=this.value" placeholder="Role title"><button class="tc-del" onclick="removeTitleChip('+i+')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>'});
+  ch+='<div style="margin-top:10px"><button class="ai-chip" onclick="addCustomTitleChip()" style="border-style:dashed;gap:5px"><svg style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add custom role</button></div>';
+  wrap.innerHTML=ch;
+  document.getElementById('aiNextBtn').disabled=aiRoleTitles.length===0;
+}
+
+function startBuilding(){
+  var filtered=[];var filteredData=[];
+  aiRoleTitles.forEach(function(r,i){if(r.title.trim()){filtered.push(r);filteredData.push(aiRoleData[i])}});
+  aiRoleTitles=filtered;aiRoleData=filteredData;
+  if(aiRoleTitles.length===0){showToast('Add at least one role title');return}
+  aiRoleCount=aiRoleTitles.length;
+  aiRoleTitles.forEach(function(r){r.status='pending'});
+  aiActiveRole=0;aiRoleTitles[0].status='active';aiCurrentQ=1;
+  aiSessionPhase='building';
+  document.getElementById('aiTabBar').classList.add('visible');
+  renderTabBar();renderAiQuestion();
+}
+
+function renderTabBar(){
+  var bar=document.getElementById('aiTabBar');var h='';
+  aiRoleTitles.forEach(function(r,i){
+    var cls='ai-tab';if(r.status==='done')cls+=' done';else if(i===aiActiveRole)cls+=' active';
+    h+='<div class="'+cls+'" onclick="switchToRole('+i+')">';
+    h+='<span class="tab-dot"></span>';
+    h+='<svg class="tab-check" viewBox="0 0 24 24" style="stroke:var(--green-lt);fill:none;stroke-width:2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+    h+='<span style="max-width:120px;overflow:hidden;text-overflow:ellipsis">'+(r.title||'Role '+(i+1))+'</span></div>';
+  });
+  bar.innerHTML=h;
+  var at=bar.querySelector('.ai-tab.active');if(at)at.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+}
+
+function switchToRole(index){
+  if(index===aiActiveRole&&aiSessionPhase==='building')return;
+  saveCurrentInput();
+  if(aiRoleTitles[aiActiveRole].status==='active')aiRoleTitles[aiActiveRole].status='pending';
+  aiActiveRole=index;
+  if(aiRoleTitles[index].status!=='done')aiRoleTitles[index].status='active';
+  aiSessionPhase='building';
+  var data=aiRoleData[index];var resumeQ=1;
+  for(var i=1;i<AI_QUESTIONS.length;i++){if(!data[AI_QUESTIONS[i].id])break;resumeQ=i+1}
+  aiCurrentQ=Math.min(resumeQ,AI_QUESTIONS.length-1);
+  if(aiRoleTitles[index].status==='done')aiCurrentQ=1;
+  renderTabBar();renderAiQuestion();
+}
+
+function saveCurrentInput(){
+  var inp=document.getElementById('aiManualInput');
+  if(inp&&inp.value&&aiCurrentQ<AI_QUESTIONS.length){setAiAnswer(AI_QUESTIONS[aiCurrentQ].id,inp.value)}
+}
+
+function renderAiQuestion(){
+  var q=AI_QUESTIONS[aiCurrentQ];
+  if(!q)return completeCurrentRole();
+  var total=AI_QUESTIONS.length;var questionsLeft=total-1;var qIdx=aiCurrentQ;
+  var pct=Math.round((qIdx/questionsLeft)*100);
+  var roleTitle=aiRoleTitles[aiActiveRole]?aiRoleTitles[aiActiveRole].title:'Role '+(aiActiveRole+1);
+
+  document.getElementById('aiProgFill').style.width=pct+'%';
+  document.getElementById('aiProgFill').style.background='';
+  document.getElementById('aiProgText').textContent=roleTitle+' \u00b7 Q'+qIdx+' / '+questionsLeft;
+  document.getElementById('aiBackBtn').style.display=aiCurrentQ>1?'inline-flex':'none';
+  document.getElementById('aiBackBtn').onclick=function(){aiBack()};
+  document.getElementById('aiNextBtn').style.display='';
+  document.getElementById('aiSkipBtn').style.display='';
+  document.getElementById('aiNextBtn').onclick=function(){aiNext()};
+  document.getElementById('aiNextBtn').innerHTML='Next <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5"><polyline points="9 18 15 12 9 6"/></svg>';
+  if(aiCurrentQ===total-1)document.getElementById('aiNextBtn').innerHTML='Complete Role <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+  document.getElementById('aiNextBtn').disabled=true;
+  aiSessionPhase='building';
+
+  var card=document.getElementById('aiQuestionCard');
+  card.className='ai-question-card';
+  document.querySelector('.ai-popup-body').classList.remove('mm-mode');
+  var prevAnswer=(aiRoleData[aiActiveRole]&&aiRoleData[aiActiveRole][q.id])||'';
+
+  var suggestions=q.suggestions();
+  var h='<div class="ai-q-label"><span class="q-num">'+q.num+'</span>'+q.label+(q.required?'<span class="ai-required">*</span>':'')+'</div>';
+  h+='<div class="ai-q-title">'+q.title+(q.required?' <span class="ai-required">*</span>':'')+'</div>';
+  h+='<div class="ai-q-desc">'+q.desc+'</div>';
+  h+='<div class="ai-suggestion-label"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>AI-Suggested Options</div>';
+  h+='<div class="ai-suggestions" id="aiSuggestions">';
+  suggestions.forEach(function(s){
+    var sel=(q.type==='multi')?(prevAnswer.indexOf(s)>-1):(prevAnswer===s);
+    h+='<div class="ai-chip'+(sel?' selected':'')+'" data-val="'+s.replace(/"/g,'&quot;')+'" onclick="selectAiChip(this,'+(q.type==='multi'?'true':'false')+')">';
+    h+='<span class="chip-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>'+s+'</div>';
+  });
+  h+='</div>';
+  h+='<div class="ai-or-divider"><span>or type your own</span></div>';
+  h+='<input class="ai-manual-input" id="aiManualInput" type="text" placeholder="'+(q.placeholder||'')+'" value="'+(prevAnswer||'').replace(/"/g,'&quot;')+'" onkeydown="if(event.key===\'Enter\')aiNext()" oninput="onAiManualType();clearValidation()">';
+  h+='<div class="ai-validation-msg" id="aiValidationMsg"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="aiValidationText">This field is required</span></div>';
+  card.innerHTML=h;
+  card.style.animation='none';card.offsetHeight;card.style.animation='fadeUp .4s ease both';
+  document.getElementById('aiNextBtn').disabled=false;
+}
+
+function selectAiChip(el,isMulti){
+  clearValidation();
+  if(isMulti){
+    el.classList.toggle('selected');
+    var vals=[];document.querySelectorAll('#aiSuggestions .ai-chip.selected').forEach(function(c){vals.push(c.getAttribute('data-val'))});
+    setAiAnswer(AI_QUESTIONS[aiCurrentQ].id,vals.join(', '));
+    document.getElementById('aiManualInput').value=aiRoleData[aiActiveRole][AI_QUESTIONS[aiCurrentQ].id];
+  } else {
+    document.querySelectorAll('#aiSuggestions .ai-chip').forEach(function(c){c.classList.remove('selected')});
+    el.classList.add('selected');
+    setAiAnswer(AI_QUESTIONS[aiCurrentQ].id,el.getAttribute('data-val'));
+    document.getElementById('aiManualInput').value=el.getAttribute('data-val');
+  }
+}
+function onAiManualType(){
+  var val=document.getElementById('aiManualInput').value;
+  setAiAnswer(AI_QUESTIONS[aiCurrentQ].id,val);
+  document.querySelectorAll('#aiSuggestions .ai-chip').forEach(function(c){if(c.getAttribute('data-val')===val)c.classList.add('selected');else c.classList.remove('selected')});
+}
+function validateCurrentQuestion(){
+  var q=AI_QUESTIONS[aiCurrentQ];if(!q||!q.required)return true;
+  saveCurrentInput();
+  var val=(aiRoleData[aiActiveRole]&&aiRoleData[aiActiveRole][q.id])||'';
+  if(!val.trim()){showValidation(q.label+' is required');return false}return true;
+}
+function showValidation(msg){
+  var el=document.getElementById('aiValidationMsg');var txt=document.getElementById('aiValidationText');var inp=document.getElementById('aiManualInput');
+  if(el)el.classList.add('show');if(txt)txt.textContent=msg;if(inp){inp.classList.add('error');inp.focus()}
+}
+function clearValidation(){
+  var el=document.getElementById('aiValidationMsg');var inp=document.getElementById('aiManualInput');
+  if(el)el.classList.remove('show');if(inp)inp.classList.remove('error');
+}
+function aiNext(){if(!validateCurrentQuestion())return;clearValidation();if(aiCurrentQ<AI_QUESTIONS.length-1){aiCurrentQ++;renderAiQuestion()}else{completeCurrentRole()}}
+function aiBack(){clearValidation();if(aiCurrentQ>1){aiCurrentQ--;renderAiQuestion()}}
+function aiSkip(){
+  var q=AI_QUESTIONS[aiCurrentQ];
+  if(q&&q.required){showValidation(q.label+' is required and cannot be skipped');return}
+  clearValidation();aiCurrentQ++;
+  if(aiCurrentQ>=AI_QUESTIONS.length)completeCurrentRole();else renderAiQuestion();
+}
+
+function completeCurrentRole(){
+  saveCurrentInput();var d=aiRoleData[aiActiveRole];var missing=[];
+  AI_QUESTIONS.forEach(function(q){if(q.required&&!(d[q.id]&&d[q.id].trim()))missing.push(q.label)});
+  if(missing.length>0){
+    showToast('Required: '+missing.join(', '));
+    for(var mi=0;mi<AI_QUESTIONS.length;mi++){var mq=AI_QUESTIONS[mi];if(mq.required&&!(d[mq.id]&&d[mq.id].trim())){aiCurrentQ=mi;renderAiQuestion();return}}
+    return;
+  }
+  aiRoleTitles[aiActiveRole].status='done';renderTabBar();
+  var nextIdx=-1;
+  for(var i=0;i<aiRoleTitles.length;i++){if(aiRoleTitles[i].status==='pending'){nextIdx=i;break}}
+  if(nextIdx>=0){
+    aiActiveRole=nextIdx;aiRoleTitles[nextIdx].status='active';aiCurrentQ=1;
+    renderTabBar();showToast((d.title||'Role')+' completed \u2014 next role');renderAiQuestion();
+  } else {renderAiFinalReview()}
+}
+
+function renderAiFinalReview(){
+  aiSessionPhase='review';
+  var doneCount=0;aiRoleTitles.forEach(function(r){if(r.status==='done')doneCount++});
+  document.getElementById('aiProgFill').style.width='100%';
+  document.getElementById('aiProgFill').style.background='linear-gradient(90deg,var(--green-lt),var(--green))';
+  document.getElementById('aiProgText').textContent=doneCount+' / '+aiRoleTitles.length+' roles completed';
+  document.getElementById('aiBackBtn').style.display='inline-flex';
+  document.getElementById('aiBackBtn').onclick=function(){for(var i=aiRoleTitles.length-1;i>=0;i--){if(aiRoleTitles[i].status==='done'){switchToRole(i);return}}};
+  document.getElementById('aiSkipBtn').style.display='none';
+  document.getElementById('aiNextBtn').style.display='';document.getElementById('aiNextBtn').disabled=false;
+  document.getElementById('aiNextBtn').innerHTML='<svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5"><polyline points="20 6 9 17 4 12"/></svg> Add All '+doneCount+' Roles';
+  document.getElementById('aiNextBtn').onclick=function(){confirmAllRoles()};
+
+  var card=document.getElementById('aiQuestionCard');
+  var h='<div class="ai-q-label"><span class="q-num" style="background:var(--green-dim);color:var(--green-lt);border-color:rgba(58,184,122,0.3)"><svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:var(--green-lt);fill:none;stroke-width:2.5"><polyline points="20 6 9 17 4 12"/></svg></span>Complete</div>';
+  h+='<div class="ai-q-title">All Role Profiles Built</div>';
+  h+='<div class="ai-q-desc">'+doneCount+' role'+(doneCount>1?'s have':' has')+' been built. Click any tab to review, or add all roles.</div>';
+  h+='<div style="margin-bottom:8px">';
+  aiRoleTitles.forEach(function(r,i){
+    var d=aiRoleData[i];var isDone=r.status==='done';
+    h+='<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:8px;border:1px solid '+(isDone?'rgba(58,184,122,0.2)':'var(--ink-border)')+';background:'+(isDone?'rgba(26,122,74,0.05)':'var(--ink-raised)')+';margin-bottom:6px;cursor:pointer" onclick="switchToRole('+i+')">';
+    if(isDone)h+='<div style="width:24px;height:24px;border-radius:50%;background:var(--green-dim);border:1.5px solid var(--green-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg style="width:12px;height:12px;stroke:var(--green-lt);fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>';
+    else h+='<div style="width:24px;height:24px;border-radius:50%;border:1.5px dashed var(--amber-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:var(--amber-lt)">!</div>';
+    h+='<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:var(--paper)">'+d.title+'</div>';
+    h+='<div style="font-size:11px;color:var(--ink-soft);margin-top:1px">'+(d.family||'\u2014')+' \u00b7 '+(d.senior||'\u2014')+(d.dept?' \u00b7 '+d.dept:'')+'</div></div>';
+    if(!isDone)h+='<span style="font-size:10px;color:var(--amber-lt)">Incomplete</span>';
+    h+='</div>';
+  });
+  h+='</div>';
+  card.innerHTML=h;card.style.animation='none';card.offsetHeight;card.style.animation='fadeUp .4s ease both';
+}
+
+function confirmAllRoles(){
+  var count=0;
+  aiRoleTitles.forEach(function(r,i){
+    if(r.status!=='done')return;var d=aiRoleData[i];
+    D.roles.push({title:d.title||'',family:d.family||'',dept:d.dept||'',level:d.senior||'',reports_to:'',role_purpose:d.kra||''});
+    count++;
+  });
+  reRenderList('roles');
+  closeAiPopup();
+}
+
+// =========================================================
+// FIELD-BY-FIELD POPUP SYSTEM
+// =========================================================
+var SCREEN_FIELDS={
+  1:{standalone:[],lists:[
+    {key:'skillDomains',label:'Skill Domain',addFn:'addSkillDomain',fields:[
+      {id:'f-sd-name',label:'Domain Name',type:'input',required:true},
+      {id:'f-sd-areas',label:'Knowledge Areas',type:'input',placeholder:'e.g. Structural, Geotech'}
+    ],aiMsg:'Skill domains are the top-level categories in your skill taxonomy.',aiRule:'Foundation nodes in the SkillForge ontology graph.'},
+    {key:'skillsMaster',label:'Skill',addFn:'addSkillMaster',fields:[
+      {id:'f-sk-name',label:'Skill Name',type:'input',required:true},
+      {id:'f-sk-domain',label:'Skill Domain',type:'input'},
+      {id:'f-sk-type',label:'Skill Type',type:'select',options:['Technical','Functional','Behavioral','Digital','Compliance','Analytical']},
+      {id:'f-sk-emerging',label:'Emerging?',type:'select',options:['No','Yes']},
+      {id:'f-sk-regulatory',label:'Regulatory?',type:'select',options:['No','Yes']}
+    ],aiMsg:'Individual skills are the atomic units of capability measurement.',aiRule:'Each skill node connects to roles, assessments, and training.'}
+  ]},
+  2:{standalone:[
+    {id:'f-prof-scale',label:'Proficiency Scale',type:'input',placeholder:'e.g. Level 1-5',aiMsg:'The proficiency scale defines how capability levels are measured.',aiRule:'Sets the assessment rubric granularity for SkillForge.'},
+    {id:'f-prof-approach',label:'Assessment Approach',type:'input',placeholder:'e.g. Manager review + self-assessment',aiMsg:'Assessment approach determines how competency data is collected.',aiRule:'Configures data collection methods for the triangulation engine.'}
+  ],lists:[{key:'competencies',label:'Competency',addFn:'addCompetency',fields:[
+    {id:'f-comp-name',label:'Name',type:'input',required:true},
+    {id:'f-comp-type',label:'Type',type:'select',options:['Core / Enterprise','Leadership','Technical']},
+    {id:'f-comp-cat',label:'Category',type:'input'},
+    {id:'f-comp-desc',label:'Description',type:'input'}
+  ],aiMsg:'Competencies are the building blocks for assessments.',aiRule:'Generates competency-based assessment rubrics.'}]},
+  3:{standalone:[],lists:[
+    {key:'jobLevels',label:'Job Level',addFn:'addJobLevel',fields:[
+      {id:'f-jl-code',label:'Level Code',type:'input',required:true},
+      {id:'f-jl-name',label:'Level Name',type:'input'},
+      {id:'f-jl-tier',label:'Seniority Tier',type:'select',options:['Entry','Early Career','Mid-Level','Senior','Leadership','Executive']},
+      {id:'f-jl-icmgr',label:'IC or Manager',type:'select',options:['IC','Manager','Both']},
+      {id:'f-jl-minyrs',label:'Min Years',type:'input',inputType:'number'}
+    ],aiMsg:'Job levels define the career ladder.',aiRule:'Structures career pathways and progression.'},
+    {key:'roles',label:'Role',addFn:'addRole',fields:[
+      {id:'f-role-title',label:'Job Title',type:'input',required:true},
+      {id:'f-role-family',label:'Family',type:'select',options:['Engineering','Technology','Operations','Corporate','Leadership']},
+      {id:'f-role-dept',label:'Department',type:'input'},
+      {id:'f-role-level',label:'Level',type:'select',options:['L1 — Entry','L2 — Associate','L3 — Mid','L4 — Senior','L5 — Lead','L6 — Director','L7 — C-Suite']},
+      {id:'f-role-reports',label:'Reports To',type:'input'},
+      {id:'f-role-purpose',label:'Role Purpose',type:'input'}
+    ],aiMsg:'Roles are the structural backbone for skill assessments and career paths.',aiRule:'Core entity in the role-skill matrix.'}
+  ]},
+  4:{standalone:[],lists:[
+    {key:'roleSkillReqs',label:'Role-Skill Requirement',addFn:'addRoleSkillReq',fields:[
+      {id:'f-rsr-role',label:'Role Title',type:'input'},
+      {id:'f-rsr-skill',label:'Skill',type:'input'},
+      {id:'f-rsr-level',label:'Required Level',type:'select',options:['Level 1','Level 2','Level 3','Level 4','Level 5']},
+      {id:'f-rsr-crit',label:'Criticality',type:'select',options:['Low','Medium','High','Critical']}
+    ],aiMsg:'Role-skill requirements define what proficiency each role needs.',aiRule:'Primary input for gap detection and training recommendations.'}
+  ]}
+};
+
+var fpState={screen:1,fieldIdx:0,open:false};
+
+function fpGetFields(screenNum){
+  var cfg=SCREEN_FIELDS[screenNum];
+  if(!cfg)return[];
+  if(Array.isArray(cfg))return cfg;
+  var fields=[];
+  if(cfg.standalone&&cfg.standalone.length)fields=fields.concat(cfg.standalone);
+  if(cfg.lists&&cfg.lists.length){cfg.lists.forEach(function(lst){fields.push({_isList:true,listConfig:lst})})}
+  return fields;
+}
+
+function openFieldPopup(screenNum){
+  var fields=fpGetFields(screenNum);
+  if(!fields||!fields.length)return;
+  fpState.screen=screenNum;fpState.fieldIdx=0;fpState.open=true;
+  var overlay=document.getElementById('fieldPopup');
+  overlay.style.display='flex';
+  setTimeout(function(){overlay.classList.add('fp-open')},10);
+  renderFieldPopup();
+}
+
+function closeFieldPopup(){
+  fpState.open=false;
+  var overlay=document.getElementById('fieldPopup');
+  overlay.classList.remove('fp-open');
+  setTimeout(function(){overlay.style.display='none'},350);
+}
+
+function renderFieldPopup(){
+  var screenNum=fpState.screen;
+  var fields=fpGetFields(screenNum);
+  if(!fields||!fields.length){closeFieldPopup();return}
+  var idx=fpState.fieldIdx;
+  if(idx>=fields.length)idx=fields.length-1;
+  if(idx<0)idx=0;
+  fpState.fieldIdx=idx;
+
+  var stepTitle=STEPS[screenNum-1]?STEPS[screenNum-1].title:'Screen '+screenNum;
+  document.getElementById('fpHeaderTitle').textContent='Screen '+screenNum+' — '+stepTitle;
+  document.getElementById('fpHeaderCounter').textContent=(idx+1)+' / '+fields.length;
+  document.getElementById('fpProgressFill').style.width=((idx+1)/fields.length*100)+'%';
+  document.getElementById('fpBackBtn').style.display=idx>0?'inline-flex':'none';
+  document.getElementById('fpNextBtn').innerHTML=idx>=fields.length-1?'Complete <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>':'Next <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>';
+
+  var f=fields[idx];
+  var body=document.getElementById('fpBody');
+  var h='<div class="fp-field-area">';
+
+  if(f._isList){
+    var lst=f.listConfig;
+    h+='<div class="fp-field-label">'+lst.label+'s <span class="fp-badge recommended" style="font-size:8px">list</span></div>';
+    h+='<div class="fp-list-added" id="fpListItems_'+lst.key+'">';
+    D[lst.key].forEach(function(item){
+      var display=item.name||item.title||item.skill_name||item.domain_name||item.level_code||item.role_title||'Item';
+      h+='<div class="added-chip">'+escH(display)+'</div>';
+    });
+    h+='</div>';
+    var sugItems=getListItems(lst.key,screenNum);
+    if(sugItems&&sugItems.length){
+      h+='<div class="fp-suggestion-chips" style="margin-top:10px">';
+      h+='<span style="font-size:9px;color:var(--purple-lt);width:100%;margin-bottom:2px"><svg style="width:10px;height:10px;stroke:var(--purple-lt);fill:none;stroke-width:2;vertical-align:middle" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> AI Suggestions</span>';
+      sugItems.forEach(function(item,i){
+        var key=lst.key+'_'+screenNum+'_'+i;
+        var title=item.name||item.title||item.skill_name||item.domain_name||item.level_code||item.role_title||'';
+        var applied=appliedSuggestions[key];
+        h+='<span class="fp-chip'+(applied?' fp-applied':'')+'" onclick="fpApplyListSuggestion(\''+lst.key+'\','+screenNum+','+i+',this)">';
+        h+='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> '+escH(title)+'</span>';
+      });
+      h+='</div>';
+    }
+    h+='<div class="fp-list-section" style="margin-top:12px"><div class="fp-list-section-title">Add '+lst.label+'</div>';
+    h+='<div class="fp-list-mini-form">';
+    lst.fields.forEach(function(ff){
+      h+='<div class="fp-mini-group"><span class="fp-mini-label">'+ff.label+(ff.required?' *':'')+'</span>';
+      if(ff.type==='select'&&ff.options){
+        h+='<select class="fp-mini-select" id="'+ff.id+'">';
+        ff.options.forEach(function(o){h+='<option>'+o+'</option>'});
+        h+='</select>';
+      } else {
+        h+='<input class="fp-mini-input" id="'+ff.id+'" placeholder="'+(ff.placeholder||'')+'"'+(ff.inputType?' type="'+ff.inputType+'"':'')+'>';
+      }
+      h+='</div>';
+    });
+    h+='</div>';
+    h+='<button class="btn btn-blue btn-sm" onclick="fpAddListItem(\''+lst.addFn+'\',\''+lst.key+'\','+screenNum+')" style="margin-top:8px">+ Add '+lst.label+'</button></div>';
+    if(lst.aiMsg){
+      h+='<div class="fp-ai-area" style="margin-top:12px"><div class="fp-ai-msg"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> '+lst.aiMsg+'</div>';
+      if(lst.aiRule)h+='<div class="fp-ai-rule"><strong>SIP Rule:</strong> '+lst.aiRule+'</div>';
+      h+='</div>';
+    }
+  } else {
+    h+='<div class="fp-field-label">'+f.label;
+    if(f.required)h+=' <span class="fp-badge required">required</span>';
+    else if(f.recommended)h+=' <span class="fp-badge recommended">recommended</span>';
+    h+='</div>';
+    var curVal='';var realEl=document.getElementById(f.id);
+    if(realEl)curVal=realEl.value||'';
+    if(f.type==='select'){
+      h+='<select class="fp-select" id="fp-field-input" onkeydown="if(event.key===\'Enter\')fpAutoAdvance()"><option value="">Select...</option>';
+      (f.options||[]).forEach(function(opt){h+='<option'+(curVal===opt?' selected':'')+'>'+opt+'</option>'});
+      h+='</select>';
+    } else if(f.type==='textarea'){
+      h+='<textarea class="fp-textarea" id="fp-field-input" placeholder="'+(f.placeholder||'')+'">'+escH(curVal)+'</textarea>';
+    } else {
+      h+='<input class="fp-input" id="fp-field-input" placeholder="'+(f.placeholder||'')+'" value="'+escH(curVal)+'"'+(f.inputType?' type="'+f.inputType+'"':'')+' onkeydown="if(event.key===\'Enter\')fpAutoAdvance()">';
+    }
+    if(f.aiMsg){
+      h+='<div class="fp-ai-area" style="margin-top:16px"><div class="fp-ai-msg"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> '+f.aiMsg+'</div>';
+      if(f.aiRule)h+='<div class="fp-ai-rule"><strong>SIP Rule:</strong> '+f.aiRule+'</div>';
+      h+='</div>';
+    }
+  }
+  h+='</div>';
+  body.innerHTML=h;
+  setTimeout(function(){var inp=document.getElementById('fp-field-input');if(inp&&inp.focus)inp.focus()},100);
+}
+
+function fpSaveCurrentField(){
+  var screenNum=fpState.screen;var fields=fpGetFields(screenNum);var f=fields[fpState.fieldIdx];
+  if(!f||f._isList)return;
+  var inp=document.getElementById('fp-field-input');if(!inp)return;
+  var realEl=document.getElementById(f.id);if(!realEl)return;
+  realEl.value=inp.value;if(inp.value)realEl.classList.add('ai-filled');
+}
+
+function fpNext(){
+  fpSaveCurrentField();
+  var fields=fpGetFields(fpState.screen);
+  if(fpState.fieldIdx>=fields.length-1){closeFieldPopup();saveStep(fpState.screen);return}
+  fpState.fieldIdx++;renderFieldPopup();
+}
+function fpBack(){fpSaveCurrentField();if(fpState.fieldIdx>0){fpState.fieldIdx--;renderFieldPopup()}}
+function fpAutoAdvance(){fpSaveCurrentField();setTimeout(function(){fpNext()},200)}
+
+function fpApplyListSuggestion(listKey,step,idx,chipEl){
+  applyListSuggestion(listKey,step,idx);
+  if(chipEl){chipEl.classList.add('fp-applied');chipEl.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Added'}
+  setTimeout(function(){renderFieldPopup()},100);
+}
+function fpAddListItem(addFnName,listKey,screenNum){
+  if(typeof window[addFnName]==='function')window[addFnName]();
+  setTimeout(function(){renderFieldPopup()},100);
+}
+
+// Modify goToStep to auto-open field popup
+var _origGoToStep=goToStep;
+goToStep=function(n){
+  _origGoToStep(n);
+  if(SCREEN_FIELDS[n]&&n!==5&&n!==6){
+    setTimeout(function(){openFieldPopup(n)},300);
+  }
+};
+
+// INIT
+renderSteps();renderStepper();updateProgress();updateAiForStep(1);
+</script>
+</body>
+</html>
