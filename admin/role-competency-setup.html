@@ -831,6 +831,30 @@ function navBtns(prev,next){
   return h+'</div>';
 }
 
+function buildContextSummary(currentScreen){
+  var items=[];
+  if(D.skillDomains.length) items.push({label:'Skill Domains',count:D.skillDomains.length,done:state.completed[1]});
+  if(D.skillsMaster.length) items.push({label:'Skills',count:D.skillsMaster.length,done:state.completed[1]});
+  if(D.competencies.length) items.push({label:'Competencies',count:D.competencies.length,done:state.completed[2]});
+  if(D.jobLevels.length) items.push({label:'Job Levels',count:D.jobLevels.length,done:state.completed[3]});
+  if(D.roles.length) items.push({label:'Roles',count:D.roles.length,done:state.completed[3]});
+  if(D.roleSkillReqs.length) items.push({label:'Role-Skill Maps',count:D.roleSkillReqs.length,done:state.completed[4]});
+  var mappedEmps=D.employeeRoleMappings.filter(function(m){return m.role}).length;
+  if(mappedEmps) items.push({label:'Employees Mapped',count:mappedEmps+'/'+employeeData.length,done:state.completed[5]});
+  if(!items.length) return '';
+  var h='<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;padding:10px 14px;background:linear-gradient(135deg,rgba(26,122,74,0.06) 0%,rgba(106,58,154,0.04) 100%);border:1px solid rgba(58,184,122,0.15);border-radius:10px;animation:fadeUp .3s ease both">';
+  h+='<div style="font-size:9px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em;width:100%;margin-bottom:2px;display:flex;align-items:center;gap:5px"><svg style="width:11px;height:11px;stroke:var(--green-lt);fill:none;stroke-width:2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Progress So Far</div>';
+  items.forEach(function(it){
+    var color=it.done?'var(--green-lt)':'var(--paper-mid)';
+    h+='<div style="padding:4px 10px;border-radius:6px;background:var(--ink-raised);border:1px solid var(--ink-border);font-size:10px;display:flex;align-items:center;gap:5px">';
+    if(it.done) h+='<svg style="width:10px;height:10px;stroke:var(--green-lt);fill:none;stroke-width:2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+    h+='<span style="color:'+color+';font-weight:500">'+it.count+'</span>';
+    h+='<span style="color:var(--ink-soft)">'+it.label+'</span></div>';
+  });
+  h+='</div>';
+  return h;
+}
+
 function buildStep1(){
   var sug=getAiSuggestions();
   return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 1 — Skill Ontology & Taxonomy</div>'+dlBtn(1)+'</div><div class="panel-body">'
@@ -850,7 +874,7 @@ function buildStep1(){
 
 function buildStep2(){
   var sug=getAiSuggestions();
-  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 2 — Competency Framework</div>'+dlBtn(2)+'</div><div class="panel-body">'
+  return buildContextSummary(2)+'<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 2 — Competency Framework</div>'+dlBtn(2)+'</div><div class="panel-body">'
   +uploadZone(2)
   +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Competencies</div><div id="competenciesList"></div>'
   +listSuggestions('competencies',sug[2]?sug[2].comps:null,2)
@@ -865,7 +889,7 @@ function buildStep2(){
 
 function buildStep3(){
   var sug=getAiSuggestions();
-  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 3 — Role Architecture</div><div style="display:flex;gap:8px;align-items:center"><button class="btn btn-sm" onclick="openAiPopup()" style="background:linear-gradient(135deg,var(--gold) 0%,#E0CC70 100%);border-color:var(--gold);color:var(--ink);font-weight:600;gap:6px"><svg style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>AI-Guided Builder</button>'+dlBtn(3)+'</div></div><div class="panel-body">'
+  return buildContextSummary(3)+'<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 3 — Role Architecture</div><div style="display:flex;gap:8px;align-items:center"><button class="btn btn-sm" onclick="openAiPopup()" style="background:linear-gradient(135deg,var(--gold) 0%,#E0CC70 100%);border-color:var(--gold);color:var(--ink);font-weight:600;gap:6px"><svg style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>AI-Guided Builder</button>'+dlBtn(3)+'</div></div><div class="panel-body">'
   +uploadZone(3)
   +'<div class="sub-section-title" style="border-top:none;margin-top:0;padding-top:0">Job Role Levels</div><div id="jobLevelList"></div>'
   +listSuggestions('jobLevels',sug[3]?sug[3].level_items:null,3)
@@ -884,7 +908,7 @@ function buildStep3(){
 
 function buildStep4(){
   var sug=getAiSuggestions();
-  return '<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 4 — Role-Skill Mapping</div>'+dlBtn(4)+'</div><div class="panel-body">'
+  return buildContextSummary(4)+'<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 4 — Role-Skill Mapping</div>'+dlBtn(4)+'</div><div class="panel-body">'
   +uploadZone(4)
   +'<div class="section-desc">Map skills to roles with required proficiency levels and criticality. This powers gap analysis across the workforce.</div>'
   +'<div id="roleSkillReqList"></div>'
@@ -901,7 +925,7 @@ function buildStep5(){
   var totalEmps=emps.length;
   var pct=totalEmps>0?Math.round(mappedCount/totalEmps*100):0;
 
-  var h='<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 5 — Employee-Role Mapping</div><button class="btn btn-sm" onclick="autoMapAll()" style="background:linear-gradient(135deg,var(--gold) 0%,#E0CC70 100%);border-color:var(--gold);color:var(--ink);font-weight:600;gap:6px"><svg style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Auto-Map All</button></div><div class="panel-body">';
+  var h=buildContextSummary(5)+'<div class="panel fade-up"><div class="panel-head"><div class="panel-title">Screen 5 — Employee-Role Mapping</div><button class="btn btn-sm" onclick="autoMapAll()" style="background:linear-gradient(135deg,var(--gold) 0%,#E0CC70 100%);border-color:var(--gold);color:var(--ink);font-weight:600;gap:6px"><svg style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Auto-Map All</button></div><div class="panel-body">';
 
   if(totalEmps===0){
     h+='<div class="section-desc" style="border-left-color:var(--amber-lt)">No employee data found in localStorage (key: <em>sip_employees</em>). Upload employees in Module 2 first, or add sample data below.</div>';
