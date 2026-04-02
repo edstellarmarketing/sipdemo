@@ -235,6 +235,73 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
 
+/* ── BLOCK B: HIERARCHY ── */
+.hier-tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--border);padding-bottom:0}
+.hier-tab{padding:10px 18px;font-size:13px;font-weight:500;color:var(--text-t);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.hier-tab:hover{color:var(--text-s)}
+.hier-tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.hier-tab-content{display:none;animation:fadeUp .3s ease both}
+.hier-tab-content.active{display:block}
+
+/* Pattern cards */
+.pattern-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:20px}
+.pattern-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;cursor:pointer;transition:all .2s;position:relative}
+.pattern-card:hover{border-color:var(--text-t);box-shadow:var(--shadow-sm)}
+.pattern-card.selected{border-color:var(--primary);background:var(--primary-soft);box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
+.pattern-card.ai-rec{border-color:var(--ai);background:var(--ai-soft)}
+.pattern-card.ai-rec::after{content:'AI Recommended';position:absolute;top:8px;right:8px;font-size:8px;font-weight:700;color:var(--ai);background:var(--surface);padding:2px 6px;border-radius:100px;border:1px solid var(--border-ai);letter-spacing:.03em}
+.pattern-card h4{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px}
+.pattern-card p{font-size:10px;color:var(--text-t);line-height:1.4}
+.pattern-card .pattern-example{font-family:var(--mono);font-size:9px;color:var(--primary);margin-top:6px;padding:4px 8px;background:var(--surface-alt);border-radius:4px}
+.pattern-card.selected h4{color:var(--primary)}
+
+/* Level definition */
+.level-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.level-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);transition:all .15s}
+.level-row:hover{border-color:var(--text-t)}
+.level-num{width:28px;height:28px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.level-name{font-size:13px;font-weight:600;color:var(--text);min-width:100px}
+.level-code{font-family:var(--mono);font-size:11px;color:var(--text-t);padding:2px 8px;background:var(--surface-alt);border-radius:4px}
+.level-type{font-size:10px;color:var(--text-t);padding:2px 8px;border-radius:100px;border:1px solid var(--border)}
+.level-type.assignment{color:var(--success);border-color:var(--success-border);background:var(--success-soft)}
+.level-type.grouping{color:var(--info);border-color:rgba(37,99,235,0.2);background:var(--info-soft)}
+.level-type.both{color:var(--ai);border-color:var(--border-ai);background:var(--ai-soft)}
+.level-actions{margin-left:auto;display:flex;gap:4px}
+.level-actions button{width:26px;height:26px;border-radius:4px;border:1px solid var(--border);background:var(--surface);color:var(--text-t);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.level-actions button:hover{background:var(--surface-alt);color:var(--text)}
+.level-actions button.del:hover{background:var(--danger-soft);color:var(--danger);border-color:var(--danger)}
+.level-actions button svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+
+/* Node tree */
+.tree-wrap{padding:0 0 0 8px}
+.tree-node{position:relative;padding-left:24px;margin-bottom:4px}
+.tree-node::before{content:'';position:absolute;left:8px;top:0;bottom:12px;width:1px;background:var(--border)}
+.tree-node::after{content:'';position:absolute;left:8px;top:16px;width:16px;height:1px;background:var(--border)}
+.tree-node:last-child::before{bottom:auto;height:16px}
+.tree-node-card{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;max-width:100%}
+.tree-node-card:hover{border-color:var(--primary);box-shadow:var(--shadow-sm)}
+.tree-node-card.selected{border-color:var(--primary);background:var(--primary-soft)}
+.tree-node-card .tn-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tree-node-card .tn-name{font-size:12px;font-weight:500;color:var(--text)}
+.tree-node-card .tn-code{font-family:var(--mono);font-size:9px;color:var(--text-t)}
+.tree-node-card .tn-head{font-size:9px;color:var(--text-t)}
+.tree-children{padding-left:0;margin-top:4px}
+
+/* Node detail panel (right side) */
+.node-detail{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px 18px}
+.node-detail h4{font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px}
+
+/* Secondary hierarchy cards */
+.sec-hier-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:10px}
+.sec-hier-card h4{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.sec-hier-card p{font-size:11px;color:var(--text-t)}
+
+/* Platform behavior table */
+.behavior-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}
+.behavior-table th{text-align:left;padding:8px 12px;background:var(--surface-alt);color:var(--text-s);font-weight:600;font-size:11px;border-bottom:1px solid var(--border)}
+.behavior-table td{padding:8px 12px;border-bottom:1px solid var(--border);color:var(--text-s);vertical-align:top}
+.behavior-table tr:hover td{background:var(--surface-alt)}
+
 /* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes typingDot{0%,80%,100%{opacity:.3;transform:scale(.7)}40%{opacity:1;transform:scale(1)}}
@@ -494,6 +561,14 @@ function getBlockSummary(id, bs){
     if(d.currentHeadcount) parts.push(d.currentHeadcount+' employees');
     return parts.join(' · ') || '';
   }
+  if(id==='B'){
+    var parts = [];
+    if(d.levels && d.levels.length) parts.push(d.levels.length+' levels');
+    var nodeCount = d.nodes ? d.nodes.length : 0;
+    if(nodeCount) parts.push(nodeCount+' nodes');
+    if(d.secondaryHierarchies && d.secondaryHierarchies.length) parts.push(d.secondaryHierarchies.length+' secondary');
+    return parts.join(' · ') || '';
+  }
   return '';
 }
 
@@ -582,6 +657,7 @@ function enterEditMode(){
 function renderBlockContent(id){
   var body = document.getElementById('bpBody');
   if(id==='A') body.innerHTML = editMode ? renderBlockA_Edit() : renderBlockA_ReadOnly();
+  else if(id==='B') body.innerHTML = editMode ? renderBlockB_Edit() : renderBlockB_ReadOnly();
   else body.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-t)"><div style="font-size:40px;margin-bottom:12px">'+BLOCKS.find(function(x){return x.id===id}).icon+'</div><div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px">'+BLOCKS.find(function(x){return x.id===id}).title+'</div><div style="font-size:13px">Coming in next implementation phase</div></div>';
 }
 
@@ -760,6 +836,9 @@ function autoSaveCurrentBlock(){
     setBlockData('A', d);
     checkBlockACompletion();
   }
+  if(currentBlock==='B'){
+    saveHierarchyState();
+  }
 }
 
 function aiExtractBlockA(){
@@ -799,6 +878,580 @@ function aiExtractBlockA(){
 
     showToast('AI extraction complete — 15 fields filled');
   }, 1500);
+}
+
+// ═══════════════════════════════════════════════════════
+// BLOCK B: HIERARCHY ARCHITECTURE
+// ═══════════════════════════════════════════════════════
+var HIER_PATTERNS = [
+  {id:'traditional',name:'Traditional Corporate',example:'Org → Division → Dept → Team',desc:'Standard 4-level hierarchy. All reporting follows this structure.',levels:[{name:'Organisation',code:'ORG',type:'grouping'},{name:'Division',code:'DIV',type:'grouping'},{name:'Department',code:'DEPT',type:'both'},{name:'Team',code:'TEAM',type:'assignment'}]},
+  {id:'spotify',name:'Agile / Spotify',example:'Org → Tribe → Squad + Chapter',desc:'Squad is primary assignment. Chapter is cross-cutting secondary.',levels:[{name:'Organisation',code:'ORG',type:'grouping'},{name:'Tribe',code:'TRB',type:'grouping'},{name:'Squad',code:'SQD',type:'assignment'}]},
+  {id:'consulting',name:'Consulting / Services',example:'Org → Practice → Capability → Account → Engagement',desc:'5-level. Assignment at Engagement Team for project work.',levels:[{name:'Organisation',code:'ORG',type:'grouping'},{name:'Practice Area',code:'PRA',type:'grouping'},{name:'Capability Group',code:'CAP',type:'grouping'},{name:'Account',code:'ACC',type:'grouping'},{name:'Engagement Team',code:'ENG',type:'assignment'}]},
+  {id:'manufacturing',name:'Manufacturing',example:'Org → Site → Plant → Line → Shift',desc:'Shift is assignment level. Location compliance auto-applied.',levels:[{name:'Organisation',code:'ORG',type:'grouping'},{name:'Site',code:'SITE',type:'grouping'},{name:'Plant',code:'PLT',type:'grouping'},{name:'Production Line',code:'LINE',type:'grouping'},{name:'Shift',code:'SFT',type:'assignment'}]},
+  {id:'holding',name:'Holding / Multi-Entity',example:'Group → Legal Entity → BU → Dept → Team',desc:'Legal Entity enforces data boundaries between entities.',levels:[{name:'Group',code:'GRP',type:'grouping'},{name:'Legal Entity',code:'ENT',type:'grouping'},{name:'Business Unit',code:'BU',type:'grouping'},{name:'Department',code:'DEPT',type:'both'},{name:'Team',code:'TEAM',type:'assignment'}]},
+  {id:'government',name:'Government / Public',example:'Ministry → Directorate → Division → Unit → Section',desc:'Deep hierarchy. Standards cascade from Ministry level.',levels:[{name:'Ministry',code:'MIN',type:'grouping'},{name:'Directorate',code:'DIR',type:'grouping'},{name:'Division',code:'DVN',type:'grouping'},{name:'Unit',code:'UNT',type:'both'},{name:'Section',code:'SEC',type:'assignment'}]},
+  {id:'flat',name:'Flat / Startup',example:'Org → Team',desc:'2-level. Skills aggregate directly from Team to Org.',levels:[{name:'Organisation',code:'ORG',type:'grouping'},{name:'Team',code:'TEAM',type:'assignment'}]},
+  {id:'matrix',name:'Matrix',example:'Functional + Project dual hierarchy',desc:'Two simultaneous hierarchies. Primary functional + secondary project.',levels:[{name:'Organisation',code:'ORG',type:'grouping'},{name:'Function',code:'FUN',type:'grouping'},{name:'Department',code:'DEPT',type:'assignment'}]},
+  {id:'geographic',name:'Geographic',example:'Org → Region → Country → City → Office',desc:'Geography-first. Location drives compliance and delivery capability.',levels:[{name:'Organisation',code:'ORG',type:'grouping'},{name:'Region',code:'REG',type:'grouping'},{name:'Country',code:'CTY',type:'grouping'},{name:'City',code:'CTY',type:'grouping'},{name:'Office',code:'OFC',type:'assignment'}]}
+];
+
+var hierActiveTab = 'definition';
+var hierSelectedPattern = null;
+var hierNodeCounter = 0;
+
+function getHierData(){
+  var d = getBlockState('B').data;
+  if(!d.pattern) d.pattern = null;
+  if(!d.levels) d.levels = [];
+  if(!d.nodes) d.nodes = [];
+  if(!d.secondaryHierarchies) d.secondaryHierarchies = [];
+  return d;
+}
+
+function saveHierarchyState(){
+  var d = getHierData();
+  setBlockData('B', d);
+  checkBlockBCompletion();
+}
+
+function checkBlockBCompletion(){
+  var d = getHierData();
+  if(d.levels.length >= 2 && d.nodes.length >= 1) markComplete('B');
+}
+
+// ── AI recommend pattern ──
+function getRecommendedPattern(){
+  var aData = getBlockState('A').data;
+  var industry = (aData.primaryIndustry || '').toLowerCase();
+  var model = (aData.operatingModel || '').toLowerCase();
+  var size = parseInt(aData.currentHeadcount) || 0;
+  if(model.indexOf('consulting')>-1 || model.indexOf('services')>-1) return 'consulting';
+  if(industry.indexOf('manufacturing')>-1) return 'manufacturing';
+  if(industry.indexOf('infrastructure')>-1 || industry.indexOf('construction')>-1) return 'traditional';
+  if(industry.indexOf('technology')>-1 || industry.indexOf('software')>-1) return size > 200 ? 'matrix' : 'spotify';
+  if(size <= 50) return 'flat';
+  return 'traditional';
+}
+
+// ── EDIT MODE ──
+function renderBlockB_Edit(){
+  var h = '';
+  // Tabs
+  h += '<div class="hier-tabs">';
+  h += '<div class="hier-tab'+(hierActiveTab==='definition'?' active':'')+'" onclick="switchHierTab(\'definition\')">1. Define Structure</div>';
+  h += '<div class="hier-tab'+(hierActiveTab==='nodes'?' active':'')+'" onclick="switchHierTab(\'nodes\')">2. Build Nodes</div>';
+  h += '<div class="hier-tab'+(hierActiveTab==='secondary'?' active':'')+'" onclick="switchHierTab(\'secondary\')">3. Secondary Hierarchies</div>';
+  h += '</div>';
+
+  h += '<div class="hier-tab-content'+(hierActiveTab==='definition'?' active':'')+'" id="tabDefinition">'+renderHierTab_Definition()+'</div>';
+  h += '<div class="hier-tab-content'+(hierActiveTab==='nodes'?' active':'')+'" id="tabNodes">'+renderHierTab_Nodes()+'</div>';
+  h += '<div class="hier-tab-content'+(hierActiveTab==='secondary'?' active':'')+'" id="tabSecondary">'+renderHierTab_Secondary()+'</div>';
+  return h;
+}
+
+function switchHierTab(tab){
+  hierActiveTab = tab;
+  renderBlockContent('B');
+}
+
+// ── Tab 1: Definition ──
+function renderHierTab_Definition(){
+  var d = getHierData();
+  var recPattern = getRecommendedPattern();
+  var h = '';
+
+  // Pattern selection
+  h += '<div class="form-section">';
+  h += '<div class="form-section-title">Choose Your Org Model Pattern</div>';
+  h += '<div class="form-section-desc">AI recommends a pattern based on your industry and size. Select one to pre-populate levels, or choose Custom.</div>';
+  h += '<div class="pattern-grid">';
+  HIER_PATTERNS.forEach(function(p){
+    var sel = d.pattern === p.id ? ' selected' : '';
+    var rec = p.id === recPattern ? ' ai-rec' : '';
+    h += '<div class="pattern-card'+sel+rec+'" onclick="selectPattern(\''+p.id+'\')">';
+    h += '<h4>'+p.name+'</h4>';
+    h += '<p>'+p.desc+'</p>';
+    h += '<div class="pattern-example">'+p.example+'</div>';
+    h += '</div>';
+  });
+  h += '</div></div>';
+
+  // Level definition
+  h += '<div class="form-section">';
+  h += '<div class="form-section-title">Hierarchy Levels</div>';
+  h += '<div class="form-section-desc">Define each level. Drag to reorder. Each level can be a Grouping Level (for rollup), Assignment Level (where employees sit), or Both.</div>';
+
+  if(d.levels.length === 0){
+    h += '<div style="padding:20px;text-align:center;color:var(--text-t);border:2px dashed var(--border);border-radius:var(--radius-md)">Select a pattern above to pre-populate levels, or add manually below.</div>';
+  } else {
+    h += '<div class="level-list" id="levelList">';
+    d.levels.forEach(function(lv, i){
+      var typeClass = lv.type === 'assignment' ? 'assignment' : lv.type === 'grouping' ? 'grouping' : 'both';
+      var typeLabel = lv.type === 'assignment' ? 'Assignment' : lv.type === 'grouping' ? 'Grouping' : 'Both';
+      h += '<div class="level-row">';
+      h += '<div class="level-num">'+(i+1)+'</div>';
+      h += '<div class="level-name">'+escH(lv.name)+'</div>';
+      h += '<div class="level-code">'+escH(lv.code)+'</div>';
+      h += '<span class="level-type '+typeClass+'">'+typeLabel+'</span>';
+      h += '<div class="level-actions">';
+      h += '<button onclick="editLevel('+i+')" title="Edit"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>';
+      h += '<button class="del" onclick="removeLevel('+i+')" title="Remove"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
+      h += '</div></div>';
+    });
+    h += '</div>';
+  }
+
+  // Add level form
+  h += '<div style="background:var(--surface-alt);border-radius:var(--radius-md);padding:14px 16px;margin-top:10px">';
+  h += '<div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px">+ Add Level</div>';
+  h += '<div class="form-grid">';
+  h += '<div class="form-group"><label class="form-label">Level Name <span class="req">*</span></label><input class="form-input" id="f_newLevelName" placeholder="e.g. Division, Squad, Plant"></div>';
+  h += '<div class="form-group"><label class="form-label">Short Code</label><input class="form-input" id="f_newLevelCode" placeholder="e.g. DIV" style="text-transform:uppercase"></div>';
+  h += '</div>';
+  h += '<div class="form-grid">';
+  h += '<div class="form-group"><label class="form-label">Level Type</label><select class="form-select" id="f_newLevelType"><option value="grouping">Grouping (rollup only)</option><option value="assignment">Assignment (employees sit here)</option><option value="both">Both</option></select></div>';
+  h += '<div class="form-group"><label class="form-label">&nbsp;</label><button class="btn btn-primary btn-sm" onclick="addLevel()">Add Level</button></div>';
+  h += '</div></div>';
+
+  h += '</div>'; // close section
+  return h;
+}
+
+function selectPattern(patternId){
+  var d = getHierData();
+  var pattern = HIER_PATTERNS.find(function(p){return p.id === patternId});
+  if(!pattern) return;
+  d.pattern = patternId;
+  d.levels = pattern.levels.map(function(l){return {name:l.name, code:l.code, type:l.type, mandatory:true, description:''}});
+  // Reset nodes when changing pattern
+  d.nodes = [];
+  // Auto-add root node
+  hierNodeCounter = 1;
+  d.nodes.push({id:hierNodeCounter,name:getBlockState('A').data.legalName||'Organisation',code:d.levels[0].code+'-ROOT',levelIdx:0,parentId:null,head:'',locations:[],costCentre:'',function:'',isActive:true});
+  setBlockData('B', d);
+  renderBlockContent('B');
+  showToast(pattern.name+' pattern applied — '+d.levels.length+' levels');
+}
+
+function addLevel(){
+  var name = document.getElementById('f_newLevelName').value.trim();
+  if(!name){showToast('Enter a level name');return}
+  var code = document.getElementById('f_newLevelCode').value.trim().toUpperCase() || name.substring(0,3).toUpperCase();
+  var type = document.getElementById('f_newLevelType').value;
+  var d = getHierData();
+  d.levels.push({name:name, code:code, type:type, mandatory:false, description:''});
+  setBlockData('B', d);
+  renderBlockContent('B');
+  showToast(name+' level added');
+}
+
+function removeLevel(idx){
+  var d = getHierData();
+  d.levels.splice(idx, 1);
+  // Remove nodes at this level and remap
+  d.nodes = d.nodes.filter(function(n){return n.levelIdx !== idx}).map(function(n){
+    if(n.levelIdx > idx) n.levelIdx--;
+    return n;
+  });
+  setBlockData('B', d);
+  renderBlockContent('B');
+}
+
+function editLevel(idx){
+  var d = getHierData();
+  var lv = d.levels[idx];
+  var newName = prompt('Level name:', lv.name);
+  if(newName === null) return;
+  lv.name = newName;
+  var newType = prompt('Type (grouping/assignment/both):', lv.type);
+  if(newType && ['grouping','assignment','both'].indexOf(newType) > -1) lv.type = newType;
+  setBlockData('B', d);
+  renderBlockContent('B');
+}
+
+// ── Tab 2: Nodes ──
+function renderHierTab_Nodes(){
+  var d = getHierData();
+  var h = '';
+
+  if(d.levels.length === 0){
+    h += '<div style="padding:30px;text-align:center;color:var(--text-t)">Define hierarchy levels first (Tab 1) before adding nodes.</div>';
+    return h;
+  }
+
+  h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;min-height:400px">';
+
+  // Left: Tree view
+  h += '<div>';
+  h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">';
+  h += '<div style="font-size:14px;font-weight:600;color:var(--text)">Organisation Tree</div>';
+  h += '<button class="btn btn-sm" onclick="addNodePrompt()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Node</button>';
+  h += '</div>';
+
+  if(d.nodes.length === 0){
+    h += '<div style="padding:20px;text-align:center;color:var(--text-t);border:2px dashed var(--border);border-radius:var(--radius-md)">No nodes yet. Click "Add Node" to start building.</div>';
+  } else {
+    h += '<div class="tree-wrap">';
+    h += renderTreeLevel(d, null, 0);
+    h += '</div>';
+  }
+  h += '</div>';
+
+  // Right: Node detail / add form
+  h += '<div id="nodeDetailPanel">';
+  h += renderNodeAddForm(d);
+  h += '</div>';
+
+  h += '</div>';
+  return h;
+}
+
+function renderTreeLevel(d, parentId, depth){
+  var children = d.nodes.filter(function(n){return n.parentId === parentId});
+  if(children.length === 0) return '';
+  var h = '<div class="tree-children">';
+  children.forEach(function(node){
+    var levelName = d.levels[node.levelIdx] ? d.levels[node.levelIdx].name : '?';
+    var colors = ['var(--primary)','var(--ai)','var(--success)','var(--warning)','var(--info)','var(--danger)'];
+    var dotColor = colors[node.levelIdx % colors.length];
+    h += '<div class="tree-node">';
+    h += '<div class="tree-node-card" onclick="selectNode('+node.id+')">';
+    h += '<div class="tn-dot" style="background:'+dotColor+'"></div>';
+    h += '<div><div class="tn-name">'+escH(node.name)+'</div>';
+    h += '<div style="display:flex;gap:6px;align-items:center"><span class="tn-code">'+escH(node.code)+'</span><span class="tn-head">'+escH(levelName)+'</span></div>';
+    h += '</div></div>';
+    h += renderTreeLevel(d, node.id, depth+1);
+    h += '</div>';
+  });
+  h += '</div>';
+  return h;
+}
+
+function renderNodeAddForm(d){
+  var h = '<div class="node-detail">';
+  h += '<h4>Add Node</h4>';
+  h += '<div class="form-grid single">';
+  h += '<div class="form-group"><label class="form-label">Node Name <span class="req">*</span></label><input class="form-input" id="f_nodeName" placeholder="e.g. Engineering Division"></div>';
+  h += '</div>';
+  h += '<div class="form-grid">';
+  h += '<div class="form-group"><label class="form-label">Short Code</label><input class="form-input" id="f_nodeCode" placeholder="e.g. ENG"></div>';
+  h += '<div class="form-group"><label class="form-label">Level</label><select class="form-select" id="f_nodeLevel">';
+  d.levels.forEach(function(lv,i){h += '<option value="'+i+'">'+escH(lv.name)+' ('+escH(lv.code)+')</option>'});
+  h += '</select></div>';
+  h += '</div>';
+  h += '<div class="form-grid">';
+  h += '<div class="form-group"><label class="form-label">Parent Node</label><select class="form-select" id="f_nodeParent"><option value="">— Root (no parent) —</option>';
+  d.nodes.forEach(function(n){h+='<option value="'+n.id+'">'+escH(n.name)+'</option>'});
+  h += '</select></div>';
+  h += '<div class="form-group"><label class="form-label">Head / Leader</label><input class="form-input" id="f_nodeHead" placeholder="e.g. Rajesh Kumar"></div>';
+  h += '</div>';
+  h += '<div class="form-grid">';
+  h += '<div class="form-group"><label class="form-label">Location(s)</label><input class="form-input" id="f_nodeLocations" placeholder="e.g. Singapore, Mumbai"></div>';
+  h += '<div class="form-group"><label class="form-label">Cost Centre</label><input class="form-input" id="f_nodeCostCentre" placeholder="e.g. CC-ENG-001"></div>';
+  h += '</div>';
+  h += '<div class="form-grid single">';
+  h += '<div class="form-group"><label class="form-label">Primary Function</label><input class="form-input" id="f_nodeFunction" placeholder="e.g. Civil and structural engineering delivery"></div>';
+  h += '</div>';
+  h += '<div style="display:flex;gap:8px;margin-top:12px">';
+  h += '<button class="btn btn-primary btn-sm" onclick="addNode()">Add Node</button>';
+  h += '<button class="btn btn-ai btn-sm" onclick="aiGenerateNodes()"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> AI Generate Nodes</button>';
+  h += '</div>';
+  h += '</div>';
+  return h;
+}
+
+function addNodePrompt(){
+  // Just focus on the node name field
+  var el = document.getElementById('f_nodeName');
+  if(el) el.focus();
+}
+
+function addNode(){
+  var name = document.getElementById('f_nodeName').value.trim();
+  if(!name){showToast('Enter a node name');return}
+  var d = getHierData();
+  hierNodeCounter = d.nodes.length > 0 ? Math.max.apply(null, d.nodes.map(function(n){return n.id})) + 1 : 1;
+  var levelIdx = parseInt(document.getElementById('f_nodeLevel').value) || 0;
+  var parentVal = document.getElementById('f_nodeParent').value;
+  var parentId = parentVal ? parseInt(parentVal) : null;
+  d.nodes.push({
+    id: hierNodeCounter,
+    name: name,
+    code: document.getElementById('f_nodeCode').value.trim().toUpperCase() || name.substring(0,3).toUpperCase(),
+    levelIdx: levelIdx,
+    parentId: parentId,
+    head: document.getElementById('f_nodeHead').value.trim(),
+    locations: document.getElementById('f_nodeLocations').value.trim().split(',').map(function(s){return s.trim()}).filter(Boolean),
+    costCentre: document.getElementById('f_nodeCostCentre').value.trim(),
+    function: document.getElementById('f_nodeFunction').value.trim(),
+    isActive: true
+  });
+  setBlockData('B', d);
+  renderBlockContent('B');
+  showToast(name+' added to tree');
+}
+
+function selectNode(nodeId){
+  var d = getHierData();
+  var node = d.nodes.find(function(n){return n.id===nodeId});
+  if(!node) return;
+  var panel = document.getElementById('nodeDetailPanel');
+  var levelName = d.levels[node.levelIdx] ? d.levels[node.levelIdx].name : '?';
+  var h = '<div class="node-detail">';
+  h += '<h4 style="display:flex;align-items:center;gap:8px">'+escH(node.name)+'<span class="level-code">'+escH(levelName)+'</span></h4>';
+  h += '<div class="ro-grid" style="margin-top:12px">';
+  h += '<div class="ro-field"><div class="ro-field-label">Code</div><div class="ro-field-value">'+escH(node.code)+'</div></div>';
+  h += '<div class="ro-field"><div class="ro-field-label">Head / Leader</div><div class="ro-field-value'+(node.head?'':' empty')+'">'+(node.head||'Not set')+'</div></div>';
+  h += '<div class="ro-field"><div class="ro-field-label">Location(s)</div><div class="ro-field-value'+(node.locations.length?'':' empty')+'">'+(node.locations.join(', ')||'Not set')+'</div></div>';
+  h += '<div class="ro-field"><div class="ro-field-label">Cost Centre</div><div class="ro-field-value'+(node.costCentre?'':' empty')+'">'+(node.costCentre||'Not set')+'</div></div>';
+  h += '<div class="ro-field" style="grid-column:1/-1"><div class="ro-field-label">Function</div><div class="ro-field-value'+(node.function?'':' empty')+'">'+(node.function||'Not set')+'</div></div>';
+  h += '</div>';
+  h += '<div style="display:flex;gap:8px;margin-top:14px">';
+  h += '<button class="btn btn-sm" onclick="cloneNode('+node.id+')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Clone</button>';
+  h += '<button class="btn btn-sm del" style="color:var(--danger);border-color:var(--danger)" onclick="removeNode('+node.id+')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Remove</button>';
+  h += '</div></div>';
+  panel.innerHTML = h;
+}
+
+function cloneNode(nodeId){
+  var d = getHierData();
+  var node = d.nodes.find(function(n){return n.id===nodeId});
+  if(!node) return;
+  hierNodeCounter = Math.max.apply(null, d.nodes.map(function(n){return n.id})) + 1;
+  var clone = JSON.parse(JSON.stringify(node));
+  clone.id = hierNodeCounter;
+  clone.name = node.name + ' (Copy)';
+  clone.code = node.code + '2';
+  d.nodes.push(clone);
+  setBlockData('B', d);
+  renderBlockContent('B');
+  showToast('Node cloned');
+}
+
+function removeNode(nodeId){
+  var d = getHierData();
+  // Remove node and all children recursively
+  var toRemove = [nodeId];
+  function findChildren(pid){
+    d.nodes.forEach(function(n){if(n.parentId===pid){toRemove.push(n.id);findChildren(n.id)}});
+  }
+  findChildren(nodeId);
+  d.nodes = d.nodes.filter(function(n){return toRemove.indexOf(n.id)===-1});
+  setBlockData('B', d);
+  renderBlockContent('B');
+  showToast('Node removed');
+}
+
+function aiGenerateNodes(){
+  var d = getHierData();
+  if(d.levels.length < 2){showToast('Define at least 2 levels first');return}
+  var aData = getBlockState('A').data;
+  var orgName = aData.legalName || 'Organisation';
+  showToast('AI generating org structure...');
+
+  setTimeout(function(){
+    hierNodeCounter = d.nodes.length > 0 ? Math.max.apply(null, d.nodes.map(function(n){return n.id})) + 1 : 1;
+    // Clear existing and generate fresh
+    d.nodes = [];
+    var id = 0;
+    function nid(){return ++id}
+
+    // Root node at level 0
+    var rootId = nid();
+    d.nodes.push({id:rootId,name:orgName,code:d.levels[0].code+'-ROOT',levelIdx:0,parentId:null,head:'CEO',locations:[(aData.hqCity||'Singapore')],costCentre:'CC-HQ',function:'Corporate headquarters',isActive:true});
+
+    if(d.levels.length >= 2){
+      // Generate level 1 nodes
+      var l1Names = [];
+      var industry = (aData.primaryIndustry||'').toLowerCase();
+      if(industry.indexOf('infrastructure')>-1||industry.indexOf('construction')>-1){
+        l1Names = [{n:'Engineering',h:'Chief Engineer',f:'Civil and structural engineering'},{n:'Digital Delivery',h:'Head of Digital',f:'BIM, digital twin, smart infrastructure'},{n:'Project Delivery',h:'VP Delivery',f:'End-to-end project execution'},{n:'Corporate Services',h:'VP Corporate',f:'HR, Finance, Legal, Admin'},{n:'EHS & Risk',h:'Chief Safety Officer',f:'Health, safety, environment, risk management'}];
+      } else if(industry.indexOf('technology')>-1){
+        l1Names = [{n:'Engineering',h:'VP Engineering',f:'Product development and platform'},{n:'Product',h:'VP Product',f:'Product strategy and management'},{n:'Sales & Marketing',h:'CRO',f:'Revenue and growth'},{n:'Operations',h:'COO',f:'Infrastructure and delivery'},{n:'People & Culture',h:'CHRO',f:'HR, L&D, culture'}];
+      } else {
+        l1Names = [{n:'Operations',h:'COO',f:'Core business operations'},{n:'Technology',h:'CTO',f:'Technology and digital'},{n:'Commercial',h:'CCO',f:'Sales and client management'},{n:'Corporate',h:'CFO',f:'Finance, HR, legal'},{n:'Strategy',h:'CSO',f:'Strategy and transformation'}];
+      }
+
+      var l1Ids = [];
+      l1Names.forEach(function(item){
+        var nId = nid();
+        l1Ids.push(nId);
+        d.nodes.push({id:nId,name:item.n,code:d.levels[1].code+'-'+item.n.substring(0,3).toUpperCase(),levelIdx:1,parentId:rootId,head:item.h,locations:[],costCentre:'',function:item.f,isActive:true});
+      });
+
+      // Generate level 2 nodes if exists
+      if(d.levels.length >= 3){
+        var l2Map = {0:['Structural','Civil','Geotechnical'],1:['BIM','Analytics','IT Infra'],2:['Projects SG','Projects India'],3:['HR','Finance','Legal'],4:['Safety','Environment']};
+        if(industry.indexOf('technology')>-1){
+          l2Map = {0:['Frontend','Backend','Platform'],1:['Product A','Product B'],2:['Sales','Marketing'],3:['DevOps','Security'],4:['HR','L&D']};
+        }
+        l1Ids.forEach(function(l1Id, li){
+          var teams = l2Map[li] || ['Team 1','Team 2'];
+          teams.forEach(function(tName){
+            var tId = nid();
+            d.nodes.push({id:tId,name:tName,code:d.levels[2].code+'-'+tName.substring(0,3).toUpperCase(),levelIdx:2,parentId:l1Id,head:'',locations:[],costCentre:'',function:'',isActive:true});
+          });
+        });
+      }
+    }
+
+    setBlockData('B', d);
+    renderBlockContent('B');
+    addAiMsg("Generated <strong>"+d.nodes.length+" nodes</strong> across "+d.levels.length+" levels based on your industry ("+escH(aData.primaryIndustry||'General')+"). Review the tree and adjust as needed — add, remove, or rename any node.");
+    showToast(d.nodes.length+' nodes generated by AI');
+  }, 1200);
+}
+
+// ── Tab 3: Secondary Hierarchies ──
+function renderHierTab_Secondary(){
+  var d = getHierData();
+  var h = '';
+
+  h += '<div class="form-section">';
+  h += '<div class="form-section-title">Secondary Hierarchies</div>';
+  h += '<div class="form-section-desc">Add up to 4 parallel hierarchies for matrix organisations. Employees can belong to nodes in multiple hierarchies simultaneously.</div>';
+
+  if(d.secondaryHierarchies.length === 0){
+    h += '<div style="padding:20px;text-align:center;color:var(--text-t);border:2px dashed var(--border);border-radius:var(--radius-md);margin-bottom:16px">';
+    h += 'No secondary hierarchies defined. Most organisations need at least one for project/programme structures.';
+    h += '</div>';
+  } else {
+    d.secondaryHierarchies.forEach(function(sh, i){
+      h += '<div class="sec-hier-card">';
+      h += '<div style="display:flex;align-items:center;justify-content:space-between">';
+      h += '<div><h4>'+escH(sh.name)+'</h4><p>'+sh.levels.length+' levels · Type: '+escH(sh.type)+'</p></div>';
+      h += '<button class="btn btn-sm del" style="color:var(--danger);border-color:var(--danger)" onclick="removeSecondary('+i+')">Remove</button>';
+      h += '</div></div>';
+    });
+  }
+
+  // Quick-add presets
+  h += '<div style="font-size:12px;font-weight:600;color:var(--text);margin:12px 0 8px">Quick Add</div>';
+  h += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">';
+  var presets = [
+    {name:'Project / Programme',type:'Project',levels:['Programme','Project','Workstream']},
+    {name:'Client Account',type:'Commercial',levels:['Client Portfolio','Account','Engagement']},
+    {name:'Geographic',type:'Geographic',levels:['Region','Country','Office']},
+    {name:'Community of Practice',type:'Community',levels:['Community','Special Interest Group']}
+  ];
+  presets.forEach(function(pr, i){
+    var exists = d.secondaryHierarchies.some(function(sh){return sh.type===pr.type});
+    if(!exists){
+      h += '<button class="btn btn-sm" onclick="addSecondaryPreset('+i+')">+ '+pr.name+'</button>';
+    }
+  });
+  h += '</div>';
+
+  // Platform behavior table
+  if(d.secondaryHierarchies.length > 0){
+    h += '<div class="form-section-title" style="margin-top:24px">How Multi-Dimensional Hierarchy Affects the Platform</div>';
+    h += '<table class="behavior-table">';
+    h += '<thead><tr><th>Platform Feature</th><th>Multi-Dimensional Behavior</th></tr></thead><tbody>';
+    h += '<tr><td>Dashboards</td><td>Filter by any active hierarchy simultaneously. E.g., "APAC employees on Cloud Migration programme".</td></tr>';
+    h += '<tr><td>Assessment Scoping</td><td>Scope assessments to any node in any active hierarchy.</td></tr>';
+    h += '<tr><td>TNA / TNI Reports</td><td>Run training needs analysis across any hierarchy dimension.</td></tr>';
+    h += '<tr><td>Approval Workflow</td><td>Primary hierarchy by default. Secondary leaders get review permissions for their nodes.</td></tr>';
+    h += '<tr><td>L&D Projects</td><td>Target any combination of nodes from any active hierarchy.</td></tr>';
+    h += '<tr><td>Notifications</td><td>Route to hierarchy leaders independently across all hierarchies.</td></tr>';
+    h += '</tbody></table>';
+  }
+
+  h += '</div>';
+  return h;
+}
+
+var SEC_PRESETS = [
+  {name:'Project / Programme',type:'Project',levels:['Programme','Project','Workstream']},
+  {name:'Client Account',type:'Commercial',levels:['Client Portfolio','Account','Engagement']},
+  {name:'Geographic',type:'Geographic',levels:['Region','Country','Office']},
+  {name:'Community of Practice',type:'Community',levels:['Community','Special Interest Group']}
+];
+
+function addSecondaryPreset(idx){
+  var d = getHierData();
+  if(d.secondaryHierarchies.length >= 4){showToast('Maximum 4 secondary hierarchies');return}
+  var pr = SEC_PRESETS[idx];
+  d.secondaryHierarchies.push({
+    name: pr.name,
+    type: pr.type,
+    levels: pr.levels.map(function(l,i){return {name:l,code:l.substring(0,3).toUpperCase(),type:i===pr.levels.length-1?'assignment':'grouping'}}),
+    nodes: []
+  });
+  setBlockData('B', d);
+  renderBlockContent('B');
+  showToast(pr.name+' hierarchy added');
+}
+
+function removeSecondary(idx){
+  var d = getHierData();
+  d.secondaryHierarchies.splice(idx, 1);
+  setBlockData('B', d);
+  renderBlockContent('B');
+}
+
+// ── READ-ONLY VIEW ──
+function renderBlockB_ReadOnly(){
+  var d = getHierData();
+  var h = '';
+
+  // Pattern + Level summary
+  h += '<div class="ro-card">';
+  h += '<div class="ro-card-header"><div class="ro-card-title">Hierarchy Structure</div>';
+  h += '<button class="ro-edit-btn" onclick="enterEditMode()"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Structure</button>';
+  h += '</div>';
+
+  if(d.pattern){
+    var pat = HIER_PATTERNS.find(function(p){return p.id===d.pattern});
+    h += '<div style="font-size:12px;color:var(--text-t);margin-bottom:10px">Pattern: <strong style="color:var(--text)">'+escH(pat?pat.name:d.pattern)+'</strong></div>';
+  }
+
+  // Levels as a flow
+  if(d.levels.length){
+    h += '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:14px">';
+    d.levels.forEach(function(lv, i){
+      var typeClass = lv.type === 'assignment' ? 'assignment' : lv.type === 'grouping' ? 'grouping' : 'both';
+      h += '<span class="level-type '+typeClass+'" style="padding:4px 12px;font-size:11px;font-weight:500">'+escH(lv.name)+'</span>';
+      if(i < d.levels.length - 1) h += '<span style="color:var(--text-t)">→</span>';
+    });
+    h += '</div>';
+  }
+
+  // Node count
+  h += '<div style="font-size:12px;color:var(--text-s)">'+d.nodes.length+' nodes configured</div>';
+  h += '</div>';
+
+  // Tree view (read-only)
+  if(d.nodes.length > 0){
+    h += '<div class="ro-card">';
+    h += '<div class="ro-card-header"><div class="ro-card-title">Organisation Tree</div></div>';
+    h += '<div class="tree-wrap" style="pointer-events:none">';
+    h += renderTreeLevel(d, null, 0);
+    h += '</div></div>';
+  }
+
+  // Secondary hierarchies
+  if(d.secondaryHierarchies.length > 0){
+    h += '<div class="ro-card">';
+    h += '<div class="ro-card-header"><div class="ro-card-title">Secondary Hierarchies ('+d.secondaryHierarchies.length+')</div></div>';
+    d.secondaryHierarchies.forEach(function(sh){
+      h += '<div style="padding:6px 0;display:flex;align-items:center;gap:8px">';
+      h += '<span style="font-size:13px;font-weight:500;color:var(--text)">'+escH(sh.name)+'</span>';
+      h += '<span style="font-size:10px;color:var(--text-t)">'+sh.levels.length+' levels · '+escH(sh.type)+'</span>';
+      h += '</div>';
+    });
+    h += '</div>';
+  }
+
+  // Completion check
+  if(d.levels.length < 2 || d.nodes.length < 1){
+    h += '<div style="padding:12px 16px;background:var(--warning-soft);border:1px solid var(--warning-border);border-radius:var(--radius-md);margin-top:14px;display:flex;align-items:center;gap:10px">';
+    h += '<svg style="width:16px;height:16px;stroke:var(--warning);fill:none;stroke-width:2;flex-shrink:0" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+    h += '<span style="font-size:12px;color:var(--warning)">Need at least 2 levels and 1 node to complete this block</span>';
+    h += '<button class="btn btn-sm" onclick="enterEditMode()" style="margin-left:auto;color:var(--warning);border-color:var(--warning)">Continue Setup</button>';
+    h += '</div>';
+  }
+
+  return h;
 }
 
 // ═══════════════════════════════════════════════════════
