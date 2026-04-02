@@ -1459,8 +1459,17 @@ function renderBlockB_ReadOnly(){
 // ═══════════════════════════════════════════════════════
 function saveBlock(){
   if(currentBlock) autoSaveCurrentBlock();
+  // Stay on the same block — switch to read-only view
+  editMode = false;
+  document.getElementById('bpEditAllBtn').style.display = '';
+  renderBlockContent(currentBlock);
+  // Update saved timestamp
+  var bs = getBlockState(currentBlock);
+  document.getElementById('bpSaved').innerHTML = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg> Saved just now';
+  document.getElementById('bpSaveInfo').textContent = 'Saved just now';
   showToast('Block saved');
-  closeBlock();
+  // Update dashboard in background
+  renderDashboard();
 }
 
 function saveAndContinue(){
